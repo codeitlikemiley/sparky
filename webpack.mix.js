@@ -25,6 +25,7 @@ mix.styles([
     'resources/assets/metro/plugins/bootstrap/css/bootstrap.metro.css',
     'resources/assets/metro/css/help.css',
     'resources/assets/metro/css/parsley.css',
+    // This Contain CSS Class For Sidebar and Other Widget
     'resources/assets/metro/css/docs.css',
     'resources/assets/metro/css/docs-rtl.css',
     'node_modules/sweetalert/dist/sweetalert.css'
@@ -43,7 +44,7 @@ mix.combine([
     'resources/assets/metro/plugins/jquery-ui.min.js',
     // added data tables // read more about this shit
     'resources/assets/metro/js/jquery.dataTables.min.js',
-    'resources/assets/metro/js/web.js',
+    // This Contains The Js For Sidebar
     'resources/assets/metro/js/docs.js',
 ], 'public/js/metro.js')
 
