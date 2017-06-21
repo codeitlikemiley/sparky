@@ -1,34 +1,9 @@
 <div class="app-bar fixed-top bg-darker" data-role="appbar">
     <div class="container-top">
         <div class="sidebar-trigger sidebar-sizer mobile-only"><span class="fa fa-menu"></span></div>
-        <a href="#!" class="app-bar-element branding bg-hover-red"> 
-             {!!config('nav.brand.logo')!!}
-             {!!config('nav.brand.title')!!}
-        </a>
-
+         @include('partials.navbar.logo')
         <ul class="app-bar-menu place-right">
-
-            <li class="no-phone">
-                <!--  when click we should make the notification as read -->
-                <a class="icon" href="{{ $notification->action_url }}" data-role="hint" data-hint="{{ $notification->action_text }}|{{ $notification->body }}"
-                    @if($notification->read == 0) 
-                    data-hint-background="bg-green" 
-                    @else 
-                    data-hint-background="bg-amber" 
-                    @endif
-                    data-hint-color="fg-white">&nbsp;
-                    <span class="mif-bell 
-                    @if($notification->read == '0')
-                    mif-ani-ring mif-ani-fast fg-lightGreen 
-                    @else fg-amber 
-                    @endif">
-                    </span>
-                </a>
-            </li>
-            <li class="bg-darker">
-                <a href="#" id="rtl-demo" class="icon">&nbsp; <span class="mif-display fg-taupe"></span></a>
-            </li>
-
+            @include('partials.header.notification_latest')
             <li class="bg-darker ">
                 <a href="#" class="dropdown-toggle">
                     <img src="{{ auth()->user()->photo_url }}" alt="{{ auth()->user()->name }}"
