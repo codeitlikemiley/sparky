@@ -8,6 +8,11 @@ use Laravel\Spark\Repositories\NotificationRepository as Notification;
 
 class ComposerServiceProvider extends ServiceProvider
 {
+    public function __construct(){
+	  $this->data = array(
+		'appcolor' => 'bg-darkTeal',
+	  );
+	}
     /**
      * Register bindings in the container.
      *
@@ -17,6 +22,7 @@ class ComposerServiceProvider extends ServiceProvider
     {
         $this->composeLatestNotification();
         $this->composeLogin();
+        $this->composeAppColor();
         
     }
 
@@ -32,7 +38,7 @@ class ComposerServiceProvider extends ServiceProvider
     // Allow Notification in All View!
     private function composeLatestNotification()
     {
-        view()->composer(['partials.header'], function($view)
+        view()->composer(['partials.header.notification_latest'], function($view)
         {
         $notification = new Notification();
         $notification = $notification->recent(auth()->user())->first();
@@ -41,10 +47,17 @@ class ComposerServiceProvider extends ServiceProvider
         });
 
     }
+    private function composeAppColor()
+    {
+        view()->composer('*', function($view){
+            $view->with($this->data);
+        });
+    }
+ 
 
     private function composeLogin()
     {
-        view()->composer(['spark::auth.login', 'spark::auth.register'], function($view)
+        view()->composer(['spark::auth.login'], function($view)
         {
         $dir = scandir(base_path('public/images/lock/landscape'));
         foreach ($dir as $key => $value) {
