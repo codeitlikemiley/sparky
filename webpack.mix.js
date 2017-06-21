@@ -11,9 +11,6 @@ mix.webpackConfig({
         }
     }
 });
-// Copy Laravel Spark Sweet Alert
-mix.copy('node_modules/sweetalert/dist/sweetalert.min.js', 'public/js/sweetalert.min.js')
-    .copy('node_modules/sweetalert/dist/sweetalert.css', 'public/css/sweetalert.css')
 mix.styles([
     // Add Here all CSS to Concatenate
 
@@ -30,27 +27,29 @@ mix.styles([
     'resources/assets/metro/css/parsley.css',
     'resources/assets/metro/css/docs.css',
     'resources/assets/metro/css/docs-rtl.css',
+    'node_modules/sweetalert/dist/sweetalert.css'
     // This is Required By Spark 
     // app.css will be our override
     // 'resources/assets/build/css/app.css',
-], 'public/css/metroui.css')
+], 'public/css/metro.css')
 
 // This Has Jquery Included
 mix.js('resources/assets/js/app.js', 'public/js/app.js')
 
 mix.combine([
     // required Jquery to Run this
+    'node_modules/sweetalert/dist/sweetalert.min.js',
     'resources/assets/metro/js/metro.js',
     'resources/assets/metro/plugins/jquery-ui.min.js',
     // added data tables // read more about this shit
     'resources/assets/metro/js/jquery.dataTables.min.js',
     'resources/assets/metro/js/web.js',
     'resources/assets/metro/js/docs.js',
-], 'public/js/metroui.js')
+], 'public/js/metro.js')
 
 if (mix.config.inProduction) {
     mix.version()
 }
 mix.browserSync({
-    proxy: 'evolutly-info.dev'
+    proxy: 'sparky.dev'
 });
