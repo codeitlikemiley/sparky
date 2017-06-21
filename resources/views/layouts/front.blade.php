@@ -40,30 +40,16 @@
 <body style="background: #f0f0f2 url(./images/lock/landscape/86a053d7e8fd3c8efeb13ddf1057cc3a31cad70b6724793854ddbc9b8bea0c6a.jpg)
 center center no-repeat;">
     <div id="spark-app" v-cloak>
-        <!-- Top NavBar & SideBar? -->
-        <!-- remove nav bar on register -->
-        @if(!Request::segment(1)=='register') 
         @if (Auth::check()) 
         @include('partials.navbar.front_user')
-        <!--@include('partials.sidebar')-->
         @else 
         @include('partials.navbar.front_guest')
-        @endif 
         @endif
         <!-- Make The Containing Full Screen -->
         <div class="page-container op-black" style="height:100vh">
             @yield('content')
-            <!-- Application Level Modals -->
-            @if (Auth::check()) @include('spark::modals.notifications') @include('spark::modals.support') @include('spark::modals.session-expired')
-            @endif
         </div>
         </div>
-        <!-- Application Level Modals -->
-        @if (Auth::check()) 
-        @include('spark::modals.notifications') 
-        @include('spark::modals.support') 
-        @include('spark::modals.session-expired')
-        @endif
     </div>
     @include( 'partials.footer')
     <!-- Proper Order of Js is Necessary -->
