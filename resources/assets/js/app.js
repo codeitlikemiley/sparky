@@ -14,7 +14,7 @@
  |
  */
 
-require('spark-bootstrap');
+require('./spark-bootstrap');
 
 require('./components/bootstrap');
 
