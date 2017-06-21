@@ -1,3 +1,5 @@
+<!-- Check if There is a Notification -->
+@if($notification)
 <li class="no-phone">
     <!--  when click we should make the notification as read -->
     <a class="icon" 
@@ -20,3 +22,4 @@
             </span>
     </a>
 </li>
+@endif
