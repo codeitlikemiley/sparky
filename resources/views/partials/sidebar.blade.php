@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper ">
     <ul class="sidebar subdown " id="sidebar-2">
         @include('partials.sidebar.headline')
-        @include('partilas.sidebar.links')
+        @include('partials.sidebar.links')
     </ul>
     <div class="margin-bottom-60"></div>
 </div>
