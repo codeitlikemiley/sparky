@@ -41,7 +41,7 @@ class SparkServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $usesApi = true;
+    protected $usesApi = false;
 
     /**
      * Finish configuring Spark for the application.
@@ -50,17 +50,49 @@ class SparkServiceProvider extends ServiceProvider
      */
     public function booted()
     {
-        Spark::useStripe()->noCardUpFront()->trialDays(10);
+        Spark::useStripe();
 
-        Spark::freePlan()
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-
-        Spark::plan('Basic', 'provider-id-1')
+        Spark::plan('BASIC PLAN', 'spark_test_1')
             ->price(10)
+            ->trialDays(7)
             ->features([
                 'First', 'Second', 'Third'
             ]);
+        Spark::plan('BASIC PLAN YEARLY', 'spark_test_yearly_1')
+            ->price(100)
+            ->trialDays(7)
+            ->yearly()
+            ->features([
+                'First', 'Second', 'Third'
+            ]);
+        Spark::plan('PRO PLAN', 'spark_test_2')
+            ->price(30)
+            ->trialDays(7)
+            ->features([
+                'First', 'Second', 'Third'
+            ]);
+        Spark::plan('BASIC PLAN YEARLY', 'spark_test_yearly_2')
+            ->price(300)
+            ->trialDays(7)
+            ->yearly()
+            ->features([
+                'First', 'Second', 'Third'
+            ]);
+        Spark::plan('VIP PLAN', 'spark_test_3')
+            ->price(60)
+            ->trialDays(7)
+            ->features([
+                'First', 'Second', 'Third'
+            ]);
+        Spark::plan('VIP PLAN YEARLY', 'spark_test_yearly_3')
+            ->price(600)
+            ->trialDays(7)
+            ->yearly()
+            ->features([
+                'First', 'Second', 'Third'
+            ]);
+        Spark::promotion('10USDOFF');
+        Spark::collectBillingAddress();
+        
     }
 }
