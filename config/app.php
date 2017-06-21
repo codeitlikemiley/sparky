@@ -13,6 +13,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'icon' => env('APP_ICON', 'mif-shop'),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +170,7 @@ return [
         Laravel\Tinker\TinkerServiceProvider::class,
         Laravel\Spark\Providers\SparkServiceProvider::class,
         Laravel\Cashier\CashierServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Application Service Providers...
