@@ -1,4 +1,4 @@
-@extends('spark::layouts.app')
+@extends('layouts.main')
 
 @section('content')
 <home :user="user" inline-template>
