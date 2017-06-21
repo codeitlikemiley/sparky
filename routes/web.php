@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', 'WelcomeController@show');
+Route::get('/', 'WelcomeController@show')->name('frontend');
 
 Route::get('/home', 'HomeController@show');
