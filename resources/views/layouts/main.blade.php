@@ -23,7 +23,7 @@
         }
     </style>
     <!-- Metro Asset CSS Helper -->
-    {!! SiteHelpers::call_css(isset($css)?$css:array()) !!}
+    {!! call_css(isset($css)? $css : array()) !!}
     <!-- Inject Css On The Fly -->
     @stack('critical_css') 
     
@@ -35,8 +35,8 @@
 </head>
 
 <!-- Body Contents -->
-<body onload="" class="{{ $appcolor or 'bg-steel' }} " dir="">
-    @include( 'partials.header')
+<body onload="" class="{{ $appcolor or 'bg-steel' }}" dir="">
+    @include('partials.navbar')
     <div class="page-container metro" id="spark-app" v-cloak>
         <div class="row flex" style="height:100%">
             <!-- Only Show Sidebar for Login User -->
@@ -64,7 +64,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/metro.js') }}"></script>
     <!-- Metro Asset JS Helper for Jquery Plugins -->
-    {!! SiteHelpers::call_js(isset($js)?$js:array()) !!} 
+    {!! call_js(isset($js)? $js : array()) !!} 
     <!-- Inject Script On The Fly -->
     @stack('footer_js')
 
