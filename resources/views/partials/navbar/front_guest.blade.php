@@ -1,11 +1,7 @@
 <div class="app-bar fixed-top bg-darker" data-role="appbar">
     <div class="container-top">
         <div class="sidebar-trigger sidebar-sizer mobile-only"><span class="fa fa-menu"></span></div>
-        <a href="#!" class="app-bar-element branding bg-hover-red"> 
-             {!!config('nav.brand.logo')!!}
-             {!!config('nav.brand.title')!!}
-        </a>
-
+        @include('partials.navbar.logo')
         <ul class="app-bar-menu place-right">
             <li class="bg-darker">
                 <a class="icon bg-hover-red" href="#!" data-role="hint" data-hint="Need Help?" data-hint-background="bg-darkTeal" data-hint-color="fg-white">&nbsp;<span class="mif-help fg-orange"></span> Support</a>
