@@ -594,7 +594,7 @@ jQuery(document).ready(function($){
 		}
 
 		// rtl demo
-		$('#rtl-demo').on('click',function(){
+		$('#rtl-button').on('click',function(){
 			if($('body').attr('dir')=='rtl'){
 				$('body').attr('dir','');
 			}else{
