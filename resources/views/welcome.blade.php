@@ -1,94 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Meta Information -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>@yield('title', config('app.name'))</title>
-
-    <!-- Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
-
-    <style>
-        body, html {
-            background: url('/img/spark-bg.png');
-            background-repeat: repeat;
-            background-size: 300px 200px;
-            height: 100%;
-            margin: 0;
-        }
-
-        .full-height {
-            min-height: 100%;
-        }
-
-        .flex-column {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .flex-fill {
-            flex: 1;
-        }
-
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-
-
-        .text-center {
-            text-align: center;
-        }
-
-        .links {
-            padding: 1em;
-            text-align: right;
-        }
-
-        .links a {
-            text-decoration: none;
-        }
-
-        .links button {
-            background-color: #3097D1;
-            border: 0;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            font-family: 'Open Sans';
-            font-size: 14px;
-            font-weight: 600;
-            padding: 15px;
-            text-transform: uppercase;
-            width: 100px;
-        }
-    </style>
-</head>
-<body>
-    <div class="full-height flex-column">
-        <nav class="links">
-            <a href="/login" style="margin-right: 15px;">
-                <button>
-                    Login
-                </button>
-            </a>
-
-            <a href="/register">
-                <button>
-                    Register
-                </button>
-            </a>
-        </nav>
-
-        <div class="flex-fill flex-center">
-            <h1 class="text-center">
-                <img src="/img/color-logo.png">
-            </h1>
+@extends('layouts.main') 
+@section('content')
+<div class="grid no-margin-top">
+    <div class="row cells align-center padding-top-90">
+        <div class="cell fg-white text-shadow ">
+            <div class="leader">Evolutly</div>
+            <div class="header">"Easy Task Management"</div>
         </div>
     </div>
-</body>
-</html>
+    <div class="row cells3 align-center padding-top-50">
+        <div class="cell bg-red padding10">
+            <a href="#!" class="leader fg-white"><span class="mif-books"></span><br>Tutorials</a>
+        </div>
+        <div class="cell bg-yellow padding10">
+            <a href="{{ route('register') }}" class="leader fg-white"><span class="mif-user-plus"></span><br>Register</a>
+        </div>
+        <div class="cell bg-green padding10">
+            <a href="{{ route('login') }}" class="leader fg-white"><span class="fa fa-sign-in"></span><br>Login</a>
+        </div>
+    </div>
+</div>
+@endsection

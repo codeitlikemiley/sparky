@@ -29,9 +29,6 @@ mix.styles([
     'resources/assets/metro/css/docs.css',
     'resources/assets/metro/css/docs-rtl.css',
     'node_modules/sweetalert/dist/sweetalert.css'
-    // This is Required By Spark 
-    // app.css will be our override
-    // 'resources/assets/build/css/app.css',
 ], 'public/css/metro.css')
 
 // This Has Jquery Included
