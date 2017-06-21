@@ -12,5 +12,7 @@
 */
 
 Route::get('/', 'WelcomeController@show')->name('frontend');
-
 Route::get('/home', 'HomeController@show');
+Route::get('/paid', ['middleware' => 'subscribed', function () {
+    // Route ONLY for Subscribed User
+}]);
