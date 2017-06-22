@@ -13,10 +13,12 @@ use App\Traits\StaticFunctions\UserStaticFunctions;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use App\Traits\Sluggable\UserSluggable;
+use App\Traits\Permissions\CanComment;
 
 trait UserBuilder {
     use CanCreateClients, CanCreateEmployees, CanCreateProjects,
         CanManageClients, CanManageEmployees, CanManageProjects,
         UsersMutator, UserStaticFunctions,
-        Sluggable, SluggableScopeHelpers, UserSluggable;
+        Sluggable, SluggableScopeHelpers, UserSluggable,
+        CanComment;
 }
