@@ -8,15 +8,17 @@ class Project extends Model
 {
     protected $table ='projects';
 
-    public $fillable = [
+    protected $fillable = [
         'name'
     ];
 
-    public $casts = [
+    protected $casts = [
         'done' => 'boolean'
     ];
 
-    public $dates = ['created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at'];
+
+    protected $slugKeyName = 'username';
 
     public function tenant()
     {
