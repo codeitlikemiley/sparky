@@ -9,13 +9,13 @@ class User extends SparkUser
 {
     use UserBuilder;
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'username'
     ];
 
-    public $hidden = [
+    protected $hidden = [
         'password',
         'remember_token',
         'authy_id',
@@ -32,10 +32,12 @@ class User extends SparkUser
         'extra_billing_information',
     ];
 
-    public $casts = [
+    protected $casts = [
         'trial_ends_at' => 'datetime',
         'uses_two_factor_auth' => 'boolean',
     ];
 
-    public $dates = ['created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at'];
+
+    protected $slugKeyName = 'username';
 }
