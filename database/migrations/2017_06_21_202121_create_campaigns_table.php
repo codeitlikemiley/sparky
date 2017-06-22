@@ -21,7 +21,7 @@ class CreateCampaignsTable extends Migration
                   ->references('id')->on('projects')
                   ->onDelete('cascade');
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('order')->nullable()->default(0);
             $table->boolean('done')->default(0);
             $table->timestamps();
