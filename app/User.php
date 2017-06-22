@@ -12,6 +12,7 @@ class User extends SparkUser
     public $fillable = [
         'name',
         'email',
+        'username'
     ];
 
     public $hidden = [
