@@ -22,7 +22,13 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $app_namespace = 'App\Http\Controllers';
+
+    protected $employee_namespace = 'Employee\Controllers';
+
+    protected $client_namespace = 'Client\Controllers';
+
+    protected $tenant_namespace = 'Tenant\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -34,13 +40,22 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
         
         Route::bind('username', function ($value) {
-        return User::where('username', $value)->first();
+        try {
+        return User::where('username', $value)->firstOrFail();
+        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->to(config('app.url'));
+        }
         });
         Route::pattern('username', '[a-z0-9_-]{3,16}');
 
         Route::bind('projectSlug', function ($value) {
-        return User::where('slug', $value)->first();
+        try {
+        return Project::where('slug', $value)->firstOrFail();
+        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('frontend');
+        }
         });
+
         Route::pattern('projectSlug', '[a-z0-9-]+');
 
         Route::model('user', User::class);
@@ -66,8 +81,6 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::pattern('id', '[0-9]+');
         Route::pattern('nonwww', '[\/\w\.-]*');
-        Route::pattern('subdomain', '^(?!.*(admin|api|www)).*$');
-        
     }
 
     /**
@@ -81,6 +94,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes($router);
 
         $this->mapApiRoutes($router);
+
+        $this->mapClientRoutes($router);
+
+        $this->mapEmployeeRoutes($router);
+
+        $this->mapTenantRoutes($router);
 
         //
     }
@@ -96,7 +115,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes(Router $router)
     {
         $router->group([
-            'namespace' => $this->namespace, 'middleware' => ['web', 'hasTeam'],
+            'namespace' => $this->app_namespace, 'middleware' => ['web', 'hasTeam'],
         ], function ($router) {
             require base_path('routes/web.php');
         });
@@ -111,11 +130,65 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(Router $router)
     {
         $router->group([
-            'namespace' => $this->namespace,
+            'namespace' => $this->app_namespace,
             'middleware' => 'api',
-            'prefix' => 'api',
+            'domain' => 'api.'. config('app.domain'),
         ], function ($router) {
             require base_path('routes/api.php');
+        });
+    }
+
+    /**
+     * Define the "client" routes for the application.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    protected function mapClientRoutes(Router $router)
+    {
+        $router->group([
+            'namespace' => $this->client_namespace,
+            'middleware' => 'web',
+            'domain' => '{username}.'.config('app.domain'),
+            'prefix' => 'client',
+        ], function ($router) {
+            require base_path('routes/client.php');
+        });
+    }
+
+    /**
+     * Define the "client" routes for the application.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    protected function mapEmployeeRoutes(Router $router)
+    {
+        $router->group([
+            'namespace' => $this->employee_namespace,
+            'middleware' => 'web',
+            'domain' => '{username}.'.config('app.domain'),
+            'prefix' => 'employee',
+        ], function ($router) {
+            require base_path('routes/employee.php');
+        });
+    }
+
+    /**
+     * Define the "client" routes for the application.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    protected function mapTenantRoutes(Router $router)
+    {
+        $router->group([
+            'namespace' => $this->tenant_namespace,
+            'middleware' => 'web',
+            'domain' => '{username}.'.config('app.domain'),
+            'prefix' => 'admin',
+        ], function ($router) {
+            require base_path('routes/tenant.php');
         });
     }
 }
