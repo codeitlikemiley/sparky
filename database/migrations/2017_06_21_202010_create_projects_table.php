@@ -16,9 +16,9 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->unsignedInteger('tenant_id');
-            $table->integer('projectable_id');
-            $table->string('projectable_type');
+            $table->unsignedInteger('tenant_id')->nullable();
+            $table->unsignedInteger('client_id')->nullable();
+            $table->nullableMorphs('projectable');
             $table->string('slug')->unique();
             $table->boolean('done')->default(0);
             $table->timestamps();
