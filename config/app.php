@@ -173,6 +173,7 @@ return [
         Laravel\Cashier\CashierServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
+        BrianFaust\Commentable\CommentableServiceProvider::class,
 
         /*
          * Application Service Providers...
