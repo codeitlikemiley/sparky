@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ModelBuilder\ProjectBuilder;
 
 class Project extends Model
 {
+    use ProjectBuilder;
+
     protected $table ='projects';
 
     protected $fillable = [
@@ -18,15 +21,6 @@ class Project extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $slugKeyName = 'username';
+    protected $slugKeyName = 'slug';
 
-    public function tenant()
-    {
-        return $this->belongsTo('App\User', 'tenant_id', 'id')->select(['id','name','email']);
-    }
-
-    public function projectable()
-    {
-        return $this->morphTo();
-    }
 }

@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Subtasks\SubtaskBuilder;
+use App\Traits\ModelBuilder\SubtaskBuilder;
 
 class Subtask extends Model
 {

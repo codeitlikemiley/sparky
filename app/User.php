@@ -3,7 +3,7 @@
 namespace App;
 
 use Laravel\Spark\User as SparkUser;
-use App\Traits\Users\UserBuilder;
+use App\Traits\ModelBuilder\UserBuilder;
 
 class User extends SparkUser
 {

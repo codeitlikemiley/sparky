@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Subtasks;
+namespace App\Traits\ModelBuilder;
 
 use BrianFaust\Commentable\HasComments;
 

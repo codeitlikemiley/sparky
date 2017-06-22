@@ -3,19 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ModelBuilder\ClientBuilder;
 
 class Client extends Model
 {
-    protected $table ='projects';
+    use ClientBuilder;
 
+    protected $table ='clients';
 
-    public function tenant()
-    {
-        return $this->belongsTo('App\User', 'tenant_id', 'id')->select(['id','name','email']);
-    }
+    protected $fillable = [
+        'name',
+        'email',
+    ];
 
-    public function clientable()
-    {
-        return $this->morphTo();
-    }
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $dates = ['created_at', 'updated_at'];
+
 }

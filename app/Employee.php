@@ -3,16 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\CanCreate;
+use App\Traits\ModelBuilder\EmployeeBuilder;
 
 class Employee extends Model
 {
+    use EmployeeBuilder;
+    
     protected $table ='employees';
 
-    use CanCreate;
+    protected $fillable = [
+        'name',
+        'email',
+    ];
 
-    public function employable()
-    {
-        return $this->morphTo();
-    }
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $dates = ['created_at', 'updated_at'];
+
 }
