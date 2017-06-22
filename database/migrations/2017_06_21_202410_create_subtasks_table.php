@@ -13,9 +13,9 @@ class CreateSubtasksTable extends Migration
      */
     public function up()
     {
-        Schema::table('subtasks', function (Blueprint $table) {
+        Schema::create('subtasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('task_id')->unsigned();
+            $table->unsignedInteger('task_id');
             $table->foreign('task_id')
                   ->references('id')->on('tasks')
                   ->onDelete('cascade');
