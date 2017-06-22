@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
-trait OwnsByClient
+trait ByClient
 {
-    public function client()
+    public function byClient()
     {
         return $this->belongsTo('App\Client', 'client_id', 'id')->select(['id','name','email']);
     }

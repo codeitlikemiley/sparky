@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
-trait OwnsByTenant
+trait ByTenant
 {
-    public function tenant()
+    public function byTenant()
     {
         return $this->belongsTo('App\User', 'tenant_id', 'id')->select(['id','name','email']);
     }

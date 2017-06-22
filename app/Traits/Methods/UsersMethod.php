@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Traits\StaticFunctions;
+namespace App\Traits\Methods;
 
-trait UserStaticFunctions
+trait UsersMethod
 {
    public static function findByEmail($email)
     {

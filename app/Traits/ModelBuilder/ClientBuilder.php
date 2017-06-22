@@ -2,13 +2,13 @@
 
 namespace App\Traits\ModelBuilder;
 
-use App\Traits\Permissions\OwnsByTenant;
+use App\Traits\Relationship\ByTenant;
 use App\Traits\Mutators\UsersMutator;
-use App\Traits\StaticFunctions\UserStaticFunctions;
+use App\Traits\Methods\UsersMethod;
 use App\Traits\MorphTo\Clientable;
-use App\Traits\Permissions\CanComment;
+use App\Traits\Relationship\HasComments;
 
 trait ClientBuilder {
-    use OwnsByTenant, UsersMutator, UserStaticFunctions, 
-    Clientable, CanComment;
+    use ByTenant, UsersMutator, UsersMethod, 
+    Clientable, HasComments;
 }

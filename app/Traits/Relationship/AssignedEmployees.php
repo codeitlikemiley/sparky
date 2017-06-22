@@ -1,13 +1,13 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
-trait AllowedEmployees
+trait AssignedEmployees
 {
     // This Trait Needs to Be Added to Project
     // So We Can Easily Get Array of Employees
     // That Can Access a Certain Project
-    public function allowedEmployees()
+    public function assignedEmployees()
     {
         return $this->belongsToMany('App\Employee', 'project_employee');
     }

@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
 trait CanManageEmployees
 {

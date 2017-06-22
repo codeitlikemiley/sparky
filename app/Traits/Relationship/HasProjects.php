@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
-trait CanCreateProjects
+trait HasProjects
 {
     // This Trait Needs to Be Added to User and Employee
     // Since a User Can Create a Project

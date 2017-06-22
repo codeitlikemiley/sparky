@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
-trait CanCreateClients
+trait HasClients
 {
     // This Trait Needs to Be Added to User and Employee
     // Since a User as Tenant Can Create a Clients

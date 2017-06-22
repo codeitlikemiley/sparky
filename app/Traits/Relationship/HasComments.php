@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Traits\Permissions;
+namespace App\Traits\Relationship;
 
 use BrianFaust\Commentable\Comment;
 
-trait CanComment
+trait HasComments
 {
     // This Trait Needs to Be Added to User, Employee and Clients
     // Since a User, Employee, Client Can Comment
