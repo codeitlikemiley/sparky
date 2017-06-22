@@ -16,6 +16,9 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('tenant_id');
+            $table->foreign('tenant_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade');
             $table->integer('clientable_id');
             $table->string('clientable_type');
             $table->string('name');
@@ -33,8 +36,7 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('clients');
     }
 }

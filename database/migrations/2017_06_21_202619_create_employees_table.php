@@ -16,6 +16,9 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('tenant_id');
+            $table->foreign('tenant_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade');
             $table->integer('employable_id');
             $table->string('employable_type');
             $table->string('name');
@@ -33,8 +36,7 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
-        Schema::table('employees', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('employees');
     }
 }
