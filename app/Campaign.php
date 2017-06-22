@@ -8,16 +8,16 @@ class Campaign extends Model
 {
     protected $table ='campaigns';
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'order'
     ];
 
-    public $casts = [
+    protected $casts = [
         'done' => 'boolean'
     ];
 
-    public $dates = ['created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at'];
 
     public function tasks()
     {

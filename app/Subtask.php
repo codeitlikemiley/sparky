@@ -8,7 +8,7 @@ class Subtask extends Model
 {
     protected $table ='subtasks';
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'assigned_points',
         'priority',
@@ -16,11 +16,11 @@ class Subtask extends Model
         'due_date',
     ];
 
-    public $casts = [
+    protected $casts = [
         'done' => 'boolean'
     ];
 
-    public $dates = ['created_at', 'updated_at', 'due_date'];
+    protected $dates = ['created_at', 'updated_at', 'due_date'];
 
     public function task()
     {
