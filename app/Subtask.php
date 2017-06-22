@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Subtasks\SubtaskBuilder;
 
 class Subtask extends Model
 {
+    use SubtaskBuilder;
+    
     protected $table ='subtasks';
 
     protected $fillable = [
