@@ -44,6 +44,14 @@ return [
         'api' => [
             'driver' => 'spark',
         ],
+        'employee' => [
+            'driver' => 'session',
+            'provider' => 'employees',
+        ],
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
     ],
 
     /*
@@ -64,15 +72,21 @@ return [
     */
 
     'providers' => [
+        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'employees' => [
+            'driver' => 'eloquent',
+            'table' =>App\Employee::class,
+        ],
+
+        'clients' => [
+            'driver' => 'eloquent',
+            'table' =>App\Client::class,
+        ],
     ],
 
     /*
@@ -100,6 +114,16 @@ return [
             'email' => 'spark::auth.emails.password',
             'table' => 'password_resets',
             'expire' => 60,
+        ],
+        'employees' => [
+            'provider' => 'employees',
+            'table' => 'password_resets',
+            'expire' => 15,
+        ],
+        'clients' => [
+            'provider' => 'clients',
+            'table' => 'password_resets',
+            'expire' => 15,
         ],
     ],
 
