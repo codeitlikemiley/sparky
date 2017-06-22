@@ -13,6 +13,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'domain' => env('APP_DOMAIN', 'laravel.dev'),
     'icon' => env('APP_ICON', 'mif-shop'),
 
     /*
