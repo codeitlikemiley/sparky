@@ -36,8 +36,7 @@ class CreateSubtasksTable extends Migration
      */
     public function down()
     {
-        Schema::table('subtasks', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('subtasks');
     }
 }

@@ -35,8 +35,7 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('tasks');
     }
 }

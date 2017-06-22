@@ -36,8 +36,7 @@ class CreateCampaignsTable extends Migration
      */
     public function down()
     {
-        Schema::table('campaigns', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('campaigns');
     }
 }

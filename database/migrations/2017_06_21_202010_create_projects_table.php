@@ -32,8 +32,7 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::table('projects', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('projects');
     }
 }
