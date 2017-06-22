@@ -45,7 +45,7 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\SubTask::class, function (Faker\Generator $faker) {
+$factory->define(App\Subtask::class, function (Faker\Generator $faker) {
 
     return [
         'name' => $faker->catchPhrase(),
