@@ -11,10 +11,12 @@ use App\Traits\Permissions\CanManageEmployees;
 use App\Traits\Mutators\UsersMutator;
 use App\Traits\StaticFunctions\UserStaticFunctions;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use App\Traits\Sluggable\UserSluggable;
 
 trait UserBuilder {
     use CanCreateClients, CanCreateEmployees, CanCreateProjects,
         CanManageClients, CanManageEmployees, CanManageProjects,
-        UsersMutator, UserStaticFunctions, Sluggable, UserSluggable;
+        UsersMutator, UserStaticFunctions,
+        Sluggable, SluggableScopeHelpers, UserSluggable;
 }
