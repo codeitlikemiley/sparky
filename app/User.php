@@ -3,25 +3,18 @@
 namespace App;
 
 use Laravel\Spark\User as SparkUser;
+use App\Traits\Users\UserBuilder;
 
 class User extends SparkUser
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
+    use UserBuilder;
+
+    public $fillable = [
         'name',
         'email',
     ];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
+    public $hidden = [
         'password',
         'remember_token',
         'authy_id',
@@ -38,13 +31,10 @@ class User extends SparkUser
         'extra_billing_information',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
+    public $casts = [
         'trial_ends_at' => 'datetime',
         'uses_two_factor_auth' => 'boolean',
     ];
+
+    public $dates = ['created_at', 'updated_at'];
 }
