@@ -15,12 +15,9 @@ class CreateCampaignsTable extends Migration
     {
             Schema::create('campaigns', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('project_id');
-            $table->foreign('project_id')
-                  ->references('id')->on('projects')
-                  ->onDelete('cascade');
+            $table->unsignedInteger('project_id')->nullable();
             $table->string('name');
-            $table->integer('order')->nullable()->default(0);
+            $table->integer('order')->default(0);
             $table->boolean('done')->default(0);
             $table->timestamps();
         });
@@ -33,7 +30,6 @@ class CreateCampaignsTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('campaigns');
     }
 }

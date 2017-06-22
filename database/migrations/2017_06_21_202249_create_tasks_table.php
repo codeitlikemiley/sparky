@@ -15,11 +15,8 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('campaign_id');
-            $table->foreign('campaign_id')
-                  ->references('id')->on('campaigns')
-                  ->onDelete('cascade');
-            $table->string('name')->nullable();
+            $table->unsignedInteger('campaign_id')->nullable();
+            $table->string('name');
             $table->string('description')->nullable();
             $table->string('link')->nullable();
             $table->integer('max_points')->default(1);
@@ -35,7 +32,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('tasks');
     }
 }
