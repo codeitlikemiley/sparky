@@ -2,15 +2,26 @@
 
 namespace App\Traits\Methods;
 
+use Spatie\Activitylog\Models\Activity;
+
 trait LoggersMethod
 {
-    public function getDescriptionForEvent(string $eventName): string
+    public static function getLogs($id)
     {
-        // $this->guard is declared in Your Model (User, Employee, Client) as protected properties
-        $name = auth()->guard($this->guard)->user()->name;
-        // No user
-        if(!$name)return "This model has been {$eventName}";
-        // With User
-        return "{$eventName} by: {$name}";
+        $subject =  self::find($id);
+        return Activity::forSubject($subject)->get();
     }
+
+    public static function firstLog($id)
+    {
+        $subject =  self::find($id);
+        return Activity::forSubject($subject)->get()->first();
+    }
+
+    public static function lastLog($id)
+    {
+        $subject =  self::find($id);
+        return Activity::forSubject($subject)->get()->last();
+    }
+
 }
