@@ -9,10 +9,15 @@ class User extends SparkUser
 {
     use UserBuilder;
 
+    protected $table ='users';
+
+    protected $guard = 'web';
+
     protected $fillable = [
         'name',
         'email',
-        'username'
+        'username',
+        'photo_url'
     ];
 
     protected $hidden = [
@@ -30,6 +35,7 @@ class User extends SparkUser
         'billing_zip',
         'billing_country',
         'extra_billing_information',
+        'tax_rate'
     ];
 
     protected $casts = [
