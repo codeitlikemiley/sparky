@@ -9,10 +9,10 @@ use App\Traits\Mutators\UsersMutator;
 use App\Traits\Methods\UsersMethod;
 use App\Traits\Relationship\HasComments;
 use App\Traits\MorphTo\Employable;
-use App\Traits\Relationship\CanLogActivities;
+use App\Traits\Relationship\HasActivities;
 
 trait EmployeeBuilder {
     use ByTenant, HasProjects, AssignedSubtasks,
         UsersMutator, UsersMethod,
-        HasComments, Employable, CanLogActivities;
+        HasComments, Employable, HasActivities;
 }
