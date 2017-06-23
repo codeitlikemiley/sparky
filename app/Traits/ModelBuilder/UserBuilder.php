@@ -14,11 +14,12 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use App\Traits\Sluggable\UserSluggable;
 use App\Traits\Relationship\HasComments;
+use App\Traits\Relationship\CanLogActivities;
 
 trait UserBuilder {
     use HasClients, HasEmployees, HasProjects,
         CanManageClients, CanManageEmployees, CanManageProjects,
         UsersMutator, UsersMethod,
         Sluggable, SluggableScopeHelpers, UserSluggable,
-        HasComments;
+        HasComments, CanLogActivities;
 }
