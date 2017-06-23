@@ -3,8 +3,8 @@
 namespace App\Traits\ModelBuilder;
 
 use BrianFaust\Commentable\HasComments;
-use Spatie\Activitylog\Traits\LogsActivity;
+use App\Traits\Methods\LoggersMethod;
 
 trait TaskBuilder {
-    use HasComments, LogsActivity;
+    use HasComments, LoggersMethod;
 }
