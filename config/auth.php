@@ -81,12 +81,12 @@ return [
 
         'employees' => [
             'driver' => 'eloquent',
-            'table' => App\Employee::class,
+            'model' => App\Employee::class,
         ],
 
         'clients' => [
             'driver' => 'eloquent',
-            'table' => App\Client::class,
+            'model' => App\Client::class,
         ],
     ],
 
