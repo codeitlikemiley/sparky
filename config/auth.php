@@ -2,6 +2,7 @@
 
 return [
 
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -80,12 +81,12 @@ return [
 
         'employees' => [
             'driver' => 'eloquent',
-            'table' =>App\Employee::class,
+            'table' => App\Employee::class,
         ],
 
         'clients' => [
             'driver' => 'eloquent',
-            'table' =>App\Client::class,
+            'table' => App\Client::class,
         ],
     ],
 
