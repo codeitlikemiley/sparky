@@ -2,13 +2,13 @@
 
 namespace App\Traits\Relationship;
 
-trait AssignedProjects
+trait AssignedSubtasks
 {
     // This Trait Needs to Be Added to Employee
     // So We Can Easily Get Array of Projects
     // That An Employee Can Access
-    public function assignedProjects()
+    public function assignedSubtasks()
     {
-        return $this->belongsToMany('App\Project', 'project_employee');
+        return $this->belongsToMany('App\Subtask', 'employee_subtask');
     }
 }

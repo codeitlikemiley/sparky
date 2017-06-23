@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectEmployeeTable extends Migration
+class CreateEmployeeSubtaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateProjectEmployeeTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_employee', function (Blueprint $table) {
-            $table->unsignedInteger('project_id');
+        Schema::create('employee_subtask', function (Blueprint $table) {
             $table->unsignedInteger('employee_id');
+            $table->unsignedInteger('subtask_id');
         });
     }
 
@@ -26,6 +26,6 @@ class CreateProjectEmployeeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_employee');
+        Schema::dropIfExists('employee_subtask');
     }
 }
