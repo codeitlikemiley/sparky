@@ -11,9 +11,12 @@ class Employee extends Model
     
     protected $table ='employees';
 
+    protected $guard = 'employee';
+
     protected $fillable = [
         'name',
         'email',
+        'photo_url'
     ];
 
     protected $hidden = [

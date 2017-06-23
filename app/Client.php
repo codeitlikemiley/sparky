@@ -11,9 +11,12 @@ class Client extends Model
 
     protected $table ='clients';
 
+    protected $guard = 'client';
+
     protected $fillable = [
         'name',
         'email',
+        'photo_url'
     ];
 
     protected $hidden = [
