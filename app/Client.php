@@ -2,12 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Client\Notifications\ResetPasswordNotification;
 use App\Traits\ModelBuilder\ClientBuilder;
 
-class Client extends Model
+class Client extends Authenticatable
 {
-    use ClientBuilder;
+    use ClientBuilder, Notifiable;
 
     protected $table ='clients';
 
@@ -26,4 +28,9 @@ class Client extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
+    // Override the Built In PasswordResetNotification by Laravel
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
 }
