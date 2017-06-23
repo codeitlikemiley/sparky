@@ -174,7 +174,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         BrianFaust\Commentable\CommentableServiceProvider::class,
-
+        Spatie\Activitylog\ActivitylogServiceProvider::class,
+        
         /*
          * Application Service Providers...
          */
