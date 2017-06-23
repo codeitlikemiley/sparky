@@ -28,4 +28,9 @@ trait UsersMutator
     {
         return ucwords($name);
     }
+
+    public function getPhotoUrlAttribute($value)
+    {
+        return empty($value) ? 'https://www.gravatar.com/avatar/'.md5(Str::lower($this->email)).'.jpg?s=200&d=mm' : url($value);
+    }
 }
