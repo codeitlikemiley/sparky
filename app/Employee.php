@@ -2,12 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Employee\Notifications\ResetPasswordNotification;
 use App\Traits\ModelBuilder\EmployeeBuilder;
 
-class Employee extends Model
+class Employee extends Authenticatable
 {
-    use EmployeeBuilder;
+    use EmployeeBuilder, Notifiable;
     
     protected $table ='employees';
 
@@ -26,4 +28,9 @@ class Employee extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
+    // Override the Built In PasswordResetNotification by Laravel
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
 }
