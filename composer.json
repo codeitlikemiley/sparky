@@ -14,7 +14,7 @@
         "laravel/framework": "5.4.*",
         "laravel/spark": "~4.0",
         "laravel/tinker": "~1.0",
-        "spatie/laravel-activitylog": "^1.15"
+        "spatie/laravel-activitylog": "dev-multiauth"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -25,6 +25,10 @@
         {
             "type": "composer",
             "url": "https://spark-satis.laravel.com"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/codeitlikemiley/laravel-activitylog"
         }
     ],
     "autoload": {
