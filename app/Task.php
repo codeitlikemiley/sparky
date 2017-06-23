@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ModelBuilder\TaskBuilder;
 
 class Task extends Model
 {
+    use TaskBuilder;
+
     protected $table ='tasks';
 
     protected $fillable = [

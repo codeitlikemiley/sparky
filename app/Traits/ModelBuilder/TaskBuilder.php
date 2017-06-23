@@ -4,6 +4,6 @@ namespace App\Traits\ModelBuilder;
 
 use BrianFaust\Commentable\HasComments;
 
-trait SubtaskBuilder {
+trait TaskBuilder {
     use HasComments;
 }
