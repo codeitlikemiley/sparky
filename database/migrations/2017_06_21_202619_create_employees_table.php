@@ -15,12 +15,8 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tenant_id');
-            $table->foreign('tenant_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade');
-            $table->integer('employable_id');
-            $table->string('employable_type');
+            $table->unsignedInteger('tenant_id')->nullable();
+            $table->nullableMorphs('employable');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
@@ -37,7 +33,6 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('employees');
     }
 }
