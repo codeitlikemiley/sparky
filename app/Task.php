@@ -24,6 +24,8 @@ class Task extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
+    protected static $logAttributes = ['name', 'description', 'link', 'maxpoints'];
+
     public function subtasks()
     {
         return $this->hasMany('App\SubTask','task_id', 'id');
