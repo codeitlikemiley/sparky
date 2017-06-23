@@ -2,6 +2,8 @@
 
 namespace App\Traits\Mutators;
 
+use Illuminate\Support\Str;
+
 trait UsersMutator
 {
    public function setEmailAttribute($email)
