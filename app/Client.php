@@ -28,7 +28,6 @@ class Client extends Authenticatable
 
     protected $dates = ['created_at', 'updated_at'];
 
-    // Override the Built In PasswordResetNotification by Laravel
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
