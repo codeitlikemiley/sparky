@@ -39,7 +39,7 @@
             "App\\": "app/",
             "Client\\": "client/",
             "Employee\\": "employee/",
-            "Tenant\\": "tenant/"
+            "Typeform\\": "typeform/"
         },
         "files": [
             "app/Http/Helpers.php"
