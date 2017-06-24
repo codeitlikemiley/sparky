@@ -3,16 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ModelBuilder\CampaignBuilder;
 
 class Subtask extends Model
 {
+    use CampaignBuilder;
+
     protected $table ='subtasks';
 
     protected $fillable = [
         'name',
-        'assigned_points',
+        'points',
         'priority',
-        'video_link',
+        'link',
         'due_date',
     ];
 
