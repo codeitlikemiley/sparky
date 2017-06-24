@@ -23,6 +23,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Employee::class, function (Faker\Generator $faker) {
     static $password;
 
@@ -34,6 +35,7 @@ $factory->define(App\Employee::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Client::class, function (Faker\Generator $faker) {
     static $password;
 
@@ -45,35 +47,37 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Project::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
     ];
 });
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Campaign::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->catchPhrase(),
     ];
 });
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Task::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->catchPhrase(),
         'description' => $faker->sentence($nbWords = 15, $variableNbWords = true),
         'link' => $faker->url(),
-        'max_points' => $faker->numberBetween($min = 50, $max = 100),
     ];
 });
 
-
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Subtask::class, function (Faker\Generator $faker) {
 
     return [
         'name' => $faker->catchPhrase(),
-        'assigned_points' => $faker->numberBetween($min = 1, $max = 10),
+        'points' => $faker->numberBetween($min = 10, $max = 50),
         'priority' => $faker->numberBetween($min = 1, $max = 5),
-        'video_link' => $faker->url(),
+        'link' => $faker->url(),
         'due_date' => \Carbon\Carbon::now()->addDays(10)->toDateTimeString(),
     ];
 });
