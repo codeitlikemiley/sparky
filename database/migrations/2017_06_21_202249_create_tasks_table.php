@@ -19,7 +19,6 @@ class CreateTasksTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('link')->nullable();
-            $table->integer('max_points')->default(1);
             $table->boolean('done')->default(0);
             $table->timestamps();
         });
