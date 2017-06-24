@@ -16,7 +16,6 @@ class Task extends Model
         'name',
         'description',
         'link',
-        'max_points',
     ];
 
     protected $casts = [
@@ -51,7 +50,9 @@ class Task extends Model
            }
         }
         // No user
-        if(!$name)return "This model has been {$eventName}";
+        if(!$name){
+            return "This model has been {$eventName}";
+        }
         // With User
         return "{$eventName} by: {$name}";
     }
