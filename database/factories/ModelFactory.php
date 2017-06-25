@@ -51,20 +51,21 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
 $factory->define(App\Project::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
+        'slug' => $faker->slug
     ];
 });
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Campaign::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->catchPhrase(),
+        'name' => $faker->name,
     ];
 });
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Task::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->catchPhrase(),
+        'name' => $faker->name,
         'description' => $faker->sentence($nbWords = 15, $variableNbWords = true),
         'link' => $faker->url(),
     ];
@@ -72,13 +73,14 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Subtask::class, function (Faker\Generator $faker) {
-
+    $done = array(true,false);
     return [
-        'name' => $faker->catchPhrase(),
+        'name' => $faker->name,
         'points' => $faker->numberBetween($min = 10, $max = 50),
         'priority' => $faker->numberBetween($min = 1, $max = 5),
         'link' => $faker->url(),
         'due_date' => \Carbon\Carbon::now()->addDays(10)->toDateTimeString(),
+        'done'  => $faker->randomElement($done)
     ];
 });
 
