@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ModelBuilder\CampaignBuilder;
 
 class Campaign extends Model
 {
+    use CampaignBuilder;
     protected $table ='campaigns';
 
     protected $fillable = [
