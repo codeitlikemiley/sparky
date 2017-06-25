@@ -42,6 +42,7 @@ class Task extends Model
 
     public function getDescriptionForEvent(string $eventName): string
     {
+        $name = null;
         $guards = collect(config('auth.guards'))->keys()->all();
         foreach ($guards as $guard) {
            if(auth()->guard($guard)->check()){
@@ -49,11 +50,9 @@ class Task extends Model
             break;
            }
         }
-        // No user
         if(!$name){
             return "This model has been {$eventName}";
         }
-        // With User
         return "{$eventName} by: {$name}";
     }
 }
