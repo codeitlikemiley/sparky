@@ -3,8 +3,9 @@
 namespace App\Traits\ModelBuilder;
 
 use App\Traits\Methods\NormalizerMethod;
+use App\Traits\Methods\CampaignProgressMethod;
 
 trait CampaignBuilder {
 
-    use NormalizerMethod;
+    use NormalizerMethod ,CampaignProgressMethod;
 }
