@@ -23,4 +23,9 @@ class Project extends Model
 
     protected $slugKeyName = 'slug';
 
+    public function campaigns()
+    {
+        return $this->hasMany('App\Campaign', 'project_id', 'id');
+    }
+
 }
