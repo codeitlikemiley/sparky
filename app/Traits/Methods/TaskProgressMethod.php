@@ -23,12 +23,12 @@ trait TaskProgressMethod
     public static function total($modelOrID) : int
     {
         $task = self::normalize($modelOrID);
-        return $task->subtasks()->sum('assigned_points');
+        return $task->subtasks()->sum('points');
     }
 
     public static function done($modelOrID) : int
     {
         $task = self::normalize($modelOrID);
-        return $task->subtasks()->where('done',true)->sum('assigned_points');
+        return $task->subtasks()->where('done',true)->sum('points');
     }
 }
