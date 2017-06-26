@@ -24,11 +24,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $app_namespace = 'App\Http\Controllers';
 
-    protected $employee_namespace = 'Employee\Controllers';
+    protected $employee_namespace = 'Modules\Employee\Controllers';
 
-    protected $client_namespace = 'Client\Controllers';
-
-    protected $tenant_namespace = 'Tenant\Controllers';
+    protected $client_namespace = 'Modules\Client\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -99,9 +97,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapEmployeeRoutes($router);
 
-        $this->mapTenantRoutes($router);
-
-        //
     }
 
     /**
@@ -174,21 +169,4 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Define the "client" routes for the application.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    protected function mapTenantRoutes(Router $router)
-    {
-        $router->group([
-            'namespace' => $this->tenant_namespace,
-            'middleware' => 'web',
-            'domain' => '{username}.'.config('app.domain'),
-            'prefix' => 'admin',
-        ], function ($router) {
-            require base_path('routes/tenant.php');
-        });
-    }
 }
