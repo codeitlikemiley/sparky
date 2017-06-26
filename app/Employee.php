@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Client\Notifications\ResetPasswordNotification;
+use Modules\Employee\Notifications\ResetPasswordNotification;
 use App\Traits\ModelBuilder\EmployeeBuilder;
 
 class Employee extends Authenticatable
