@@ -10,9 +10,7 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
   Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('client.password.reset');
   // Admin Dashboard Route
-  Route::get('/', 'DashboardController@index')->name('admin.dashboard');
-  
+  Route::get('/dashboard', 'DashboardController@index')->name('client.dashboard');
 });
-
 
 
