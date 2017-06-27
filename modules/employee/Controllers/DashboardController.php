@@ -22,8 +22,8 @@ class DashboardController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($tenant)
     {
-        return view('modules.employee.dashboard');
+        return view('modules.employee.dashboard',['tenant' => $tenant]);
     }
 }

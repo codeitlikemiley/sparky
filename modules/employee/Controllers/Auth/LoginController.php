@@ -13,9 +13,9 @@ class LoginController extends BaseController
       $this->middleware('guest:employee', ['except' => ['logout']]);
     }
 
-    public function showLoginForm()
+    public function showLoginForm($tenant)
     {
-      return view('modules.employee.login');
+      return view('modules.employee.login',['tenant' => $tenant]);
     }
 
     public function login(Request $request)

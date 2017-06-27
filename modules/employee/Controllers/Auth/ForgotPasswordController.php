@@ -24,6 +24,7 @@ class ForgotPasswordController extends BaseController
     /**
      * Create a new controller instance.
      *
+     * 
      * @return void
      */
     public function __construct()
@@ -36,9 +37,9 @@ class ForgotPasswordController extends BaseController
       return Password::broker('employees');
     }
 
-    public function showLinkRequestForm()
+    public function showLinkRequestForm($tenant)
     {
 
-        return view('employee.passwords.email');
+        return view('modules.employee.forgotpassword',['tenant' => $tenant]);
     }
 }
