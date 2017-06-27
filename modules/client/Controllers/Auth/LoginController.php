@@ -39,6 +39,6 @@ class LoginController extends BaseController
     public function logout()
     {
         Auth::guard('client')->logout();
-        return redirect()->url(config('app.url'));
+        return redirect(config('app.url'));
     }
 }
