@@ -36,13 +36,31 @@
         background-attachment: fixed;
         background-size: cover;
     }
+
+    .avatar {
+    /* fill the container, preserving aspect ratio, and cropping to fit */
+    background-size: cover;
+
+    /* center the image vertically and horizontally */
+    background-position: center;
+
+    /* round the edges to a circle with border radius 1/2 container size */
+    border-radius: 50%;
+}
 </style>
 @endpush @section('content')
 <div class="login-form padding20 fg-white ">
-    <form class="form-horizontal" role="form" method="POST" action="/login">
+    <form class="form-horizontal" role="form" method="POST" action="{{ route('employee.login.submit',['username' => $tenant->username]) }}">
         {{ csrf_field() }}
-        <h3 class="text-light text-shadow">{{config('app.name')}} Login</h3>
-        <hr class="bg-white" />
+        <div class="align-center">
+        <a href="#" class="icon">
+        <img src="{{$tenant->photo_url}}" class="avatar">
+        </a>
+        </div>
+        <h3 class="align-center">{{ $tenant->name }}'s</h3>
+        <h4 class="align-center">Employee Login Page</h4>
+        
+        <hr class="bg-white"/>
         <br />
         <div class="input-control text full-size" data-role="input">
             <label for="user_login">Email:</label>
@@ -72,11 +90,10 @@
         <div class="form-actions">
 
             <button type="submit" class="button primary">LOGIN</button>
-            <a href="{{url('/')}}" type="button " class="button fg-white link ">Cancel</a>
         </div>
         <div>
-            <p>Don't have any account?</p>
-            <a href='{{url(' /register ')}}' class="fg-white" type="fg-white "><span class="fa fa-sign-in"></span> <u>Register here</u></a>
+            <p>Forgot Password?</p>
+            <a href='{{route('employee.password.request', ['username' => $tenant->username])}}' class="fg-white" type="fg-white "><span class="mif-envelop mif-ani-vertical mif-ani-slow"></span> <u> Reset Password</u></a>
         </div>
     </form>
 </div>

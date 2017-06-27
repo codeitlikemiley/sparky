@@ -54,11 +54,11 @@
         {{ csrf_field() }}
         <div class="align-center">
             <a href="#" class="icon">
-        <img src="{{ $tenant->photo_url }}" class="avatar">
+        <img src="{{$tenant->photo_url}}" class="avatar">
         </a>
         </div>
         <h3 class="align-center">{{ $tenant->name }}'s</h3>
-        <h4 class="align-center">Client Login Page</h4>
+        <h4 class="align-center">Client Forgot Password Page</h4>
 
         <hr class="bg-white" />
         <br />
@@ -69,31 +69,10 @@
         </div>
         <br />
         <br />
-        <div class="input-control password full-size" data-role="input">
-            <label for="user_password">Password:</label>
-            <input type="password" name="password" id="user_password">
-            <button class="button helper-button reveal"><span class="mif-looks"></span></button>
-        </div>
-        <br />
-        <br />
-
-        <div class="cell">
-            <label class="input-control checkbox">
-                <input type="checkbox" name="remember">
-                <span class="check"></span>
-                <span class="caption">Remember Me</span>
-            </label>
-
-        </div>
-        <br />
-        <br />
         <div class="form-actions">
 
-            <button type="submit" class="button primary">LOGIN</button>
-        </div>
-        <div>
-            <p>Forgot Password?</p>
-            <a href='{{route('client.password.request', ['username ' => $tenant->username])}}' class="fg-white" type="fg-white "><span class="mif-envelop mif-ani-vertical mif-ani-slow"></span> <u> Reset Password</u></a>
+            <button type="submit" class="button primary">Reset Password</button>
+            <a href="{{route('client.login',['username' => $tenant->username])}}" type="button " class="button fg-white link "><span class="mif-blocked mif-ani-horizontal mif-ani-fast"></span> Cancel</a>
         </div>
     </form>
 </div>
