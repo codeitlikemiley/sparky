@@ -22,7 +22,7 @@ class DashboardController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($tenant)
     {
         return view('modules.client.dashboard');
     }
