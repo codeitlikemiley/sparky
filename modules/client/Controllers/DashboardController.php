@@ -24,6 +24,6 @@ class DashboardController extends BaseController
      */
     public function index($tenant)
     {
-        return view('modules.client.dashboard');
+        return view('modules.client.dashboard',['tenant' => $tenant]);
     }
 }
