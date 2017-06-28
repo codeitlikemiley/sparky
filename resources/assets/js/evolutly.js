@@ -2,9 +2,9 @@
 require('./evolutly-bootstrap');
 
 // All Our Global Components
-require('./evolutly/components');
+require('bootstrap-components');
 
 var evo = new Vue({
     // mixins are all module.exports
-    mixins: [require('./evolutly/module')]
+    mixins: [require('./evolutly/evolutly')]
 });
