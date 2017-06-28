@@ -78,7 +78,7 @@ class ComposerServiceProvider extends ServiceProvider
                 return $guard;
             }
         }
-        return $auth->getDefaultDriver();
+        return auth()->getDefaultDriver();
     }
 
     private function composeGuard()
