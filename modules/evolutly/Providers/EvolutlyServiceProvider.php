@@ -11,7 +11,9 @@ class EvolutlyServiceProvider extends ServiceProvider
 
     public function booted()
     {
-        
+        $this->loadViewsFrom(__DIR__.'/resources/views/modules/employee', 'employee');
+        $this->loadViewsFrom(__DIR__.'/resources/views/modules/client', 'client');
+        $this->loadViewsFrom(__DIR__.'/resources/views/modules/evolutly', 'evolutly');
     }
 
     public function register()
