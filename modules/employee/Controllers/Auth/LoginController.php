@@ -3,7 +3,7 @@
 namespace Modules\Employee\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use Modules\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 use Auth;
 
 class LoginController extends BaseController

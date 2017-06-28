@@ -3,7 +3,7 @@
 namespace Modules\Client\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use Modules\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 use Password;
 
 class ForgotPasswordController extends BaseController

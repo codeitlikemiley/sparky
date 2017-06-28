@@ -3,7 +3,7 @@
 namespace Modules\Client\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Modules\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use Password;
 use Auth;

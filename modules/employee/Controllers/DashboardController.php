@@ -3,7 +3,7 @@
 namespace Modules\Employee\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Controller as BaseController;
+use App\Http\Controllers\Controller as BaseController;
 
 class DashboardController extends BaseController
 {
