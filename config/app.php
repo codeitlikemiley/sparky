@@ -186,6 +186,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SparkServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        Modules\Evolutly\Providers\EvolutlyServiceProvider::class,
 
     ],
 
