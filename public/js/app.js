@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 292);
+/******/ 	return __webpack_require__(__webpack_require__.s = 297);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(280)("./" + name);
+            __webpack_require__(176)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4534,7 +4534,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(136)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(131)(module)))
 
 /***/ }),
 /* 1 */
@@ -4543,7 +4543,7 @@ return hooks;
 "use strict";
 
 
-var bind = __webpack_require__(15);
+var bind = __webpack_require__(11);
 
 /*global toString:true*/
 
@@ -4844,158 +4844,12 @@ module.exports = {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-/*
- * This mixin is primarily used to share code for the "interval" selector
- * on the registration and subscription screens, which is used to show
- * all of the various subscription plans offered by the application.
- */
-module.exports = {
-    data: function data() {
-        return {
-            selectedPlan: null,
-            detailingPlan: null,
-
-            showingMonthlyPlans: true,
-            showingYearlyPlans: false
-        };
-    },
-
-
-    methods: {
-        /**
-         * Switch to showing monthly plans.
-         */
-        showMonthlyPlans: function showMonthlyPlans() {
-            this.showingMonthlyPlans = true;
-
-            this.showingYearlyPlans = false;
-        },
-
-
-        /**
-         * Switch to showing yearly plans.
-         */
-        showYearlyPlans: function showYearlyPlans() {
-            this.showingMonthlyPlans = false;
-
-            this.showingYearlyPlans = true;
-        },
-
-
-        /**
-         * Show the plan details for the given plan.
-         */
-        showPlanDetails: function showPlanDetails(plan) {
-            this.detailingPlan = plan;
-
-            $('#modal-plan-details').modal('show');
-        }
-    },
-
-    computed: {
-        /**
-         * Get the active "interval" being displayed.
-         */
-        activeInterval: function activeInterval() {
-            return this.showingMonthlyPlans ? 'monthly' : 'yearly';
-        },
-
-
-        /**
-         * Get all of the plans for the active interval.
-         */
-        plansForActiveInterval: function plansForActiveInterval() {
-            var _this = this;
-
-            return _.filter(this.plans, function (plan) {
-                return plan.active && (plan.price == 0 || plan.interval == _this.activeInterval);
-            });
-        },
-
-
-        /**
-         * Get all of the paid plans.
-         */
-        paidPlans: function paidPlans() {
-            return _.filter(this.plans, function (plan) {
-                return plan.active && plan.price > 0;
-            });
-        },
-
-
-        /**
-         * Get all of the paid plans for the active interval.
-         */
-        paidPlansForActiveInterval: function paidPlansForActiveInterval() {
-            return _.filter(this.plansForActiveInterval, function (plan) {
-                return plan.active && plan.price > 0;
-            });
-        },
-
-
-        /**
-         * Determine if both monthly and yearly plans are available.
-         */
-        hasMonthlyAndYearlyPlans: function hasMonthlyAndYearlyPlans() {
-            return this.monthlyPlans.length > 0 && this.yearlyPlans.length > 0;
-        },
-
-
-        /**
-         * Determine if both monthly and yearly plans are available.
-         */
-        hasMonthlyAndYearlyPaidPlans: function hasMonthlyAndYearlyPaidPlans() {
-            return _.where(this.paidPlans, { interval: 'monthly' }).length > 0 && _.where(this.paidPlans, { interval: 'yearly' }).length > 0;
-        },
-
-
-        /**
-         * Determine if only yearly plans are available.
-         */
-        onlyHasYearlyPlans: function onlyHasYearlyPlans() {
-            return this.monthlyPlans.length == 0 && this.yearlyPlans.length > 0;
-        },
-
-
-        /**
-         * Determine if both monthly and yearly plans are available.
-         */
-        onlyHasYearlyPaidPlans: function onlyHasYearlyPaidPlans() {
-            return _.where(this.paidPlans, { interval: 'monthly' }).length == 0 && _.where(this.paidPlans, { interval: 'yearly' }).length > 0;
-        },
-
-
-        /**
-         * Get all of the monthly plans.
-         */
-        monthlyPlans: function monthlyPlans() {
-            return _.filter(this.plans, function (plan) {
-                return plan.active && plan.interval == 'monthly';
-            });
-        },
-
-
-        /**
-         * Get all of the yearly plans.
-         */
-        yearlyPlans: function yearlyPlans() {
-            return _.filter(this.plans, function (plan) {
-                return plan.active && plan.interval == 'yearly';
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var asap = __webpack_require__(10);
+var asap = __webpack_require__(6);
 
 function noop() {}
 
@@ -5209,185 +5063,14 @@ function doResolve(fn, promise) {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-/*
- * This mixin is used by most of the subscription related screens to select plans
- * and send subscription plan changes to the server. This contains helpers for
- * the active subscription, trial information and other convenience helpers.
- */
-module.exports = {
-    /**
-     * The mixin's data.
-     */
-    data: function data() {
-        return {
-            selectingPlan: null,
-
-            planForm: new SparkForm({})
-        };
-    },
-
-
-    methods: {
-        /**
-         * Update the subscription to the given plan.
-         *
-         * Used when updating or resuming the subscription plan.
-         */
-        updateSubscription: function updateSubscription(plan) {
-            var _this = this;
-
-            this.selectingPlan = plan;
-
-            this.planForm.errors.forget();
-
-            // Here we will send the request to the server to update the subscription plan and
-            // update the user and team once the request is complete. This method gets used
-            // for both updating subscriptions plus resuming any cancelled subscriptions.
-            axios.put(this.urlForPlanUpdate, { "plan": plan.id }).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-            }).catch(function (errors) {
-                if (errors.response.status == 422) {
-                    _this.planForm.errors.set(errors.response.data);
-                } else {
-                    _this.planForm.errors.set({ plan: ["We were unable to update your subscription. Please contact customer support."] });
-                }
-            }).finally(function () {
-                _this.selectingPlan = null;
-            });
-        },
-
-
-        /**
-         * Determine if the given plan is selected.
-         */
-        isActivePlan: function isActivePlan(plan) {
-            return this.activeSubscription && this.activeSubscription.provider_plan == plan.id;
-        }
-    },
-
-    computed: {
-        /**
-         * Get the active plan instance.
-         */
-        activePlan: function activePlan() {
-            var _this2 = this;
-
-            if (this.activeSubscription) {
-                return _.find(this.plans, function (plan) {
-                    return plan.id == _this2.activeSubscription.provider_plan;
-                });
-            }
-        },
-
-
-        /**
-         * Determine if the active plan is a monthly plan.
-         */
-        activePlanIsMonthly: function activePlanIsMonthly() {
-            return this.activePlan && this.activePlan.interval == 'monthly';
-        },
-
-
-        /**
-         * Get the active subscription instance.
-         */
-        activeSubscription: function activeSubscription() {
-            if (!this.billable) {
-                return;
-            }
-
-            var subscription = _.find(this.billable.subscriptions, function (subscription) {
-                return subscription.name == 'default';
-            });
-
-            if (typeof subscription !== 'undefined') {
-                return subscription;
-            }
-        },
-
-
-        /**
-         * Determine if the current subscription is active.
-         */
-        subscriptionIsActive: function subscriptionIsActive() {
-            return this.activeSubscription && !this.activeSubscription.ends_at;
-        },
-
-
-        /**
-         * Determine if the billable entity is on a generic trial.
-         */
-        onGenericTrial: function onGenericTrial() {
-            return this.billable.trial_ends_at && moment.utc(this.billable.trial_ends_at).isAfter(moment.utc());
-        },
-
-
-        /**
-         * Determine if the current subscription is active.
-         */
-        subscriptionIsOnTrial: function subscriptionIsOnTrial() {
-            if (this.onGenericTrial) {
-                return true;
-            }
-
-            return this.activeSubscription && this.activeSubscription.trial_ends_at && moment.utc().isBefore(moment.utc(this.activeSubscription.trial_ends_at));
-        },
-
-
-        /**
-         * Get the formatted trial ending date.
-         */
-        trialEndsAt: function trialEndsAt() {
-            if (!this.subscriptionIsOnTrial) {
-                return;
-            }
-
-            if (this.onGenericTrial) {
-                return moment.utc(this.billable.trial_ends_at).local().format('MMMM Do, YYYY');
-            }
-
-            return moment.utc(this.activeSubscription.trial_ends_at).local().format('MMMM Do, YYYY');
-        },
-
-
-        /**
-         * Determine if the current subscription is active.
-         */
-        subscriptionIsOnGracePeriod: function subscriptionIsOnGracePeriod() {
-            return this.activeSubscription && this.activeSubscription.ends_at && moment.utc().isBefore(moment.utc(this.activeSubscription.ends_at));
-        },
-
-
-        /**
-         * Determine if the billable entity has no active subscription.
-         */
-        needsSubscription: function needsSubscription() {
-            return !this.activeSubscription || this.activeSubscription.ends_at && moment.utc().isAfter(moment.utc(this.activeSubscription.ends_at));
-        },
-
-
-        /**
-         * Get the URL for the subscription plan update.
-         */
-        urlForPlanUpdate: function urlForPlanUpdate() {
-            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
-        }
-    }
-};
-
-/***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(154);
+var normalizeHeaderName = __webpack_require__(148);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -5404,10 +5087,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(7);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(7);
   }
   return adapter;
 }
@@ -5478,265 +5161,156 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(177)))
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports) {
 
-window.braintreeCheckout = [];
-
+/*
+ * This mixin is primarily used to share code for the "interval" selector
+ * on the registration and subscription screens, which is used to show
+ * all of the various subscription plans offered by the application.
+ */
 module.exports = {
+    data: function data() {
+        return {
+            selectedPlan: null,
+            detailingPlan: null,
+
+            showingMonthlyPlans: true,
+            showingYearlyPlans: false
+        };
+    },
+
+
     methods: {
         /**
-         * Configure the Braintree container.
+         * Switch to showing monthly plans.
          */
-        braintree: function (_braintree) {
-            function braintree(_x, _x2) {
-                return _braintree.apply(this, arguments);
-            }
+        showMonthlyPlans: function showMonthlyPlans() {
+            this.showingMonthlyPlans = true;
 
-            braintree.toString = function () {
-                return _braintree.toString();
-            };
-
-            return braintree;
-        }(function (containerName, callback) {
-            braintree.setup(Spark.braintreeToken, 'dropin', {
-                container: containerName,
-                paypal: {
-                    singleUse: false,
-                    locale: 'en_us',
-                    enableShippingAddress: false
-                },
-                dataCollector: {
-                    paypal: true
-                },
-                onReady: function onReady(checkout) {
-                    window.braintreeCheckout[containerName] = checkout;
-                },
-
-                onPaymentMethodReceived: callback
-            });
-        }),
+            this.showingYearlyPlans = false;
+        },
 
 
         /**
-         * Reset the Braintree container.
+         * Switch to showing yearly plans.
          */
-        resetBraintree: function resetBraintree(containerName, callback) {
+        showYearlyPlans: function showYearlyPlans() {
+            this.showingMonthlyPlans = false;
+
+            this.showingYearlyPlans = true;
+        },
+
+
+        /**
+         * Show the plan details for the given plan.
+         */
+        showPlanDetails: function showPlanDetails(plan) {
+            this.detailingPlan = plan;
+
+            $('#modal-plan-details').modal('show');
+        }
+    },
+
+    computed: {
+        /**
+         * Get the active "interval" being displayed.
+         */
+        activeInterval: function activeInterval() {
+            return this.showingMonthlyPlans ? 'monthly' : 'yearly';
+        },
+
+
+        /**
+         * Get all of the plans for the active interval.
+         */
+        plansForActiveInterval: function plansForActiveInterval() {
             var _this = this;
 
-            window.braintreeCheckout[containerName].teardown(function () {
-                window.braintreeCheckout[containerName] = null;
+            return _.filter(this.plans, function (plan) {
+                return plan.active && (plan.price == 0 || plan.interval == _this.activeInterval);
+            });
+        },
 
-                _this.braintree(containerName, callback);
+
+        /**
+         * Get all of the paid plans.
+         */
+        paidPlans: function paidPlans() {
+            return _.filter(this.plans, function (plan) {
+                return plan.active && plan.price > 0;
+            });
+        },
+
+
+        /**
+         * Get all of the paid plans for the active interval.
+         */
+        paidPlansForActiveInterval: function paidPlansForActiveInterval() {
+            return _.filter(this.plansForActiveInterval, function (plan) {
+                return plan.active && plan.price > 0;
+            });
+        },
+
+
+        /**
+         * Determine if both monthly and yearly plans are available.
+         */
+        hasMonthlyAndYearlyPlans: function hasMonthlyAndYearlyPlans() {
+            return this.monthlyPlans.length > 0 && this.yearlyPlans.length > 0;
+        },
+
+
+        /**
+         * Determine if both monthly and yearly plans are available.
+         */
+        hasMonthlyAndYearlyPaidPlans: function hasMonthlyAndYearlyPaidPlans() {
+            return _.where(this.paidPlans, { interval: 'monthly' }).length > 0 && _.where(this.paidPlans, { interval: 'yearly' }).length > 0;
+        },
+
+
+        /**
+         * Determine if only yearly plans are available.
+         */
+        onlyHasYearlyPlans: function onlyHasYearlyPlans() {
+            return this.monthlyPlans.length == 0 && this.yearlyPlans.length > 0;
+        },
+
+
+        /**
+         * Determine if both monthly and yearly plans are available.
+         */
+        onlyHasYearlyPaidPlans: function onlyHasYearlyPaidPlans() {
+            return _.where(this.paidPlans, { interval: 'monthly' }).length == 0 && _.where(this.paidPlans, { interval: 'yearly' }).length > 0;
+        },
+
+
+        /**
+         * Get all of the monthly plans.
+         */
+        monthlyPlans: function monthlyPlans() {
+            return _.filter(this.plans, function (plan) {
+                return plan.active && plan.interval == 'monthly';
+            });
+        },
+
+
+        /**
+         * Get all of the yearly plans.
+         */
+        yearlyPlans: function yearlyPlans() {
+            return _.filter(this.plans, function (plan) {
+                return plan.active && plan.interval == 'yearly';
             });
         }
     }
 };
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    methods: {
-        /**
-         * Get the current discount for the given billable entity.
-         */
-        getCurrentDiscountForBillable: function getCurrentDiscountForBillable(type, billable) {
-            if (type === 'user') {
-                return this.getCurrentDiscountForUser(billable);
-            } else {
-                return this.getCurrentDiscountForTeam(billable);
-            }
-        },
-
-
-        /**
-         * Get the current discount for the user.
-         */
-        getCurrentDiscountForUser: function getCurrentDiscountForUser(user) {
-            var _this = this;
-
-            this.currentDiscount = null;
-
-            this.loadingCurrentDiscount = true;
-
-            axios.get('/coupon/user/' + user.id).then(function (response) {
-                if (response.status == 200) {
-                    _this.currentDiscount = response.data;
-                }
-
-                _this.loadingCurrentDiscount = false;
-            });
-        },
-
-
-        /**
-         * Get the current discount for the team.
-         */
-        getCurrentDiscountForTeam: function getCurrentDiscountForTeam(team) {
-            var _this2 = this;
-
-            this.currentDiscount = null;
-
-            this.loadingCurrentDiscount = true;
-
-            axios.get('/coupon/' + Spark.teamString + '/' + team.id).then(function (response) {
-                if (response.status == 200) {
-                    _this2.currentDiscount = response.data;
-                }
-
-                _this2.loadingCurrentDiscount = false;
-            });
-        },
-
-
-        /**
-         * Get the formatted discount amount for the given discount.
-         */
-        formattedDiscount: function formattedDiscount(discount) {
-            if (!discount) {
-                return;
-            }
-
-            if (discount.percent_off) {
-                return discount.percent_off + '%';
-            } else {
-                return Vue.filter('currency')(this.calculateAmountOff(discount.amount_off));
-            }
-        },
-
-
-        /**
-         * Calculate the amount off for the given discount amount.
-         */
-        calculateAmountOff: function calculateAmountOff(amount) {
-            return amount / 100;
-        },
-
-
-        /**
-         * Get the formatted discount duration for the given discount.
-         */
-        formattedDiscountDuration: function formattedDiscountDuration(discount) {
-            if (!discount) {
-                return;
-            }
-
-            switch (discount.duration) {
-                case 'forever':
-                    return 'all future invoices';
-                case 'once':
-                    return 'a single invoice';
-                case 'repeating':
-                    return 'all invoices during the next ' + discount.duration_in_months + ' months';
-            }
-        }
-    }
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    pushStateSelector: null,
-
-    methods: {
-        /**
-         * Initialize push state handling for tabs.
-         */
-        usePushStateForTabs: function usePushStateForTabs(selector) {
-            var _this = this;
-
-            this.pushStateSelector = selector;
-
-            this.registerTabClickHandler();
-
-            window.addEventListener('popstate', function (e) {
-                _this.activateTabForCurrentHash();
-            });
-
-            if (window.location.hash) {
-                this.activateTabForCurrentHash();
-            } else {
-                this.activateFirstTab();
-            }
-        },
-
-
-        /**
-         * Register the click handler for all of the tabs.
-         */
-        registerTabClickHandler: function registerTabClickHandler() {
-            var self = this;
-
-            $(this.pushStateSelector + ' a[data-toggle="tab"]').on('click', function (e) {
-                self.removeActiveClassFromTabs();
-
-                history.pushState(null, null, '#/' + $(this).attr('href').substring(1));
-
-                self.broadcastTabChange($(this).attr('href').substring(1));
-            });
-        },
-
-
-        /**
-         * Activate the tab for the current hash in the URL.
-         */
-        activateTabForCurrentHash: function activateTabForCurrentHash() {
-            var hash = window.location.hash.substring(2);
-
-            var parameters = hash.split('/');
-
-            hash = parameters.shift();
-
-            this.removeActiveClassFromTabs();
-
-            var tab = $(this.pushStateSelector + ' a[href="#' + hash + '"][data-toggle="tab"]');
-
-            if (tab.length > 0) {
-                tab.tab('show');
-            }
-
-            this.broadcastTabChange(hash, parameters);
-        },
-
-
-        /**
-         * Activate the first tab in a list.
-         */
-        activateFirstTab: function activateFirstTab() {
-            var tab = $(this.pushStateSelector + ' a[data-toggle="tab"]').first();
-
-            tab.tab('show');
-
-            this.broadcastTabChange(tab.attr('href').substring(1));
-        },
-
-
-        /**
-         * Remove the active class from the tabs.
-         */
-        removeActiveClassFromTabs: function removeActiveClassFromTabs() {
-            $(this.pushStateSelector + ' li').removeClass('active');
-        },
-
-
-        /**
-         * Broadcast that a tab change happened.
-         */
-        broadcastTabChange: function broadcastTabChange(hash, parameters) {
-            Bus.$emit('sparkHashChanged', hash, parameters);
-        }
-    }
-};
-
-/***/ }),
-/* 9 */
+/* 5 */
 /***/ (function(module, exports) {
 
 var g;
@@ -5763,7 +5337,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 10 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5991,22 +5565,22 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 // back into ASAP proper.
 // https://github.com/tildeio/rsvp.js/blob/cddf7232546a9cf858524b75cde6f9edf72620a7/lib/rsvp/asap.js
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 11 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(146);
-var buildURL = __webpack_require__(149);
-var parseHeaders = __webpack_require__(155);
-var isURLSameOrigin = __webpack_require__(153);
-var createError = __webpack_require__(14);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(148);
+var settle = __webpack_require__(140);
+var buildURL = __webpack_require__(143);
+var parseHeaders = __webpack_require__(149);
+var isURLSameOrigin = __webpack_require__(147);
+var createError = __webpack_require__(10);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(142);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -6102,7 +5676,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(151);
+      var cookies = __webpack_require__(145);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -6178,7 +5752,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6204,7 +5778,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 13 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6216,13 +5790,13 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(145);
+var enhanceError = __webpack_require__(139);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -6240,7 +5814,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 15 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6258,197 +5832,178 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 16 */
+/* 12 */
 /***/ (function(module, exports) {
 
+/*
+ * This mixin is used by most of the subscription related screens to select plans
+ * and send subscription plan changes to the server. This contains helpers for
+ * the active subscription, trial information and other convenience helpers.
+ */
 module.exports = {
     /**
      * The mixin's data.
      */
     data: function data() {
         return {
-            plans: [],
-            selectedPlan: null,
+            selectingPlan: null,
 
-            invitation: null,
-            invalidInvitation: false
+            planForm: new SparkForm({})
         };
     },
 
 
     methods: {
         /**
-         * Get the active plans for the application.
+         * Update the subscription to the given plan.
+         *
+         * Used when updating or resuming the subscription plan.
          */
-        getPlans: function getPlans() {
+        updateSubscription: function updateSubscription(plan) {
             var _this = this;
 
-            if (!Spark.cardUpFront) {
-                return;
-            }
+            this.selectingPlan = plan;
 
-            axios.get('/spark/plans').then(function (response) {
-                var plans = response.data;
+            this.planForm.errors.forget();
 
-                _this.plans = _.where(plans, { type: "user" }).length > 0 ? _.where(plans, { type: "user" }) : _.where(plans, { type: "team" });
-
-                _this.selectAppropriateDefaultPlan();
-            });
-        },
-
-
-        /**
-         * Get the invitation specified in the query string.
-         */
-        getInvitation: function getInvitation() {
-            var _this2 = this;
-
-            axios.get("/invitations/" + this.query.invitation).then(function (response) {
-                _this2.invitation = response.data;
-            }).catch(function (response) {
-                _this2.invalidInvitation = true;
-            });
-        },
-
-
-        /**
-         * Select the appropriate default plan for registration.
-         */
-        selectAppropriateDefaultPlan: function selectAppropriateDefaultPlan() {
-            if (this.query.plan) {
-                this.selectPlanById(this.query.plan) || this.selectPlanByName(this.query.plan);
-            } else if (this.query.invitation) {
-                this.selectFreePlan();
-            } else if (this.paidPlansForActiveInterval.length > 0) {
-                this.selectPlan(this.paidPlansForActiveInterval[0]);
-            } else {
-                this.selectFreePlan();
-            }
-
-            if (this.shouldShowYearlyPlans()) {
-                this.showYearlyPlans();
-            }
-        },
-
-
-        /**
-         * Select the free plan.
-         */
-        selectFreePlan: function selectFreePlan() {
-            var plan = _.find(this.plans, function (plan) {
-                return plan.price === 0;
-            });
-
-            if (typeof plan !== 'undefined') {
-                this.selectPlan(plan);
-            }
-        },
-
-
-        /**
-         * Select the plan with the given id.
-         */
-        selectPlanById: function selectPlanById(id) {
-            var _this3 = this;
-
-            _.each(this.plans, function (plan) {
-                if (plan.id == id) {
-                    _this3.selectPlan(plan);
+            // Here we will send the request to the server to update the subscription plan and
+            // update the user and team once the request is complete. This method gets used
+            // for both updating subscriptions plus resuming any cancelled subscriptions.
+            axios.put(this.urlForPlanUpdate, { "plan": plan.id }).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+            }).catch(function (errors) {
+                if (errors.response.status == 422) {
+                    _this.planForm.errors.set(errors.response.data);
+                } else {
+                    _this.planForm.errors.set({ plan: ["We were unable to update your subscription. Please contact customer support."] });
                 }
+            }).finally(function () {
+                _this.selectingPlan = null;
             });
-
-            return this.selectedPlan;
-        },
-
-
-        /**
-         * Select the plan with the given name.
-         */
-        selectPlanByName: function selectPlanByName(name) {
-            var _this4 = this;
-
-            _.each(this.plans, function (plan) {
-                if (plan.name == name) {
-                    _this4.selectPlan(plan);
-                }
-            });
-
-            return this.selectedPlan;
         },
 
 
         /**
          * Determine if the given plan is selected.
          */
-        isSelected: function isSelected(plan) {
-            return this.selectedPlan && plan.id == this.selectedPlan.id;
-        },
-
-
-        /**
-         * Select the given plan.
-         */
-        selectPlan: function selectPlan(plan) {
-            this.selectedPlan = plan;
-
-            this.registerForm.plan = plan.id;
-        },
-
-
-        /**
-         * Determine if we should show the yearly plans.
-         */
-        shouldShowYearlyPlans: function shouldShowYearlyPlans() {
-            return this.monthlyPlans.length == 0 && this.yearlyPlans.length > 0 || this.selectedPlan.interval == 'yearly';
+        isActivePlan: function isActivePlan(plan) {
+            return this.activeSubscription && this.activeSubscription.provider_plan == plan.id;
         }
-    }
-};
+    },
 
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    methods: {
+    computed: {
         /**
-         * Determine if the given country collects European VAT.
+         * Get the active plan instance.
          */
-        collectsVat: function collectsVat(country) {
-            return Spark.collectsEuropeanVat ? _.contains(['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'GR', 'ES', 'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'], country) : false;
+        activePlan: function activePlan() {
+            var _this2 = this;
+
+            if (this.activeSubscription) {
+                return _.find(this.plans, function (plan) {
+                    return plan.id == _this2.activeSubscription.provider_plan;
+                });
+            }
         },
 
 
         /**
-         * Refresh the tax rate using the given form input.
+         * Determine if the active plan is a monthly plan.
          */
-        refreshTaxRate: function refreshTaxRate(form) {
-            var _this = this;
+        activePlanIsMonthly: function activePlanIsMonthly() {
+            return this.activePlan && this.activePlan.interval == 'monthly';
+        },
 
-            axios.post('/tax-rate', JSON.parse(JSON.stringify(form))).then(function (response) {
-                _this.taxRate = response.data.rate;
+
+        /**
+         * Get the active subscription instance.
+         */
+        activeSubscription: function activeSubscription() {
+            if (!this.billable) {
+                return;
+            }
+
+            var subscription = _.find(this.billable.subscriptions, function (subscription) {
+                return subscription.name == 'default';
             });
+
+            if (typeof subscription !== 'undefined') {
+                return subscription;
+            }
         },
 
 
         /**
-         * Get the tax amount for the selected plan.
+         * Determine if the current subscription is active.
          */
-        taxAmount: function taxAmount(plan) {
-            return plan.price * (this.taxRate / 100);
+        subscriptionIsActive: function subscriptionIsActive() {
+            return this.activeSubscription && !this.activeSubscription.ends_at;
         },
 
 
         /**
-         * Get the total plan price including the applicable tax.
+         * Determine if the billable entity is on a generic trial.
          */
-        priceWithTax: function priceWithTax(plan) {
-            return plan.price + this.taxAmount(plan);
+        onGenericTrial: function onGenericTrial() {
+            return this.billable.trial_ends_at && moment.utc(this.billable.trial_ends_at).isAfter(moment.utc());
+        },
+
+
+        /**
+         * Determine if the current subscription is active.
+         */
+        subscriptionIsOnTrial: function subscriptionIsOnTrial() {
+            if (this.onGenericTrial) {
+                return true;
+            }
+
+            return this.activeSubscription && this.activeSubscription.trial_ends_at && moment.utc().isBefore(moment.utc(this.activeSubscription.trial_ends_at));
+        },
+
+
+        /**
+         * Get the formatted trial ending date.
+         */
+        trialEndsAt: function trialEndsAt() {
+            if (!this.subscriptionIsOnTrial) {
+                return;
+            }
+
+            if (this.onGenericTrial) {
+                return moment.utc(this.billable.trial_ends_at).local().format('MMMM Do, YYYY');
+            }
+
+            return moment.utc(this.activeSubscription.trial_ends_at).local().format('MMMM Do, YYYY');
+        },
+
+
+        /**
+         * Determine if the current subscription is active.
+         */
+        subscriptionIsOnGracePeriod: function subscriptionIsOnGracePeriod() {
+            return this.activeSubscription && this.activeSubscription.ends_at && moment.utc().isBefore(moment.utc(this.activeSubscription.ends_at));
+        },
+
+
+        /**
+         * Determine if the billable entity has no active subscription.
+         */
+        needsSubscription: function needsSubscription() {
+            return !this.activeSubscription || this.activeSubscription.ends_at && moment.utc().isAfter(moment.utc(this.activeSubscription.ends_at));
+        },
+
+
+        /**
+         * Get the URL for the subscription plan update.
+         */
+        urlForPlanUpdate: function urlForPlanUpdate() {
+            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
         }
     }
 };
 
 /***/ }),
-/* 18 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6526,7 +6081,7 @@ return af;
 
 
 /***/ }),
-/* 19 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6590,7 +6145,7 @@ return arDz;
 
 
 /***/ }),
-/* 20 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6654,7 +6209,7 @@ return arKw;
 
 
 /***/ }),
-/* 21 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6785,7 +6340,7 @@ return arLy;
 
 
 /***/ }),
-/* 22 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6850,7 +6405,7 @@ return arMa;
 
 
 /***/ }),
-/* 23 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -6960,7 +6515,7 @@ return arSa;
 
 
 /***/ }),
-/* 24 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7024,7 +6579,7 @@ return arTn;
 
 
 /***/ }),
-/* 25 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7171,7 +6726,7 @@ return ar;
 
 
 /***/ }),
-/* 26 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7281,7 +6836,7 @@ return az;
 
 
 /***/ }),
-/* 27 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7420,7 +6975,7 @@ return be;
 
 
 /***/ }),
-/* 28 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7515,7 +7070,7 @@ return bg;
 
 
 /***/ }),
-/* 29 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7639,7 +7194,7 @@ return bn;
 
 
 /***/ }),
-/* 30 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7763,7 +7318,7 @@ return bo;
 
 
 /***/ }),
-/* 31 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -7876,7 +7431,7 @@ return br;
 
 
 /***/ }),
-/* 32 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8024,7 +7579,7 @@ return bs;
 
 
 /***/ }),
-/* 33 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8117,7 +7672,7 @@ return ca;
 
 
 /***/ }),
-/* 34 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8294,7 +7849,7 @@ return cs;
 
 
 /***/ }),
-/* 35 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8362,7 +7917,7 @@ return cv;
 
 
 /***/ }),
-/* 36 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8448,7 +8003,7 @@ return cy;
 
 
 /***/ }),
-/* 37 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8513,7 +8068,7 @@ return da;
 
 
 /***/ }),
-/* 38 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8597,7 +8152,7 @@ return deAt;
 
 
 /***/ }),
-/* 39 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8680,7 +8235,7 @@ return deCh;
 
 
 /***/ }),
-/* 40 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8763,7 +8318,7 @@ return de;
 
 
 /***/ }),
-/* 41 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8868,7 +8423,7 @@ return dv;
 
 
 /***/ }),
-/* 42 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -8973,7 +8528,7 @@ return el;
 
 
 /***/ }),
-/* 43 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9045,7 +8600,7 @@ return enAu;
 
 
 /***/ }),
-/* 44 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9113,7 +8668,7 @@ return enCa;
 
 
 /***/ }),
-/* 45 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9185,7 +8740,7 @@ return enGb;
 
 
 /***/ }),
-/* 46 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9257,7 +8812,7 @@ return enIe;
 
 
 /***/ }),
-/* 47 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9329,7 +8884,7 @@ return enNz;
 
 
 /***/ }),
-/* 48 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9407,7 +8962,7 @@ return eo;
 
 
 /***/ }),
-/* 49 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9494,7 +9049,7 @@ return esDo;
 
 
 /***/ }),
-/* 50 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9582,7 +9137,7 @@ return es;
 
 
 /***/ }),
-/* 51 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9667,7 +9222,7 @@ return et;
 
 
 /***/ }),
-/* 52 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9738,7 +9293,7 @@ return eu;
 
 
 /***/ }),
-/* 53 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9850,7 +9405,7 @@ return fa;
 
 
 /***/ }),
-/* 54 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -9962,7 +9517,7 @@ return fi;
 
 
 /***/ }),
-/* 55 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10027,7 +9582,7 @@ return fo;
 
 
 /***/ }),
-/* 56 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10106,7 +9661,7 @@ return frCa;
 
 
 /***/ }),
-/* 57 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10189,7 +9744,7 @@ return frCh;
 
 
 /***/ }),
-/* 58 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10277,7 +9832,7 @@ return fr;
 
 
 /***/ }),
-/* 59 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10357,7 +9912,7 @@ return fy;
 
 
 /***/ }),
-/* 60 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10438,7 +9993,7 @@ return gd;
 
 
 /***/ }),
-/* 61 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10520,7 +10075,7 @@ return gl;
 
 
 /***/ }),
-/* 62 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10647,7 +10202,7 @@ return gomLatn;
 
 
 /***/ }),
-/* 63 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10751,7 +10306,7 @@ return he;
 
 
 /***/ }),
-/* 64 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -10880,7 +10435,7 @@ return hi;
 
 
 /***/ }),
-/* 65 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11030,7 +10585,7 @@ return hr;
 
 
 /***/ }),
-/* 66 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11144,7 +10699,7 @@ return hu;
 
 
 /***/ }),
-/* 67 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11244,7 +10799,7 @@ return hyAm;
 
 
 /***/ }),
-/* 68 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11332,7 +10887,7 @@ return id;
 
 
 /***/ }),
-/* 69 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11464,7 +11019,7 @@ return is;
 
 
 /***/ }),
-/* 70 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11539,7 +11094,7 @@ return it;
 
 
 /***/ }),
-/* 71 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11624,7 +11179,7 @@ return ja;
 
 
 /***/ }),
-/* 72 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11712,7 +11267,7 @@ return jv;
 
 
 /***/ }),
-/* 73 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11806,7 +11361,7 @@ return ka;
 
 
 /***/ }),
-/* 74 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11898,7 +11453,7 @@ return kk;
 
 
 /***/ }),
-/* 75 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -11961,7 +11516,7 @@ return km;
 
 
 /***/ }),
-/* 76 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12092,7 +11647,7 @@ return kn;
 
 
 /***/ }),
-/* 77 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12166,7 +11721,7 @@ return ko;
 
 
 /***/ }),
-/* 78 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12259,7 +11814,7 @@ return ky;
 
 
 /***/ }),
-/* 79 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12401,7 +11956,7 @@ return lb;
 
 
 /***/ }),
-/* 80 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12476,7 +12031,7 @@ return lo;
 
 
 /***/ }),
-/* 81 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12598,7 +12153,7 @@ return lt;
 
 
 /***/ }),
-/* 82 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12700,7 +12255,7 @@ return lv;
 
 
 /***/ }),
-/* 83 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12816,7 +12371,7 @@ return me;
 
 
 /***/ }),
-/* 84 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12885,7 +12440,7 @@ return mi;
 
 
 /***/ }),
-/* 85 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -12980,7 +12535,7 @@ return mk;
 
 
 /***/ }),
-/* 86 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13066,7 +12621,7 @@ return ml;
 
 
 /***/ }),
-/* 87 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13230,7 +12785,7 @@ return mr;
 
 
 /***/ }),
-/* 88 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13318,7 +12873,7 @@ return msMy;
 
 
 /***/ }),
-/* 89 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13405,7 +12960,7 @@ return ms;
 
 
 /***/ }),
-/* 90 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13506,7 +13061,7 @@ return my;
 
 
 /***/ }),
-/* 91 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13574,7 +13129,7 @@ return nb;
 
 
 /***/ }),
-/* 92 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13702,7 +13257,7 @@ return ne;
 
 
 /***/ }),
-/* 93 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13795,7 +13350,7 @@ return nlBe;
 
 
 /***/ }),
-/* 94 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13888,7 +13443,7 @@ return nl;
 
 
 /***/ }),
-/* 95 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -13953,7 +13508,7 @@ return nn;
 
 
 /***/ }),
-/* 96 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14082,7 +13637,7 @@ return paIn;
 
 
 /***/ }),
-/* 97 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14194,7 +13749,7 @@ return pl;
 
 
 /***/ }),
-/* 98 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14260,7 +13815,7 @@ return ptBr;
 
 
 /***/ }),
-/* 99 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14330,7 +13885,7 @@ return pt;
 
 
 /***/ }),
-/* 100 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14410,7 +13965,7 @@ return ro;
 
 
 /***/ }),
-/* 101 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14598,7 +14153,7 @@ return ru;
 
 
 /***/ }),
-/* 102 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14701,7 +14256,7 @@ return sd;
 
 
 /***/ }),
-/* 103 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14767,7 +14322,7 @@ return se;
 
 
 /***/ }),
-/* 104 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14843,7 +14398,7 @@ return si;
 
 
 /***/ }),
-/* 105 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -14998,7 +14553,7 @@ return sk;
 
 
 /***/ }),
-/* 106 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15165,7 +14720,7 @@ return sl;
 
 
 /***/ }),
-/* 107 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15240,7 +14795,7 @@ return sq;
 
 
 /***/ }),
-/* 108 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15355,7 +14910,7 @@ return srCyrl;
 
 
 /***/ }),
-/* 109 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15470,7 +15025,7 @@ return sr;
 
 
 /***/ }),
-/* 110 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15564,7 +15119,7 @@ return ss;
 
 
 /***/ }),
-/* 111 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15638,7 +15193,7 @@ return sv;
 
 
 /***/ }),
-/* 112 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15702,7 +15257,7 @@ return sw;
 
 
 /***/ }),
-/* 113 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15837,7 +15392,7 @@ return ta;
 
 
 /***/ }),
-/* 114 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -15931,7 +15486,7 @@ return te;
 
 
 /***/ }),
-/* 115 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16004,7 +15559,7 @@ return tet;
 
 
 /***/ }),
-/* 116 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16076,7 +15631,7 @@ return th;
 
 
 /***/ }),
-/* 117 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16143,7 +15698,7 @@ return tlPh;
 
 
 /***/ }),
-/* 118 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16268,7 +15823,7 @@ return tlh;
 
 
 /***/ }),
-/* 119 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16363,7 +15918,7 @@ return tr;
 
 
 /***/ }),
-/* 120 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16459,7 +16014,7 @@ return tzl;
 
 
 /***/ }),
-/* 121 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16522,7 +16077,7 @@ return tzmLatn;
 
 
 /***/ }),
-/* 122 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16585,7 +16140,7 @@ return tzm;
 
 
 /***/ }),
-/* 123 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16741,7 +16296,7 @@ return uk;
 
 
 /***/ }),
-/* 124 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16845,7 +16400,7 @@ return ur;
 
 
 /***/ }),
-/* 125 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16908,7 +16463,7 @@ return uzLatn;
 
 
 /***/ }),
-/* 126 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16971,7 +16526,7 @@ return uz;
 
 
 /***/ }),
-/* 127 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17055,7 +16610,7 @@ return vi;
 
 
 /***/ }),
-/* 128 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17128,7 +16683,7 @@ return xPseudo;
 
 
 /***/ }),
-/* 129 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17193,7 +16748,7 @@ return yo;
 
 
 /***/ }),
-/* 130 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17309,7 +16864,7 @@ return zhCn;
 
 
 /***/ }),
-/* 131 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17419,7 +16974,7 @@ return zhHk;
 
 
 /***/ }),
-/* 132 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17528,7 +17083,7 @@ return zhTw;
 
 
 /***/ }),
-/* 133 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17723,7 +17278,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 134 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17978,7 +17533,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 135 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.0 by @mathias */
@@ -18514,10 +18069,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(136)(module), __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(131)(module), __webpack_require__(5)))
 
 /***/ }),
-/* 136 */
+/* 131 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -18545,42 +18100,14 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 137 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/*
- |--------------------------------------------------------------------------
- | Laravel Spark Bootstrap
- |--------------------------------------------------------------------------
- |
- | First, we will load all of the "core" dependencies for Spark which are
- | libraries such as Vue and jQuery. This also loads the Spark helpers
- | for things such as HTTP calls, forms, and form validation errors.
- |
- | Next, we'll create the root Vue application for Spark. This will start
- | the entire application and attach it to the DOM. Of course, you may
- | customize this script as you desire and load your own components.
- |
- */
-
-__webpack_require__(159);
-
-__webpack_require__(157);
-
-var app = new Vue({
-  mixins: [__webpack_require__(263)]
-});
-
-/***/ }),
-/* 138 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 // rawAsap provides everything we need except exception management.
-var rawAsap = __webpack_require__(10);
+var rawAsap = __webpack_require__(6);
 // RawTasks are recycled to reduce GC churn.
 var freeTasks = [];
 // We queue errors to ensure they are thrown in right order (FIFO).
@@ -18646,22 +18173,22 @@ RawTask.prototype.call = function () {
 
 
 /***/ }),
-/* 139 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(140);
+module.exports = __webpack_require__(134);
 
 /***/ }),
-/* 140 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(15);
-var Axios = __webpack_require__(142);
-var defaults = __webpack_require__(5);
+var bind = __webpack_require__(11);
+var Axios = __webpack_require__(136);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -18694,15 +18221,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(12);
-axios.CancelToken = __webpack_require__(141);
-axios.isCancel = __webpack_require__(13);
+axios.Cancel = __webpack_require__(8);
+axios.CancelToken = __webpack_require__(135);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(156);
+axios.spread = __webpack_require__(150);
 
 module.exports = axios;
 
@@ -18711,13 +18238,13 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 141 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(12);
+var Cancel = __webpack_require__(8);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -18775,18 +18302,18 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 142 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(5);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(143);
-var dispatchRequest = __webpack_require__(144);
-var isAbsoluteURL = __webpack_require__(152);
-var combineURLs = __webpack_require__(150);
+var InterceptorManager = __webpack_require__(137);
+var dispatchRequest = __webpack_require__(138);
+var isAbsoluteURL = __webpack_require__(146);
+var combineURLs = __webpack_require__(144);
 
 /**
  * Create a new instance of Axios
@@ -18867,7 +18394,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 143 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18926,16 +18453,16 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 144 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(147);
-var isCancel = __webpack_require__(13);
-var defaults = __webpack_require__(5);
+var transformData = __webpack_require__(141);
+var isCancel = __webpack_require__(9);
+var defaults = __webpack_require__(3);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -19012,7 +18539,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 145 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19038,13 +18565,13 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 146 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(14);
+var createError = __webpack_require__(10);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -19070,7 +18597,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 147 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19097,7 +18624,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 148 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19140,7 +18667,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 149 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19215,7 +18742,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 150 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19234,7 +18761,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 151 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19294,7 +18821,7 @@ module.exports = (
 
 
 /***/ }),
-/* 152 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19315,7 +18842,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 153 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19390,7 +18917,7 @@ module.exports = (
 
 
 /***/ }),
-/* 154 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19409,7 +18936,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 155 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19453,7 +18980,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 156 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19487,1071 +19014,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 157 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/*
- |--------------------------------------------------------------------------
- | Laravel Spark Components
- |--------------------------------------------------------------------------
- |
- | Here we will load the Spark components which makes up the core client
- | application. This is also a convenient spot for you to load all of
- | your components that you write while building your applications.
- */
-
-__webpack_require__(162);
-
-__webpack_require__(158);
-
-/***/ }),
-/* 158 */
-/***/ (function(module, exports) {
-
-Vue.component('home', {
-    props: ['user'],
-
-    mounted: function mounted() {
-        //
-    }
-});
-
-/***/ }),
-/* 159 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Load various JavaScript modules that assist Spark.
- */
-window.URI = __webpack_require__(290);
-window.axios = __webpack_require__(139);
-window._ = __webpack_require__(289);
-window.moment = __webpack_require__(0);
-window.Promise = __webpack_require__(282);
-window.Cookies = __webpack_require__(279);
-
-/*
- * Define Moment locales
- */
-window.moment.defineLocale('en-short', {
-    parentLocale: 'en',
-    relativeTime: {
-        future: "in %s",
-        past: "%s",
-        s: "1s",
-        m: "1m",
-        mm: "%dm",
-        h: "1h",
-        hh: "%dh",
-        d: "1d",
-        dd: "%dd",
-        M: "1 month ago",
-        MM: "%d months ago",
-        y: "1y",
-        yy: "%dy"
-    }
-});
-window.moment.locale('en');
-
-/*
- * Load jQuery and Bootstrap jQuery, used for front-end interaction.
- */
-if (window.$ === undefined || window.jQuery === undefined) {
-    window.$ = window.jQuery = __webpack_require__(278);
-}
-// Remove Since We Have it On Metro Ui JS
-__webpack_require__(265);
-
-/**
- * Load Vue if this application is using Vue as its framework.
- * Load Vue & Vue-Resource.
- */
-if ($('#spark-app').length > 0) {
-    __webpack_require__(264);
-}
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest',
-    'X-CSRF-TOKEN': Spark.csrfToken
-};
-
-/**
- * Intercept the incoming responses.
- *
- * Handle any unexpected HTTP errors and pop up modals, etc.
- */
-window.axios.interceptors.response.use(function (response) {
-    return response;
-}, function (error) {
-    switch (error.response.status) {
-        case 401:
-            window.axios.get('/logout');
-            $('#modal-session-expired').modal('show');
-            break;
-
-        case 402:
-            window.location = '/settings#/subscription';
-            break;
-    }
-
-    return Promise.reject(error);
-});
-
-/***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(209);
-
-Vue.component('spark-register-braintree', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 161 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(210);
-
-Vue.component('spark-register-stripe', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 162 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/**
- * Layout Components...
- */
-__webpack_require__(169);
-__webpack_require__(170);
-
-/**
- * Authentication Components...
- */
-__webpack_require__(161);
-__webpack_require__(160);
-
-/**
- * Settings Component...
- */
-__webpack_require__(190);
-
-/**
- * Profile Settings Components...
- */
-__webpack_require__(183);
-__webpack_require__(185);
-__webpack_require__(184);
-
-/**
- * Teams Settings Components...
- */
-__webpack_require__(197);
-__webpack_require__(198);
-__webpack_require__(201);
-__webpack_require__(199);
-__webpack_require__(206);
-__webpack_require__(205);
-__webpack_require__(208);
-__webpack_require__(207);
-__webpack_require__(204);
-__webpack_require__(202);
-__webpack_require__(200);
-__webpack_require__(203);
-
-/**
- * Security Settings Components...
- */
-__webpack_require__(186);
-__webpack_require__(189);
-__webpack_require__(188);
-__webpack_require__(187);
-
-/**
- * API Settings Components...
- */
-__webpack_require__(171);
-__webpack_require__(172);
-__webpack_require__(173);
-
-/**
- * Subscription Settings Components...
- */
-__webpack_require__(191);
-__webpack_require__(195);
-__webpack_require__(194);
-__webpack_require__(196);
-__webpack_require__(193);
-__webpack_require__(192);
-
-/**
- * Payment Method Components...
- */
-__webpack_require__(178);
-__webpack_require__(177);
-__webpack_require__(182);
-__webpack_require__(181);
-__webpack_require__(180);
-__webpack_require__(179);
-
-/**
- * Billing History Components...
- */
-__webpack_require__(174);
-__webpack_require__(176);
-__webpack_require__(175);
-
-/**
- * Kiosk Components...
- */
-__webpack_require__(165);
-__webpack_require__(164);
-__webpack_require__(166);
-__webpack_require__(168);
-__webpack_require__(167);
-__webpack_require__(163);
-
-/***/ }),
-/* 163 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(216);
-
-Vue.component('spark-kiosk-add-discount', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 164 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(217);
-
-Vue.component('spark-kiosk-announcements', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 165 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(218);
-
-Vue.component('spark-kiosk', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 166 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(219);
-
-Vue.component('spark-kiosk-metrics', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 167 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(220);
-
-Vue.component('spark-kiosk-profile', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(221);
-
-Vue.component('spark-kiosk-users', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 169 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(223);
-
-Vue.component('spark-navbar', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 170 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(224);
-
-Vue.component('spark-notifications', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 171 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(225);
-
-Vue.component('spark-api', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 172 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(226);
-
-Vue.component('spark-create-token', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 173 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(227);
-
-Vue.component('spark-tokens', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 174 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(228);
-
-Vue.component('spark-invoices', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 175 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(229);
-
-Vue.component('spark-invoice-list', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 176 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(230);
-
-Vue.component('spark-update-extra-billing-information', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 177 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(231);
-
-Vue.component('spark-payment-method-braintree', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 178 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(232);
-
-Vue.component('spark-payment-method-stripe', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 179 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(233);
-
-Vue.component('spark-redeem-coupon', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 180 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(234);
-
-Vue.component('spark-update-payment-method-braintree', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 181 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(235);
-
-Vue.component('spark-update-payment-method-stripe', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 182 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(236);
-
-Vue.component('spark-update-vat-id', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 183 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(237);
-
-Vue.component('spark-profile', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 184 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(238);
-
-Vue.component('spark-update-contact-information', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 185 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(239);
-
-Vue.component('spark-update-profile-photo', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 186 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(240);
-
-Vue.component('spark-security', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 187 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(241);
-
-Vue.component('spark-disable-two-factor-auth', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 188 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(242);
-
-Vue.component('spark-enable-two-factor-auth', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 189 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(243);
-
-Vue.component('spark-update-password', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 190 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(244);
-
-Vue.component('spark-settings', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 191 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(245);
-
-Vue.component('spark-subscription', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(246);
-
-Vue.component('spark-cancel-subscription', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 193 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(247);
-
-Vue.component('spark-resume-subscription', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(248);
-
-Vue.component('spark-subscribe-braintree', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 195 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(249);
-
-Vue.component('spark-subscribe-stripe', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 196 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(250);
-
-Vue.component('spark-update-subscription', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 197 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(251);
-
-Vue.component('spark-teams', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 198 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(252);
-
-Vue.component('spark-create-team', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 199 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(253);
-
-Vue.component('spark-current-teams', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 200 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(254);
-
-Vue.component('spark-mailed-invitations', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 201 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(255);
-
-Vue.component('spark-pending-invitations', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 202 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(256);
-
-Vue.component('spark-send-invitation', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 203 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(257);
-
-Vue.component('spark-team-members', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 204 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(258);
-
-Vue.component('spark-team-membership', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 205 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(259);
-
-Vue.component('spark-team-profile', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 206 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(260);
-
-Vue.component('spark-team-settings', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 207 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(261);
-
-Vue.component('spark-update-team-name', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 208 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var base = __webpack_require__(262);
-
-Vue.component('spark-update-team-photo', {
-    mixins: [base]
-});
-
-/***/ }),
-/* 209 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(6), __webpack_require__(2), __webpack_require__(16)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            query: null,
-
-            coupon: null,
-            invalidCoupon: false,
-
-            registerForm: $.extend(true, new SparkForm({
-                braintree_type: '',
-                braintree_token: '',
-                plan: '',
-                team: '',
-                team_slug: '',
-                name: '',
-                email: '',
-                password: '',
-                password_confirmation: '',
-                terms: false,
-                coupon: null,
-                invitation: null
-            }), Spark.forms.register)
-        };
-    },
-
-
-    watch: {
-        /**
-         * Watch the team name for changes.
-         */
-        'registerForm.team': function registerFormTeam(val, oldVal) {
-            if (this.registerForm.team_slug == '' || this.registerForm.team_slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
-                this.registerForm.team_slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
-            }
-        }
-    },
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        this.getPlans();
-
-        this.query = URI(document.URL).query(true);
-
-        if (this.query.coupon) {
-            this.getCoupon();
-
-            this.registerForm.coupon = this.query.coupon;
-        }
-
-        if (this.query.invitation) {
-            this.getInvitation();
-
-            this.registerForm.invitation = this.query.invitation;
-        }
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.configureBraintree();
-    },
-
-
-    methods: {
-        configureBraintree: function configureBraintree() {
-            var _this = this;
-
-            if (!Spark.cardUpFront) {
-                return;
-            }
-
-            this.braintree('braintree-container', function (response) {
-                _this.registerForm.braintree_type = response.type;
-                _this.registerForm.braintree_token = response.nonce;
-
-                _this.register();
-            });
-        },
-
-
-        /**
-         * Get the coupon specified in the query string.
-         */
-        getCoupon: function getCoupon() {
-            var _this2 = this;
-
-            axios.get('/coupon/' + this.query.coupon).then(function (response) {
-                _this2.coupon = response.data;
-            }).catch(function (response) {
-                _this2.invalidCoupon = true;
-            });
-        },
-
-
-        /**
-         * Attempt to register with the application.
-         */
-        register: function register() {
-            Spark.post('/register', this.registerForm).then(function (response) {
-                window.location = response.redirect;
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Get the displayable discount for the coupon.
-         */
-        discount: function discount() {
-            if (this.coupon) {
-                return Vue.filter('currency')(this.coupon.amount_off);
-            }
-        }
-    }
-};
-
-/***/ }),
-/* 210 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(16), __webpack_require__(2), __webpack_require__(17)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            query: null,
-
-            coupon: null,
-            invalidCoupon: false,
-
-            country: null,
-            taxRate: 0,
-
-            registerForm: $.extend(true, new SparkForm({
-                stripe_token: '',
-                plan: '',
-                team: '',
-                team_slug: '',
-                name: '',
-                email: '',
-                password: '',
-                password_confirmation: '',
-                address: '',
-                address_line_2: '',
-                city: '',
-                state: '',
-                zip: '',
-                country: 'US',
-                vat_id: '',
-                terms: false,
-                coupon: null,
-                invitation: null
-            }), Spark.forms.register),
-
-            cardForm: new SparkForm({
-                name: '',
-                number: '',
-                cvc: '',
-                month: '',
-                year: ''
-            })
-        };
-    },
-
-
-    watch: {
-        /**
-         * Watch for changes on the entire billing address.
-         */
-        'currentBillingAddress': function currentBillingAddress(value) {
-            if (!Spark.collectsEuropeanVat) {
-                return;
-            }
-
-            this.refreshTaxRate(this.registerForm);
-        },
-
-        /**
-         * Watch the team name for changes.
-         */
-        'registerForm.team': function registerFormTeam(val, oldVal) {
-            if (this.registerForm.team_slug == '' || this.registerForm.team_slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
-                this.registerForm.team_slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
-            }
-        }
-    },
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        Stripe.setPublishableKey(Spark.stripeKey);
-
-        this.getPlans();
-
-        this.guessCountry();
-
-        this.query = URI(document.URL).query(true);
-
-        if (this.query.coupon) {
-            this.getCoupon();
-
-            this.registerForm.coupon = this.query.coupon;
-        }
-
-        if (this.query.invitation) {
-            this.getInvitation();
-
-            this.registerForm.invitation = this.query.invitation;
-        }
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        //
-    },
-
-
-    methods: {
-        /**
-         * Attempt to guess the user's country.
-         */
-        guessCountry: function guessCountry() {
-            var _this = this;
-
-            axios.get('/geocode/country').then(function (response) {
-                if (response.data != 'ZZ') {
-                    _this.registerForm.country = response.data;
-                }
-            }).catch(function (response) {
-                //
-            }).finally(function () {
-                this.refreshStatesAndProvinces();
-            });
-        },
-
-
-        /**
-         * Get the coupon specified in the query string.
-         */
-        getCoupon: function getCoupon() {
-            var _this2 = this;
-
-            axios.get('/coupon/' + this.query.coupon).then(function (response) {
-                _this2.coupon = response.data;
-            }).catch(function (response) {
-                _this2.invalidCoupon = true;
-            });
-        },
-
-
-        /**
-         * Attempt to register with the application.
-         */
-        register: function register() {
-            var _this3 = this;
-
-            this.cardForm.errors.forget();
-
-            this.registerForm.busy = true;
-            this.registerForm.errors.forget();
-
-            if (!Spark.cardUpFront || this.selectedPlan.price == 0) {
-                return this.sendRegistration();
-            }
-
-            Stripe.card.createToken(this.stripePayload(), function (status, response) {
-                if (response.error) {
-                    _this3.cardForm.errors.set({ number: [response.error.message] });
-                    _this3.registerForm.busy = false;
-                } else {
-                    _this3.registerForm.stripe_token = response.id;
-                    _this3.sendRegistration();
-                }
-            });
-        },
-
-
-        /**
-         * Build the Stripe payload based on the form input.
-         */
-        stripePayload: function stripePayload() {
-            // Here we will build out the payload to send to Stripe to obtain a card token so
-            // we can create the actual subscription. We will build out this data that has
-            // this credit card number, CVC, etc. and exchange it for a secure token ID.
-            return {
-                name: this.cardForm.name,
-                number: this.cardForm.number,
-                cvc: this.cardForm.cvc,
-                exp_month: this.cardForm.month,
-                exp_year: this.cardForm.year,
-                address_line1: this.registerForm.address,
-                address_line2: this.registerForm.address_line_2,
-                address_city: this.registerForm.city,
-                address_state: this.registerForm.state,
-                address_zip: this.registerForm.zip,
-                address_country: this.registerForm.country
-            };
-        },
-
-
-        /*
-         * After obtaining the Stripe token, send the registration to Spark.
-         */
-        sendRegistration: function sendRegistration() {
-            Spark.post('/register', this.registerForm).then(function (response) {
-                window.location = response.redirect;
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Determine if the selected country collects European VAT.
-         */
-        countryCollectsVat: function countryCollectsVat() {
-            return this.collectsVat(this.registerForm.country);
-        },
-
-
-        /**
-         * Get the displayable discount for the coupon.
-         */
-        discount: function discount() {
-            if (this.coupon) {
-                if (this.coupon.percent_off) {
-                    return this.coupon.percent_off + '%';
-                } else {
-                    return Vue.filter('currency')(this.coupon.amount_off / 100);
-                }
-            }
-        },
-
-
-        /**
-         * Get the current billing address from the register form.
-         *
-         * This used primarily for wathcing.
-         */
-        currentBillingAddress: function currentBillingAddress() {
-            return this.registerForm.address + this.registerForm.address_line_2 + this.registerForm.city + this.registerForm.state + this.registerForm.zip + this.registerForm.country + this.registerForm.vat_id;
-        }
-    }
-};
-
-/***/ }),
-/* 211 */
+/* 151 */
 /***/ (function(module, exports) {
 
 /**
@@ -20616,7 +19079,7 @@ Vue.filter('currency', function (value) {
 });
 
 /***/ }),
-/* 212 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -20631,20 +19094,20 @@ Spark.forms = {
 /**
  * Load the SparkForm helper class.
  */
-__webpack_require__(214);
+__webpack_require__(154);
 
 /**
  * Define the SparkFormError collection class.
  */
-__webpack_require__(213);
+__webpack_require__(153);
 
 /**
  * Add additional HTTP / form helpers to the Spark object.
  */
-$.extend(Spark, __webpack_require__(215));
+$.extend(Spark, __webpack_require__(155));
 
 /***/ }),
-/* 213 */
+/* 153 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -20716,7 +19179,7 @@ window.SparkFormErrors = function () {
 };
 
 /***/ }),
-/* 214 */
+/* 154 */
 /***/ (function(module, exports) {
 
 /**
@@ -20771,7 +19234,7 @@ window.SparkForm = function (data) {
 };
 
 /***/ }),
-/* 215 */
+/* 155 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -20830,807 +19293,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 216 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function kioskAddDiscountForm() {
-    return {
-        type: 'amount',
-        value: null,
-        duration: 'once',
-        months: null
-    };
-}
-
-module.exports = {
-    mixins: [__webpack_require__(7)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            loadingCurrentDiscount: false,
-            currentDiscount: null,
-
-            discountingUser: null,
-            form: new SparkForm(kioskAddDiscountForm())
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        Bus.$on('addDiscount', function (user) {
-            self.form = new SparkForm(kioskAddDiscountForm());
-
-            self.setUser(user);
-
-            $('#modal-add-discount').modal('show');
-        });
-    },
-
-
-    methods: {
-        /**
-         * Set the user receiving teh discount.
-         */
-        setUser: function setUser(user) {
-            this.discountingUser = user;
-
-            this.getCurrentDiscountForUser(user);
-        },
-
-
-        /**
-         * Apply the discount to the user.
-         */
-        applyDiscount: function applyDiscount() {
-            Spark.post('/spark/kiosk/users/discount/' + this.discountingUser.id, this.form).then(function () {
-                $('#modal-add-discount').modal('hide');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 217 */
-/***/ (function(module, exports) {
-
-var announcementsCreateForm = function announcementsCreateForm() {
-    return {
-        body: '',
-        action_text: '',
-        action_url: ''
-    };
-};
-
-module.exports = {
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            announcements: [],
-            updatingAnnouncement: null,
-            deletingAnnouncement: null,
-
-            createForm: new SparkForm(announcementsCreateForm()),
-            updateForm: new SparkForm(announcementsCreateForm()),
-
-            deleteForm: new SparkForm({})
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        Bus.$on('sparkHashChanged', function (hash, parameters) {
-            if (hash == 'announcements' && self.announcements.length === 0) {
-                self.getAnnouncements();
-            }
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get all of the announcements.
-         */
-        getAnnouncements: function getAnnouncements() {
-            var _this = this;
-
-            axios.get('/spark/kiosk/announcements').then(function (response) {
-                _this.announcements = response.data;
-            });
-        },
-
-
-        /**
-         * Create a new announcement.
-         */
-        create: function create() {
-            var _this2 = this;
-
-            Spark.post('/spark/kiosk/announcements', this.createForm).then(function () {
-                _this2.createForm = new SparkForm(announcementsCreateForm());
-
-                _this2.getAnnouncements();
-            });
-        },
-
-
-        /**
-         * Edit the given announcement.
-         */
-        editAnnouncement: function editAnnouncement(announcement) {
-            this.updatingAnnouncement = announcement;
-
-            this.updateForm.icon = announcement.icon;
-            this.updateForm.body = announcement.body;
-            this.updateForm.action_text = announcement.action_text;
-            this.updateForm.action_url = announcement.action_url;
-
-            $('#modal-update-announcement').modal('show');
-        },
-
-
-        /**
-         * Update the specified announcement.
-         */
-        update: function update() {
-            var _this3 = this;
-
-            Spark.put('/spark/kiosk/announcements/' + this.updatingAnnouncement.id, this.updateForm).then(function () {
-                _this3.getAnnouncements();
-
-                $('#modal-update-announcement').modal('hide');
-            });
-        },
-
-
-        /**
-         * Show the approval dialog for deleting an announcement.
-         */
-        approveAnnouncementDelete: function approveAnnouncementDelete(announcement) {
-            this.deletingAnnouncement = announcement;
-
-            $('#modal-delete-announcement').modal('show');
-        },
-
-
-        /**
-         * Delete the specified announcement.
-         */
-        deleteAnnouncement: function deleteAnnouncement() {
-            var _this4 = this;
-
-            Spark.delete('/spark/kiosk/announcements/' + this.deletingAnnouncement.id, this.deleteForm).then(function () {
-                _this4.getAnnouncements();
-
-                $('#modal-delete-announcement').modal('hide');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 218 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(8)],
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.usePushStateForTabs('.spark-settings-tabs');
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        Bus.$on('sparkHashChanged', function (hash, parameters) {
-            if (hash == 'users') {
-                setTimeout(function () {
-                    $('#kiosk-users-search').focus();
-                }, 150);
-            }
-
-            return true;
-        });
-    }
-};
-
-/***/ }),
-/* 219 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            monthlyRecurringRevenue: 0,
-            yearlyRecurringRevenue: 0,
-            totalVolume: 0,
-            genericTrialUsers: 0,
-
-            indicators: [],
-            lastMonthsIndicators: null,
-            lastYearsIndicators: null,
-
-            plans: []
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        Bus.$on('sparkHashChanged', function (hash, parameters) {
-            if (hash == 'metrics' && self.yearlyRecurringRevenue === 0) {
-                self.getRevenue();
-                self.getPlans();
-                self.getTrialUsers();
-                self.getPerformanceIndicators();
-            }
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get the revenue information for the application.
-         */
-        getRevenue: function getRevenue() {
-            var _this = this;
-
-            axios.get('/spark/kiosk/performance-indicators/revenue').then(function (response) {
-                _this.yearlyRecurringRevenue = response.data.yearlyRecurringRevenue;
-                _this.monthlyRecurringRevenue = response.data.monthlyRecurringRevenue;
-                _this.totalVolume = response.data.totalVolume;
-            });
-        },
-
-
-        /**
-         * Get the subscriber information for the application.
-         */
-        getPlans: function getPlans() {
-            var _this2 = this;
-
-            axios.get('/spark/kiosk/performance-indicators/plans').then(function (response) {
-                _this2.plans = response.data;
-            });
-        },
-
-
-        /**
-         * Get the number of users that are on a generic trial.
-         */
-        getTrialUsers: function getTrialUsers() {
-            var _this3 = this;
-
-            axios.get('/spark/kiosk/performance-indicators/trialing').then(function (response) {
-                _this3.genericTrialUsers = parseInt(response.data);
-            });
-        },
-
-
-        /**
-         * Get the performance indicators for the application.
-         */
-        getPerformanceIndicators: function getPerformanceIndicators() {
-            var _this4 = this;
-
-            axios.get('/spark/kiosk/performance-indicators').then(function (response) {
-                _this4.indicators = response.data.indicators;
-                _this4.lastMonthsIndicators = response.data.last_month;
-                _this4.lastYearsIndicators = response.data.last_year;
-
-                Vue.nextTick(function () {
-                    _this4.drawCharts();
-                });
-            });
-        },
-
-
-        /**
-         * Draw the performance indicator charts.
-         */
-        drawCharts: function drawCharts() {
-            this.drawMonthlyRecurringRevenueChart();
-            this.drawYearlyRecurringRevenueChart();
-            this.drawDailyVolumeChart();
-            this.drawNewUsersChart();
-        },
-
-
-        /**
-         * Draw the monthly recurring revenue chart.
-         */
-        drawMonthlyRecurringRevenueChart: function drawMonthlyRecurringRevenueChart() {
-            return this.drawCurrencyChart('monthlyRecurringRevenueChart', 30, function (indicator) {
-                return indicator.monthly_recurring_revenue;
-            });
-        },
-
-
-        /**
-         * Draw the yearly recurring revenue chart.
-         */
-        drawYearlyRecurringRevenueChart: function drawYearlyRecurringRevenueChart() {
-            return this.drawCurrencyChart('yearlyRecurringRevenueChart', 30, function (indicator) {
-                return indicator.yearly_recurring_revenue;
-            });
-        },
-
-
-        /**
-         * Draw the daily volume chart.
-         */
-        drawDailyVolumeChart: function drawDailyVolumeChart() {
-            return this.drawCurrencyChart('dailyVolumeChart', 14, function (indicator) {
-                return indicator.daily_volume;
-            });
-        },
-
-
-        /**
-         * Draw the daily new users chart.
-         */
-        drawNewUsersChart: function drawNewUsersChart() {
-            return this.drawChart('newUsersChart', 14, function (indicator) {
-                return indicator.new_users;
-            });
-        },
-
-
-        /**
-         * Draw a chart with currency formatting on the Y-Axis.
-         */
-        drawCurrencyChart: function drawCurrencyChart(id, days, dataGatherer) {
-            return this.drawChart(id, days, dataGatherer, function (value) {
-                return Vue.filter('currency')(value.value);
-            });
-        },
-
-
-        /**
-         * Draw a chart with the given parameters.
-         */
-        drawChart: function drawChart(id, days, dataGatherer, scaleLabelFormatter) {
-            var dataset = JSON.parse(JSON.stringify(this.baseChartDataSet));
-
-            dataset.data = _.map(_.last(this.indicators, days), dataGatherer);
-
-            // Here we will build out the dataset for the chart. This will contain the dates and data
-            // points for the chart. Each chart on the Kiosk only gets one dataset so we only need
-            // to add it a single element to this array here. But, charts could have more later.
-            var data = {
-                labels: _.last(this.availableChartDates, days),
-                datasets: [dataset]
-            };
-
-            var options = { responsive: true };
-
-            // If a scale label formatter was passed, we will hand that to this chart library to fill
-            // out the Y-Axis labels. This is particularly useful when we want to format them as a
-            // currency as we do on all of our revenue charts that we display on the Kiosk here.
-            if (arguments.length === 4) {
-                options.scaleLabel = scaleLabelFormatter;
-            }
-
-            var chart = new Chart(document.getElementById(id).getContext('2d'), {
-                type: 'line',
-                data: data,
-                options: options
-            });
-        },
-
-
-        /**
-         * Calculate the percent change between two numbers.
-         */
-        percentChange: function percentChange(current, previous) {
-            var change = Math.round((current - previous) / previous * 100);
-
-            return change > 0 ? '+' + change.toFixed(0) : change.toFixed(0);
-        }
-    },
-
-    computed: {
-        /**
-         * Calculate the monthly change in monthly recurring revenue.
-         */
-        monthlyChangeInMonthlyRecurringRevenue: function monthlyChangeInMonthlyRecurringRevenue() {
-            if (!this.lastMonthsIndicators || !this.indicators) {
-                return false;
-            }
-
-            return this.percentChange(_.last(this.indicators).monthly_recurring_revenue, this.lastMonthsIndicators.monthly_recurring_revenue);
-        },
-
-
-        /**
-         * Calculate the yearly change in monthly recurring revenue.
-         */
-        yearlyChangeInMonthlyRecurringRevenue: function yearlyChangeInMonthlyRecurringRevenue() {
-            if (!this.lastYearsIndicators || !this.indicators) {
-                return false;
-            }
-
-            return this.percentChange(_.last(this.indicators).monthly_recurring_revenue, this.lastYearsIndicators.monthly_recurring_revenue);
-        },
-
-
-        /**
-         * Calculate the monthly change in yearly recurring revenue.
-         */
-        monthlyChangeInYearlyRecurringRevenue: function monthlyChangeInYearlyRecurringRevenue() {
-            if (!this.lastMonthsIndicators || !this.indicators) {
-                return false;
-            }
-
-            return this.percentChange(_.last(this.indicators).yearly_recurring_revenue, this.lastMonthsIndicators.yearly_recurring_revenue);
-        },
-
-
-        /**
-         * Calculate the yearly change in yearly recurring revenue.
-         */
-        yearlyChangeInYearlyRecurringRevenue: function yearlyChangeInYearlyRecurringRevenue() {
-            if (!this.lastYearsIndicators || !this.indicators) {
-                return false;
-            }
-            ;
-            return this.percentChange(_.last(this.indicators).yearly_recurring_revenue, this.lastYearsIndicators.yearly_recurring_revenue);
-        },
-
-
-        /**
-         * Get the total number of users trialing.
-         */
-        totalTrialUsers: function totalTrialUsers() {
-            return this.genericTrialUsers + _.reduce(this.plans, function (memo, plan) {
-                return memo + plan.trialing;
-            }, 0);
-        },
-
-
-        /**
-         * Get the available, formatted chart dates for the current indicators.
-         */
-        availableChartDates: function availableChartDates() {
-            return _.map(this.indicators, function (indicator) {
-                return moment(indicator.created_at).format('M/D');
-            });
-        },
-
-
-        /**
-         * Get the base chart data set.
-         */
-        baseChartDataSet: function baseChartDataSet() {
-            return {
-                label: "Dataset",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)"
-            };
-        }
-    }
-};
-
-/***/ }),
-/* 220 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'plans'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            loading: false,
-            profile: null,
-            revenue: 0
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.$parent.$on('showUserProfile', function (id) {
-            self.getUserProfile(id);
-        });
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        var _this = this;
-
-        Mousetrap.bind('esc', function (e) {
-            return _this.showSearch();
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get the profile user.
-         */
-        getUserProfile: function getUserProfile(id) {
-            var _this2 = this;
-
-            this.loading = true;
-
-            axios.get('/spark/kiosk/users/' + id + '/profile').then(function (response) {
-                _this2.profile = response.data.user;
-                _this2.revenue = response.data.revenue;
-
-                _this2.loading = false;
-            });
-        },
-
-
-        /**
-         * Impersonate the given user.
-         */
-        impersonate: function impersonate(user) {
-            window.location = '/spark/kiosk/users/impersonate/' + user.id;
-        },
-
-
-        /**
-         * Show the discount modal for the given user.
-         */
-        addDiscount: function addDiscount(user) {
-            Bus.$emit('addDiscount', user);
-        },
-
-
-        /**
-         * Get the plan the user is actively subscribed to.
-         */
-        activePlan: function activePlan(billable) {
-            if (this.activeSubscription(billable)) {
-                var activeSubscription = this.activeSubscription(billable);
-
-                return _.find(this.plans, function (plan) {
-                    return plan.id == activeSubscription.provider_plan;
-                });
-            }
-        },
-
-
-        /**
-         * Get the active, valid subscription for the user.
-         */
-        activeSubscription: function activeSubscription(billable) {
-            var subscription = this.subscription(billable);
-
-            if (!subscription || subscription.ends_at && moment.utc().isAfter(moment.utc(subscription.ends_at))) {
-                return;
-            }
-
-            return subscription;
-        },
-
-
-        /**
-         * Get the active subscription instance.
-         */
-        subscription: function subscription(billable) {
-            if (!billable) {
-                return;
-            }
-
-            var subscription = _.find(billable.subscriptions, function (subscription) {
-                return subscription.name == 'default';
-            });
-
-            if (typeof subscription !== 'undefined') {
-                return subscription;
-            }
-        },
-
-
-        /**
-         * Get the customer URL on the billing provider's website.
-         */
-        customerUrlOnBillingProvider: function customerUrlOnBillingProvider(billable) {
-            if (!billable) {
-                return;
-            }
-
-            if (this.spark.usesStripe) {
-                return 'https://dashboard.stripe.com/customers/' + billable.stripe_id;
-            } else {
-                var domain = Spark.env == 'production' ? '' : 'sandbox.';
-
-                return 'https://' + domain + 'braintreegateway.com/merchants/' + Spark.braintreeMerchantId + '/customers/' + billable.braintree_id;
-            }
-        },
-
-
-        /**
-         * Show the search results and hide the user profile.
-         */
-        showSearch: function showSearch() {
-            this.$parent.$emit('showSearch');
-
-            this.profile = null;
-        }
-    }
-};
-
-/***/ }),
-/* 221 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            plans: [],
-
-            searchForm: new SparkForm({
-                query: ''
-            }),
-
-            searching: false,
-            noSearchResults: false,
-            searchResults: [],
-
-            showingUserProfile: false
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.getPlans();
-
-        this.$on('showSearch', function () {
-            self.navigateToSearch();
-        });
-
-        Bus.$on('sparkHashChanged', function (hash, parameters) {
-            if (hash != 'users') {
-                return true;
-            }
-
-            if (parameters && parameters.length > 0) {
-                self.loadProfile({ id: parameters[0] });
-            } else {
-                self.showSearch();
-            }
-
-            return true;
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get all of the available subscription plans.
-         */
-        getPlans: function getPlans() {
-            var _this = this;
-
-            axios.get('/spark/plans').then(function (response) {
-                _this.plans = response.data;
-            });
-        },
-
-
-        /**
-         * Perform a search for the given query.
-         */
-        search: function search() {
-            var _this2 = this;
-
-            this.searching = true;
-            this.noSearchResults = false;
-
-            axios.post('/spark/kiosk/users/search', this.searchForm).then(function (response) {
-                _this2.searchResults = response.data;
-                _this2.noSearchResults = _this2.searchResults.length === 0;
-
-                _this2.searching = false;
-            });
-        },
-
-
-        /**
-         * Show the search results and update the browser history.
-         */
-        navigateToSearch: function navigateToSearch() {
-            history.pushState(null, null, '#/users');
-
-            this.showSearch();
-        },
-
-
-        /**
-         * Show the search results.
-         */
-        showSearch: function showSearch() {
-            this.showingUserProfile = false;
-
-            Vue.nextTick(function () {
-                $('#kiosk-users-search').focus();
-            });
-        },
-
-
-        /**
-         * Show the user profile for the given user.
-         */
-        showUserProfile: function showUserProfile(user) {
-            history.pushState(null, null, '#/users/' + user.id);
-
-            this.loadProfile(user);
-        },
-
-
-        /**
-         * Load the user profile for the given user.
-         */
-        loadProfile: function loadProfile(user) {
-            this.$emit('showUserProfile', user.id);
-
-            this.showingUserProfile = true;
-        }
-    }
-};
-
-/***/ }),
-/* 222 */
+/* 156 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -21665,595 +19328,140 @@ module.exports = {
 };
 
 /***/ }),
-/* 223 */
+/* 157 */
 /***/ (function(module, exports) {
 
-module.exports = {
-    props: ['user', 'teams', 'currentTeam', 'hasUnreadNotifications', 'hasUnreadAnnouncements'],
-
-    methods: {
-        /**
-         * Show the user's notifications.
-         */
-        showNotifications: function showNotifications() {
-            Bus.$emit('showNotifications');
-        },
-
-
-        /**
-         * Show the customer support e-mail form.
-         */
-        showSupportForm: function showSupportForm() {
-            Bus.$emit('showSupportForm');
-        }
-    }
-};
-
-/***/ }),
-/* 224 */
-/***/ (function(module, exports) {
+window.braintreeCheckout = [];
 
 module.exports = {
-    props: ['notifications', 'hasUnreadAnnouncements', 'loadingNotifications'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            showingNotifications: true,
-            showingAnnouncements: false
-        };
-    },
-
-
     methods: {
         /**
-         * Show the user notifications.
+         * Configure the Braintree container.
          */
-        showNotifications: function showNotifications() {
-            this.showingNotifications = true;
-            this.showingAnnouncements = false;
-        },
+        braintree: function (_braintree) {
+            function braintree(_x, _x2) {
+                return _braintree.apply(this, arguments);
+            }
 
+            braintree.toString = function () {
+                return _braintree.toString();
+            };
 
-        /**
-         * Show the product announcements.
-         */
-        showAnnouncements: function showAnnouncements() {
-            this.showingNotifications = false;
-            this.showingAnnouncements = true;
+            return braintree;
+        }(function (containerName, callback) {
+            braintree.setup(Spark.braintreeToken, 'dropin', {
+                container: containerName,
+                paypal: {
+                    singleUse: false,
+                    locale: 'en_us',
+                    enableShippingAddress: false
+                },
+                dataCollector: {
+                    paypal: true
+                },
+                onReady: function onReady(checkout) {
+                    window.braintreeCheckout[containerName] = checkout;
+                },
 
-            this.updateLastReadAnnouncementsTimestamp();
-        },
-
-
-        /**
-         * Update the last read announcements timestamp.
-         */
-        updateLastReadAnnouncementsTimestamp: function updateLastReadAnnouncementsTimestamp() {
-            axios.put('/user/last-read-announcements-at').then(function () {
-                Bus.$emit('updateUser');
+                onPaymentMethodReceived: callback
             });
-        }
-    },
-
-    computed: {
-        /**
-         * Get the active notifications or announcements.
-         */
-        activeNotifications: function activeNotifications() {
-            if (!this.notifications) {
-                return [];
-            }
-
-            if (this.showingNotifications) {
-                return this.notifications.notifications;
-            } else {
-                return this.notifications.announcements;
-            }
-        },
+        }),
 
 
         /**
-         * Determine if the user has any notifications.
+         * Reset the Braintree container.
          */
-        hasNotifications: function hasNotifications() {
-            return this.notifications && this.notifications.notifications.length > 0;
-        },
-
-
-        /**
-         * Determine if the user has any announcements.
-         */
-        hasAnnouncements: function hasAnnouncements() {
-            return this.notifications && this.notifications.announcements.length > 0;
-        }
-    }
-};
-
-/***/ }),
-/* 225 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            tokens: [],
-            availableAbilities: []
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.getTokens();
-        this.getAvailableAbilities();
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.$on('updateTokens', function () {
-            self.getTokens();
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get the current API tokens for the user.
-         */
-        getTokens: function getTokens() {
+        resetBraintree: function resetBraintree(containerName, callback) {
             var _this = this;
 
-            axios.get('/settings/api/tokens').then(function (response) {
-                return _this.tokens = response.data;
+            window.braintreeCheckout[containerName].teardown(function () {
+                window.braintreeCheckout[containerName] = null;
+
+                _this.braintree(containerName, callback);
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    methods: {
+        /**
+         * Get the current discount for the given billable entity.
+         */
+        getCurrentDiscountForBillable: function getCurrentDiscountForBillable(type, billable) {
+            if (type === 'user') {
+                return this.getCurrentDiscountForUser(billable);
+            } else {
+                return this.getCurrentDiscountForTeam(billable);
+            }
+        },
+
+
+        /**
+         * Get the current discount for the user.
+         */
+        getCurrentDiscountForUser: function getCurrentDiscountForUser(user) {
+            var _this = this;
+
+            this.currentDiscount = null;
+
+            this.loadingCurrentDiscount = true;
+
+            axios.get('/coupon/user/' + user.id).then(function (response) {
+                if (response.status == 200) {
+                    _this.currentDiscount = response.data;
+                }
+
+                _this.loadingCurrentDiscount = false;
             });
         },
 
 
         /**
-         * Get all of the available token abilities.
+         * Get the current discount for the team.
          */
-        getAvailableAbilities: function getAvailableAbilities() {
+        getCurrentDiscountForTeam: function getCurrentDiscountForTeam(team) {
             var _this2 = this;
 
-            axios.get('/settings/api/token/abilities').then(function (response) {
-                return _this2.availableAbilities = response.data;
+            this.currentDiscount = null;
+
+            this.loadingCurrentDiscount = true;
+
+            axios.get('/coupon/' + Spark.teamString + '/' + team.id).then(function (response) {
+                if (response.status == 200) {
+                    _this2.currentDiscount = response.data;
+                }
+
+                _this2.loadingCurrentDiscount = false;
             });
-        }
-    }
-};
-
-/***/ }),
-/* 226 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['availableAbilities'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            showingToken: null,
-            allAbilitiesAssigned: false,
-
-            form: new SparkForm({
-                name: '',
-                abilities: []
-            })
-        };
-    },
+        },
 
 
-    computed: {
-        copyCommandSupported: function copyCommandSupported() {
-            return document.queryCommandSupported('copy');
-        }
-    },
-
-    watch: {
         /**
-         * Watch the available abilities for changes.
+         * Get the formatted discount amount for the given discount.
          */
-        availableAbilities: function availableAbilities() {
-            if (this.availableAbilities.length > 0) {
-                this.assignDefaultAbilities();
+        formattedDiscount: function formattedDiscount(discount) {
+            if (!discount) {
+                return;
             }
-        }
-    },
 
-    methods: {
-        /**
-         * Assign all of the default abilities.
-         */
-        assignDefaultAbilities: function assignDefaultAbilities() {
-            var defaults = _.filter(this.availableAbilities, function (a) {
-                return a.default;
-            });
-
-            this.form.abilities = _.pluck(defaults, 'value');
-        },
-
-
-        /**
-         * Enable all the available abilities for the given token.
-         */
-        assignAllAbilities: function assignAllAbilities() {
-            this.allAbilitiesAssigned = true;
-
-            this.form.abilities = _.pluck(this.availableAbilities, 'value');
-        },
-
-
-        /**
-         * Remove all of the abilities from the token.
-         */
-        removeAllAbilities: function removeAllAbilities() {
-            this.allAbilitiesAssigned = false;
-
-            this.form.abilities = [];
-        },
-
-
-        /**
-         * Toggle the given ability in the list of assigned abilities.
-         */
-        toggleAbility: function toggleAbility(ability) {
-            if (this.abilityIsAssigned(ability)) {
-                this.form.abilities = _.reject(this.form.abilities, function (a) {
-                    return a == ability;
-                });
+            if (discount.percent_off) {
+                return discount.percent_off + '%';
             } else {
-                this.form.abilities.push(ability);
+                return Vue.filter('currency')(this.calculateAmountOff(discount.amount_off));
             }
         },
 
 
-        /**
-         * Determine if the given ability has been assigned to the token.
-         */
-        abilityIsAssigned: function abilityIsAssigned(ability) {
-            return _.contains(this.form.abilities, ability);
-        },
-
-
-        /**
-         * Create a new API token.
-         */
-        create: function create() {
-            var _this = this;
-
-            Spark.post('/settings/api/token', this.form).then(function (response) {
-                _this.showToken(response.token);
-
-                _this.resetForm();
-
-                _this.$parent.$emit('updateTokens');
-            });
-        },
-
-
-        /**
-         * Display the token to the user.
-         */
-        showToken: function showToken(token) {
-            this.showingToken = token;
-
-            $('#modal-show-token').modal('show');
-        },
-
-
-        /**
-         * Select the token and copy to Clipboard.
-         */
-        selectToken: function selectToken() {
-            $('#api-token').select();
-
-            if (this.copyCommandSupported) {
-                document.execCommand("copy");
-            }
-        },
-
-
-        /**
-         * Reset the token form back to its default state.
-         */
-        resetForm: function resetForm() {
-            this.form.name = '';
-
-            this.assignDefaultAbilities();
-
-            this.allAbilitiesAssigned = false;
-        }
-    }
-};
-
-/***/ }),
-/* 227 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['tokens', 'availableAbilities'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            updatingToken: null,
-            deletingToken: null,
-
-            updateTokenForm: new SparkForm({
-                name: '',
-                abilities: []
-            }),
-
-            deleteTokenForm: new SparkForm({})
-        };
-    },
-
-
-    methods: {
-        /**
-         * Show the edit token modal.
-         */
-        editToken: function editToken(token) {
-            this.updatingToken = token;
-
-            this.initializeUpdateFormWith(token);
-
-            $('#modal-update-token').modal('show');
-        },
-
-
-        /**
-         * Initialize the edit form with the given token.
-         */
-        initializeUpdateFormWith: function initializeUpdateFormWith(token) {
-            this.updateTokenForm.name = token.name;
-
-            this.updateTokenForm.abilities = token.metadata.abilities;
-        },
-
-
-        /**
-         * Update the token being edited.
-         */
-        updateToken: function updateToken() {
-            var _this = this;
-
-            Spark.put('/settings/api/token/' + this.updatingToken.id, this.updateTokenForm).then(function (response) {
-                _this.$parent.$emit('updateTokens');
-
-                $('#modal-update-token').modal('hide');
-            });
-        },
-
-
-        /**
-         * Toggle the ability on the current token being edited.
-         */
-        toggleAbility: function toggleAbility(ability) {
-            if (this.abilityIsAssigned(ability)) {
-                this.updateTokenForm.abilities = _.reject(this.updateTokenForm.abilities, function (a) {
-                    return a == ability;
-                });
-            } else {
-                this.updateTokenForm.abilities.push(ability);
-            }
-        },
-
-
-        /**
-         * Determine if the ability has been assigned to the token being edited.
-         */
-        abilityIsAssigned: function abilityIsAssigned(ability) {
-            return _.contains(this.updateTokenForm.abilities, ability);
-        },
-
-
-        /**
-         * Get user confirmation that the token should be deleted.
-         */
-        approveTokenDelete: function approveTokenDelete(token) {
-            this.deletingToken = token;
-
-            $('#modal-delete-token').modal('show');
-        },
-
-
-        /**
-         * Delete the specified token.
-         */
-        deleteToken: function deleteToken() {
-            var _this2 = this;
-
-            Spark.delete('/settings/api/token/' + this.deletingToken.id, this.deleteTokenForm).then(function () {
-                _this2.$parent.$emit('updateTokens');
-
-                $('#modal-delete-token').modal('hide');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 228 */
-/***/ (function(module, exports) {
-
-module.exports = {
-	props: ['user', 'team', 'billableType'],
-
-	/**
-  * The component's data.
-  */
-	data: function data() {
-		return {
-			invoices: []
-		};
-	},
-
-
-	/**
-  * Prepare the component.
-  */
-	mounted: function mounted() {
-		this.getInvoices();
-	},
-
-
-	methods: {
-		/**
-   * Get the user's billing invoices
-   */
-		getInvoices: function getInvoices() {
-			var _this = this;
-
-			axios.get(this.urlForInvoices).then(function (response) {
-				_this.invoices = _.filter(response.data, function (invoice) {
-					return invoice.total != '$0.00';
-				});
-			});
-		}
-	},
-
-	computed: {
-		/**
-   * Get the URL for retrieving the invoices.
-   */
-		urlForInvoices: function urlForInvoices() {
-			return this.billingUser ? '/settings/invoices' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invoices';
-		}
-	}
-};
-
-/***/ }),
-/* 229 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'invoices', 'billableType'],
-
-    methods: {
-        /**
-         * Get the URL for downloading a given invoice.
-         */
-        downloadUrlFor: function downloadUrlFor(invoice) {
-            return this.billingUser ? '/settings/invoice/' + invoice.id : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invoice/' + invoice.id;
-        }
-    }
-};
-
-/***/ }),
-/* 230 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                information: ''
-            })
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.form.information = this.billable.extra_billing_information;
-    },
-
-
-    methods: {
-        /**
-         * Update the extra billing information.
-         */
-        update: function update() {
-            Spark.put(this.urlForUpdate, this.form);
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for the extra billing information method update.
-         */
-        urlForUpdate: function urlForUpdate() {
-            return this.billingUser ? '/settings/extra-billing-information' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/extra-billing-information';
-        }
-    }
-};
-
-/***/ }),
-/* 231 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(7)],
-
-    /**
-     * The componetn's data.
-     */
-    data: function data() {
-        return {
-            currentDiscount: null,
-            loadingCurrentDiscount: false
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.$on('updateDiscount', function () {
-            self.getCurrentDiscountForBillable(self.billableType, self.billable);
-
-            return true;
-        });
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.getCurrentDiscountForBillable(this.billableType, this.billable);
-    },
-
-
-    methods: {
         /**
          * Calculate the amount off for the given discount amount.
          */
         calculateAmountOff: function calculateAmountOff(amount) {
-            return amount;
+            return amount / 100;
         },
 
 
@@ -22267,2368 +19475,115 @@ module.exports = {
 
             switch (discount.duration) {
                 case 'forever':
-                    return 'for all future invoices';
+                    return 'all future invoices';
                 case 'once':
                     return 'a single invoice';
                 case 'repeating':
-                    if (discount.duration_in_months === 1) {
-                        return 'all invoices during the next billing cycle';
-                    } else {
-                        return 'all invoices during the next ' + discount.duration_in_months + ' billing cycles';
-                    }
+                    return 'all invoices during the next ' + discount.duration_in_months + ' months';
             }
         }
     }
 };
 
 /***/ }),
-/* 232 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(7)],
-
-    /**
-     * The componetn's data.
-     */
-    data: function data() {
-        return {
-            currentDiscount: null,
-            loadingCurrentDiscount: false
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.$on('updateDiscount', function () {
-            self.getCurrentDiscountForBillable(self.billableType, self.billable);
-
-            return true;
-        });
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.getCurrentDiscountForBillable(this.billableType, this.billable);
-    }
-};
-
-/***/ }),
-/* 233 */
+/* 159 */
 /***/ (function(module, exports) {
 
 module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                coupon: ''
-            })
-        };
-    },
-
+    pushStateSelector: null,
 
     methods: {
         /**
-         * Redeem the given coupon code.
+         * Initialize push state handling for tabs.
          */
-        redeem: function redeem() {
+        usePushStateForTabs: function usePushStateForTabs(selector) {
             var _this = this;
 
-            Spark.post(this.urlForRedemption, this.form).then(function () {
-                _this.form.coupon = '';
+            this.pushStateSelector = selector;
 
-                _this.$parent.$emit('updateDiscount');
+            this.registerTabClickHandler();
+
+            window.addEventListener('popstate', function (e) {
+                _this.activateTabForCurrentHash();
             });
-        }
-    },
 
-    computed: {
-        /**
-         * Get the URL for redeeming a coupon.
-         */
-        urlForRedemption: function urlForRedemption() {
-            return this.billingUser ? '/settings/payment-method/coupon' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method/coupon';
-        }
-    }
-};
-
-/***/ }),
-/* 234 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(6)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                braintree_type: '',
-                braintree_token: ''
-            })
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.braintree('braintree-payment-method-container', this.braintreeCallback);
-    },
-
-
-    methods: {
-        /**
-         * Update the entity's card information.
-         */
-        update: function update() {
-            var _this = this;
-
-            Spark.put(this.urlForUpdate, this.form).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-
-                _this.resetBraintree('braintree-payment-method-container', _this.braintreeCallback);
-            });
-        },
-
-
-        /**
-         * The Braintree payment method received callback.
-         */
-        braintreeCallback: function braintreeCallback(response) {
-            this.form.braintree_type = response.type;
-            this.form.braintree_token = response.nonce;
-
-            this.update();
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for the payment method update.
-         */
-        urlForUpdate: function urlForUpdate() {
-            return this.billingUser ? '/settings/payment-method' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method';
-        },
-
-
-        /**
-         * Get the proper brand icon for the customer's credit card.
-         */
-        cardIcon: function cardIcon() {
-            if (!this.billable.card_brand) {
-                return 'fa-credit-card';
-            }
-
-            switch (this.billable.card_brand) {
-                case 'American Express':
-                    return 'fa-cc-amex';
-                case 'Diners Club':
-                    return 'fa-cc-diners-club';
-                case 'Discover':
-                    return 'fa-cc-discover';
-                case 'JCB':
-                    return 'fa-cc-jcb';
-                case 'MasterCard':
-                    return 'fa-cc-mastercard';
-                case 'Visa':
-                    return 'fa-cc-visa';
-                default:
-                    return 'fa-credit-card';
-            }
-        }
-    }
-};
-
-/***/ }),
-/* 235 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                stripe_token: '',
-                address: '',
-                address_line_2: '',
-                city: '',
-                state: '',
-                zip: '',
-                country: 'US'
-            }),
-
-            cardForm: new SparkForm({
-                name: '',
-                number: '',
-                cvc: '',
-                month: '',
-                year: ''
-            })
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        Stripe.setPublishableKey(Spark.stripeKey);
-
-        this.initializeBillingAddress();
-    },
-
-
-    methods: {
-        /**
-         * Initialize the billing address form for the billable entity.
-         */
-        initializeBillingAddress: function initializeBillingAddress() {
-            if (!Spark.collectsBillingAddress) {
-                return;
-            }
-
-            this.form.address = this.billable.billing_address;
-            this.form.address_line_2 = this.billable.billing_address_line_2;
-            this.form.city = this.billable.billing_city;
-            this.form.state = this.billable.billing_state;
-            this.form.zip = this.billable.billing_zip;
-            this.form.country = this.billable.billing_country || 'US';
-        },
-
-
-        /**
-         * Update the billable's card information.
-         */
-        update: function update() {
-            var _this = this;
-
-            this.form.busy = true;
-            this.form.errors.forget();
-            this.form.successful = false;
-            this.cardForm.errors.forget();
-
-            // Here we will build out the payload to send to Stripe to obtain a card token so
-            // we can create the actual subscription. We will build out this data that has
-            // this credit card number, CVC, etc. and exchange it for a secure token ID.
-            var payload = {
-                name: this.cardForm.name,
-                number: this.cardForm.number,
-                cvc: this.cardForm.cvc,
-                exp_month: this.cardForm.month,
-                exp_year: this.cardForm.year,
-                address_line1: this.form.address,
-                address_line2: this.form.address_line_2,
-                address_city: this.form.city,
-                address_state: this.form.state,
-                address_zip: this.form.zip,
-                address_country: this.form.country
-            };
-
-            // Once we have the Stripe payload we'll send it off to Stripe and obtain a token
-            // which we will send to the server to update this payment method. If there is
-            // an error we will display that back out to the user for their information.
-            Stripe.card.createToken(payload, function (status, response) {
-                if (response.error) {
-                    _this.cardForm.errors.set({ number: [response.error.message] });
-
-                    _this.form.busy = false;
-                } else {
-                    _this.sendUpdateToServer(response.id);
-                }
-            });
-        },
-
-
-        /**
-         * Send the credit card update information to the server.
-         */
-        sendUpdateToServer: function sendUpdateToServer(token) {
-            var _this2 = this;
-
-            this.form.stripe_token = token;
-
-            Spark.put(this.urlForUpdate, this.form).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-
-                _this2.cardForm.name = '';
-                _this2.cardForm.number = '';
-                _this2.cardForm.cvc = '';
-                _this2.cardForm.month = '';
-                _this2.cardForm.year = '';
-
-                if (!Spark.collectsBillingAddress) {
-                    _this2.form.zip = '';
-                }
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Get the billable entity's "billable" name.
-         */
-        billableName: function billableName() {
-            return this.billingUser ? this.user.name : this.team.owner.name;
-        },
-
-
-        /**
-         * Get the URL for the payment method update.
-         */
-        urlForUpdate: function urlForUpdate() {
-            return this.billingUser ? '/settings/payment-method' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method';
-        },
-
-
-        /**
-         * Get the proper brand icon for the customer's credit card.
-         */
-        cardIcon: function cardIcon() {
-            if (!this.billable.card_brand) {
-                return 'fa-cc-stripe';
-            }
-
-            switch (this.billable.card_brand) {
-                case 'American Express':
-                    return 'fa-cc-amex';
-                case 'Diners Club':
-                    return 'fa-cc-diners-club';
-                case 'Discover':
-                    return 'fa-cc-discover';
-                case 'JCB':
-                    return 'fa-cc-jcb';
-                case 'MasterCard':
-                    return 'fa-cc-mastercard';
-                case 'Visa':
-                    return 'fa-cc-visa';
-                default:
-                    return 'fa-cc-stripe';
-            }
-        },
-
-
-        /**
-         * Get the placeholder for the billable entity's credit card.
-         */
-        placeholder: function placeholder() {
-            if (this.billable.card_last_four) {
-                return '************' + this.billable.card_last_four;
-            }
-
-            return '';
-        }
-    }
-};
-
-/***/ }),
-/* 236 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({ vat_id: '' })
-        };
-    },
-
-
-    /**
-     * Bootstrap the component.
-     */
-    mounted: function mounted() {
-        this.form.vat_id = this.billable.vat_id;
-    },
-
-
-    methods: {
-        /**
-         * Update the customer's VAT ID.
-         */
-        update: function update() {
-            Spark.put(this.urlForUpdate, this.form);
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for the VAT ID update.
-         */
-        urlForUpdate: function urlForUpdate() {
-            return this.billingUser ? '/settings/payment-method/vat-id' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method/vat-id';
-        }
-    }
-};
-
-/***/ }),
-/* 237 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user']
-};
-
-/***/ }),
-/* 238 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: $.extend(true, new SparkForm({
-                name: '',
-                email: ''
-            }), Spark.forms.updateContactInformation)
-        };
-    },
-
-
-    /**
-     * Bootstrap the component.
-     */
-    mounted: function mounted() {
-        this.form.name = this.user.name;
-        this.form.email = this.user.email;
-    },
-
-
-    methods: {
-        /**
-         * Update the user's contact information.
-         */
-        update: function update() {
-            Spark.put('/settings/contact', this.form).then(function () {
-                Bus.$emit('updateUser');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 239 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({})
-        };
-    },
-
-
-    methods: {
-        /**
-         * Update the user's profile photo.
-         */
-        update: function update(e) {
-            e.preventDefault();
-
-            if (!this.$refs.photo.files.length) {
-                return;
-            }
-
-            var self = this;
-
-            this.form.startProcessing();
-
-            // We need to gather a fresh FormData instance with the profile photo appended to
-            // the data so we can POST it up to the server. This will allow us to do async
-            // uploads of the profile photos. We will update the user after this action.
-            axios.post('/settings/photo', this.gatherFormData()).then(function () {
-                Bus.$emit('updateUser');
-
-                self.form.finishProcessing();
-            }, function (error) {
-                self.form.setErrors(error.response.data);
-            });
-        },
-
-
-        /**
-         * Gather the form data for the photo upload.
-         */
-        gatherFormData: function gatherFormData() {
-            var data = new FormData();
-
-            data.append('photo', this.$refs.photo.files[0]);
-
-            return data;
-        }
-    },
-
-    computed: {
-        /**
-         * Calculate the style attribute for the photo preview.
-         */
-        previewStyle: function previewStyle() {
-            return 'background-image: url(' + this.user.photo_url + ')';
-        }
-    }
-};
-
-/***/ }),
-/* 240 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            twoFactorResetCode: null
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.$on('receivedTwoFactorResetCode', function (code) {
-            self.twoFactorResetCode = code;
-
-            $('#modal-show-two-factor-reset-code').modal('show');
-        });
-    }
-};
-
-/***/ }),
-/* 241 */
-/***/ (function(module, exports) {
-
-module.exports = {
-	props: ['user'],
-
-	/**
-  * The component's data.
-  */
-	data: function data() {
-		return {
-			form: new SparkForm({})
-		};
-	},
-
-
-	methods: {
-		/**
-   * Disable two-factor authentication for the user.
-   */
-		disable: function disable() {
-			Spark.delete('/settings/two-factor-auth', this.form).then(function () {
-				Bus.$emit('updateUser');
-			});
-		}
-	}
-};
-
-/***/ }),
-/* 242 */
-/***/ (function(module, exports) {
-
-module.exports = {
-	props: ['user'],
-
-	/**
-  * The component's data.
-  */
-	data: function data() {
-		return {
-			form: new SparkForm({
-				country_code: '',
-				phone: ''
-			})
-		};
-	},
-
-
-	/**
-  * Prepare the component.
-  */
-	mounted: function mounted() {
-		this.form.country_code = this.user.country_code;
-		this.form.phone = this.user.phone;
-	},
-
-
-	methods: {
-		/**
-   * Enable two-factor authentication for the user.
-   */
-		enable: function enable() {
-			var _this = this;
-
-			Spark.post('/settings/two-factor-auth', this.form).then(function (code) {
-				_this.$parent.$emit('receivedTwoFactorResetCode', code);
-
-				Bus.$emit('updateUser');
-			});
-		}
-	}
-};
-
-/***/ }),
-/* 243 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                current_password: '',
-                password: '',
-                password_confirmation: ''
-            })
-        };
-    },
-
-
-    methods: {
-        /**
-         * Update the user's password.
-         */
-        update: function update() {
-            Spark.put('/settings/password', this.form);
-        }
-    }
-};
-
-/***/ }),
-/* 244 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'teams'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(8)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            billableType: 'user',
-            team: null
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.usePushStateForTabs('.spark-settings-tabs');
-    }
-};
-
-/***/ }),
-/* 245 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(2), __webpack_require__(4)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            plans: []
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        var self = this;
-
-        this.getPlans();
-
-        this.$on('showPlanDetails', function (plan) {
-            self.showPlanDetails(plan);
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get the active plans for the application.
-         */
-        getPlans: function getPlans() {
-            var _this = this;
-
-            axios.get('/spark/plans').then(function (response) {
-                _this.plans = _this.billingUser ? _.where(response.data, { type: "user" }) : _.where(response.data, { type: "team" });
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 246 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({})
-        };
-    },
-
-
-    methods: {
-        /**
-         * Confirm the cancellation operation.
-         */
-        confirmCancellation: function confirmCancellation() {
-            $('#modal-confirm-cancellation').modal('show');
-        },
-
-
-        /**
-         * Cancel the current subscription.
-         */
-        cancel: function cancel() {
-            Spark.delete(this.urlForCancellation, this.form).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-
-                $('#modal-confirm-cancellation').modal('hide');
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for the subscription cancellation.
-         */
-        urlForCancellation: function urlForCancellation() {
-            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
-        }
-    }
-};
-
-/***/ }),
-/* 247 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'plans', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(2), __webpack_require__(4)],
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        if (this.onlyHasYearlyPlans) {
-            this.showYearlyPlans();
-        }
-    },
-
-
-    methods: {
-        /**
-         * Show the plan details for the given plan.
-         *
-         * We'll ask the parent subscription component to display it.
-         */
-        showPlanDetails: function showPlanDetails(plan) {
-            this.$parent.$emit('showPlanDetails', plan);
-        },
-
-
-        /**
-         * Get the plan price with the applicable VAT.
-         */
-        priceWithTax: function priceWithTax(plan) {
-            return plan.price + plan.price * (this.billable.tax_rate / 100);
-        }
-    }
-};
-
-/***/ }),
-/* 248 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'plans', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(6), __webpack_require__(2), __webpack_require__(4)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                braintree_type: '',
-                braintree_token: '',
-                plan: '',
-                coupon: null
-            })
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        var _this = this;
-
-        // If only yearly subscription plans are available, we will select that interval so that we
-        // can show the plans. Then we'll select the first available paid plan from the list and
-        // start the form in a good default spot. The user may then select another plan later.
-        if (this.onlyHasYearlyPaidPlans) {
-            this.showYearlyPlans();
-        }
-
-        // Next, we will configure the braintree container element on the page and handle the nonce
-        // received callback. We'll then set the nonce and fire off the subscribe method so this
-        // nonce can be used to create the subscription for the billable entity being managed.
-        this.braintree('braintree-subscribe-container', function (response) {
-            _this.form.braintree_type = response.type;
-            _this.form.braintree_token = response.nonce;
-
-            _this.subscribe();
-        });
-    },
-
-
-    methods: {
-        /**
-         * Mark the given plan as selected.
-         */
-        selectPlan: function selectPlan(plan) {
-            this.selectedPlan = plan;
-
-            this.form.plan = this.selectedPlan.id;
-        },
-
-
-        /**
-         * Subscribe to the specified plan.
-         */
-        subscribe: function subscribe() {
-            Spark.post(this.urlForNewSubscription, this.form).then(function (response) {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-            });
-        },
-
-
-        /**
-         * Show the plan details for the given plan.
-         *
-         * We'll ask the parent subscription component to display it.
-         */
-        showPlanDetails: function showPlanDetails(plan) {
-            this.$parent.$emit('showPlanDetails', plan);
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for subscribing to a plan.
-         */
-        urlForNewSubscription: function urlForNewSubscription() {
-            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
-        }
-    }
-};
-
-/***/ }),
-/* 249 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'plans', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(2), __webpack_require__(4), __webpack_require__(17)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            taxRate: 0,
-
-            form: new SparkForm({
-                stripe_token: '',
-                plan: '',
-                coupon: null,
-                address: '',
-                address_line_2: '',
-                city: '',
-                state: '',
-                zip: '',
-                country: 'US',
-                vat_id: ''
-            }),
-
-            cardForm: new SparkForm({
-                name: '',
-                number: '',
-                cvc: '',
-                month: '',
-                year: '',
-                zip: ''
-            })
-        };
-    },
-
-
-    watch: {
-        /**
-         * Watch for changes on the entire billing address.
-         */
-        'currentBillingAddress': function currentBillingAddress(value) {
-            if (!Spark.collectsEuropeanVat) {
-                return;
-            }
-
-            this.refreshTaxRate(this.form);
-        }
-    },
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        Stripe.setPublishableKey(Spark.stripeKey);
-
-        this.initializeBillingAddress();
-
-        if (this.onlyHasYearlyPaidPlans) {
-            this.showYearlyPlans();
-        }
-    },
-
-
-    methods: {
-        /**
-         * Initialize the billing address form for the billable entity.
-         */
-        initializeBillingAddress: function initializeBillingAddress() {
-            this.form.address = this.billable.billing_address;
-            this.form.address_line_2 = this.billable.billing_address_line_2;
-            this.form.city = this.billable.billing_city;
-            this.form.state = this.billable.billing_state;
-            this.form.zip = this.billable.billing_zip;
-            this.form.country = this.billable.billing_country || 'US';
-            this.form.vat_id = this.billable.vat_id;
-        },
-
-
-        /**
-         * Mark the given plan as selected.
-         */
-        selectPlan: function selectPlan(plan) {
-            this.selectedPlan = plan;
-
-            this.form.plan = this.selectedPlan.id;
-        },
-
-
-        /**
-         * Subscribe to the specified plan.
-         */
-        subscribe: function subscribe() {
-            var _this = this;
-
-            this.cardForm.errors.forget();
-
-            this.form.startProcessing();
-
-            // Here we will build out the payload to send to Stripe to obtain a card token so
-            // we can create the actual subscription. We will build out this data that has
-            // this credit card number, CVC, etc. and exchange it for a secure token ID.
-            var payload = {
-                name: this.cardForm.name,
-                number: this.cardForm.number,
-                cvc: this.cardForm.cvc,
-                exp_month: this.cardForm.month,
-                exp_year: this.cardForm.year,
-                address_line1: this.form.address,
-                address_line2: this.form.address_line_2,
-                address_city: this.form.city,
-                address_state: this.form.state,
-                address_zip: this.form.zip,
-                address_country: this.form.country
-            };
-
-            // Next, we will send the payload to Stripe and handle the response. If we have a
-            // valid token we can send that to the server and use the token to create this
-            // subscription on the back-end. Otherwise, we will show the error messages.
-            Stripe.card.createToken(payload, function (status, response) {
-                if (response.error) {
-                    _this.cardForm.errors.set({ number: [response.error.message] });
-
-                    _this.form.busy = false;
-                } else {
-                    _this.createSubscription(response.id);
-                }
-            });
-        },
-
-
-        /*
-         * After obtaining the Stripe token, create subscription on the Spark server.
-         */
-        createSubscription: function createSubscription(token) {
-            this.form.stripe_token = token;
-
-            Spark.post(this.urlForNewSubscription, this.form).then(function (response) {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeam');
-            });
-        },
-
-
-        /**
-         * Determine if the user has subscribed to the given plan before.
-         */
-        hasSubscribed: function hasSubscribed(plan) {
-            return !!_.where(this.billable.subscriptions, { provider_plan: plan.id }).length;
-        },
-
-
-        /**
-         * Show the plan details for the given plan.
-         *
-         * We'll ask the parent subscription component to display it.
-         */
-        showPlanDetails: function showPlanDetails(plan) {
-            this.$parent.$emit('showPlanDetails', plan);
-        }
-    },
-
-    computed: {
-        /**
-         * Get the billable entity's "billable" name.
-         */
-        billableName: function billableName() {
-            return this.billingUser ? this.user.name : this.team.owner.name;
-        },
-
-
-        /**
-         * Determine if the selected country collects European VAT.
-         */
-        countryCollectsVat: function countryCollectsVat() {
-            return this.collectsVat(this.form.country);
-        },
-
-
-        /**
-         * Get the URL for subscribing to a plan.
-         */
-        urlForNewSubscription: function urlForNewSubscription() {
-            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
-        },
-
-
-        /**
-         * Get the current billing address from the subscribe form.
-         *
-         * This used primarily for wathcing.
-         */
-        currentBillingAddress: function currentBillingAddress() {
-            return this.form.address + this.form.address_line_2 + this.form.city + this.form.state + this.form.zip + this.form.country + this.form.vat_id;
-        }
-    }
-};
-
-/***/ }),
-/* 250 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'team', 'plans', 'billableType'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(2), __webpack_require__(4)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            confirmingPlan: null
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        var _this = this;
-
-        this.selectActivePlanInterval();
-
-        // We need to watch the activePlan computed property for changes so we can select
-        // the proper active plan on the plan interval button group. So, we will watch
-        // this property and fire off a method anytime it changes so it can sync up.
-        this.$watch('activePlan', function (value) {
-            _this.selectActivePlanInterval();
-        });
-
-        if (this.onlyHasYearlyPlans) {
-            this.showYearlyPlans();
-        }
-    },
-
-
-    methods: {
-        /**
-         * Confirm the plan update with the user.
-         */
-        confirmPlanUpdate: function confirmPlanUpdate(plan) {
-            this.confirmingPlan = plan;
-
-            $('#modal-confirm-plan-update').modal('show');
-        },
-
-
-        /**
-         * Approve the plan update.
-         */
-        approvePlanUpdate: function approvePlanUpdate() {
-            $('#modal-confirm-plan-update').modal('hide');
-
-            this.updateSubscription(this.confirmingPlan);
-        },
-
-
-        /**
-         * Select the active plan interval.
-         */
-        selectActivePlanInterval: function selectActivePlanInterval() {
-            if (this.activePlanIsMonthly || this.yearlyPlans.length == 0) {
-                this.showMonthlyPlans();
+            if (window.location.hash) {
+                this.activateTabForCurrentHash();
             } else {
-                this.showYearlyPlans();
+                this.activateFirstTab();
             }
         },
 
 
         /**
-         * Show the plan details for the given plan.
-         *
-         * We'll ask the parent subscription component to display it.
+         * Register the click handler for all of the tabs.
          */
-        showPlanDetails: function showPlanDetails(plan) {
-            this.$parent.$emit('showPlanDetails', plan);
-        },
-
-
-        /**
-         * Get the plan price with the applicable VAT.
-         */
-        priceWithTax: function priceWithTax(plan) {
-            return plan.price + plan.price * (this.billable.tax_rate / 100);
-        }
-    }
-};
-
-/***/ }),
-/* 251 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'teams']
-};
-
-/***/ }),
-/* 252 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            plans: [],
-
-            form: new SparkForm({
-                name: '',
-                slug: ''
-            })
-        };
-    },
-
-
-    computed: {
-        /**
-         * Get the active subscription instance.
-         */
-        activeSubscription: function activeSubscription() {
-            if (!this.$parent.billable) {
-                return;
-            }
-
-            var subscription = _.find(this.$parent.billable.subscriptions, function (subscription) {
-                return subscription.name == 'default';
-            });
-
-            if (typeof subscription !== 'undefined') {
-                return subscription;
-            }
-        },
-
-
-        /**
-         * Get the active plan instance.
-         */
-        activePlan: function activePlan() {
-            var _this = this;
-
-            if (this.activeSubscription) {
-                return _.find(this.plans, function (plan) {
-                    return plan.id == _this.activeSubscription.provider_plan;
-                });
-            }
-        },
-
-
-        /**
-         * Check if there's a limit for the number of teams.
-         */
-        hasTeamLimit: function hasTeamLimit() {
-            if (!this.activePlan) {
-                return false;
-            }
-
-            return !!this.activePlan.attributes.teams;
-        },
-
-
-        /**
-         *
-         * Get the remaining teams in the active plan.
-         */
-        remainingTeams: function remainingTeams() {
-            var ownedTeams = _.filter(this.$parent.teams, { owner_id: this.$parent.billable.id });
-
-            return this.activePlan ? this.activePlan.attributes.teams - ownedTeams.length : 0;
-        },
-
-
-        /**
-         * Check if the user can create more teams.
-         */
-        canCreateMoreTeams: function canCreateMoreTeams() {
-            if (!this.hasTeamLimit) {
-                return true;
-            }
-
-            return this.remainingTeams > 0;
-        }
-    },
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        this.getPlans();
-    },
-
-
-    events: {
-        /**
-         * Handle the "activatedTab" event.
-         */
-        activatedTab: function activatedTab(tab) {
-            if (tab === Spark.pluralTeamString) {
-                Vue.nextTick(function () {
-                    $('#create-team-name').focus();
-                });
-            }
-
-            return true;
-        }
-    },
-
-    watch: {
-        /**
-         * Watch the team name for changes.
-         */
-        'form.name': function formName(val, oldVal) {
-            if (this.form.slug == '' || this.form.slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
-                this.form.slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
-            }
-        }
-    },
-
-    methods: {
-        /**
-         * Create a new team.
-         */
-        create: function create() {
-            var _this2 = this;
-
-            Spark.post('/settings/' + Spark.pluralTeamString, this.form).then(function () {
-                _this2.form.name = '';
-                _this2.form.slug = '';
-
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeams');
-            });
-        },
-
-
-        /**
-         * Get all the plans defined in the application.
-         */
-        getPlans: function getPlans() {
-            var _this3 = this;
-
-            axios.get('/spark/plans').then(function (response) {
-                _this3.plans = response.data;
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 253 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'teams'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            leavingTeam: null,
-            deletingTeam: null,
-
-            leaveTeamForm: new SparkForm({}),
-            deleteTeamForm: new SparkForm({})
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        $('[data-toggle="tooltip"]').tooltip();
-    },
-
-
-    methods: {
-        /**
-         * Approve leaving the given team.
-         */
-        approveLeavingTeam: function approveLeavingTeam(team) {
-            this.leavingTeam = team;
-
-            $('#modal-leave-team').modal('show');
-        },
-
-
-        /**
-         * Leave the given team.
-         */
-        leaveTeam: function leaveTeam() {
-            Spark.delete(this.urlForLeaving, this.leaveTeamForm).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeams');
-
-                $('#modal-leave-team').modal('hide');
-            });
-        },
-
-
-        /**
-         * Approve the deletion of the given team.
-         */
-        approveTeamDelete: function approveTeamDelete(team) {
-            this.deletingTeam = team;
-
-            $('#modal-delete-team').modal('show');
-        },
-
-
-        /**
-         * Delete the given team.
-         */
-        deleteTeam: function deleteTeam() {
-            Spark.delete('/settings/' + Spark.pluralTeamString + '/' + this.deletingTeam.id, this.deleteTeamForm).then(function () {
-                Bus.$emit('updateUser');
-                Bus.$emit('updateTeams');
-
-                $('#modal-delete-team').modal('hide');
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for leaving a team.
-         */
-        urlForLeaving: function urlForLeaving() {
-            return '/settings/' + Spark.pluralTeamString + '/' + this.leavingTeam.id + '/members/' + this.user.id;
-        }
-    }
-};
-
-/***/ }),
-/* 254 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['team', 'invitations'],
-
-    methods: {
-        /**
-         * Cancel the sent invitation.
-         */
-        cancel: function cancel(invitation) {
-            var _this = this;
-
-            axios.delete('/settings/invitations/' + invitation.id).then(function () {
-                _this.$parent.$emit('updateInvitations');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 255 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            invitations: []
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        this.getPendingInvitations();
-    },
-
-
-    methods: {
-        /**
-         * Get the pending invitations for the user.
-         */
-        getPendingInvitations: function getPendingInvitations() {
-            var _this = this;
-
-            axios.get('/settings/invitations/pending').then(function (response) {
-                _this.invitations = response.data;
-            });
-        },
-
-
-        /**
-         * Accept the given invitation.
-         */
-        accept: function accept(invitation) {
-            var _this2 = this;
-
-            axios.post('/settings/invitations/' + invitation.id + '/accept').then(function () {
-                Bus.$emit('updateTeams');
-
-                _this2.getPendingInvitations();
-            });
-
-            this.removeInvitation(invitation);
-        },
-
-
-        /**
-         * Reject the given invitation.
-         */
-        reject: function reject(invitation) {
-            var _this3 = this;
-
-            axios.post('/settings/invitations/' + invitation.id + '/reject').then(function () {
-                _this3.getPendingInvitations();
-            });
-
-            this.removeInvitation(invitation);
-        },
-
-
-        /**
-         * Remove the given invitation from the list.
-         */
-        removeInvitation: function removeInvitation(invitation) {
-            this.invitations = _.reject(this.invitations, function (i) {
-                return i.id === invitation.id;
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 256 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            plans: [],
-
-            form: new SparkForm({
-                email: ''
-            })
-        };
-    },
-
-
-    computed: {
-        /**
-         * Get the active subscription instance.
-         */
-        activeSubscription: function activeSubscription() {
-            if (!this.billable) {
-                return;
-            }
-
-            var subscription = _.find(this.billable.subscriptions, function (subscription) {
-                return subscription.name == 'default';
-            });
-
-            if (typeof subscription !== 'undefined') {
-                return subscription;
-            }
-        },
-
-
-        /**
-         * Get the active plan instance.
-         */
-        activePlan: function activePlan() {
-            var _this = this;
-
-            if (this.activeSubscription) {
-                return _.find(this.plans, function (plan) {
-                    return plan.id == _this.activeSubscription.provider_plan;
-                });
-            }
-        },
-
-
-        /**
-         * Check if there's a limit for the number of team members.
-         */
-        hasTeamMembersLimit: function hasTeamMembersLimit() {
-            if (!this.activePlan) {
-                return false;
-            }
-
-            return !!this.activePlan.attributes.teamMembers;
-        },
-
-
-        /**
-         *
-         * Get the remaining team members in the active plan.
-         */
-        remainingTeamMembers: function remainingTeamMembers() {
-            return this.activePlan ? this.activePlan.attributes.teamMembers - this.$parent.team.users.length : 0;
-        },
-
-
-        /**
-         * Check if the user can invite more team members.
-         */
-        canInviteMoreTeamMembers: function canInviteMoreTeamMembers() {
-            if (!this.hasTeamMembersLimit) {
-                return true;
-            }
-            return this.remainingTeamMembers > 0;
-        }
-    },
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        this.getPlans();
-    },
-
-
-    methods: {
-        /**
-         * Send a team invitation.
-         */
-        send: function send() {
-            var _this2 = this;
-
-            Spark.post('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invitations', this.form).then(function () {
-                _this2.form.email = '';
-
-                _this2.$parent.$emit('updateInvitations');
-            });
-        },
-
-
-        /**
-         * Get all the plans defined in the application.
-         */
-        getPlans: function getPlans() {
-            var _this3 = this;
-
-            axios.get('/spark/plans').then(function (response) {
-                _this3.plans = response.data;
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 257 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            roles: [],
-
-            updatingTeamMember: null,
-            deletingTeamMember: null,
-
-            updateTeamMemberForm: $.extend(true, new SparkForm({
-                role: ''
-            }), Spark.forms.updateTeamMember),
-
-            deleteTeamMemberForm: new SparkForm({})
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        this.getRoles();
-    },
-
-
-    methods: {
-        /**
-         * Get the available team member roles.
-         */
-        getRoles: function getRoles() {
-            var _this = this;
-
-            axios.get('/settings/' + Spark.pluralTeamString + '/roles').then(function (response) {
-                _this.roles = response.data;
-            });
-        },
-
-
-        /**
-         * Edit the given team member.
-         */
-        editTeamMember: function editTeamMember(member) {
-            this.updatingTeamMember = member;
-            this.updateTeamMemberForm.role = member.pivot.role;
-
-            $('#modal-update-team-member').modal('show');
-        },
-
-
-        /**
-         * Update the team member.
-         */
-        update: function update() {
-            Spark.put(this.urlForUpdating, this.updateTeamMemberForm).then(function () {
-                Bus.$emit('updateTeam');
-
-                $('#modal-update-team-member').modal('hide');
-            });
-        },
-
-
-        /**
-         * Display the approval modal for the deletion of a team member.
-         */
-        approveTeamMemberDelete: function approveTeamMemberDelete(member) {
-            this.deletingTeamMember = member;
-
-            $('#modal-delete-member').modal('show');
-        },
-
-
-        /**
-         * Delete the given team member.
-         */
-        deleteMember: function deleteMember() {
-            Spark.delete(this.urlForDeleting, this.deleteTeamMemberForm).then(function () {
-                Bus.$emit('updateTeam');
-
-                $('#modal-delete-member').modal('hide');
-            });
-        },
-
-
-        /**
-         * Determine if the current user can edit a team member.
-         */
-        canEditTeamMember: function canEditTeamMember(member) {
-            return this.user.id === this.team.owner_id && this.user.id !== member.id;
-        },
-
-
-        /**
-         * Determine if the current user can delete a team member.
-         */
-        canDeleteTeamMember: function canDeleteTeamMember(member) {
-            return this.user.id === this.team.owner_id && this.user.id !== member.id;
-        },
-
-
-        /**
-         * Get the displayable role for the given team member.
-         */
-        teamMemberRole: function teamMemberRole(member) {
-            if (this.roles.length == 0) {
-                return '';
-            }
-
-            if (member.pivot.role == 'owner') {
-                return 'Owner';
-            }
-
-            var role = _.find(this.roles, function (role) {
-                return role.value == member.pivot.role;
-            });
-
-            if (typeof role !== 'undefined') {
-                return role.text;
-            }
-        }
-    },
-
-    computed: {
-        /**
-         * Get the URL for updating a team member.
-         */
-        urlForUpdating: function urlForUpdating() {
-            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/members/' + this.updatingTeamMember.id;
-        },
-
-        /**
-         * Get the URL for deleting a team member.
-         */
-        urlForDeleting: function urlForDeleting() {
-            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/members/' + this.deletingTeamMember.id;
-        }
-    }
-};
-
-/***/ }),
-/* 258 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team', 'billableType'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            invitations: []
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.getInvitations();
-
-        this.$on('updateInvitations', function () {
-            self.getInvitations();
-        });
-    },
-
-
-    methods: {
-        /**
-         * Get all of the invitations for the team.
-         */
-        getInvitations: function getInvitations() {
-            var _this = this;
-
-            axios.get('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invitations').then(function (response) {
-                _this.invitations = response.data;
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 259 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team']
-};
-
-/***/ }),
-/* 260 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-    props: ['user', 'teamId'],
-
-    /**
-     * Load mixins for the component.
-     */
-    mixins: [__webpack_require__(8)],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            billableType: 'team',
-            team: null
-        };
-    },
-
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        this.getTeam();
-
-        Bus.$on('updateTeam', function () {
-            self.getTeam();
-        });
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.usePushStateForTabs('.spark-settings-tabs');
-    },
-
-
-    methods: {
-        /**
-         * Get the team being managed.
-         */
-        getTeam: function getTeam() {
-            var _this = this;
-
-            axios.get('/' + Spark.pluralTeamString + '/' + this.teamId).then(function (response) {
-                _this.team = response.data;
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 261 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({
-                name: ''
-            })
-        };
-    },
-
-
-    /**
-     * Prepare the component.
-     */
-    mounted: function mounted() {
-        this.form.name = this.team.name;
-    },
-
-
-    methods: {
-        /**
-         * Update the team name.
-         */
-        update: function update() {
-            Spark.put('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/name', this.form).then(function () {
-                Bus.$emit('updateTeam');
-                Bus.$emit('updateTeams');
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 262 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    props: ['user', 'team'],
-
-    /**
-     * The component's data.
-     */
-    data: function data() {
-        return {
-            form: new SparkForm({})
-        };
-    },
-
-
-    methods: {
-        /**
-         * Update the team's photo.
-         */
-        update: function update(e) {
-            e.preventDefault();
-
-            if (!this.$refs.photo.files.length) {
-                return;
-            }
-
+        registerTabClickHandler: function registerTabClickHandler() {
             var self = this;
 
-            this.form.startProcessing();
+            $(this.pushStateSelector + ' a[data-toggle="tab"]').on('click', function (e) {
+                self.removeActiveClassFromTabs();
 
-            // We need to gather a fresh FormData instance with the profile photo appended to
-            // the data so we can POST it up to the server. This will allow us to do async
-            // uploads of the profile photos. We will update the user after this action.
-            axios.post(this.urlForUpdate, this.gatherFormData()).then(function () {
-                Bus.$emit('updateTeam');
-                Bus.$emit('updateTeams');
+                history.pushState(null, null, '#/' + $(this).attr('href').substring(1));
 
-                self.form.finishProcessing();
-            }, function (error) {
-                self.form.setErrors(error.response.data);
+                self.broadcastTabChange($(this).attr('href').substring(1));
             });
         },
 
 
         /**
-         * Gather the form data for the photo upload.
+         * Activate the tab for the current hash in the URL.
          */
-        gatherFormData: function gatherFormData() {
-            var data = new FormData();
+        activateTabForCurrentHash: function activateTabForCurrentHash() {
+            var hash = window.location.hash.substring(2);
 
-            data.append('photo', this.$refs.photo.files[0]);
+            var parameters = hash.split('/');
 
-            return data;
-        }
-    },
+            hash = parameters.shift();
 
-    computed: {
-        /**
-         * Get the URL for updating the team photo.
-         */
-        urlForUpdate: function urlForUpdate() {
-            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/photo';
+            this.removeActiveClassFromTabs();
+
+            var tab = $(this.pushStateSelector + ' a[href="#' + hash + '"][data-toggle="tab"]');
+
+            if (tab.length > 0) {
+                tab.tab('show');
+            }
+
+            this.broadcastTabChange(hash, parameters);
         },
 
 
         /**
-         * Calculate the style attribute for the photo preview.
+         * Activate the first tab in a list.
          */
-        previewStyle: function previewStyle() {
-            return 'background-image: url(' + this.team.photo_url + ')';
+        activateFirstTab: function activateFirstTab() {
+            var tab = $(this.pushStateSelector + ' a[data-toggle="tab"]').first();
+
+            tab.tab('show');
+
+            this.broadcastTabChange(tab.attr('href').substring(1));
+        },
+
+
+        /**
+         * Remove the active class from the tabs.
+         */
+        removeActiveClassFromTabs: function removeActiveClassFromTabs() {
+            $(this.pushStateSelector + ' li').removeClass('active');
+        },
+
+
+        /**
+         * Broadcast that a tab change happened.
+         */
+        broadcastTabChange: function broadcastTabChange(hash, parameters) {
+            Bus.$emit('sparkHashChanged', hash, parameters);
         }
     }
 };
 
 /***/ }),
-/* 263 */
-/***/ (function(module, exports) {
-
-/**
- * Export the root Spark application.
- */
-module.exports = {
-    el: '#spark-app',
-
-    /**
-     * Holds the timestamp for the last time we updated the API token.
-     */
-    lastRefreshedApiTokenAt: null,
-
-    /**
-     * The application's data.
-     */
-    data: {
-        user: Spark.state.user,
-        teams: Spark.state.teams,
-        currentTeam: Spark.state.currentTeam,
-
-        loadingNotifications: false,
-        notifications: null,
-
-        supportForm: new SparkForm({
-            from: '',
-            subject: '',
-            message: ''
-        })
-    },
-
-    /**
-     * The component has been created by Vue.
-     */
-    created: function created() {
-        var self = this;
-
-        if (Spark.userId) {
-            this.loadDataForAuthenticatedUser();
-        }
-
-        if (Spark.userId && Spark.usesApi) {
-            this.refreshApiTokenEveryFewMinutes();
-        }
-
-        Bus.$on('updateUser', function () {
-            self.getUser();
-        });
-
-        Bus.$on('updateUserData', function () {
-            self.loadDataForAuthenticatedUser();
-        });
-
-        Bus.$on('updateTeams', function () {
-            self.getTeams();
-        });
-
-        Bus.$on('showNotifications', function () {
-            $('#modal-notifications').modal('show');
-
-            self.markNotificationsAsRead();
-        });
-
-        Bus.$on('showSupportForm', function () {
-            if (self.user) {
-                self.supportForm.from = self.user.email;
-            }
-
-            $('#modal-support').modal('show');
-
-            setTimeout(function () {
-                $('#support-subject').focus();
-            }, 500);
-        });
-    },
-
-
-    /**
-     * Prepare the application.
-     */
-    mounted: function mounted() {
-        this.whenReady();
-    },
-
-
-    methods: {
-        /**
-         * Finish bootstrapping the application.
-         */
-        whenReady: function whenReady() {
-            //
-        },
-
-
-        /**
-         * Load the data for an authenticated user.
-         */
-        loadDataForAuthenticatedUser: function loadDataForAuthenticatedUser() {
-            this.getNotifications();
-        },
-
-
-        /**
-         * Refresh the current API token every few minutes.
-         */
-        refreshApiTokenEveryFewMinutes: function refreshApiTokenEveryFewMinutes() {
-            var _this = this;
-
-            this.lastRefreshedApiTokenAt = moment();
-
-            setInterval(function () {
-                _this.refreshApiToken();
-            }, 240000);
-
-            setInterval(function () {
-                if (moment().diff(_this.lastRefreshedApiTokenAt, 'minutes') >= 5) {
-                    _this.refreshApiToken();
-                }
-            }, 5000);
-        },
-
-
-        /**
-         * Refresh the current API token.
-         */
-        refreshApiToken: function refreshApiToken() {
-            this.lastRefreshedApiTokenAt = moment();
-
-            axios.put('/spark/token');
-        },
-
-
-        /*
-         * Get the current user of the application.
-         */
-        getUser: function getUser() {
-            var _this2 = this;
-
-            axios.get('/user/current').then(function (response) {
-                _this2.user = response.data;
-            });
-        },
-
-
-        /**
-         * Get the current team list.
-         */
-        getTeams: function getTeams() {
-            var _this3 = this;
-
-            axios.get('/' + Spark.pluralTeamString).then(function (response) {
-                _this3.teams = response.data;
-            });
-        },
-
-
-        /**
-         * Get the current team.
-         */
-        getCurrentTeam: function getCurrentTeam() {
-            var _this4 = this;
-
-            axios.get('/' + Spark.pluralTeamString + '/current').then(function (response) {
-                _this4.currentTeam = response.data;
-            }).catch(function (response) {
-                //
-            });
-        },
-
-
-        /**
-         * Get the application notifications.
-         */
-        getNotifications: function getNotifications() {
-            var _this5 = this;
-
-            this.loadingNotifications = true;
-
-            axios.get('/notifications/recent').then(function (response) {
-                _this5.notifications = response.data;
-
-                _this5.loadingNotifications = false;
-            });
-        },
-
-
-        /**
-         * Mark the current notifications as read.
-         */
-        markNotificationsAsRead: function markNotificationsAsRead() {
-            if (!this.hasUnreadNotifications) {
-                return;
-            }
-
-            axios.put('/notifications/read', {
-                notifications: _.pluck(this.notifications.notifications, 'id')
-            });
-
-            _.each(this.notifications.notifications, function (notification) {
-                notification.read = 1;
-            });
-        },
-
-
-        /**
-         * Send a customer support request.
-         */
-        sendSupportRequest: function sendSupportRequest() {
-            var _this6 = this;
-
-            Spark.post('/support/email', this.supportForm).then(function () {
-                $('#modal-support').modal('hide');
-
-                _this6.showSupportRequestSuccessMessage();
-
-                _this6.supportForm.subject = '';
-                _this6.supportForm.message = '';
-            });
-        },
-
-
-        /**
-         * Show an alert informing the user their support request was sent.
-         */
-        showSupportRequestSuccessMessage: function showSupportRequestSuccessMessage() {
-            swal({
-                title: 'Got It!',
-                text: 'We have received your message and will respond soon!',
-                type: 'success',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        }
-    },
-
-    computed: {
-        /**
-         * Determine if the user has any unread notifications.
-         */
-        hasUnreadAnnouncements: function hasUnreadAnnouncements() {
-            var _this7 = this;
-
-            if (this.notifications && this.user) {
-                if (this.notifications.announcements.length && !this.user.last_read_announcements_at) {
-                    return true;
-                }
-
-                return _.filter(this.notifications.announcements, function (announcement) {
-                    return moment.utc(_this7.user.last_read_announcements_at).isBefore(moment.utc(announcement.created_at));
-                }).length > 0;
-            }
-
-            return false;
-        },
-
-
-        /**
-         * Determine if the user has any unread notifications.
-         */
-        hasUnreadNotifications: function hasUnreadNotifications() {
-            if (this.notifications) {
-                return _.filter(this.notifications.notifications, function (notification) {
-                    return !notification.read;
-                }).length > 0;
-            }
-
-            return false;
-        }
-    }
-};
-
-/***/ }),
-/* 264 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -24637,7 +19592,7 @@ module.exports = {
  * Vue is the JavaScript framework used by Spark.
  */
 if (window.Vue === undefined) {
-  window.Vue = __webpack_require__(291);
+  window.Vue = __webpack_require__(187);
 
   window.Bus = new Vue();
 }
@@ -24645,38 +19600,38 @@ if (window.Vue === undefined) {
 /**
  * Load Vue Global Mixin.
  */
-Vue.mixin(__webpack_require__(222));
+Vue.mixin(__webpack_require__(156));
 
 /**
  * Define the Vue filters.
  */
-__webpack_require__(211);
+__webpack_require__(151);
 
 /**
  * Load the Spark form utilities.
  */
-__webpack_require__(212);
+__webpack_require__(152);
 
 /***/ }),
-/* 265 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-__webpack_require__(277)
-__webpack_require__(267)
-__webpack_require__(268)
-__webpack_require__(269)
-__webpack_require__(270)
-__webpack_require__(271)
-__webpack_require__(272)
-__webpack_require__(276)
-__webpack_require__(273)
-__webpack_require__(274)
-__webpack_require__(275)
-__webpack_require__(266)
+__webpack_require__(173)
+__webpack_require__(163)
+__webpack_require__(164)
+__webpack_require__(165)
+__webpack_require__(166)
+__webpack_require__(167)
+__webpack_require__(168)
+__webpack_require__(172)
+__webpack_require__(169)
+__webpack_require__(170)
+__webpack_require__(171)
+__webpack_require__(162)
 
 /***/ }),
-/* 266 */
+/* 162 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -24844,7 +19799,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 267 */
+/* 163 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -24944,7 +19899,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 268 */
+/* 164 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -25075,7 +20030,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 269 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -25318,7 +20273,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 270 */
+/* 166 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -25536,7 +20491,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 271 */
+/* 167 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -25707,7 +20662,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 272 */
+/* 168 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -26052,7 +21007,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 273 */
+/* 169 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -26166,7 +21121,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 274 */
+/* 170 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -26344,7 +21299,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 275 */
+/* 171 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -26505,7 +21460,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 276 */
+/* 172 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -27031,7 +21986,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 277 */
+/* 173 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -27096,7 +22051,7 @@ __webpack_require__(266)
 
 
 /***/ }),
-/* 278 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36917,7 +31872,7 @@ return jQuery;
 
 
 /***/ }),
-/* 279 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -37092,240 +32047,240 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 280 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 18,
-	"./af.js": 18,
-	"./ar": 25,
-	"./ar-dz": 19,
-	"./ar-dz.js": 19,
-	"./ar-kw": 20,
-	"./ar-kw.js": 20,
-	"./ar-ly": 21,
-	"./ar-ly.js": 21,
-	"./ar-ma": 22,
-	"./ar-ma.js": 22,
-	"./ar-sa": 23,
-	"./ar-sa.js": 23,
-	"./ar-tn": 24,
-	"./ar-tn.js": 24,
-	"./ar.js": 25,
-	"./az": 26,
-	"./az.js": 26,
-	"./be": 27,
-	"./be.js": 27,
-	"./bg": 28,
-	"./bg.js": 28,
-	"./bn": 29,
-	"./bn.js": 29,
-	"./bo": 30,
-	"./bo.js": 30,
-	"./br": 31,
-	"./br.js": 31,
-	"./bs": 32,
-	"./bs.js": 32,
-	"./ca": 33,
-	"./ca.js": 33,
-	"./cs": 34,
-	"./cs.js": 34,
-	"./cv": 35,
-	"./cv.js": 35,
-	"./cy": 36,
-	"./cy.js": 36,
-	"./da": 37,
-	"./da.js": 37,
-	"./de": 40,
-	"./de-at": 38,
-	"./de-at.js": 38,
-	"./de-ch": 39,
-	"./de-ch.js": 39,
-	"./de.js": 40,
-	"./dv": 41,
-	"./dv.js": 41,
-	"./el": 42,
-	"./el.js": 42,
-	"./en-au": 43,
-	"./en-au.js": 43,
-	"./en-ca": 44,
-	"./en-ca.js": 44,
-	"./en-gb": 45,
-	"./en-gb.js": 45,
-	"./en-ie": 46,
-	"./en-ie.js": 46,
-	"./en-nz": 47,
-	"./en-nz.js": 47,
-	"./eo": 48,
-	"./eo.js": 48,
-	"./es": 50,
-	"./es-do": 49,
-	"./es-do.js": 49,
-	"./es.js": 50,
-	"./et": 51,
-	"./et.js": 51,
-	"./eu": 52,
-	"./eu.js": 52,
-	"./fa": 53,
-	"./fa.js": 53,
-	"./fi": 54,
-	"./fi.js": 54,
-	"./fo": 55,
-	"./fo.js": 55,
-	"./fr": 58,
-	"./fr-ca": 56,
-	"./fr-ca.js": 56,
-	"./fr-ch": 57,
-	"./fr-ch.js": 57,
-	"./fr.js": 58,
-	"./fy": 59,
-	"./fy.js": 59,
-	"./gd": 60,
-	"./gd.js": 60,
-	"./gl": 61,
-	"./gl.js": 61,
-	"./gom-latn": 62,
-	"./gom-latn.js": 62,
-	"./he": 63,
-	"./he.js": 63,
-	"./hi": 64,
-	"./hi.js": 64,
-	"./hr": 65,
-	"./hr.js": 65,
-	"./hu": 66,
-	"./hu.js": 66,
-	"./hy-am": 67,
-	"./hy-am.js": 67,
-	"./id": 68,
-	"./id.js": 68,
-	"./is": 69,
-	"./is.js": 69,
-	"./it": 70,
-	"./it.js": 70,
-	"./ja": 71,
-	"./ja.js": 71,
-	"./jv": 72,
-	"./jv.js": 72,
-	"./ka": 73,
-	"./ka.js": 73,
-	"./kk": 74,
-	"./kk.js": 74,
-	"./km": 75,
-	"./km.js": 75,
-	"./kn": 76,
-	"./kn.js": 76,
-	"./ko": 77,
-	"./ko.js": 77,
-	"./ky": 78,
-	"./ky.js": 78,
-	"./lb": 79,
-	"./lb.js": 79,
-	"./lo": 80,
-	"./lo.js": 80,
-	"./lt": 81,
-	"./lt.js": 81,
-	"./lv": 82,
-	"./lv.js": 82,
-	"./me": 83,
-	"./me.js": 83,
-	"./mi": 84,
-	"./mi.js": 84,
-	"./mk": 85,
-	"./mk.js": 85,
-	"./ml": 86,
-	"./ml.js": 86,
-	"./mr": 87,
-	"./mr.js": 87,
-	"./ms": 89,
-	"./ms-my": 88,
-	"./ms-my.js": 88,
-	"./ms.js": 89,
-	"./my": 90,
-	"./my.js": 90,
-	"./nb": 91,
-	"./nb.js": 91,
-	"./ne": 92,
-	"./ne.js": 92,
-	"./nl": 94,
-	"./nl-be": 93,
-	"./nl-be.js": 93,
-	"./nl.js": 94,
-	"./nn": 95,
-	"./nn.js": 95,
-	"./pa-in": 96,
-	"./pa-in.js": 96,
-	"./pl": 97,
-	"./pl.js": 97,
-	"./pt": 99,
-	"./pt-br": 98,
-	"./pt-br.js": 98,
-	"./pt.js": 99,
-	"./ro": 100,
-	"./ro.js": 100,
-	"./ru": 101,
-	"./ru.js": 101,
-	"./sd": 102,
-	"./sd.js": 102,
-	"./se": 103,
-	"./se.js": 103,
-	"./si": 104,
-	"./si.js": 104,
-	"./sk": 105,
-	"./sk.js": 105,
-	"./sl": 106,
-	"./sl.js": 106,
-	"./sq": 107,
-	"./sq.js": 107,
-	"./sr": 109,
-	"./sr-cyrl": 108,
-	"./sr-cyrl.js": 108,
-	"./sr.js": 109,
-	"./ss": 110,
-	"./ss.js": 110,
-	"./sv": 111,
-	"./sv.js": 111,
-	"./sw": 112,
-	"./sw.js": 112,
-	"./ta": 113,
-	"./ta.js": 113,
-	"./te": 114,
-	"./te.js": 114,
-	"./tet": 115,
-	"./tet.js": 115,
-	"./th": 116,
-	"./th.js": 116,
-	"./tl-ph": 117,
-	"./tl-ph.js": 117,
-	"./tlh": 118,
-	"./tlh.js": 118,
-	"./tr": 119,
-	"./tr.js": 119,
-	"./tzl": 120,
-	"./tzl.js": 120,
-	"./tzm": 122,
-	"./tzm-latn": 121,
-	"./tzm-latn.js": 121,
-	"./tzm.js": 122,
-	"./uk": 123,
-	"./uk.js": 123,
-	"./ur": 124,
-	"./ur.js": 124,
-	"./uz": 126,
-	"./uz-latn": 125,
-	"./uz-latn.js": 125,
-	"./uz.js": 126,
-	"./vi": 127,
-	"./vi.js": 127,
-	"./x-pseudo": 128,
-	"./x-pseudo.js": 128,
-	"./yo": 129,
-	"./yo.js": 129,
-	"./zh-cn": 130,
-	"./zh-cn.js": 130,
-	"./zh-hk": 131,
-	"./zh-hk.js": 131,
-	"./zh-tw": 132,
-	"./zh-tw.js": 132
+	"./af": 13,
+	"./af.js": 13,
+	"./ar": 20,
+	"./ar-dz": 14,
+	"./ar-dz.js": 14,
+	"./ar-kw": 15,
+	"./ar-kw.js": 15,
+	"./ar-ly": 16,
+	"./ar-ly.js": 16,
+	"./ar-ma": 17,
+	"./ar-ma.js": 17,
+	"./ar-sa": 18,
+	"./ar-sa.js": 18,
+	"./ar-tn": 19,
+	"./ar-tn.js": 19,
+	"./ar.js": 20,
+	"./az": 21,
+	"./az.js": 21,
+	"./be": 22,
+	"./be.js": 22,
+	"./bg": 23,
+	"./bg.js": 23,
+	"./bn": 24,
+	"./bn.js": 24,
+	"./bo": 25,
+	"./bo.js": 25,
+	"./br": 26,
+	"./br.js": 26,
+	"./bs": 27,
+	"./bs.js": 27,
+	"./ca": 28,
+	"./ca.js": 28,
+	"./cs": 29,
+	"./cs.js": 29,
+	"./cv": 30,
+	"./cv.js": 30,
+	"./cy": 31,
+	"./cy.js": 31,
+	"./da": 32,
+	"./da.js": 32,
+	"./de": 35,
+	"./de-at": 33,
+	"./de-at.js": 33,
+	"./de-ch": 34,
+	"./de-ch.js": 34,
+	"./de.js": 35,
+	"./dv": 36,
+	"./dv.js": 36,
+	"./el": 37,
+	"./el.js": 37,
+	"./en-au": 38,
+	"./en-au.js": 38,
+	"./en-ca": 39,
+	"./en-ca.js": 39,
+	"./en-gb": 40,
+	"./en-gb.js": 40,
+	"./en-ie": 41,
+	"./en-ie.js": 41,
+	"./en-nz": 42,
+	"./en-nz.js": 42,
+	"./eo": 43,
+	"./eo.js": 43,
+	"./es": 45,
+	"./es-do": 44,
+	"./es-do.js": 44,
+	"./es.js": 45,
+	"./et": 46,
+	"./et.js": 46,
+	"./eu": 47,
+	"./eu.js": 47,
+	"./fa": 48,
+	"./fa.js": 48,
+	"./fi": 49,
+	"./fi.js": 49,
+	"./fo": 50,
+	"./fo.js": 50,
+	"./fr": 53,
+	"./fr-ca": 51,
+	"./fr-ca.js": 51,
+	"./fr-ch": 52,
+	"./fr-ch.js": 52,
+	"./fr.js": 53,
+	"./fy": 54,
+	"./fy.js": 54,
+	"./gd": 55,
+	"./gd.js": 55,
+	"./gl": 56,
+	"./gl.js": 56,
+	"./gom-latn": 57,
+	"./gom-latn.js": 57,
+	"./he": 58,
+	"./he.js": 58,
+	"./hi": 59,
+	"./hi.js": 59,
+	"./hr": 60,
+	"./hr.js": 60,
+	"./hu": 61,
+	"./hu.js": 61,
+	"./hy-am": 62,
+	"./hy-am.js": 62,
+	"./id": 63,
+	"./id.js": 63,
+	"./is": 64,
+	"./is.js": 64,
+	"./it": 65,
+	"./it.js": 65,
+	"./ja": 66,
+	"./ja.js": 66,
+	"./jv": 67,
+	"./jv.js": 67,
+	"./ka": 68,
+	"./ka.js": 68,
+	"./kk": 69,
+	"./kk.js": 69,
+	"./km": 70,
+	"./km.js": 70,
+	"./kn": 71,
+	"./kn.js": 71,
+	"./ko": 72,
+	"./ko.js": 72,
+	"./ky": 73,
+	"./ky.js": 73,
+	"./lb": 74,
+	"./lb.js": 74,
+	"./lo": 75,
+	"./lo.js": 75,
+	"./lt": 76,
+	"./lt.js": 76,
+	"./lv": 77,
+	"./lv.js": 77,
+	"./me": 78,
+	"./me.js": 78,
+	"./mi": 79,
+	"./mi.js": 79,
+	"./mk": 80,
+	"./mk.js": 80,
+	"./ml": 81,
+	"./ml.js": 81,
+	"./mr": 82,
+	"./mr.js": 82,
+	"./ms": 84,
+	"./ms-my": 83,
+	"./ms-my.js": 83,
+	"./ms.js": 84,
+	"./my": 85,
+	"./my.js": 85,
+	"./nb": 86,
+	"./nb.js": 86,
+	"./ne": 87,
+	"./ne.js": 87,
+	"./nl": 89,
+	"./nl-be": 88,
+	"./nl-be.js": 88,
+	"./nl.js": 89,
+	"./nn": 90,
+	"./nn.js": 90,
+	"./pa-in": 91,
+	"./pa-in.js": 91,
+	"./pl": 92,
+	"./pl.js": 92,
+	"./pt": 94,
+	"./pt-br": 93,
+	"./pt-br.js": 93,
+	"./pt.js": 94,
+	"./ro": 95,
+	"./ro.js": 95,
+	"./ru": 96,
+	"./ru.js": 96,
+	"./sd": 97,
+	"./sd.js": 97,
+	"./se": 98,
+	"./se.js": 98,
+	"./si": 99,
+	"./si.js": 99,
+	"./sk": 100,
+	"./sk.js": 100,
+	"./sl": 101,
+	"./sl.js": 101,
+	"./sq": 102,
+	"./sq.js": 102,
+	"./sr": 104,
+	"./sr-cyrl": 103,
+	"./sr-cyrl.js": 103,
+	"./sr.js": 104,
+	"./ss": 105,
+	"./ss.js": 105,
+	"./sv": 106,
+	"./sv.js": 106,
+	"./sw": 107,
+	"./sw.js": 107,
+	"./ta": 108,
+	"./ta.js": 108,
+	"./te": 109,
+	"./te.js": 109,
+	"./tet": 110,
+	"./tet.js": 110,
+	"./th": 111,
+	"./th.js": 111,
+	"./tl-ph": 112,
+	"./tl-ph.js": 112,
+	"./tlh": 113,
+	"./tlh.js": 113,
+	"./tr": 114,
+	"./tr.js": 114,
+	"./tzl": 115,
+	"./tzl.js": 115,
+	"./tzm": 117,
+	"./tzm-latn": 116,
+	"./tzm-latn.js": 116,
+	"./tzm.js": 117,
+	"./uk": 118,
+	"./uk.js": 118,
+	"./ur": 119,
+	"./ur.js": 119,
+	"./uz": 121,
+	"./uz-latn": 120,
+	"./uz-latn.js": 120,
+	"./uz.js": 121,
+	"./vi": 122,
+	"./vi.js": 122,
+	"./x-pseudo": 123,
+	"./x-pseudo.js": 123,
+	"./yo": 124,
+	"./yo.js": 124,
+	"./zh-cn": 125,
+	"./zh-cn.js": 125,
+	"./zh-hk": 126,
+	"./zh-hk.js": 126,
+	"./zh-tw": 127,
+	"./zh-tw.js": 127
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -37341,10 +32296,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 280;
+webpackContext.id = 176;
 
 /***/ }),
-/* 281 */
+/* 177 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -37534,23 +32489,23 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 282 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(286)
+module.exports = __webpack_require__(182)
 
 
 /***/ }),
-/* 283 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(3);
+var Promise = __webpack_require__(2);
 
 module.exports = Promise;
 Promise.prototype.done = function (onFulfilled, onRejected) {
@@ -37564,7 +32519,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 
 
 /***/ }),
-/* 284 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37572,7 +32527,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 
 //This file contains the ES6 extensions to the core Promises/A+ API
 
-var Promise = __webpack_require__(3);
+var Promise = __webpack_require__(2);
 
 module.exports = Promise;
 
@@ -37678,13 +32633,13 @@ Promise.prototype['catch'] = function (onRejected) {
 
 
 /***/ }),
-/* 285 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(3);
+var Promise = __webpack_require__(2);
 
 module.exports = Promise;
 Promise.prototype['finally'] = function (f) {
@@ -37701,22 +32656,22 @@ Promise.prototype['finally'] = function (f) {
 
 
 /***/ }),
-/* 286 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(3);
-__webpack_require__(283);
-__webpack_require__(285);
-__webpack_require__(284);
-__webpack_require__(287);
-__webpack_require__(288);
+module.exports = __webpack_require__(2);
+__webpack_require__(179);
+__webpack_require__(181);
+__webpack_require__(180);
+__webpack_require__(183);
+__webpack_require__(184);
 
 
 /***/ }),
-/* 287 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37725,8 +32680,8 @@ __webpack_require__(288);
 // This file contains then/promise specific extensions that are only useful
 // for node.js interop
 
-var Promise = __webpack_require__(3);
-var asap = __webpack_require__(138);
+var Promise = __webpack_require__(2);
+var asap = __webpack_require__(132);
 
 module.exports = Promise;
 
@@ -37853,13 +32808,13 @@ Promise.prototype.nodeify = function (callback, ctx) {
 
 
 /***/ }),
-/* 288 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Promise = __webpack_require__(3);
+var Promise = __webpack_require__(2);
 
 module.exports = Promise;
 Promise.enableSynchronous = function () {
@@ -37922,7 +32877,7 @@ Promise.disableSynchronous = function() {
 
 
 /***/ }),
-/* 289 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -39477,7 +34432,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 
 
 /***/ }),
-/* 290 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -39497,10 +34452,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   // https://github.com/umdjs/umd/blob/master/returnExports.js
   if (typeof module === 'object' && module.exports) {
     // Node
-    module.exports = factory(__webpack_require__(135), __webpack_require__(133), __webpack_require__(134));
+    module.exports = factory(__webpack_require__(130), __webpack_require__(128), __webpack_require__(129));
   } else if (true) {
     // AMD. Register as an anonymous module.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(135), __webpack_require__(133), __webpack_require__(134)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(130), __webpack_require__(128), __webpack_require__(129)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -41740,7 +36695,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 291 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -51429,13 +46384,5058 @@ return Vue$3;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ }),
+/* 188 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * The mixin's data.
+     */
+    data: function data() {
+        return {
+            plans: [],
+            selectedPlan: null,
+
+            invitation: null,
+            invalidInvitation: false
+        };
+    },
+
+
+    methods: {
+        /**
+         * Get the active plans for the application.
+         */
+        getPlans: function getPlans() {
+            var _this = this;
+
+            if (!Spark.cardUpFront) {
+                return;
+            }
+
+            axios.get('/spark/plans').then(function (response) {
+                var plans = response.data;
+
+                _this.plans = _.where(plans, { type: "user" }).length > 0 ? _.where(plans, { type: "user" }) : _.where(plans, { type: "team" });
+
+                _this.selectAppropriateDefaultPlan();
+            });
+        },
+
+
+        /**
+         * Get the invitation specified in the query string.
+         */
+        getInvitation: function getInvitation() {
+            var _this2 = this;
+
+            axios.get("/invitations/" + this.query.invitation).then(function (response) {
+                _this2.invitation = response.data;
+            }).catch(function (response) {
+                _this2.invalidInvitation = true;
+            });
+        },
+
+
+        /**
+         * Select the appropriate default plan for registration.
+         */
+        selectAppropriateDefaultPlan: function selectAppropriateDefaultPlan() {
+            if (this.query.plan) {
+                this.selectPlanById(this.query.plan) || this.selectPlanByName(this.query.plan);
+            } else if (this.query.invitation) {
+                this.selectFreePlan();
+            } else if (this.paidPlansForActiveInterval.length > 0) {
+                this.selectPlan(this.paidPlansForActiveInterval[0]);
+            } else {
+                this.selectFreePlan();
+            }
+
+            if (this.shouldShowYearlyPlans()) {
+                this.showYearlyPlans();
+            }
+        },
+
+
+        /**
+         * Select the free plan.
+         */
+        selectFreePlan: function selectFreePlan() {
+            var plan = _.find(this.plans, function (plan) {
+                return plan.price === 0;
+            });
+
+            if (typeof plan !== 'undefined') {
+                this.selectPlan(plan);
+            }
+        },
+
+
+        /**
+         * Select the plan with the given id.
+         */
+        selectPlanById: function selectPlanById(id) {
+            var _this3 = this;
+
+            _.each(this.plans, function (plan) {
+                if (plan.id == id) {
+                    _this3.selectPlan(plan);
+                }
+            });
+
+            return this.selectedPlan;
+        },
+
+
+        /**
+         * Select the plan with the given name.
+         */
+        selectPlanByName: function selectPlanByName(name) {
+            var _this4 = this;
+
+            _.each(this.plans, function (plan) {
+                if (plan.name == name) {
+                    _this4.selectPlan(plan);
+                }
+            });
+
+            return this.selectedPlan;
+        },
+
+
+        /**
+         * Determine if the given plan is selected.
+         */
+        isSelected: function isSelected(plan) {
+            return this.selectedPlan && plan.id == this.selectedPlan.id;
+        },
+
+
+        /**
+         * Select the given plan.
+         */
+        selectPlan: function selectPlan(plan) {
+            this.selectedPlan = plan;
+
+            this.registerForm.plan = plan.id;
+        },
+
+
+        /**
+         * Determine if we should show the yearly plans.
+         */
+        shouldShowYearlyPlans: function shouldShowYearlyPlans() {
+            return this.monthlyPlans.length == 0 && this.yearlyPlans.length > 0 || this.selectedPlan.interval == 'yearly';
+        }
+    }
+};
+
+/***/ }),
+/* 189 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    methods: {
+        /**
+         * Determine if the given country collects European VAT.
+         */
+        collectsVat: function collectsVat(country) {
+            return Spark.collectsEuropeanVat ? _.contains(['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'GR', 'ES', 'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'], country) : false;
+        },
+
+
+        /**
+         * Refresh the tax rate using the given form input.
+         */
+        refreshTaxRate: function refreshTaxRate(form) {
+            var _this = this;
+
+            axios.post('/tax-rate', JSON.parse(JSON.stringify(form))).then(function (response) {
+                _this.taxRate = response.data.rate;
+            });
+        },
+
+
+        /**
+         * Get the tax amount for the selected plan.
+         */
+        taxAmount: function taxAmount(plan) {
+            return plan.price * (this.taxRate / 100);
+        },
+
+
+        /**
+         * Get the total plan price including the applicable tax.
+         */
+        priceWithTax: function priceWithTax(plan) {
+            return plan.price + this.taxAmount(plan);
+        }
+    }
+};
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Laravel Spark Bootstrap
+ |--------------------------------------------------------------------------
+ | This is For the Tenant Front End , We Dont wanna Messed With it...
+ |
+ */
+
+__webpack_require__(198);
+
+__webpack_require__(192);
+
+var app = new Vue({
+  // You Are Actually Calling This From
+  // vendor/laravel/spark/resources/assets/js/spark.js
+  mixins: [__webpack_require__(296)]
+});
+
+/***/ }),
+/* 191 */,
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Laravel Spark Components
+ |--------------------------------------------------------------------------
+ |
+ | Here we will load the Spark components which makes up the core client
+ | application. This is also a convenient spot for you to load all of
+ | your components that you write while building your applications.
+ */
+
+__webpack_require__(201);
+
+__webpack_require__(193);
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports) {
+
+Vue.component('home', {
+    props: ['user'],
+
+    mounted: function mounted() {
+        //
+    }
+});
+
+/***/ }),
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Load various JavaScript modules that assist Spark.
+ */
+window.URI = __webpack_require__(186);
+window.axios = __webpack_require__(133);
+window._ = __webpack_require__(185);
+window.moment = __webpack_require__(0);
+window.Promise = __webpack_require__(178);
+window.Cookies = __webpack_require__(175);
+
+/*
+ * Define Moment locales
+ */
+window.moment.defineLocale('en-short', {
+    parentLocale: 'en',
+    relativeTime: {
+        future: "in %s",
+        past: "%s",
+        s: "1s",
+        m: "1m",
+        mm: "%dm",
+        h: "1h",
+        hh: "%dh",
+        d: "1d",
+        dd: "%dd",
+        M: "1 month ago",
+        MM: "%d months ago",
+        y: "1y",
+        yy: "%dy"
+    }
+});
+window.moment.locale('en');
+
+/*
+ * Load jQuery and Bootstrap jQuery, used for front-end interaction.
+ */
+if (window.$ === undefined || window.jQuery === undefined) {
+    window.$ = window.jQuery = __webpack_require__(174);
+}
+// Remove Since We Have it On Metro Ui JS
+__webpack_require__(161);
+
+/**
+ * Load Vue if this application is using Vue as its framework.
+ * Load Vue & Vue-Resource.
+ */
+if ($('#spark-app').length > 0) {
+    __webpack_require__(160);
+}
+
+/**
+ * We'll load the axios HTTP library which allows us to easily issue requests
+ * to our Laravel back-end. This library automatically handles sending the
+ * CSRF token as a header based on the value of the "XSRF" token cookie.
+ */
+window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN': Spark.csrfToken
+};
+
+/**
+ * Intercept the incoming responses.
+ *
+ * Handle any unexpected HTTP errors and pop up modals, etc.
+ */
+window.axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    switch (error.response.status) {
+        case 401:
+            window.axios.get('/logout');
+            $('#modal-session-expired').modal('show');
+            break;
+
+        case 402:
+            window.location = '/settings#/subscription';
+            break;
+    }
+
+    return Promise.reject(error);
+});
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(248);
+
+Vue.component('spark-register-braintree', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(249);
+
+Vue.component('spark-register-stripe', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/**
+ * Layout Components...
+ */
+__webpack_require__(208);
+__webpack_require__(209);
+
+/**
+ * Authentication Components...
+ */
+__webpack_require__(200);
+__webpack_require__(199);
+
+/**
+ * Settings Component...
+ */
+__webpack_require__(229);
+
+/**
+ * Profile Settings Components...
+ */
+__webpack_require__(222);
+__webpack_require__(224);
+__webpack_require__(223);
+
+/**
+ * Teams Settings Components...
+ */
+__webpack_require__(236);
+__webpack_require__(237);
+__webpack_require__(240);
+__webpack_require__(238);
+__webpack_require__(245);
+__webpack_require__(244);
+__webpack_require__(247);
+__webpack_require__(246);
+__webpack_require__(243);
+__webpack_require__(241);
+__webpack_require__(239);
+__webpack_require__(242);
+
+/**
+ * Security Settings Components...
+ */
+__webpack_require__(225);
+__webpack_require__(228);
+__webpack_require__(227);
+__webpack_require__(226);
+
+/**
+ * API Settings Components...
+ */
+__webpack_require__(210);
+__webpack_require__(211);
+__webpack_require__(212);
+
+/**
+ * Subscription Settings Components...
+ */
+__webpack_require__(230);
+__webpack_require__(234);
+__webpack_require__(233);
+__webpack_require__(235);
+__webpack_require__(232);
+__webpack_require__(231);
+
+/**
+ * Payment Method Components...
+ */
+__webpack_require__(217);
+__webpack_require__(216);
+__webpack_require__(221);
+__webpack_require__(220);
+__webpack_require__(219);
+__webpack_require__(218);
+
+/**
+ * Billing History Components...
+ */
+__webpack_require__(213);
+__webpack_require__(215);
+__webpack_require__(214);
+
+/**
+ * Kiosk Components...
+ */
+__webpack_require__(204);
+__webpack_require__(203);
+__webpack_require__(205);
+__webpack_require__(207);
+__webpack_require__(206);
+__webpack_require__(202);
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(250);
+
+Vue.component('spark-kiosk-add-discount', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(251);
+
+Vue.component('spark-kiosk-announcements', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 204 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(252);
+
+Vue.component('spark-kiosk', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(253);
+
+Vue.component('spark-kiosk-metrics', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 206 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(254);
+
+Vue.component('spark-kiosk-profile', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(255);
+
+Vue.component('spark-kiosk-users', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 208 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(256);
+
+Vue.component('spark-navbar', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 209 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(257);
+
+Vue.component('spark-notifications', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 210 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(258);
+
+Vue.component('spark-api', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(259);
+
+Vue.component('spark-create-token', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 212 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(260);
+
+Vue.component('spark-tokens', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(261);
+
+Vue.component('spark-invoices', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(262);
+
+Vue.component('spark-invoice-list', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(263);
+
+Vue.component('spark-update-extra-billing-information', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(264);
+
+Vue.component('spark-payment-method-braintree', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(265);
+
+Vue.component('spark-payment-method-stripe', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(266);
+
+Vue.component('spark-redeem-coupon', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(267);
+
+Vue.component('spark-update-payment-method-braintree', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 220 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(268);
+
+Vue.component('spark-update-payment-method-stripe', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(269);
+
+Vue.component('spark-update-vat-id', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(270);
+
+Vue.component('spark-profile', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(271);
+
+Vue.component('spark-update-contact-information', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(272);
+
+Vue.component('spark-update-profile-photo', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(273);
+
+Vue.component('spark-security', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(274);
+
+Vue.component('spark-disable-two-factor-auth', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 227 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(275);
+
+Vue.component('spark-enable-two-factor-auth', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(276);
+
+Vue.component('spark-update-password', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(277);
+
+Vue.component('spark-settings', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(278);
+
+Vue.component('spark-subscription', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(279);
+
+Vue.component('spark-cancel-subscription', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(280);
+
+Vue.component('spark-resume-subscription', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(281);
+
+Vue.component('spark-subscribe-braintree', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(282);
+
+Vue.component('spark-subscribe-stripe', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(283);
+
+Vue.component('spark-update-subscription', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(284);
+
+Vue.component('spark-teams', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(285);
+
+Vue.component('spark-create-team', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(286);
+
+Vue.component('spark-current-teams', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(287);
+
+Vue.component('spark-mailed-invitations', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(288);
+
+Vue.component('spark-pending-invitations', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(289);
+
+Vue.component('spark-send-invitation', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 242 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(290);
+
+Vue.component('spark-team-members', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(291);
+
+Vue.component('spark-team-membership', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(292);
+
+Vue.component('spark-team-profile', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(293);
+
+Vue.component('spark-team-settings', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(294);
+
+Vue.component('spark-update-team-name', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var base = __webpack_require__(295);
+
+Vue.component('spark-update-team-photo', {
+    mixins: [base]
+});
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(157), __webpack_require__(4), __webpack_require__(188)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            query: null,
+
+            coupon: null,
+            invalidCoupon: false,
+
+            registerForm: $.extend(true, new SparkForm({
+                braintree_type: '',
+                braintree_token: '',
+                plan: '',
+                team: '',
+                team_slug: '',
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                terms: false,
+                coupon: null,
+                invitation: null
+            }), Spark.forms.register)
+        };
+    },
+
+
+    watch: {
+        /**
+         * Watch the team name for changes.
+         */
+        'registerForm.team': function registerFormTeam(val, oldVal) {
+            if (this.registerForm.team_slug == '' || this.registerForm.team_slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
+                this.registerForm.team_slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
+            }
+        }
+    },
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        this.getPlans();
+
+        this.query = URI(document.URL).query(true);
+
+        if (this.query.coupon) {
+            this.getCoupon();
+
+            this.registerForm.coupon = this.query.coupon;
+        }
+
+        if (this.query.invitation) {
+            this.getInvitation();
+
+            this.registerForm.invitation = this.query.invitation;
+        }
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.configureBraintree();
+    },
+
+
+    methods: {
+        configureBraintree: function configureBraintree() {
+            var _this = this;
+
+            if (!Spark.cardUpFront) {
+                return;
+            }
+
+            this.braintree('braintree-container', function (response) {
+                _this.registerForm.braintree_type = response.type;
+                _this.registerForm.braintree_token = response.nonce;
+
+                _this.register();
+            });
+        },
+
+
+        /**
+         * Get the coupon specified in the query string.
+         */
+        getCoupon: function getCoupon() {
+            var _this2 = this;
+
+            axios.get('/coupon/' + this.query.coupon).then(function (response) {
+                _this2.coupon = response.data;
+            }).catch(function (response) {
+                _this2.invalidCoupon = true;
+            });
+        },
+
+
+        /**
+         * Attempt to register with the application.
+         */
+        register: function register() {
+            Spark.post('/register', this.registerForm).then(function (response) {
+                window.location = response.redirect;
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the displayable discount for the coupon.
+         */
+        discount: function discount() {
+            if (this.coupon) {
+                return Vue.filter('currency')(this.coupon.amount_off);
+            }
+        }
+    }
+};
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(188), __webpack_require__(4), __webpack_require__(189)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            query: null,
+
+            coupon: null,
+            invalidCoupon: false,
+
+            country: null,
+            taxRate: 0,
+
+            registerForm: $.extend(true, new SparkForm({
+                stripe_token: '',
+                plan: '',
+                team: '',
+                team_slug: '',
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                address: '',
+                address_line_2: '',
+                city: '',
+                state: '',
+                zip: '',
+                country: 'US',
+                vat_id: '',
+                terms: false,
+                coupon: null,
+                invitation: null
+            }), Spark.forms.register),
+
+            cardForm: new SparkForm({
+                name: '',
+                number: '',
+                cvc: '',
+                month: '',
+                year: ''
+            })
+        };
+    },
+
+
+    watch: {
+        /**
+         * Watch for changes on the entire billing address.
+         */
+        'currentBillingAddress': function currentBillingAddress(value) {
+            if (!Spark.collectsEuropeanVat) {
+                return;
+            }
+
+            this.refreshTaxRate(this.registerForm);
+        },
+
+        /**
+         * Watch the team name for changes.
+         */
+        'registerForm.team': function registerFormTeam(val, oldVal) {
+            if (this.registerForm.team_slug == '' || this.registerForm.team_slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
+                this.registerForm.team_slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
+            }
+        }
+    },
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        Stripe.setPublishableKey(Spark.stripeKey);
+
+        this.getPlans();
+
+        this.guessCountry();
+
+        this.query = URI(document.URL).query(true);
+
+        if (this.query.coupon) {
+            this.getCoupon();
+
+            this.registerForm.coupon = this.query.coupon;
+        }
+
+        if (this.query.invitation) {
+            this.getInvitation();
+
+            this.registerForm.invitation = this.query.invitation;
+        }
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        //
+    },
+
+
+    methods: {
+        /**
+         * Attempt to guess the user's country.
+         */
+        guessCountry: function guessCountry() {
+            var _this = this;
+
+            axios.get('/geocode/country').then(function (response) {
+                if (response.data != 'ZZ') {
+                    _this.registerForm.country = response.data;
+                }
+            }).catch(function (response) {
+                //
+            }).finally(function () {
+                this.refreshStatesAndProvinces();
+            });
+        },
+
+
+        /**
+         * Get the coupon specified in the query string.
+         */
+        getCoupon: function getCoupon() {
+            var _this2 = this;
+
+            axios.get('/coupon/' + this.query.coupon).then(function (response) {
+                _this2.coupon = response.data;
+            }).catch(function (response) {
+                _this2.invalidCoupon = true;
+            });
+        },
+
+
+        /**
+         * Attempt to register with the application.
+         */
+        register: function register() {
+            var _this3 = this;
+
+            this.cardForm.errors.forget();
+
+            this.registerForm.busy = true;
+            this.registerForm.errors.forget();
+
+            if (!Spark.cardUpFront || this.selectedPlan.price == 0) {
+                return this.sendRegistration();
+            }
+
+            Stripe.card.createToken(this.stripePayload(), function (status, response) {
+                if (response.error) {
+                    _this3.cardForm.errors.set({ number: [response.error.message] });
+                    _this3.registerForm.busy = false;
+                } else {
+                    _this3.registerForm.stripe_token = response.id;
+                    _this3.sendRegistration();
+                }
+            });
+        },
+
+
+        /**
+         * Build the Stripe payload based on the form input.
+         */
+        stripePayload: function stripePayload() {
+            // Here we will build out the payload to send to Stripe to obtain a card token so
+            // we can create the actual subscription. We will build out this data that has
+            // this credit card number, CVC, etc. and exchange it for a secure token ID.
+            return {
+                name: this.cardForm.name,
+                number: this.cardForm.number,
+                cvc: this.cardForm.cvc,
+                exp_month: this.cardForm.month,
+                exp_year: this.cardForm.year,
+                address_line1: this.registerForm.address,
+                address_line2: this.registerForm.address_line_2,
+                address_city: this.registerForm.city,
+                address_state: this.registerForm.state,
+                address_zip: this.registerForm.zip,
+                address_country: this.registerForm.country
+            };
+        },
+
+
+        /*
+         * After obtaining the Stripe token, send the registration to Spark.
+         */
+        sendRegistration: function sendRegistration() {
+            Spark.post('/register', this.registerForm).then(function (response) {
+                window.location = response.redirect;
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Determine if the selected country collects European VAT.
+         */
+        countryCollectsVat: function countryCollectsVat() {
+            return this.collectsVat(this.registerForm.country);
+        },
+
+
+        /**
+         * Get the displayable discount for the coupon.
+         */
+        discount: function discount() {
+            if (this.coupon) {
+                if (this.coupon.percent_off) {
+                    return this.coupon.percent_off + '%';
+                } else {
+                    return Vue.filter('currency')(this.coupon.amount_off / 100);
+                }
+            }
+        },
+
+
+        /**
+         * Get the current billing address from the register form.
+         *
+         * This used primarily for wathcing.
+         */
+        currentBillingAddress: function currentBillingAddress() {
+            return this.registerForm.address + this.registerForm.address_line_2 + this.registerForm.city + this.registerForm.state + this.registerForm.zip + this.registerForm.country + this.registerForm.vat_id;
+        }
+    }
+};
+
+/***/ }),
+/* 250 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function kioskAddDiscountForm() {
+    return {
+        type: 'amount',
+        value: null,
+        duration: 'once',
+        months: null
+    };
+}
+
+module.exports = {
+    mixins: [__webpack_require__(158)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            loadingCurrentDiscount: false,
+            currentDiscount: null,
+
+            discountingUser: null,
+            form: new SparkForm(kioskAddDiscountForm())
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        Bus.$on('addDiscount', function (user) {
+            self.form = new SparkForm(kioskAddDiscountForm());
+
+            self.setUser(user);
+
+            $('#modal-add-discount').modal('show');
+        });
+    },
+
+
+    methods: {
+        /**
+         * Set the user receiving teh discount.
+         */
+        setUser: function setUser(user) {
+            this.discountingUser = user;
+
+            this.getCurrentDiscountForUser(user);
+        },
+
+
+        /**
+         * Apply the discount to the user.
+         */
+        applyDiscount: function applyDiscount() {
+            Spark.post('/spark/kiosk/users/discount/' + this.discountingUser.id, this.form).then(function () {
+                $('#modal-add-discount').modal('hide');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports) {
+
+var announcementsCreateForm = function announcementsCreateForm() {
+    return {
+        body: '',
+        action_text: '',
+        action_url: ''
+    };
+};
+
+module.exports = {
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            announcements: [],
+            updatingAnnouncement: null,
+            deletingAnnouncement: null,
+
+            createForm: new SparkForm(announcementsCreateForm()),
+            updateForm: new SparkForm(announcementsCreateForm()),
+
+            deleteForm: new SparkForm({})
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        Bus.$on('sparkHashChanged', function (hash, parameters) {
+            if (hash == 'announcements' && self.announcements.length === 0) {
+                self.getAnnouncements();
+            }
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get all of the announcements.
+         */
+        getAnnouncements: function getAnnouncements() {
+            var _this = this;
+
+            axios.get('/spark/kiosk/announcements').then(function (response) {
+                _this.announcements = response.data;
+            });
+        },
+
+
+        /**
+         * Create a new announcement.
+         */
+        create: function create() {
+            var _this2 = this;
+
+            Spark.post('/spark/kiosk/announcements', this.createForm).then(function () {
+                _this2.createForm = new SparkForm(announcementsCreateForm());
+
+                _this2.getAnnouncements();
+            });
+        },
+
+
+        /**
+         * Edit the given announcement.
+         */
+        editAnnouncement: function editAnnouncement(announcement) {
+            this.updatingAnnouncement = announcement;
+
+            this.updateForm.icon = announcement.icon;
+            this.updateForm.body = announcement.body;
+            this.updateForm.action_text = announcement.action_text;
+            this.updateForm.action_url = announcement.action_url;
+
+            $('#modal-update-announcement').modal('show');
+        },
+
+
+        /**
+         * Update the specified announcement.
+         */
+        update: function update() {
+            var _this3 = this;
+
+            Spark.put('/spark/kiosk/announcements/' + this.updatingAnnouncement.id, this.updateForm).then(function () {
+                _this3.getAnnouncements();
+
+                $('#modal-update-announcement').modal('hide');
+            });
+        },
+
+
+        /**
+         * Show the approval dialog for deleting an announcement.
+         */
+        approveAnnouncementDelete: function approveAnnouncementDelete(announcement) {
+            this.deletingAnnouncement = announcement;
+
+            $('#modal-delete-announcement').modal('show');
+        },
+
+
+        /**
+         * Delete the specified announcement.
+         */
+        deleteAnnouncement: function deleteAnnouncement() {
+            var _this4 = this;
+
+            Spark.delete('/spark/kiosk/announcements/' + this.deletingAnnouncement.id, this.deleteForm).then(function () {
+                _this4.getAnnouncements();
+
+                $('#modal-delete-announcement').modal('hide');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(159)],
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.usePushStateForTabs('.spark-settings-tabs');
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        Bus.$on('sparkHashChanged', function (hash, parameters) {
+            if (hash == 'users') {
+                setTimeout(function () {
+                    $('#kiosk-users-search').focus();
+                }, 150);
+            }
+
+            return true;
+        });
+    }
+};
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            monthlyRecurringRevenue: 0,
+            yearlyRecurringRevenue: 0,
+            totalVolume: 0,
+            genericTrialUsers: 0,
+
+            indicators: [],
+            lastMonthsIndicators: null,
+            lastYearsIndicators: null,
+
+            plans: []
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        Bus.$on('sparkHashChanged', function (hash, parameters) {
+            if (hash == 'metrics' && self.yearlyRecurringRevenue === 0) {
+                self.getRevenue();
+                self.getPlans();
+                self.getTrialUsers();
+                self.getPerformanceIndicators();
+            }
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get the revenue information for the application.
+         */
+        getRevenue: function getRevenue() {
+            var _this = this;
+
+            axios.get('/spark/kiosk/performance-indicators/revenue').then(function (response) {
+                _this.yearlyRecurringRevenue = response.data.yearlyRecurringRevenue;
+                _this.monthlyRecurringRevenue = response.data.monthlyRecurringRevenue;
+                _this.totalVolume = response.data.totalVolume;
+            });
+        },
+
+
+        /**
+         * Get the subscriber information for the application.
+         */
+        getPlans: function getPlans() {
+            var _this2 = this;
+
+            axios.get('/spark/kiosk/performance-indicators/plans').then(function (response) {
+                _this2.plans = response.data;
+            });
+        },
+
+
+        /**
+         * Get the number of users that are on a generic trial.
+         */
+        getTrialUsers: function getTrialUsers() {
+            var _this3 = this;
+
+            axios.get('/spark/kiosk/performance-indicators/trialing').then(function (response) {
+                _this3.genericTrialUsers = parseInt(response.data);
+            });
+        },
+
+
+        /**
+         * Get the performance indicators for the application.
+         */
+        getPerformanceIndicators: function getPerformanceIndicators() {
+            var _this4 = this;
+
+            axios.get('/spark/kiosk/performance-indicators').then(function (response) {
+                _this4.indicators = response.data.indicators;
+                _this4.lastMonthsIndicators = response.data.last_month;
+                _this4.lastYearsIndicators = response.data.last_year;
+
+                Vue.nextTick(function () {
+                    _this4.drawCharts();
+                });
+            });
+        },
+
+
+        /**
+         * Draw the performance indicator charts.
+         */
+        drawCharts: function drawCharts() {
+            this.drawMonthlyRecurringRevenueChart();
+            this.drawYearlyRecurringRevenueChart();
+            this.drawDailyVolumeChart();
+            this.drawNewUsersChart();
+        },
+
+
+        /**
+         * Draw the monthly recurring revenue chart.
+         */
+        drawMonthlyRecurringRevenueChart: function drawMonthlyRecurringRevenueChart() {
+            return this.drawCurrencyChart('monthlyRecurringRevenueChart', 30, function (indicator) {
+                return indicator.monthly_recurring_revenue;
+            });
+        },
+
+
+        /**
+         * Draw the yearly recurring revenue chart.
+         */
+        drawYearlyRecurringRevenueChart: function drawYearlyRecurringRevenueChart() {
+            return this.drawCurrencyChart('yearlyRecurringRevenueChart', 30, function (indicator) {
+                return indicator.yearly_recurring_revenue;
+            });
+        },
+
+
+        /**
+         * Draw the daily volume chart.
+         */
+        drawDailyVolumeChart: function drawDailyVolumeChart() {
+            return this.drawCurrencyChart('dailyVolumeChart', 14, function (indicator) {
+                return indicator.daily_volume;
+            });
+        },
+
+
+        /**
+         * Draw the daily new users chart.
+         */
+        drawNewUsersChart: function drawNewUsersChart() {
+            return this.drawChart('newUsersChart', 14, function (indicator) {
+                return indicator.new_users;
+            });
+        },
+
+
+        /**
+         * Draw a chart with currency formatting on the Y-Axis.
+         */
+        drawCurrencyChart: function drawCurrencyChart(id, days, dataGatherer) {
+            return this.drawChart(id, days, dataGatherer, function (value) {
+                return Vue.filter('currency')(value.value);
+            });
+        },
+
+
+        /**
+         * Draw a chart with the given parameters.
+         */
+        drawChart: function drawChart(id, days, dataGatherer, scaleLabelFormatter) {
+            var dataset = JSON.parse(JSON.stringify(this.baseChartDataSet));
+
+            dataset.data = _.map(_.last(this.indicators, days), dataGatherer);
+
+            // Here we will build out the dataset for the chart. This will contain the dates and data
+            // points for the chart. Each chart on the Kiosk only gets one dataset so we only need
+            // to add it a single element to this array here. But, charts could have more later.
+            var data = {
+                labels: _.last(this.availableChartDates, days),
+                datasets: [dataset]
+            };
+
+            var options = { responsive: true };
+
+            // If a scale label formatter was passed, we will hand that to this chart library to fill
+            // out the Y-Axis labels. This is particularly useful when we want to format them as a
+            // currency as we do on all of our revenue charts that we display on the Kiosk here.
+            if (arguments.length === 4) {
+                options.scaleLabel = scaleLabelFormatter;
+            }
+
+            var chart = new Chart(document.getElementById(id).getContext('2d'), {
+                type: 'line',
+                data: data,
+                options: options
+            });
+        },
+
+
+        /**
+         * Calculate the percent change between two numbers.
+         */
+        percentChange: function percentChange(current, previous) {
+            var change = Math.round((current - previous) / previous * 100);
+
+            return change > 0 ? '+' + change.toFixed(0) : change.toFixed(0);
+        }
+    },
+
+    computed: {
+        /**
+         * Calculate the monthly change in monthly recurring revenue.
+         */
+        monthlyChangeInMonthlyRecurringRevenue: function monthlyChangeInMonthlyRecurringRevenue() {
+            if (!this.lastMonthsIndicators || !this.indicators) {
+                return false;
+            }
+
+            return this.percentChange(_.last(this.indicators).monthly_recurring_revenue, this.lastMonthsIndicators.monthly_recurring_revenue);
+        },
+
+
+        /**
+         * Calculate the yearly change in monthly recurring revenue.
+         */
+        yearlyChangeInMonthlyRecurringRevenue: function yearlyChangeInMonthlyRecurringRevenue() {
+            if (!this.lastYearsIndicators || !this.indicators) {
+                return false;
+            }
+
+            return this.percentChange(_.last(this.indicators).monthly_recurring_revenue, this.lastYearsIndicators.monthly_recurring_revenue);
+        },
+
+
+        /**
+         * Calculate the monthly change in yearly recurring revenue.
+         */
+        monthlyChangeInYearlyRecurringRevenue: function monthlyChangeInYearlyRecurringRevenue() {
+            if (!this.lastMonthsIndicators || !this.indicators) {
+                return false;
+            }
+
+            return this.percentChange(_.last(this.indicators).yearly_recurring_revenue, this.lastMonthsIndicators.yearly_recurring_revenue);
+        },
+
+
+        /**
+         * Calculate the yearly change in yearly recurring revenue.
+         */
+        yearlyChangeInYearlyRecurringRevenue: function yearlyChangeInYearlyRecurringRevenue() {
+            if (!this.lastYearsIndicators || !this.indicators) {
+                return false;
+            }
+            ;
+            return this.percentChange(_.last(this.indicators).yearly_recurring_revenue, this.lastYearsIndicators.yearly_recurring_revenue);
+        },
+
+
+        /**
+         * Get the total number of users trialing.
+         */
+        totalTrialUsers: function totalTrialUsers() {
+            return this.genericTrialUsers + _.reduce(this.plans, function (memo, plan) {
+                return memo + plan.trialing;
+            }, 0);
+        },
+
+
+        /**
+         * Get the available, formatted chart dates for the current indicators.
+         */
+        availableChartDates: function availableChartDates() {
+            return _.map(this.indicators, function (indicator) {
+                return moment(indicator.created_at).format('M/D');
+            });
+        },
+
+
+        /**
+         * Get the base chart data set.
+         */
+        baseChartDataSet: function baseChartDataSet() {
+            return {
+                label: "Dataset",
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)"
+            };
+        }
+    }
+};
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'plans'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            loading: false,
+            profile: null,
+            revenue: 0
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.$parent.$on('showUserProfile', function (id) {
+            self.getUserProfile(id);
+        });
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        var _this = this;
+
+        Mousetrap.bind('esc', function (e) {
+            return _this.showSearch();
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get the profile user.
+         */
+        getUserProfile: function getUserProfile(id) {
+            var _this2 = this;
+
+            this.loading = true;
+
+            axios.get('/spark/kiosk/users/' + id + '/profile').then(function (response) {
+                _this2.profile = response.data.user;
+                _this2.revenue = response.data.revenue;
+
+                _this2.loading = false;
+            });
+        },
+
+
+        /**
+         * Impersonate the given user.
+         */
+        impersonate: function impersonate(user) {
+            window.location = '/spark/kiosk/users/impersonate/' + user.id;
+        },
+
+
+        /**
+         * Show the discount modal for the given user.
+         */
+        addDiscount: function addDiscount(user) {
+            Bus.$emit('addDiscount', user);
+        },
+
+
+        /**
+         * Get the plan the user is actively subscribed to.
+         */
+        activePlan: function activePlan(billable) {
+            if (this.activeSubscription(billable)) {
+                var activeSubscription = this.activeSubscription(billable);
+
+                return _.find(this.plans, function (plan) {
+                    return plan.id == activeSubscription.provider_plan;
+                });
+            }
+        },
+
+
+        /**
+         * Get the active, valid subscription for the user.
+         */
+        activeSubscription: function activeSubscription(billable) {
+            var subscription = this.subscription(billable);
+
+            if (!subscription || subscription.ends_at && moment.utc().isAfter(moment.utc(subscription.ends_at))) {
+                return;
+            }
+
+            return subscription;
+        },
+
+
+        /**
+         * Get the active subscription instance.
+         */
+        subscription: function subscription(billable) {
+            if (!billable) {
+                return;
+            }
+
+            var subscription = _.find(billable.subscriptions, function (subscription) {
+                return subscription.name == 'default';
+            });
+
+            if (typeof subscription !== 'undefined') {
+                return subscription;
+            }
+        },
+
+
+        /**
+         * Get the customer URL on the billing provider's website.
+         */
+        customerUrlOnBillingProvider: function customerUrlOnBillingProvider(billable) {
+            if (!billable) {
+                return;
+            }
+
+            if (this.spark.usesStripe) {
+                return 'https://dashboard.stripe.com/customers/' + billable.stripe_id;
+            } else {
+                var domain = Spark.env == 'production' ? '' : 'sandbox.';
+
+                return 'https://' + domain + 'braintreegateway.com/merchants/' + Spark.braintreeMerchantId + '/customers/' + billable.braintree_id;
+            }
+        },
+
+
+        /**
+         * Show the search results and hide the user profile.
+         */
+        showSearch: function showSearch() {
+            this.$parent.$emit('showSearch');
+
+            this.profile = null;
+        }
+    }
+};
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            plans: [],
+
+            searchForm: new SparkForm({
+                query: ''
+            }),
+
+            searching: false,
+            noSearchResults: false,
+            searchResults: [],
+
+            showingUserProfile: false
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.getPlans();
+
+        this.$on('showSearch', function () {
+            self.navigateToSearch();
+        });
+
+        Bus.$on('sparkHashChanged', function (hash, parameters) {
+            if (hash != 'users') {
+                return true;
+            }
+
+            if (parameters && parameters.length > 0) {
+                self.loadProfile({ id: parameters[0] });
+            } else {
+                self.showSearch();
+            }
+
+            return true;
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get all of the available subscription plans.
+         */
+        getPlans: function getPlans() {
+            var _this = this;
+
+            axios.get('/spark/plans').then(function (response) {
+                _this.plans = response.data;
+            });
+        },
+
+
+        /**
+         * Perform a search for the given query.
+         */
+        search: function search() {
+            var _this2 = this;
+
+            this.searching = true;
+            this.noSearchResults = false;
+
+            axios.post('/spark/kiosk/users/search', this.searchForm).then(function (response) {
+                _this2.searchResults = response.data;
+                _this2.noSearchResults = _this2.searchResults.length === 0;
+
+                _this2.searching = false;
+            });
+        },
+
+
+        /**
+         * Show the search results and update the browser history.
+         */
+        navigateToSearch: function navigateToSearch() {
+            history.pushState(null, null, '#/users');
+
+            this.showSearch();
+        },
+
+
+        /**
+         * Show the search results.
+         */
+        showSearch: function showSearch() {
+            this.showingUserProfile = false;
+
+            Vue.nextTick(function () {
+                $('#kiosk-users-search').focus();
+            });
+        },
+
+
+        /**
+         * Show the user profile for the given user.
+         */
+        showUserProfile: function showUserProfile(user) {
+            history.pushState(null, null, '#/users/' + user.id);
+
+            this.loadProfile(user);
+        },
+
+
+        /**
+         * Load the user profile for the given user.
+         */
+        loadProfile: function loadProfile(user) {
+            this.$emit('showUserProfile', user.id);
+
+            this.showingUserProfile = true;
+        }
+    }
+};
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'teams', 'currentTeam', 'hasUnreadNotifications', 'hasUnreadAnnouncements'],
+
+    methods: {
+        /**
+         * Show the user's notifications.
+         */
+        showNotifications: function showNotifications() {
+            Bus.$emit('showNotifications');
+        },
+
+
+        /**
+         * Show the customer support e-mail form.
+         */
+        showSupportForm: function showSupportForm() {
+            Bus.$emit('showSupportForm');
+        }
+    }
+};
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['notifications', 'hasUnreadAnnouncements', 'loadingNotifications'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            showingNotifications: true,
+            showingAnnouncements: false
+        };
+    },
+
+
+    methods: {
+        /**
+         * Show the user notifications.
+         */
+        showNotifications: function showNotifications() {
+            this.showingNotifications = true;
+            this.showingAnnouncements = false;
+        },
+
+
+        /**
+         * Show the product announcements.
+         */
+        showAnnouncements: function showAnnouncements() {
+            this.showingNotifications = false;
+            this.showingAnnouncements = true;
+
+            this.updateLastReadAnnouncementsTimestamp();
+        },
+
+
+        /**
+         * Update the last read announcements timestamp.
+         */
+        updateLastReadAnnouncementsTimestamp: function updateLastReadAnnouncementsTimestamp() {
+            axios.put('/user/last-read-announcements-at').then(function () {
+                Bus.$emit('updateUser');
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the active notifications or announcements.
+         */
+        activeNotifications: function activeNotifications() {
+            if (!this.notifications) {
+                return [];
+            }
+
+            if (this.showingNotifications) {
+                return this.notifications.notifications;
+            } else {
+                return this.notifications.announcements;
+            }
+        },
+
+
+        /**
+         * Determine if the user has any notifications.
+         */
+        hasNotifications: function hasNotifications() {
+            return this.notifications && this.notifications.notifications.length > 0;
+        },
+
+
+        /**
+         * Determine if the user has any announcements.
+         */
+        hasAnnouncements: function hasAnnouncements() {
+            return this.notifications && this.notifications.announcements.length > 0;
+        }
+    }
+};
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            tokens: [],
+            availableAbilities: []
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.getTokens();
+        this.getAvailableAbilities();
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.$on('updateTokens', function () {
+            self.getTokens();
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get the current API tokens for the user.
+         */
+        getTokens: function getTokens() {
+            var _this = this;
+
+            axios.get('/settings/api/tokens').then(function (response) {
+                return _this.tokens = response.data;
+            });
+        },
+
+
+        /**
+         * Get all of the available token abilities.
+         */
+        getAvailableAbilities: function getAvailableAbilities() {
+            var _this2 = this;
+
+            axios.get('/settings/api/token/abilities').then(function (response) {
+                return _this2.availableAbilities = response.data;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['availableAbilities'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            showingToken: null,
+            allAbilitiesAssigned: false,
+
+            form: new SparkForm({
+                name: '',
+                abilities: []
+            })
+        };
+    },
+
+
+    computed: {
+        copyCommandSupported: function copyCommandSupported() {
+            return document.queryCommandSupported('copy');
+        }
+    },
+
+    watch: {
+        /**
+         * Watch the available abilities for changes.
+         */
+        availableAbilities: function availableAbilities() {
+            if (this.availableAbilities.length > 0) {
+                this.assignDefaultAbilities();
+            }
+        }
+    },
+
+    methods: {
+        /**
+         * Assign all of the default abilities.
+         */
+        assignDefaultAbilities: function assignDefaultAbilities() {
+            var defaults = _.filter(this.availableAbilities, function (a) {
+                return a.default;
+            });
+
+            this.form.abilities = _.pluck(defaults, 'value');
+        },
+
+
+        /**
+         * Enable all the available abilities for the given token.
+         */
+        assignAllAbilities: function assignAllAbilities() {
+            this.allAbilitiesAssigned = true;
+
+            this.form.abilities = _.pluck(this.availableAbilities, 'value');
+        },
+
+
+        /**
+         * Remove all of the abilities from the token.
+         */
+        removeAllAbilities: function removeAllAbilities() {
+            this.allAbilitiesAssigned = false;
+
+            this.form.abilities = [];
+        },
+
+
+        /**
+         * Toggle the given ability in the list of assigned abilities.
+         */
+        toggleAbility: function toggleAbility(ability) {
+            if (this.abilityIsAssigned(ability)) {
+                this.form.abilities = _.reject(this.form.abilities, function (a) {
+                    return a == ability;
+                });
+            } else {
+                this.form.abilities.push(ability);
+            }
+        },
+
+
+        /**
+         * Determine if the given ability has been assigned to the token.
+         */
+        abilityIsAssigned: function abilityIsAssigned(ability) {
+            return _.contains(this.form.abilities, ability);
+        },
+
+
+        /**
+         * Create a new API token.
+         */
+        create: function create() {
+            var _this = this;
+
+            Spark.post('/settings/api/token', this.form).then(function (response) {
+                _this.showToken(response.token);
+
+                _this.resetForm();
+
+                _this.$parent.$emit('updateTokens');
+            });
+        },
+
+
+        /**
+         * Display the token to the user.
+         */
+        showToken: function showToken(token) {
+            this.showingToken = token;
+
+            $('#modal-show-token').modal('show');
+        },
+
+
+        /**
+         * Select the token and copy to Clipboard.
+         */
+        selectToken: function selectToken() {
+            $('#api-token').select();
+
+            if (this.copyCommandSupported) {
+                document.execCommand("copy");
+            }
+        },
+
+
+        /**
+         * Reset the token form back to its default state.
+         */
+        resetForm: function resetForm() {
+            this.form.name = '';
+
+            this.assignDefaultAbilities();
+
+            this.allAbilitiesAssigned = false;
+        }
+    }
+};
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['tokens', 'availableAbilities'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            updatingToken: null,
+            deletingToken: null,
+
+            updateTokenForm: new SparkForm({
+                name: '',
+                abilities: []
+            }),
+
+            deleteTokenForm: new SparkForm({})
+        };
+    },
+
+
+    methods: {
+        /**
+         * Show the edit token modal.
+         */
+        editToken: function editToken(token) {
+            this.updatingToken = token;
+
+            this.initializeUpdateFormWith(token);
+
+            $('#modal-update-token').modal('show');
+        },
+
+
+        /**
+         * Initialize the edit form with the given token.
+         */
+        initializeUpdateFormWith: function initializeUpdateFormWith(token) {
+            this.updateTokenForm.name = token.name;
+
+            this.updateTokenForm.abilities = token.metadata.abilities;
+        },
+
+
+        /**
+         * Update the token being edited.
+         */
+        updateToken: function updateToken() {
+            var _this = this;
+
+            Spark.put('/settings/api/token/' + this.updatingToken.id, this.updateTokenForm).then(function (response) {
+                _this.$parent.$emit('updateTokens');
+
+                $('#modal-update-token').modal('hide');
+            });
+        },
+
+
+        /**
+         * Toggle the ability on the current token being edited.
+         */
+        toggleAbility: function toggleAbility(ability) {
+            if (this.abilityIsAssigned(ability)) {
+                this.updateTokenForm.abilities = _.reject(this.updateTokenForm.abilities, function (a) {
+                    return a == ability;
+                });
+            } else {
+                this.updateTokenForm.abilities.push(ability);
+            }
+        },
+
+
+        /**
+         * Determine if the ability has been assigned to the token being edited.
+         */
+        abilityIsAssigned: function abilityIsAssigned(ability) {
+            return _.contains(this.updateTokenForm.abilities, ability);
+        },
+
+
+        /**
+         * Get user confirmation that the token should be deleted.
+         */
+        approveTokenDelete: function approveTokenDelete(token) {
+            this.deletingToken = token;
+
+            $('#modal-delete-token').modal('show');
+        },
+
+
+        /**
+         * Delete the specified token.
+         */
+        deleteToken: function deleteToken() {
+            var _this2 = this;
+
+            Spark.delete('/settings/api/token/' + this.deletingToken.id, this.deleteTokenForm).then(function () {
+                _this2.$parent.$emit('updateTokens');
+
+                $('#modal-delete-token').modal('hide');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	props: ['user', 'team', 'billableType'],
+
+	/**
+  * The component's data.
+  */
+	data: function data() {
+		return {
+			invoices: []
+		};
+	},
+
+
+	/**
+  * Prepare the component.
+  */
+	mounted: function mounted() {
+		this.getInvoices();
+	},
+
+
+	methods: {
+		/**
+   * Get the user's billing invoices
+   */
+		getInvoices: function getInvoices() {
+			var _this = this;
+
+			axios.get(this.urlForInvoices).then(function (response) {
+				_this.invoices = _.filter(response.data, function (invoice) {
+					return invoice.total != '$0.00';
+				});
+			});
+		}
+	},
+
+	computed: {
+		/**
+   * Get the URL for retrieving the invoices.
+   */
+		urlForInvoices: function urlForInvoices() {
+			return this.billingUser ? '/settings/invoices' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invoices';
+		}
+	}
+};
+
+/***/ }),
+/* 262 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'invoices', 'billableType'],
+
+    methods: {
+        /**
+         * Get the URL for downloading a given invoice.
+         */
+        downloadUrlFor: function downloadUrlFor(invoice) {
+            return this.billingUser ? '/settings/invoice/' + invoice.id : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invoice/' + invoice.id;
+        }
+    }
+};
+
+/***/ }),
+/* 263 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                information: ''
+            })
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.form.information = this.billable.extra_billing_information;
+    },
+
+
+    methods: {
+        /**
+         * Update the extra billing information.
+         */
+        update: function update() {
+            Spark.put(this.urlForUpdate, this.form);
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for the extra billing information method update.
+         */
+        urlForUpdate: function urlForUpdate() {
+            return this.billingUser ? '/settings/extra-billing-information' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/extra-billing-information';
+        }
+    }
+};
+
+/***/ }),
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(158)],
+
+    /**
+     * The componetn's data.
+     */
+    data: function data() {
+        return {
+            currentDiscount: null,
+            loadingCurrentDiscount: false
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.$on('updateDiscount', function () {
+            self.getCurrentDiscountForBillable(self.billableType, self.billable);
+
+            return true;
+        });
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.getCurrentDiscountForBillable(this.billableType, this.billable);
+    },
+
+
+    methods: {
+        /**
+         * Calculate the amount off for the given discount amount.
+         */
+        calculateAmountOff: function calculateAmountOff(amount) {
+            return amount;
+        },
+
+
+        /**
+         * Get the formatted discount duration for the given discount.
+         */
+        formattedDiscountDuration: function formattedDiscountDuration(discount) {
+            if (!discount) {
+                return;
+            }
+
+            switch (discount.duration) {
+                case 'forever':
+                    return 'for all future invoices';
+                case 'once':
+                    return 'a single invoice';
+                case 'repeating':
+                    if (discount.duration_in_months === 1) {
+                        return 'all invoices during the next billing cycle';
+                    } else {
+                        return 'all invoices during the next ' + discount.duration_in_months + ' billing cycles';
+                    }
+            }
+        }
+    }
+};
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(158)],
+
+    /**
+     * The componetn's data.
+     */
+    data: function data() {
+        return {
+            currentDiscount: null,
+            loadingCurrentDiscount: false
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.$on('updateDiscount', function () {
+            self.getCurrentDiscountForBillable(self.billableType, self.billable);
+
+            return true;
+        });
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.getCurrentDiscountForBillable(this.billableType, this.billable);
+    }
+};
+
+/***/ }),
+/* 266 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                coupon: ''
+            })
+        };
+    },
+
+
+    methods: {
+        /**
+         * Redeem the given coupon code.
+         */
+        redeem: function redeem() {
+            var _this = this;
+
+            Spark.post(this.urlForRedemption, this.form).then(function () {
+                _this.form.coupon = '';
+
+                _this.$parent.$emit('updateDiscount');
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for redeeming a coupon.
+         */
+        urlForRedemption: function urlForRedemption() {
+            return this.billingUser ? '/settings/payment-method/coupon' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method/coupon';
+        }
+    }
+};
+
+/***/ }),
+/* 267 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(157)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                braintree_type: '',
+                braintree_token: ''
+            })
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.braintree('braintree-payment-method-container', this.braintreeCallback);
+    },
+
+
+    methods: {
+        /**
+         * Update the entity's card information.
+         */
+        update: function update() {
+            var _this = this;
+
+            Spark.put(this.urlForUpdate, this.form).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+
+                _this.resetBraintree('braintree-payment-method-container', _this.braintreeCallback);
+            });
+        },
+
+
+        /**
+         * The Braintree payment method received callback.
+         */
+        braintreeCallback: function braintreeCallback(response) {
+            this.form.braintree_type = response.type;
+            this.form.braintree_token = response.nonce;
+
+            this.update();
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for the payment method update.
+         */
+        urlForUpdate: function urlForUpdate() {
+            return this.billingUser ? '/settings/payment-method' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method';
+        },
+
+
+        /**
+         * Get the proper brand icon for the customer's credit card.
+         */
+        cardIcon: function cardIcon() {
+            if (!this.billable.card_brand) {
+                return 'fa-credit-card';
+            }
+
+            switch (this.billable.card_brand) {
+                case 'American Express':
+                    return 'fa-cc-amex';
+                case 'Diners Club':
+                    return 'fa-cc-diners-club';
+                case 'Discover':
+                    return 'fa-cc-discover';
+                case 'JCB':
+                    return 'fa-cc-jcb';
+                case 'MasterCard':
+                    return 'fa-cc-mastercard';
+                case 'Visa':
+                    return 'fa-cc-visa';
+                default:
+                    return 'fa-credit-card';
+            }
+        }
+    }
+};
+
+/***/ }),
+/* 268 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                stripe_token: '',
+                address: '',
+                address_line_2: '',
+                city: '',
+                state: '',
+                zip: '',
+                country: 'US'
+            }),
+
+            cardForm: new SparkForm({
+                name: '',
+                number: '',
+                cvc: '',
+                month: '',
+                year: ''
+            })
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        Stripe.setPublishableKey(Spark.stripeKey);
+
+        this.initializeBillingAddress();
+    },
+
+
+    methods: {
+        /**
+         * Initialize the billing address form for the billable entity.
+         */
+        initializeBillingAddress: function initializeBillingAddress() {
+            if (!Spark.collectsBillingAddress) {
+                return;
+            }
+
+            this.form.address = this.billable.billing_address;
+            this.form.address_line_2 = this.billable.billing_address_line_2;
+            this.form.city = this.billable.billing_city;
+            this.form.state = this.billable.billing_state;
+            this.form.zip = this.billable.billing_zip;
+            this.form.country = this.billable.billing_country || 'US';
+        },
+
+
+        /**
+         * Update the billable's card information.
+         */
+        update: function update() {
+            var _this = this;
+
+            this.form.busy = true;
+            this.form.errors.forget();
+            this.form.successful = false;
+            this.cardForm.errors.forget();
+
+            // Here we will build out the payload to send to Stripe to obtain a card token so
+            // we can create the actual subscription. We will build out this data that has
+            // this credit card number, CVC, etc. and exchange it for a secure token ID.
+            var payload = {
+                name: this.cardForm.name,
+                number: this.cardForm.number,
+                cvc: this.cardForm.cvc,
+                exp_month: this.cardForm.month,
+                exp_year: this.cardForm.year,
+                address_line1: this.form.address,
+                address_line2: this.form.address_line_2,
+                address_city: this.form.city,
+                address_state: this.form.state,
+                address_zip: this.form.zip,
+                address_country: this.form.country
+            };
+
+            // Once we have the Stripe payload we'll send it off to Stripe and obtain a token
+            // which we will send to the server to update this payment method. If there is
+            // an error we will display that back out to the user for their information.
+            Stripe.card.createToken(payload, function (status, response) {
+                if (response.error) {
+                    _this.cardForm.errors.set({ number: [response.error.message] });
+
+                    _this.form.busy = false;
+                } else {
+                    _this.sendUpdateToServer(response.id);
+                }
+            });
+        },
+
+
+        /**
+         * Send the credit card update information to the server.
+         */
+        sendUpdateToServer: function sendUpdateToServer(token) {
+            var _this2 = this;
+
+            this.form.stripe_token = token;
+
+            Spark.put(this.urlForUpdate, this.form).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+
+                _this2.cardForm.name = '';
+                _this2.cardForm.number = '';
+                _this2.cardForm.cvc = '';
+                _this2.cardForm.month = '';
+                _this2.cardForm.year = '';
+
+                if (!Spark.collectsBillingAddress) {
+                    _this2.form.zip = '';
+                }
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the billable entity's "billable" name.
+         */
+        billableName: function billableName() {
+            return this.billingUser ? this.user.name : this.team.owner.name;
+        },
+
+
+        /**
+         * Get the URL for the payment method update.
+         */
+        urlForUpdate: function urlForUpdate() {
+            return this.billingUser ? '/settings/payment-method' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method';
+        },
+
+
+        /**
+         * Get the proper brand icon for the customer's credit card.
+         */
+        cardIcon: function cardIcon() {
+            if (!this.billable.card_brand) {
+                return 'fa-cc-stripe';
+            }
+
+            switch (this.billable.card_brand) {
+                case 'American Express':
+                    return 'fa-cc-amex';
+                case 'Diners Club':
+                    return 'fa-cc-diners-club';
+                case 'Discover':
+                    return 'fa-cc-discover';
+                case 'JCB':
+                    return 'fa-cc-jcb';
+                case 'MasterCard':
+                    return 'fa-cc-mastercard';
+                case 'Visa':
+                    return 'fa-cc-visa';
+                default:
+                    return 'fa-cc-stripe';
+            }
+        },
+
+
+        /**
+         * Get the placeholder for the billable entity's credit card.
+         */
+        placeholder: function placeholder() {
+            if (this.billable.card_last_four) {
+                return '************' + this.billable.card_last_four;
+            }
+
+            return '';
+        }
+    }
+};
+
+/***/ }),
+/* 269 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({ vat_id: '' })
+        };
+    },
+
+
+    /**
+     * Bootstrap the component.
+     */
+    mounted: function mounted() {
+        this.form.vat_id = this.billable.vat_id;
+    },
+
+
+    methods: {
+        /**
+         * Update the customer's VAT ID.
+         */
+        update: function update() {
+            Spark.put(this.urlForUpdate, this.form);
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for the VAT ID update.
+         */
+        urlForUpdate: function urlForUpdate() {
+            return this.billingUser ? '/settings/payment-method/vat-id' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/payment-method/vat-id';
+        }
+    }
+};
+
+/***/ }),
+/* 270 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user']
+};
+
+/***/ }),
+/* 271 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: $.extend(true, new SparkForm({
+                name: '',
+                email: ''
+            }), Spark.forms.updateContactInformation)
+        };
+    },
+
+
+    /**
+     * Bootstrap the component.
+     */
+    mounted: function mounted() {
+        this.form.name = this.user.name;
+        this.form.email = this.user.email;
+    },
+
+
+    methods: {
+        /**
+         * Update the user's contact information.
+         */
+        update: function update() {
+            Spark.put('/settings/contact', this.form).then(function () {
+                Bus.$emit('updateUser');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 272 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({})
+        };
+    },
+
+
+    methods: {
+        /**
+         * Update the user's profile photo.
+         */
+        update: function update(e) {
+            e.preventDefault();
+
+            if (!this.$refs.photo.files.length) {
+                return;
+            }
+
+            var self = this;
+
+            this.form.startProcessing();
+
+            // We need to gather a fresh FormData instance with the profile photo appended to
+            // the data so we can POST it up to the server. This will allow us to do async
+            // uploads of the profile photos. We will update the user after this action.
+            axios.post('/settings/photo', this.gatherFormData()).then(function () {
+                Bus.$emit('updateUser');
+
+                self.form.finishProcessing();
+            }, function (error) {
+                self.form.setErrors(error.response.data);
+            });
+        },
+
+
+        /**
+         * Gather the form data for the photo upload.
+         */
+        gatherFormData: function gatherFormData() {
+            var data = new FormData();
+
+            data.append('photo', this.$refs.photo.files[0]);
+
+            return data;
+        }
+    },
+
+    computed: {
+        /**
+         * Calculate the style attribute for the photo preview.
+         */
+        previewStyle: function previewStyle() {
+            return 'background-image: url(' + this.user.photo_url + ')';
+        }
+    }
+};
+
+/***/ }),
+/* 273 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            twoFactorResetCode: null
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.$on('receivedTwoFactorResetCode', function (code) {
+            self.twoFactorResetCode = code;
+
+            $('#modal-show-two-factor-reset-code').modal('show');
+        });
+    }
+};
+
+/***/ }),
+/* 274 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	props: ['user'],
+
+	/**
+  * The component's data.
+  */
+	data: function data() {
+		return {
+			form: new SparkForm({})
+		};
+	},
+
+
+	methods: {
+		/**
+   * Disable two-factor authentication for the user.
+   */
+		disable: function disable() {
+			Spark.delete('/settings/two-factor-auth', this.form).then(function () {
+				Bus.$emit('updateUser');
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 275 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	props: ['user'],
+
+	/**
+  * The component's data.
+  */
+	data: function data() {
+		return {
+			form: new SparkForm({
+				country_code: '',
+				phone: ''
+			})
+		};
+	},
+
+
+	/**
+  * Prepare the component.
+  */
+	mounted: function mounted() {
+		this.form.country_code = this.user.country_code;
+		this.form.phone = this.user.phone;
+	},
+
+
+	methods: {
+		/**
+   * Enable two-factor authentication for the user.
+   */
+		enable: function enable() {
+			var _this = this;
+
+			Spark.post('/settings/two-factor-auth', this.form).then(function (code) {
+				_this.$parent.$emit('receivedTwoFactorResetCode', code);
+
+				Bus.$emit('updateUser');
+			});
+		}
+	}
+};
+
+/***/ }),
+/* 276 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                current_password: '',
+                password: '',
+                password_confirmation: ''
+            })
+        };
+    },
+
+
+    methods: {
+        /**
+         * Update the user's password.
+         */
+        update: function update() {
+            Spark.put('/settings/password', this.form);
+        }
+    }
+};
+
+/***/ }),
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'teams'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(159)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            billableType: 'user',
+            team: null
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.usePushStateForTabs('.spark-settings-tabs');
+    }
+};
+
+/***/ }),
+/* 278 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(4), __webpack_require__(12)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            plans: []
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        var self = this;
+
+        this.getPlans();
+
+        this.$on('showPlanDetails', function (plan) {
+            self.showPlanDetails(plan);
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get the active plans for the application.
+         */
+        getPlans: function getPlans() {
+            var _this = this;
+
+            axios.get('/spark/plans').then(function (response) {
+                _this.plans = _this.billingUser ? _.where(response.data, { type: "user" }) : _.where(response.data, { type: "team" });
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 279 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({})
+        };
+    },
+
+
+    methods: {
+        /**
+         * Confirm the cancellation operation.
+         */
+        confirmCancellation: function confirmCancellation() {
+            $('#modal-confirm-cancellation').modal('show');
+        },
+
+
+        /**
+         * Cancel the current subscription.
+         */
+        cancel: function cancel() {
+            Spark.delete(this.urlForCancellation, this.form).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+
+                $('#modal-confirm-cancellation').modal('hide');
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for the subscription cancellation.
+         */
+        urlForCancellation: function urlForCancellation() {
+            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
+        }
+    }
+};
+
+/***/ }),
+/* 280 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'plans', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(4), __webpack_require__(12)],
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        if (this.onlyHasYearlyPlans) {
+            this.showYearlyPlans();
+        }
+    },
+
+
+    methods: {
+        /**
+         * Show the plan details for the given plan.
+         *
+         * We'll ask the parent subscription component to display it.
+         */
+        showPlanDetails: function showPlanDetails(plan) {
+            this.$parent.$emit('showPlanDetails', plan);
+        },
+
+
+        /**
+         * Get the plan price with the applicable VAT.
+         */
+        priceWithTax: function priceWithTax(plan) {
+            return plan.price + plan.price * (this.billable.tax_rate / 100);
+        }
+    }
+};
+
+/***/ }),
+/* 281 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'plans', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(157), __webpack_require__(4), __webpack_require__(12)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                braintree_type: '',
+                braintree_token: '',
+                plan: '',
+                coupon: null
+            })
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        var _this = this;
+
+        // If only yearly subscription plans are available, we will select that interval so that we
+        // can show the plans. Then we'll select the first available paid plan from the list and
+        // start the form in a good default spot. The user may then select another plan later.
+        if (this.onlyHasYearlyPaidPlans) {
+            this.showYearlyPlans();
+        }
+
+        // Next, we will configure the braintree container element on the page and handle the nonce
+        // received callback. We'll then set the nonce and fire off the subscribe method so this
+        // nonce can be used to create the subscription for the billable entity being managed.
+        this.braintree('braintree-subscribe-container', function (response) {
+            _this.form.braintree_type = response.type;
+            _this.form.braintree_token = response.nonce;
+
+            _this.subscribe();
+        });
+    },
+
+
+    methods: {
+        /**
+         * Mark the given plan as selected.
+         */
+        selectPlan: function selectPlan(plan) {
+            this.selectedPlan = plan;
+
+            this.form.plan = this.selectedPlan.id;
+        },
+
+
+        /**
+         * Subscribe to the specified plan.
+         */
+        subscribe: function subscribe() {
+            Spark.post(this.urlForNewSubscription, this.form).then(function (response) {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+            });
+        },
+
+
+        /**
+         * Show the plan details for the given plan.
+         *
+         * We'll ask the parent subscription component to display it.
+         */
+        showPlanDetails: function showPlanDetails(plan) {
+            this.$parent.$emit('showPlanDetails', plan);
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for subscribing to a plan.
+         */
+        urlForNewSubscription: function urlForNewSubscription() {
+            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
+        }
+    }
+};
+
+/***/ }),
+/* 282 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'plans', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(4), __webpack_require__(12), __webpack_require__(189)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            taxRate: 0,
+
+            form: new SparkForm({
+                stripe_token: '',
+                plan: '',
+                coupon: null,
+                address: '',
+                address_line_2: '',
+                city: '',
+                state: '',
+                zip: '',
+                country: 'US',
+                vat_id: ''
+            }),
+
+            cardForm: new SparkForm({
+                name: '',
+                number: '',
+                cvc: '',
+                month: '',
+                year: '',
+                zip: ''
+            })
+        };
+    },
+
+
+    watch: {
+        /**
+         * Watch for changes on the entire billing address.
+         */
+        'currentBillingAddress': function currentBillingAddress(value) {
+            if (!Spark.collectsEuropeanVat) {
+                return;
+            }
+
+            this.refreshTaxRate(this.form);
+        }
+    },
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        Stripe.setPublishableKey(Spark.stripeKey);
+
+        this.initializeBillingAddress();
+
+        if (this.onlyHasYearlyPaidPlans) {
+            this.showYearlyPlans();
+        }
+    },
+
+
+    methods: {
+        /**
+         * Initialize the billing address form for the billable entity.
+         */
+        initializeBillingAddress: function initializeBillingAddress() {
+            this.form.address = this.billable.billing_address;
+            this.form.address_line_2 = this.billable.billing_address_line_2;
+            this.form.city = this.billable.billing_city;
+            this.form.state = this.billable.billing_state;
+            this.form.zip = this.billable.billing_zip;
+            this.form.country = this.billable.billing_country || 'US';
+            this.form.vat_id = this.billable.vat_id;
+        },
+
+
+        /**
+         * Mark the given plan as selected.
+         */
+        selectPlan: function selectPlan(plan) {
+            this.selectedPlan = plan;
+
+            this.form.plan = this.selectedPlan.id;
+        },
+
+
+        /**
+         * Subscribe to the specified plan.
+         */
+        subscribe: function subscribe() {
+            var _this = this;
+
+            this.cardForm.errors.forget();
+
+            this.form.startProcessing();
+
+            // Here we will build out the payload to send to Stripe to obtain a card token so
+            // we can create the actual subscription. We will build out this data that has
+            // this credit card number, CVC, etc. and exchange it for a secure token ID.
+            var payload = {
+                name: this.cardForm.name,
+                number: this.cardForm.number,
+                cvc: this.cardForm.cvc,
+                exp_month: this.cardForm.month,
+                exp_year: this.cardForm.year,
+                address_line1: this.form.address,
+                address_line2: this.form.address_line_2,
+                address_city: this.form.city,
+                address_state: this.form.state,
+                address_zip: this.form.zip,
+                address_country: this.form.country
+            };
+
+            // Next, we will send the payload to Stripe and handle the response. If we have a
+            // valid token we can send that to the server and use the token to create this
+            // subscription on the back-end. Otherwise, we will show the error messages.
+            Stripe.card.createToken(payload, function (status, response) {
+                if (response.error) {
+                    _this.cardForm.errors.set({ number: [response.error.message] });
+
+                    _this.form.busy = false;
+                } else {
+                    _this.createSubscription(response.id);
+                }
+            });
+        },
+
+
+        /*
+         * After obtaining the Stripe token, create subscription on the Spark server.
+         */
+        createSubscription: function createSubscription(token) {
+            this.form.stripe_token = token;
+
+            Spark.post(this.urlForNewSubscription, this.form).then(function (response) {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeam');
+            });
+        },
+
+
+        /**
+         * Determine if the user has subscribed to the given plan before.
+         */
+        hasSubscribed: function hasSubscribed(plan) {
+            return !!_.where(this.billable.subscriptions, { provider_plan: plan.id }).length;
+        },
+
+
+        /**
+         * Show the plan details for the given plan.
+         *
+         * We'll ask the parent subscription component to display it.
+         */
+        showPlanDetails: function showPlanDetails(plan) {
+            this.$parent.$emit('showPlanDetails', plan);
+        }
+    },
+
+    computed: {
+        /**
+         * Get the billable entity's "billable" name.
+         */
+        billableName: function billableName() {
+            return this.billingUser ? this.user.name : this.team.owner.name;
+        },
+
+
+        /**
+         * Determine if the selected country collects European VAT.
+         */
+        countryCollectsVat: function countryCollectsVat() {
+            return this.collectsVat(this.form.country);
+        },
+
+
+        /**
+         * Get the URL for subscribing to a plan.
+         */
+        urlForNewSubscription: function urlForNewSubscription() {
+            return this.billingUser ? '/settings/subscription' : '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/subscription';
+        },
+
+
+        /**
+         * Get the current billing address from the subscribe form.
+         *
+         * This used primarily for wathcing.
+         */
+        currentBillingAddress: function currentBillingAddress() {
+            return this.form.address + this.form.address_line_2 + this.form.city + this.form.state + this.form.zip + this.form.country + this.form.vat_id;
+        }
+    }
+};
+
+/***/ }),
+/* 283 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+    props: ['user', 'team', 'plans', 'billableType'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(4), __webpack_require__(12)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            confirmingPlan: null
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        var _this = this;
+
+        this.selectActivePlanInterval();
+
+        // We need to watch the activePlan computed property for changes so we can select
+        // the proper active plan on the plan interval button group. So, we will watch
+        // this property and fire off a method anytime it changes so it can sync up.
+        this.$watch('activePlan', function (value) {
+            _this.selectActivePlanInterval();
+        });
+
+        if (this.onlyHasYearlyPlans) {
+            this.showYearlyPlans();
+        }
+    },
+
+
+    methods: {
+        /**
+         * Confirm the plan update with the user.
+         */
+        confirmPlanUpdate: function confirmPlanUpdate(plan) {
+            this.confirmingPlan = plan;
+
+            $('#modal-confirm-plan-update').modal('show');
+        },
+
+
+        /**
+         * Approve the plan update.
+         */
+        approvePlanUpdate: function approvePlanUpdate() {
+            $('#modal-confirm-plan-update').modal('hide');
+
+            this.updateSubscription(this.confirmingPlan);
+        },
+
+
+        /**
+         * Select the active plan interval.
+         */
+        selectActivePlanInterval: function selectActivePlanInterval() {
+            if (this.activePlanIsMonthly || this.yearlyPlans.length == 0) {
+                this.showMonthlyPlans();
+            } else {
+                this.showYearlyPlans();
+            }
+        },
+
+
+        /**
+         * Show the plan details for the given plan.
+         *
+         * We'll ask the parent subscription component to display it.
+         */
+        showPlanDetails: function showPlanDetails(plan) {
+            this.$parent.$emit('showPlanDetails', plan);
+        },
+
+
+        /**
+         * Get the plan price with the applicable VAT.
+         */
+        priceWithTax: function priceWithTax(plan) {
+            return plan.price + plan.price * (this.billable.tax_rate / 100);
+        }
+    }
+};
+
+/***/ }),
+/* 284 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'teams']
+};
+
+/***/ }),
+/* 285 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            plans: [],
+
+            form: new SparkForm({
+                name: '',
+                slug: ''
+            })
+        };
+    },
+
+
+    computed: {
+        /**
+         * Get the active subscription instance.
+         */
+        activeSubscription: function activeSubscription() {
+            if (!this.$parent.billable) {
+                return;
+            }
+
+            var subscription = _.find(this.$parent.billable.subscriptions, function (subscription) {
+                return subscription.name == 'default';
+            });
+
+            if (typeof subscription !== 'undefined') {
+                return subscription;
+            }
+        },
+
+
+        /**
+         * Get the active plan instance.
+         */
+        activePlan: function activePlan() {
+            var _this = this;
+
+            if (this.activeSubscription) {
+                return _.find(this.plans, function (plan) {
+                    return plan.id == _this.activeSubscription.provider_plan;
+                });
+            }
+        },
+
+
+        /**
+         * Check if there's a limit for the number of teams.
+         */
+        hasTeamLimit: function hasTeamLimit() {
+            if (!this.activePlan) {
+                return false;
+            }
+
+            return !!this.activePlan.attributes.teams;
+        },
+
+
+        /**
+         *
+         * Get the remaining teams in the active plan.
+         */
+        remainingTeams: function remainingTeams() {
+            var ownedTeams = _.filter(this.$parent.teams, { owner_id: this.$parent.billable.id });
+
+            return this.activePlan ? this.activePlan.attributes.teams - ownedTeams.length : 0;
+        },
+
+
+        /**
+         * Check if the user can create more teams.
+         */
+        canCreateMoreTeams: function canCreateMoreTeams() {
+            if (!this.hasTeamLimit) {
+                return true;
+            }
+
+            return this.remainingTeams > 0;
+        }
+    },
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        this.getPlans();
+    },
+
+
+    events: {
+        /**
+         * Handle the "activatedTab" event.
+         */
+        activatedTab: function activatedTab(tab) {
+            if (tab === Spark.pluralTeamString) {
+                Vue.nextTick(function () {
+                    $('#create-team-name').focus();
+                });
+            }
+
+            return true;
+        }
+    },
+
+    watch: {
+        /**
+         * Watch the team name for changes.
+         */
+        'form.name': function formName(val, oldVal) {
+            if (this.form.slug == '' || this.form.slug == oldVal.toLowerCase().replace(/[\s\W-]+/g, '-')) {
+                this.form.slug = val.toLowerCase().replace(/[\s\W-]+/g, '-');
+            }
+        }
+    },
+
+    methods: {
+        /**
+         * Create a new team.
+         */
+        create: function create() {
+            var _this2 = this;
+
+            Spark.post('/settings/' + Spark.pluralTeamString, this.form).then(function () {
+                _this2.form.name = '';
+                _this2.form.slug = '';
+
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeams');
+            });
+        },
+
+
+        /**
+         * Get all the plans defined in the application.
+         */
+        getPlans: function getPlans() {
+            var _this3 = this;
+
+            axios.get('/spark/plans').then(function (response) {
+                _this3.plans = response.data;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 286 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'teams'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            leavingTeam: null,
+            deletingTeam: null,
+
+            leaveTeamForm: new SparkForm({}),
+            deleteTeamForm: new SparkForm({})
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+
+
+    methods: {
+        /**
+         * Approve leaving the given team.
+         */
+        approveLeavingTeam: function approveLeavingTeam(team) {
+            this.leavingTeam = team;
+
+            $('#modal-leave-team').modal('show');
+        },
+
+
+        /**
+         * Leave the given team.
+         */
+        leaveTeam: function leaveTeam() {
+            Spark.delete(this.urlForLeaving, this.leaveTeamForm).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeams');
+
+                $('#modal-leave-team').modal('hide');
+            });
+        },
+
+
+        /**
+         * Approve the deletion of the given team.
+         */
+        approveTeamDelete: function approveTeamDelete(team) {
+            this.deletingTeam = team;
+
+            $('#modal-delete-team').modal('show');
+        },
+
+
+        /**
+         * Delete the given team.
+         */
+        deleteTeam: function deleteTeam() {
+            Spark.delete('/settings/' + Spark.pluralTeamString + '/' + this.deletingTeam.id, this.deleteTeamForm).then(function () {
+                Bus.$emit('updateUser');
+                Bus.$emit('updateTeams');
+
+                $('#modal-delete-team').modal('hide');
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for leaving a team.
+         */
+        urlForLeaving: function urlForLeaving() {
+            return '/settings/' + Spark.pluralTeamString + '/' + this.leavingTeam.id + '/members/' + this.user.id;
+        }
+    }
+};
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['team', 'invitations'],
+
+    methods: {
+        /**
+         * Cancel the sent invitation.
+         */
+        cancel: function cancel(invitation) {
+            var _this = this;
+
+            axios.delete('/settings/invitations/' + invitation.id).then(function () {
+                _this.$parent.$emit('updateInvitations');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            invitations: []
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        this.getPendingInvitations();
+    },
+
+
+    methods: {
+        /**
+         * Get the pending invitations for the user.
+         */
+        getPendingInvitations: function getPendingInvitations() {
+            var _this = this;
+
+            axios.get('/settings/invitations/pending').then(function (response) {
+                _this.invitations = response.data;
+            });
+        },
+
+
+        /**
+         * Accept the given invitation.
+         */
+        accept: function accept(invitation) {
+            var _this2 = this;
+
+            axios.post('/settings/invitations/' + invitation.id + '/accept').then(function () {
+                Bus.$emit('updateTeams');
+
+                _this2.getPendingInvitations();
+            });
+
+            this.removeInvitation(invitation);
+        },
+
+
+        /**
+         * Reject the given invitation.
+         */
+        reject: function reject(invitation) {
+            var _this3 = this;
+
+            axios.post('/settings/invitations/' + invitation.id + '/reject').then(function () {
+                _this3.getPendingInvitations();
+            });
+
+            this.removeInvitation(invitation);
+        },
+
+
+        /**
+         * Remove the given invitation from the list.
+         */
+        removeInvitation: function removeInvitation(invitation) {
+            this.invitations = _.reject(this.invitations, function (i) {
+                return i.id === invitation.id;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 289 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            plans: [],
+
+            form: new SparkForm({
+                email: ''
+            })
+        };
+    },
+
+
+    computed: {
+        /**
+         * Get the active subscription instance.
+         */
+        activeSubscription: function activeSubscription() {
+            if (!this.billable) {
+                return;
+            }
+
+            var subscription = _.find(this.billable.subscriptions, function (subscription) {
+                return subscription.name == 'default';
+            });
+
+            if (typeof subscription !== 'undefined') {
+                return subscription;
+            }
+        },
+
+
+        /**
+         * Get the active plan instance.
+         */
+        activePlan: function activePlan() {
+            var _this = this;
+
+            if (this.activeSubscription) {
+                return _.find(this.plans, function (plan) {
+                    return plan.id == _this.activeSubscription.provider_plan;
+                });
+            }
+        },
+
+
+        /**
+         * Check if there's a limit for the number of team members.
+         */
+        hasTeamMembersLimit: function hasTeamMembersLimit() {
+            if (!this.activePlan) {
+                return false;
+            }
+
+            return !!this.activePlan.attributes.teamMembers;
+        },
+
+
+        /**
+         *
+         * Get the remaining team members in the active plan.
+         */
+        remainingTeamMembers: function remainingTeamMembers() {
+            return this.activePlan ? this.activePlan.attributes.teamMembers - this.$parent.team.users.length : 0;
+        },
+
+
+        /**
+         * Check if the user can invite more team members.
+         */
+        canInviteMoreTeamMembers: function canInviteMoreTeamMembers() {
+            if (!this.hasTeamMembersLimit) {
+                return true;
+            }
+            return this.remainingTeamMembers > 0;
+        }
+    },
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        this.getPlans();
+    },
+
+
+    methods: {
+        /**
+         * Send a team invitation.
+         */
+        send: function send() {
+            var _this2 = this;
+
+            Spark.post('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invitations', this.form).then(function () {
+                _this2.form.email = '';
+
+                _this2.$parent.$emit('updateInvitations');
+            });
+        },
+
+
+        /**
+         * Get all the plans defined in the application.
+         */
+        getPlans: function getPlans() {
+            var _this3 = this;
+
+            axios.get('/spark/plans').then(function (response) {
+                _this3.plans = response.data;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 290 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            roles: [],
+
+            updatingTeamMember: null,
+            deletingTeamMember: null,
+
+            updateTeamMemberForm: $.extend(true, new SparkForm({
+                role: ''
+            }), Spark.forms.updateTeamMember),
+
+            deleteTeamMemberForm: new SparkForm({})
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        this.getRoles();
+    },
+
+
+    methods: {
+        /**
+         * Get the available team member roles.
+         */
+        getRoles: function getRoles() {
+            var _this = this;
+
+            axios.get('/settings/' + Spark.pluralTeamString + '/roles').then(function (response) {
+                _this.roles = response.data;
+            });
+        },
+
+
+        /**
+         * Edit the given team member.
+         */
+        editTeamMember: function editTeamMember(member) {
+            this.updatingTeamMember = member;
+            this.updateTeamMemberForm.role = member.pivot.role;
+
+            $('#modal-update-team-member').modal('show');
+        },
+
+
+        /**
+         * Update the team member.
+         */
+        update: function update() {
+            Spark.put(this.urlForUpdating, this.updateTeamMemberForm).then(function () {
+                Bus.$emit('updateTeam');
+
+                $('#modal-update-team-member').modal('hide');
+            });
+        },
+
+
+        /**
+         * Display the approval modal for the deletion of a team member.
+         */
+        approveTeamMemberDelete: function approveTeamMemberDelete(member) {
+            this.deletingTeamMember = member;
+
+            $('#modal-delete-member').modal('show');
+        },
+
+
+        /**
+         * Delete the given team member.
+         */
+        deleteMember: function deleteMember() {
+            Spark.delete(this.urlForDeleting, this.deleteTeamMemberForm).then(function () {
+                Bus.$emit('updateTeam');
+
+                $('#modal-delete-member').modal('hide');
+            });
+        },
+
+
+        /**
+         * Determine if the current user can edit a team member.
+         */
+        canEditTeamMember: function canEditTeamMember(member) {
+            return this.user.id === this.team.owner_id && this.user.id !== member.id;
+        },
+
+
+        /**
+         * Determine if the current user can delete a team member.
+         */
+        canDeleteTeamMember: function canDeleteTeamMember(member) {
+            return this.user.id === this.team.owner_id && this.user.id !== member.id;
+        },
+
+
+        /**
+         * Get the displayable role for the given team member.
+         */
+        teamMemberRole: function teamMemberRole(member) {
+            if (this.roles.length == 0) {
+                return '';
+            }
+
+            if (member.pivot.role == 'owner') {
+                return 'Owner';
+            }
+
+            var role = _.find(this.roles, function (role) {
+                return role.value == member.pivot.role;
+            });
+
+            if (typeof role !== 'undefined') {
+                return role.text;
+            }
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for updating a team member.
+         */
+        urlForUpdating: function urlForUpdating() {
+            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/members/' + this.updatingTeamMember.id;
+        },
+
+        /**
+         * Get the URL for deleting a team member.
+         */
+        urlForDeleting: function urlForDeleting() {
+            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/members/' + this.deletingTeamMember.id;
+        }
+    }
+};
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team', 'billableType'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            invitations: []
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.getInvitations();
+
+        this.$on('updateInvitations', function () {
+            self.getInvitations();
+        });
+    },
+
+
+    methods: {
+        /**
+         * Get all of the invitations for the team.
+         */
+        getInvitations: function getInvitations() {
+            var _this = this;
+
+            axios.get('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/invitations').then(function (response) {
+                _this.invitations = response.data;
+            });
+        }
+    }
+};
 
 /***/ }),
 /* 292 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team']
+};
+
+/***/ }),
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(137);
+module.exports = {
+    props: ['user', 'teamId'],
+
+    /**
+     * Load mixins for the component.
+     */
+    mixins: [__webpack_require__(159)],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            billableType: 'team',
+            team: null
+        };
+    },
+
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        this.getTeam();
+
+        Bus.$on('updateTeam', function () {
+            self.getTeam();
+        });
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.usePushStateForTabs('.spark-settings-tabs');
+    },
+
+
+    methods: {
+        /**
+         * Get the team being managed.
+         */
+        getTeam: function getTeam() {
+            var _this = this;
+
+            axios.get('/' + Spark.pluralTeamString + '/' + this.teamId).then(function (response) {
+                _this.team = response.data;
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 294 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({
+                name: ''
+            })
+        };
+    },
+
+
+    /**
+     * Prepare the component.
+     */
+    mounted: function mounted() {
+        this.form.name = this.team.name;
+    },
+
+
+    methods: {
+        /**
+         * Update the team name.
+         */
+        update: function update() {
+            Spark.put('/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/name', this.form).then(function () {
+                Bus.$emit('updateTeam');
+                Bus.$emit('updateTeams');
+            });
+        }
+    }
+};
+
+/***/ }),
+/* 295 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    props: ['user', 'team'],
+
+    /**
+     * The component's data.
+     */
+    data: function data() {
+        return {
+            form: new SparkForm({})
+        };
+    },
+
+
+    methods: {
+        /**
+         * Update the team's photo.
+         */
+        update: function update(e) {
+            e.preventDefault();
+
+            if (!this.$refs.photo.files.length) {
+                return;
+            }
+
+            var self = this;
+
+            this.form.startProcessing();
+
+            // We need to gather a fresh FormData instance with the profile photo appended to
+            // the data so we can POST it up to the server. This will allow us to do async
+            // uploads of the profile photos. We will update the user after this action.
+            axios.post(this.urlForUpdate, this.gatherFormData()).then(function () {
+                Bus.$emit('updateTeam');
+                Bus.$emit('updateTeams');
+
+                self.form.finishProcessing();
+            }, function (error) {
+                self.form.setErrors(error.response.data);
+            });
+        },
+
+
+        /**
+         * Gather the form data for the photo upload.
+         */
+        gatherFormData: function gatherFormData() {
+            var data = new FormData();
+
+            data.append('photo', this.$refs.photo.files[0]);
+
+            return data;
+        }
+    },
+
+    computed: {
+        /**
+         * Get the URL for updating the team photo.
+         */
+        urlForUpdate: function urlForUpdate() {
+            return '/settings/' + Spark.pluralTeamString + '/' + this.team.id + '/photo';
+        },
+
+
+        /**
+         * Calculate the style attribute for the photo preview.
+         */
+        previewStyle: function previewStyle() {
+            return 'background-image: url(' + this.team.photo_url + ')';
+        }
+    }
+};
+
+/***/ }),
+/* 296 */
+/***/ (function(module, exports) {
+
+/**
+ * Export the root Spark application.
+ */
+module.exports = {
+    el: '#spark-app',
+
+    /**
+     * Holds the timestamp for the last time we updated the API token.
+     */
+    lastRefreshedApiTokenAt: null,
+
+    /**
+     * The application's data.
+     */
+    data: {
+        user: Spark.state.user,
+        teams: Spark.state.teams,
+        currentTeam: Spark.state.currentTeam,
+
+        loadingNotifications: false,
+        notifications: null,
+
+        supportForm: new SparkForm({
+            from: '',
+            subject: '',
+            message: ''
+        })
+    },
+
+    /**
+     * The component has been created by Vue.
+     */
+    created: function created() {
+        var self = this;
+
+        if (Spark.userId) {
+            this.loadDataForAuthenticatedUser();
+        }
+
+        if (Spark.userId && Spark.usesApi) {
+            this.refreshApiTokenEveryFewMinutes();
+        }
+
+        Bus.$on('updateUser', function () {
+            self.getUser();
+        });
+
+        Bus.$on('updateUserData', function () {
+            self.loadDataForAuthenticatedUser();
+        });
+
+        Bus.$on('updateTeams', function () {
+            self.getTeams();
+        });
+
+        Bus.$on('showNotifications', function () {
+            $('#modal-notifications').modal('show');
+
+            self.markNotificationsAsRead();
+        });
+
+        Bus.$on('showSupportForm', function () {
+            if (self.user) {
+                self.supportForm.from = self.user.email;
+            }
+
+            $('#modal-support').modal('show');
+
+            setTimeout(function () {
+                $('#support-subject').focus();
+            }, 500);
+        });
+    },
+
+
+    /**
+     * Prepare the application.
+     */
+    mounted: function mounted() {
+        this.whenReady();
+    },
+
+
+    methods: {
+        /**
+         * Finish bootstrapping the application.
+         */
+        whenReady: function whenReady() {
+            //
+        },
+
+
+        /**
+         * Load the data for an authenticated user.
+         */
+        loadDataForAuthenticatedUser: function loadDataForAuthenticatedUser() {
+            this.getNotifications();
+        },
+
+
+        /**
+         * Refresh the current API token every few minutes.
+         */
+        refreshApiTokenEveryFewMinutes: function refreshApiTokenEveryFewMinutes() {
+            var _this = this;
+
+            this.lastRefreshedApiTokenAt = moment();
+
+            setInterval(function () {
+                _this.refreshApiToken();
+            }, 240000);
+
+            setInterval(function () {
+                if (moment().diff(_this.lastRefreshedApiTokenAt, 'minutes') >= 5) {
+                    _this.refreshApiToken();
+                }
+            }, 5000);
+        },
+
+
+        /**
+         * Refresh the current API token.
+         */
+        refreshApiToken: function refreshApiToken() {
+            this.lastRefreshedApiTokenAt = moment();
+
+            axios.put('/spark/token');
+        },
+
+
+        /*
+         * Get the current user of the application.
+         */
+        getUser: function getUser() {
+            var _this2 = this;
+
+            axios.get('/user/current').then(function (response) {
+                _this2.user = response.data;
+            });
+        },
+
+
+        /**
+         * Get the current team list.
+         */
+        getTeams: function getTeams() {
+            var _this3 = this;
+
+            axios.get('/' + Spark.pluralTeamString).then(function (response) {
+                _this3.teams = response.data;
+            });
+        },
+
+
+        /**
+         * Get the current team.
+         */
+        getCurrentTeam: function getCurrentTeam() {
+            var _this4 = this;
+
+            axios.get('/' + Spark.pluralTeamString + '/current').then(function (response) {
+                _this4.currentTeam = response.data;
+            }).catch(function (response) {
+                //
+            });
+        },
+
+
+        /**
+         * Get the application notifications.
+         */
+        getNotifications: function getNotifications() {
+            var _this5 = this;
+
+            this.loadingNotifications = true;
+
+            axios.get('/notifications/recent').then(function (response) {
+                _this5.notifications = response.data;
+
+                _this5.loadingNotifications = false;
+            });
+        },
+
+
+        /**
+         * Mark the current notifications as read.
+         */
+        markNotificationsAsRead: function markNotificationsAsRead() {
+            if (!this.hasUnreadNotifications) {
+                return;
+            }
+
+            axios.put('/notifications/read', {
+                notifications: _.pluck(this.notifications.notifications, 'id')
+            });
+
+            _.each(this.notifications.notifications, function (notification) {
+                notification.read = 1;
+            });
+        },
+
+
+        /**
+         * Send a customer support request.
+         */
+        sendSupportRequest: function sendSupportRequest() {
+            var _this6 = this;
+
+            Spark.post('/support/email', this.supportForm).then(function () {
+                $('#modal-support').modal('hide');
+
+                _this6.showSupportRequestSuccessMessage();
+
+                _this6.supportForm.subject = '';
+                _this6.supportForm.message = '';
+            });
+        },
+
+
+        /**
+         * Show an alert informing the user their support request was sent.
+         */
+        showSupportRequestSuccessMessage: function showSupportRequestSuccessMessage() {
+            swal({
+                title: 'Got It!',
+                text: 'We have received your message and will respond soon!',
+                type: 'success',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    },
+
+    computed: {
+        /**
+         * Determine if the user has any unread notifications.
+         */
+        hasUnreadAnnouncements: function hasUnreadAnnouncements() {
+            var _this7 = this;
+
+            if (this.notifications && this.user) {
+                if (this.notifications.announcements.length && !this.user.last_read_announcements_at) {
+                    return true;
+                }
+
+                return _.filter(this.notifications.announcements, function (announcement) {
+                    return moment.utc(_this7.user.last_read_announcements_at).isBefore(moment.utc(announcement.created_at));
+                }).length > 0;
+            }
+
+            return false;
+        },
+
+
+        /**
+         * Determine if the user has any unread notifications.
+         */
+        hasUnreadNotifications: function hasUnreadNotifications() {
+            if (this.notifications) {
+                return _.filter(this.notifications.notifications, function (notification) {
+                    return !notification.read;
+                }).length > 0;
+            }
+
+            return false;
+        }
+    }
+};
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(190);
 
 
 /***/ })
