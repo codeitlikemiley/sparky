@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Spark\Repositories\NotificationRepository as Notification;
+use App\User;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class ComposerServiceProvider extends ServiceProvider
         $this->composeLatestNotification();
         $this->composeLogin();
         $this->composeAppColor();
+        $this->composeTenant();
+        $this->composeGuard();
         
     }
 
@@ -51,6 +54,38 @@ class ComposerServiceProvider extends ServiceProvider
     {
         view()->composer('*', function($view){
             $view->with($this->data);
+        });
+    }
+
+    private function composeTenant()
+    {
+        $tenant = request()->username;
+        view()->composer('*', function($view){
+            $view->with(compact('tenant'));
+        });
+    }
+
+    protected function getGuardsFromConfig()
+    {
+        return collect(config('auth.guards'))->keys()->toArray();
+    }
+
+    protected function getUsedGuardOrDefaultDriver()
+    {
+        $guards = $this->getGuardsFromConfig();
+        foreach ($guards as $guard) {
+            if (auth()->guard($guard)->check()) {
+                return $guard;
+            }
+        }
+        return $auth->getDefaultDriver();
+    }
+
+    private function composeGuard()
+    {
+        $guard = $this->getUsedGuardOrDefaultDriver();
+        view()->composer('*', function($view){
+            $view->with(compact('guard'));
         });
     }
  
