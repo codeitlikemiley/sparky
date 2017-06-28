@@ -46,7 +46,7 @@ require('bootstrap/dist/js/npm');
  * Load Vue & Vue-Resource.
  */
 if ($('#evolutly-app').length > 0) {
-    require('./evolutly/vue-bootstrap');
+    require('vue-bootstrap.js');
 }
 
 /**
