@@ -33,6 +33,7 @@ mix.styles([
 
 // This Has Jquery Included
 mix.js('resources/assets/js/app.js', 'public/js/app.js')
+mix.js('resources/assets/js/evolutly.js', 'public/js/evolutly.js')
 
 mix.combine([
     // required Jquery to Run this
