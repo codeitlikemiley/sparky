@@ -1,5 +1,5 @@
 /**
- * Export the root Spark application.
+ * Export the root Evolutly application.
  */
 module.exports = {
     el: '#evolutly-app',

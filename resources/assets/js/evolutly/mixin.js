@@ -1,10 +1,10 @@
 module.exports = {
     computed: {
         /**
-         * Access the global Spark object.
+         * Access the global Evolutly object.
          */
-        spark() {
-            return window.Spark;
+        evolutly() {
+            return window.Evolutly;
         }
     }
 };

@@ -1,6 +1,6 @@
 
 /*
- * Load various JavaScript modules that assist Spark.
+ * Load various JavaScript modules that assist Evolutly.
  */
 window.URI = require('urijs');
 window.axios = require('axios');
@@ -46,7 +46,9 @@ require('bootstrap/dist/js/npm');
  * Load Vue & Vue-Resource.
  */
 if ($('#evolutly-app').length > 0) {
-    require('vue-bootstrap.js');
+// relative path: 
+// resources/assets/js/evolutly
+    require('vue-evo');
 }
 
 /**
