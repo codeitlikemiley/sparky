@@ -37,9 +37,9 @@ class ForgotPasswordController extends BaseController
       return Password::broker('employees');
     }
 
-    public function showLinkRequestForm($tenant)
+    public function showLinkRequestForm()
     {
 
-        return view('modules.employee.forgotpassword',['tenant' => $tenant]);
+        return view('modules.employee.forgotpassword');
     }
 }
