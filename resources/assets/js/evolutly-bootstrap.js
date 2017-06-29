@@ -4,7 +4,7 @@
  */
 window.URI = require('urijs');
 window.axios = require('axios');
-window._ = require('underscore');
+window._ = require('lodash');
 window.moment = require('moment');
 window.Promise = require('promise');
 window.Cookies = require('js-cookie');
