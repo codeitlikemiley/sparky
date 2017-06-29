@@ -1,6 +1,6 @@
 <div class="sidebar-wrapper ">
     <ul class="sidebar subdown " id="sidebar-2">
-        @include('evolutly::.partials.sidebar.headline') 
+        @include('evolutly::.partials.sidebar.headline')
         @include('evolutly::.partials.sidebar.links')
     </ul>
     <div class="margin-bottom-60"></div>
