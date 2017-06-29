@@ -1,10 +1,11 @@
+@if($guard === 'employee')
 <li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
     <!-- First Menu Link -->
     <a href="#" class="dropdown-toggle">
 			<span class="mif-apps icon fg-steel"></span>
 			<span class="title fg-amber">Dashboard</span>
 			<span class="counter">Manage App</span>
-	</a>
+	    </a>
     <!-- First Menu Sub Links -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
         <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
@@ -14,51 +15,92 @@
                 <span class="counter">Manage Projects</span>
 			</a>
         </li>
-        <li class="{{ (Request::segment(3)=='campaigns'?'active':'') }}">
+    </ul>
+</li>
+<!-- Third Menu Link -->
+<li class="{{  (in_array(Request::segment(1),['users','groups'])?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+            <span class="mif-profile icon fg-lime"></span>
+            <span class="title fg-amber">Account Settings</span>
+            <span class="counter">Manage Account</span>
+        </a>
+    <!-- Third Menu SubLink -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(1),['users','groups'])?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
+            <a href="{{ url('/settings#/profile') }}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Profile</span>
+                    <span class="counter">Manage Profile</span>
+                </a>
+        </li>
+    </ul>
+</li>
+<!-- Sixth Menu Link -->
+<li class="{{ (Request::segment(2)=='gallery'?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+            <span class="mif-images icon fg-lightOrange"></span>
+            <span class="title fg-amber">Uploads</span>
+            <span class="counter">Manage Uploads</span>
+        </a>
+    <!-- Sixth Menu SubLink -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='gallery'?'display:block':'') }}">
+        <li class="{{ (Request::segment(3)=='gallery2'?'active':'') }}">
+            <a href="{{ url('admin/gallery/gallery2')}}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">File Management</span>
+                    <span class="counter">Manage Files</span>
+                </a>
+        </li>
+        <li class="{{ (Request::segment(3)=='gallery4'?'active':'') }}">
+            <a href="{{url('admin/gallery/dropzone')}}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Upload Files</span>
+                    <span class="counter">Drag n Drop file upload</span>
+                </a>
+        </li>
+    </ul>
+</li>
+@elseif($guard === 'client')
+<li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
+    <!-- First Menu Link -->
+    <a href="#" class="dropdown-toggle">
+			<span class="mif-apps icon fg-steel"></span>
+			<span class="title fg-amber">Dashboard</span>
+			<span class="counter">Manage App</span>
+	    </a>
+    <!-- First Menu Sub Links -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
+        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
             <a href="{{ url('#') }}">
                 <span class="mif-chevron-right icon"></span>
-                <span class="title">Campaign</span>
-                <span class="counter">Manage Campaigns</span>
+                <span class="title">Projects</span>
+                <span class="counter">View Projects</span>
 			</a>
         </li>
-        <li class="{{ (Request::segment(3)=='tasks'?'active':'') }}">
+        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
             <a href="{{ url('#') }}">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Task</span>
-                <span class="counter">Manage Tasks</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(3)=='subtasks'?'active':'') }}">
-            <a href="{{ url('#') }}">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">SubTask</span>
-                <span class="counter">Manage SubTasks</span>
+                <span class="counter">View Tasks</span>
 			</a>
         </li>
     </ul>
-
 </li>
-<!-- Second Menu Link -->
-<li class="{{ (Request::segment(2)=='powerbuilder'?'active-container':'') }}">
+@else
+<li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
+    <!-- First Menu Link -->
     <a href="#" class="dropdown-toggle">
-        <span class="fa fa-bolt icon fg-red"></span>
-        <span class="title fg-amber">Power Builder</span>
-        <span class="counter">Visual UI Builder</span>
-	</a>
-    <!-- Second Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='powerbuilder'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='layout'?'active':'') }}">
-            <a href="{{ url('admin/powerbuilder/layout')}}" class="">
+			<span class="mif-apps icon fg-steel"></span>
+			<span class="title fg-amber">Dashboard</span>
+			<span class="counter">Manage App</span>
+	    </a>
+    <!-- First Menu Sub Links -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
+        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
+            <a href="{{ url('#') }}">
                 <span class="mif-chevron-right icon"></span>
-                <span class="title">Layout Builder</span>
-                <span class="counter">visual layout builder</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(3)==" form "?'active':'') }}">
-            <a href="{{ url('admin/powerbuilder/form')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Form Builder</span>
-                <span class="counter">visual form builder</span>
+                <span class="title">Project</span>
+                <span class="counter">Manage Projects</span>
 			</a>
         </li>
     </ul>
@@ -66,124 +108,73 @@
 <!-- Third Menu Link -->
 <li class="{{  (in_array(Request::segment(1),['users','groups'])?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
-        <span class="mif-profile icon fg-lime"></span>
-        <span class="title fg-amber">Account Settings</span>
-        <span class="counter">Manage Account</span>
-	</a>
+            <span class="mif-profile icon fg-lime"></span>
+            <span class="title fg-amber">Account Settings</span>
+            <span class="counter">Manage Account</span>
+        </a>
     <!-- Third Menu SubLink -->
     <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(1),['users','groups'])?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
             <a href="{{ url('/settings#/profile') }}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Profile</span>
-                <span class="counter">Manage Profile</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(2)=='teams'?'active':'') }}">
-            <a href="{{ url('/settings#/teams') }}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Team</span>
-                <span class="counter">Manage Team</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(2)=='security'?'active':'') }}">
-            <a href="{{ url('/settings#/security') }}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Security</span>
-                <span class="counter">Manage Security</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(2)=='api'?'active':'') }}">
-            <a href="{{ url('/settings#/api') }}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Api</span>
-                <span class="counter">Manage Api</span>
-			</a>
-        </li>
-    </ul>
-</li>
-<!-- Fourth Menu Link -->
-<li class="{{ (Request::segment(2)=='teams'?'active-container':'') }}">
-    <a href="#" class="dropdown-toggle">
-        <span class="mif-credit-card icon fg-yellow"></span>
-        <span class="title fg-amber">Team Billing</span>
-        <span class="counter">Manage Billing</span>
-	</a>
-    <!-- Fourth Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='form'?'display:block':'') }}">
-        <li class="{{ (Request::segment(4)=='subscriptions'?'active':'') }}">
-            <a href="{{ url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Subscription</span>
-                <span class="counter">Manage Subscription</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(4)=='payment-method'?'active':'') }}">
-            <a href="{{ url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Payment Method</span>
-                <span class="counter">Manage Payment Method</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(4)=='invoices'?'active':'') }}">
-            <a href="{{ url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Invoices</span>
-                <span class="counter">Manage Invoice</span>
-			</a>
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Profile</span>
+                    <span class="counter">Manage Profile</span>
+                </a>
         </li>
     </ul>
 </li>
 <!-- Fifth Menu Link -->
 <li class="{{ (Request::segment(2)=='uicomponent'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
-        <span class="mif-users icon fg-olive"></span>
-        <span class="title fg-amber">User Management</span>
-        <span class="counter">Manage Users</span>
-	</a>
+            <span class="mif-users icon fg-olive"></span>
+            <span class="title fg-amber">User Management</span>
+            <span class="counter">Manage Users</span>
+        </a>
     <!-- Fifth Menu SubLink -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='uicomponent'?'display:block':'') }}">
         <li class="{{ (Request::segment(3)=='workers'?'active':'') }}">
             <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Worker</span>
-                <span class="counter">Manage Worker</span>
-			</a>
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Worker</span>
+                    <span class="counter">Manage Worker</span>
+                </a>
         </li>
         <li class="{{ (Request::segment(3)=='clients'?'active':'') }}">
             <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Client</span>
-                <span class="counter">Manage Client</span>
-			</a>
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Client</span>
+                    <span class="counter">Manage Client</span>
+                </a>
         </li>
     </ul>
 </li>
 <!-- Sixth Menu Link -->
 <li class="{{ (Request::segment(2)=='gallery'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
-        <span class="mif-images icon fg-lightOrange"></span>
-        <span class="title fg-amber">Gallery</span>
-        <span class="counter">Manage Uploads</span>
-	</a>
+            <span class="mif-images icon fg-lightOrange"></span>
+            <span class="title fg-amber">Uploads</span>
+            <span class="counter">Manage Uploads</span>
+        </a>
     <!-- Sixth Menu SubLink -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='gallery'?'display:block':'') }}">
         <li class="{{ (Request::segment(3)=='gallery2'?'active':'') }}">
             <a href="{{ url('admin/gallery/gallery2')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">File Management</span>
-                <span class="counter">Manage Files</span>
-			</a>
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">File Management</span>
+                    <span class="counter">Manage Files</span>
+                </a>
         </li>
         <li class="{{ (Request::segment(3)=='gallery4'?'active':'') }}">
             <a href="{{url('admin/gallery/dropzone')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Upload Files</span>
-                <span class="counter">Drag n Drop file upload</span>
-			</a>
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Upload Files</span>
+                    <span class="counter">Drag n Drop file upload</span>
+                </a>
         </li>
     </ul>
 </li>
+@endif
+
 <!-- Seventh Menu Link -->
 <li class="{{ (Request::segment(2)=='chart'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
