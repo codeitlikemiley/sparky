@@ -13,9 +13,9 @@ class LoginController extends BaseController
       $this->middleware('guest:client', ['except' => ['logout']]);
     }
 
-    public function showLoginForm($tenant)
+    public function showLoginForm()
     {
-      return view('modules.client.login',['tenant' => $tenant]);
+      return view('client::login');
     }
 
     public function login(Request $request)
@@ -29,7 +29,7 @@ class LoginController extends BaseController
       // Attempt to log the user in
       if (Auth::guard('client')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         // if successful, then redirect to their intended location
-        return redirect()->intended(route('client.dashboard',['tenant' => $request->username]));
+        return redirect()->intended(route('client.dashboard',['username' => $request->username->username]));
       }
 
       // if unsuccessful, then redirect back to the login with the form data
