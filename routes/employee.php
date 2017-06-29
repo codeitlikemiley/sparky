@@ -12,7 +12,7 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   // Admin Dashboard Route
   Route::get('/dashboard', 'DashboardController@index')->name('employee.dashboard');
   Route::get('/', function ($username) {
-    return $username;
+    return auth()->guard('employee')->user();
     // return redirect()->route('employee.dashboard',['username' => $username->username]);
   });
 });
