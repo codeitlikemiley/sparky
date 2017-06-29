@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Spark\Repositories\NotificationRepository as Notification;
-use App\User;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -59,40 +58,34 @@ class ComposerServiceProvider extends ServiceProvider
 
     private function composeTenant()
     {
-        $tenant = request()->username;
         view()->composer('*', function($view){
-            $view->with(compact('tenant'));
+        $view->with(['tenant' => request()->username]);
         });
     }
 
-    protected function getGuardsFromConfig()
+    private function getAuthGuard()
     {
-        return collect(config('auth.guards'))->keys()->toArray();
-    }
-
-    protected function getUsedGuardOrDefaultDriver()
-    {
-        $guards = $this->getGuardsFromConfig();
+        $guards = ['web', 'employee', 'client'];
         foreach ($guards as $guard) {
             if (auth()->guard($guard)->check()) {
                 return $guard;
             }
         }
-        return auth()->getDefaultDriver();
+        return null;
     }
 
     private function composeGuard()
     {
-        $guard = $this->getUsedGuardOrDefaultDriver();
         view()->composer('*', function($view){
-            $view->with(compact('guard'));
+        $guard = $this->getAuthGuard();
+        $view->with(['guard' => $guard]);
         });
     }
  
 
     private function composeLogin()
     {
-        view()->composer(['spark::auth.login', 'modules.employee.login', 'modules.client.login', 'modules.employee.forgotpassword', 'modules.client.forgotpassword'], function($view)
+        view()->composer(['spark::auth.login', 'employee::login', 'client::login', 'employee::forgotpassword', 'client::forgotpassword'], function($view)
         {
         $dir = scandir(base_path('public/images/lock/landscape'));
         foreach ($dir as $key => $value) {
