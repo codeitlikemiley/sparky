@@ -1,7 +1,15 @@
 Vue.component('dashboard', {
-    props: ['user'],
+    props: ['user', 'projects'],
 
     mounted() {
         //
+    },
+    computed: {
+        projectChunks() {
+            return _.chunk(this.projects, 3)
+        },
+    },
+    methods: {
+        
     }
 });
