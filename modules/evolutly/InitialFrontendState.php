@@ -16,9 +16,15 @@ class InitialFrontendState implements Contract
     public function forUser($user)
     {
         return [
-            'user' => $this->currentUser(),
+            'user' => $this->projects(),
         ];
     }
+
+    protected function projects()
+    {
+        return $this->currentUser()->with('projects.campaigns')->find($this->currentUser()->id)->toArray();
+    }
+
 
     /**
      * Get the currently authenticated user.
