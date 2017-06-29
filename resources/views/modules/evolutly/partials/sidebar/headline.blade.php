@@ -1,6 +1,6 @@
 <li class="headline">
-    <a href="#!">
+    <a>
         <span class="{{ config('app.icon') }} icon" ></span>
-        <span class="title" >{{ $tenant->name }}</span>
+        <small>{{ $tenant->name }}</small>
 	</a>
 </li>
