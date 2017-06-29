@@ -9,15 +9,19 @@ use Modules\Evolutly\Console\Commands\VersionCommand;
 class EvolutlyServiceProvider extends ServiceProvider
 {
 
-    public function booted()
-    {
-        $this->loadViewsFrom(__DIR__.'/resources/views/modules/employee', 'employee');
-        $this->loadViewsFrom(__DIR__.'/resources/views/modules/client', 'client');
-        $this->loadViewsFrom(__DIR__.'/resources/views/modules/evolutly', 'evolutly');
+    public function boot()
+    {   
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/employee', 'employee');
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/client', 'client');
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/evolutly', 'evolutly');
     }
 
     public function register()
     {
+        if (! defined('EVOLUTLY_PATH')) {
+            define('EVOLUTLY_PATH', realpath(__DIR__.'/../../../'));
+        }
+
          if (! class_exists('Evolutly')) {
             class_alias('Modules\Evolutly\Evolutly', 'Evolutly');
         }
