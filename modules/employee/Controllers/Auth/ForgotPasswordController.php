@@ -40,6 +40,6 @@ class ForgotPasswordController extends BaseController
     public function showLinkRequestForm()
     {
 
-        return view('modules.employee.forgotpassword');
+        return view('employee::forgotpassword');
     }
 }
