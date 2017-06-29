@@ -39,10 +39,10 @@
 
 <body onload="" class="{{ $appcolor or 'bg-steel' }}" dir="">
     @include('evolutly::partials.navbar')
-    <div class="page-container metro" id="spark-app" v-cloak>
+    <div class="page-container metro" id="evolutly-app" v-cloak>
         <div class="row flex" style="height:100%">
             <!-- Only Show Sidebar for Login User -->
-            @if(auth()->guard($guard)->check())
+            @if(auth()->user())
             <div class="cell sidebar-cell" style="height:100%;">
                 @include( 'evolutly::partials.sidebar' )
             </div>
