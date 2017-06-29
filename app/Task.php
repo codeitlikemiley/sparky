@@ -28,6 +28,8 @@ class Task extends Model
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
+    protected $appends = ['progress'];
+
     protected static $logOnlyDirty = true;
 
     public function subtasks()
@@ -54,5 +56,10 @@ class Task extends Model
             return "This model has been {$eventName}";
         }
         return "{$eventName} by: {$name}";
+    }
+    // Only Return when you Use toArray()
+    public function getProgressAttribute()
+    {
+        return self::progress($this->id);
     }
 }

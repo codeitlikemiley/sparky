@@ -19,6 +19,8 @@ class Campaign extends Model
         'done' => 'boolean'
     ];
 
+    protected $appends = ['progress'];
+
     protected $dates = ['created_at', 'updated_at'];
 
     public function tasks()
@@ -29,5 +31,10 @@ class Campaign extends Model
     public function project()
     {
         return $this->belongsTo('App\Project', 'project_id', 'id');
+    }
+    // Only Return when you Use toArray()
+    public function getProgressAttribute()
+    {
+        return self::progress($this->id);
     }
 }
