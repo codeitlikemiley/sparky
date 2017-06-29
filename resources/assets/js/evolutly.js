@@ -7,6 +7,7 @@ require('./evolutly-bootstrap');
 require('components/evo-components');
 
 var evo = new Vue({
+// Located at resources/assets/js/evolutly
     // mixins are all module.exports
     mixins: [require('evolutly-app')]
 });

@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-<home :user="user" inline-template>
+<home :user="userId" inline-template>
     <div class="container">
         <!-- Application Dashboard -->
         <div class="row">

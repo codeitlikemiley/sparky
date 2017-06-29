@@ -1,6 +1,6 @@
 @extends('evolutly::layouts.app') 
 @section('content')
-<dashboard>
+<dashboard :user="user" inline-template>
 
         <!-- Application Dashboard -->
         <div class="row">

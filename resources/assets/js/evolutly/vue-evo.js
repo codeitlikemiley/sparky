@@ -14,14 +14,16 @@ if (window.Vue === undefined) {
  */
 // relative path: 
 // resources/assets/js/evolutly
-Vue.mixin(require('mixin'));
+
+// This is  a Computed Properties For Evolutly Object
+Vue.mixin(require('initial_state'));
 
 /**
  * Define the Vue filters.
  */
 // relative path: 
 // resources/assets/js/evolutly
-require('filters');
+require('vue_evo_filters');
 
 /**
  * Load the Evolutly form utilities.
