@@ -5,7 +5,6 @@ mix.webpackConfig({
         modules: [
             path.resolve(__dirname, 'vendor/laravel/spark/resources/assets/js'),
             path.resolve(__dirname, 'resources/assets/js/evolutly'),
-            path.resolve(__dirname, 'resources/assets/js/evolutly/components'),
             'node_modules',
         ],
         alias: {
