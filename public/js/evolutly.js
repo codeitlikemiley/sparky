@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 298);
+/******/ 	return __webpack_require__(__webpack_require__.s = 303);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(176)("./" + name);
+            __webpack_require__(171)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -5161,7 +5161,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(177)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(172)))
 
 /***/ }),
 /* 4 */,
@@ -18765,220 +18765,6 @@ Vue.filter('currency', function (value) {
 
 /***/ }),
 /* 152 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Initialize the Spark form extension points.
- */
-Spark.forms = {
-  register: {},
-  updateContactInformation: {},
-  updateTeamMember: {}
-};
-
-/**
- * Load the SparkForm helper class.
- */
-__webpack_require__(154);
-
-/**
- * Define the SparkFormError collection class.
- */
-__webpack_require__(153);
-
-/**
- * Add additional HTTP / form helpers to the Spark object.
- */
-$.extend(Spark, __webpack_require__(155));
-
-/***/ }),
-/* 153 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
- * Spark form error collection class.
- */
-window.SparkFormErrors = function () {
-    this.errors = {};
-
-    /**
-     * Determine if the collection has any errors.
-     */
-    this.hasErrors = function () {
-        return !_.isEmpty(this.errors);
-    };
-
-    /**
-     * Determine if the collection has errors for a given field.
-     */
-    this.has = function (field) {
-        return _.indexOf(_.keys(this.errors), field) > -1;
-    };
-
-    /**
-     * Get all of the raw errors for the collection.
-     */
-    this.all = function () {
-        return this.errors;
-    };
-
-    /**
-     * Get all of the errors for the collection in a flat array.
-     */
-    this.flatten = function () {
-        return _.flatten(_.toArray(this.errors));
-    };
-
-    /**
-     * Get the first error message for a given field.
-     */
-    this.get = function (field) {
-        if (this.has(field)) {
-            return this.errors[field][0];
-        }
-    };
-
-    /**
-     * Set the raw errors for the collection.
-     */
-    this.set = function (errors) {
-        if ((typeof errors === 'undefined' ? 'undefined' : _typeof(errors)) === 'object') {
-            this.errors = errors;
-        } else {
-            this.errors = { 'form': ['Something went wrong. Please try again or contact customer support.'] };
-        }
-    };
-
-    /**
-     * Remove errors from the collection.
-     */
-    this.forget = function (field) {
-        if (typeof field === 'undefined') {
-            this.errors = {};
-        } else {
-            Vue.delete(this.errors, field);
-        }
-    };
-};
-
-/***/ }),
-/* 154 */
-/***/ (function(module, exports) {
-
-/**
- * SparkForm helper class. Used to set common properties on all forms.
- */
-window.SparkForm = function (data) {
-    var form = this;
-
-    $.extend(this, data);
-
-    /**
-     * Create the form error helper instance.
-     */
-    this.errors = new SparkFormErrors();
-
-    this.busy = false;
-    this.successful = false;
-
-    /**
-     * Start processing the form.
-     */
-    this.startProcessing = function () {
-        form.errors.forget();
-        form.busy = true;
-        form.successful = false;
-    };
-
-    /**
-     * Finish processing the form.
-     */
-    this.finishProcessing = function () {
-        form.busy = false;
-        form.successful = true;
-    };
-
-    /**
-     * Reset the errors and other state for the form.
-     */
-    this.resetStatus = function () {
-        form.errors.forget();
-        form.busy = false;
-        form.successful = false;
-    };
-
-    /**
-     * Set the errors on the form.
-     */
-    this.setErrors = function (errors) {
-        form.busy = false;
-        form.errors.set(errors);
-    };
-};
-
-/***/ }),
-/* 155 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * Helper method for making POST HTTP requests.
-     */
-    post: function post(uri, form) {
-        return Spark.sendForm('post', uri, form);
-    },
-
-
-    /**
-     * Helper method for making PUT HTTP requests.
-     */
-    put: function put(uri, form) {
-        return Spark.sendForm('put', uri, form);
-    },
-
-
-    /**
-     * Helper method for making PATCH HTTP requests.
-     */
-    patch: function patch(uri, form) {
-        return Spark.sendForm('patch', uri, form);
-    },
-
-
-    /**
-     * Helper method for making DELETE HTTP requests.
-     */
-    delete: function _delete(uri, form) {
-        return Spark.sendForm('delete', uri, form);
-    },
-
-
-    /**
-     * Send the form to the back-end server.
-     *
-     * This function will clear old errors, update "busy" status, etc.
-     */
-    sendForm: function sendForm(method, uri, form) {
-        return new Promise(function (resolve, reject) {
-            form.startProcessing();
-
-            axios[method](uri, JSON.parse(JSON.stringify(form))).then(function (response) {
-                form.finishProcessing();
-
-                resolve(response.data);
-            }).catch(function (errors) {
-                form.setErrors(errors.response.data);
-
-                reject(errors.response.data);
-            });
-        });
-    }
-};
-
-/***/ }),
-/* 156 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -19013,58 +18799,28 @@ module.exports = {
 };
 
 /***/ }),
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Load Vue & Vue-Resource.
- *
- * Vue is the JavaScript framework used by Spark.
- */
-if (window.Vue === undefined) {
-  window.Vue = __webpack_require__(187);
-
-  window.Bus = new Vue();
-}
-
-/**
- * Load Vue Global Mixin.
- */
-Vue.mixin(__webpack_require__(156));
-
-/**
- * Define the Vue filters.
- */
-__webpack_require__(151);
-
-/**
- * Load the Spark form utilities.
- */
-__webpack_require__(152);
-
-/***/ }),
-/* 161 */
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-__webpack_require__(173)
+__webpack_require__(168)
+__webpack_require__(158)
+__webpack_require__(159)
+__webpack_require__(160)
+__webpack_require__(161)
+__webpack_require__(162)
 __webpack_require__(163)
+__webpack_require__(167)
 __webpack_require__(164)
 __webpack_require__(165)
 __webpack_require__(166)
-__webpack_require__(167)
-__webpack_require__(168)
-__webpack_require__(172)
-__webpack_require__(169)
-__webpack_require__(170)
-__webpack_require__(171)
-__webpack_require__(162)
+__webpack_require__(157)
 
 /***/ }),
-/* 162 */
+/* 157 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19232,7 +18988,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 163 */
+/* 158 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19332,7 +19088,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 164 */
+/* 159 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19463,7 +19219,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 165 */
+/* 160 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19706,7 +19462,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 166 */
+/* 161 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19924,7 +19680,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 167 */
+/* 162 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20095,7 +19851,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 168 */
+/* 163 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20440,7 +20196,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 169 */
+/* 164 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20554,7 +20310,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 170 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20732,7 +20488,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 171 */
+/* 166 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20893,7 +20649,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 172 */
+/* 167 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21419,7 +21175,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 173 */
+/* 168 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21484,7 +21240,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 174 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31305,7 +31061,7 @@ return jQuery;
 
 
 /***/ }),
-/* 175 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31480,7 +31236,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 176 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -31729,10 +31485,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 176;
+webpackContext.id = 171;
 
 /***/ }),
-/* 177 */
+/* 172 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -31922,17 +31678,17 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 178 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(182)
+module.exports = __webpack_require__(177)
 
 
 /***/ }),
-/* 179 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31952,7 +31708,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 
 
 /***/ }),
-/* 180 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32066,7 +31822,7 @@ Promise.prototype['catch'] = function (onRejected) {
 
 
 /***/ }),
-/* 181 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32089,22 +31845,22 @@ Promise.prototype['finally'] = function (f) {
 
 
 /***/ }),
-/* 182 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = __webpack_require__(2);
+__webpack_require__(174);
+__webpack_require__(176);
+__webpack_require__(175);
+__webpack_require__(178);
 __webpack_require__(179);
-__webpack_require__(181);
-__webpack_require__(180);
-__webpack_require__(183);
-__webpack_require__(184);
 
 
 /***/ }),
-/* 183 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32241,7 +31997,7 @@ Promise.prototype.nodeify = function (callback, ctx) {
 
 
 /***/ }),
-/* 184 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32310,7 +32066,7 @@ Promise.disableSynchronous = function() {
 
 
 /***/ }),
-/* 185 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -33865,7 +33621,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 
 
 /***/ }),
-/* 186 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36128,7 +35884,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 187 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -45820,39 +45576,41 @@ return Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Interceptors , Depedencies ,
-__webpack_require__(194);
+// Same Level file
+__webpack_require__(189);
 
 // All Our Global Components
-__webpack_require__(195);
+// Located at resources/assets/js/evolutly
+__webpack_require__(191);
 
 var evo = new Vue({
     // mixins are all module.exports
-    mixins: [__webpack_require__(197)]
+    mixins: [__webpack_require__(192)]
 });
 
 /***/ }),
-/* 192 */,
-/* 193 */,
-/* 194 */
+/* 187 */,
+/* 188 */,
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /*
- * Load various JavaScript modules that assist Spark.
+ * Load various JavaScript modules that assist Evolutly.
  */
-window.URI = __webpack_require__(186);
+window.URI = __webpack_require__(181);
 window.axios = __webpack_require__(133);
-window._ = __webpack_require__(185);
+window._ = __webpack_require__(180);
 window.moment = __webpack_require__(0);
-window.Promise = __webpack_require__(178);
-window.Cookies = __webpack_require__(175);
+window.Promise = __webpack_require__(173);
+window.Cookies = __webpack_require__(170);
 
 /*
  * Define Moment locales
@@ -45881,17 +45639,19 @@ window.moment.locale('en');
  * Load jQuery and Bootstrap jQuery, used for front-end interaction.
  */
 if (window.$ === undefined || window.jQuery === undefined) {
-    window.$ = window.jQuery = __webpack_require__(174);
+    window.$ = window.jQuery = __webpack_require__(169);
 }
 // Remove Since We Have it On Metro Ui JS
-__webpack_require__(161);
+__webpack_require__(156);
 
 /**
  * Load Vue if this application is using Vue as its framework.
  * Load Vue & Vue-Resource.
  */
 if ($('#evolutly-app').length > 0) {
-    __webpack_require__(160);
+    // relative path: 
+    // resources/assets/js/evolutly
+    __webpack_require__(197);
 }
 
 /**
@@ -45929,13 +45689,7 @@ window.axios.interceptors.response.use(function (response) {
 });
 
 /***/ }),
-/* 195 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(196);
-
-/***/ }),
-/* 196 */
+/* 190 */
 /***/ (function(module, exports) {
 
 Vue.component('dashboard', {
@@ -45947,11 +45701,17 @@ Vue.component('dashboard', {
 });
 
 /***/ }),
-/* 197 */
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(190);
+
+/***/ }),
+/* 192 */
 /***/ (function(module, exports) {
 
 /**
- * Export the root Spark application.
+ * Export the root Evolutly application.
  */
 module.exports = {
     el: '#evolutly-app',
@@ -46057,6 +45817,264 @@ module.exports = {
 };
 
 /***/ }),
+/* 193 */
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/**
+ * Evolutly form error collection class.
+ */
+window.EvolutlyFormErrors = function () {
+    this.errors = {};
+
+    /**
+     * Determine if the collection has any errors.
+     */
+    this.hasErrors = function () {
+        return !_.isEmpty(this.errors);
+    };
+
+    /**
+     * Determine if the collection has errors for a given field.
+     */
+    this.has = function (field) {
+        return _.indexOf(_.keys(this.errors), field) > -1;
+    };
+
+    /**
+     * Get all of the raw errors for the collection.
+     */
+    this.all = function () {
+        return this.errors;
+    };
+
+    /**
+     * Get all of the errors for the collection in a flat array.
+     */
+    this.flatten = function () {
+        return _.flatten(_.toArray(this.errors));
+    };
+
+    /**
+     * Get the first error message for a given field.
+     */
+    this.get = function (field) {
+        if (this.has(field)) {
+            return this.errors[field][0];
+        }
+    };
+
+    /**
+     * Set the raw errors for the collection.
+     */
+    this.set = function (errors) {
+        if ((typeof errors === 'undefined' ? 'undefined' : _typeof(errors)) === 'object') {
+            this.errors = errors;
+        } else {
+            this.errors = { 'form': ['Something went wrong. Please try again or contact customer support.'] };
+        }
+    };
+
+    /**
+     * Remove errors from the collection.
+     */
+    this.forget = function (field) {
+        if (typeof field === 'undefined') {
+            this.errors = {};
+        } else {
+            Vue.delete(this.errors, field);
+        }
+    };
+};
+
+/***/ }),
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Initialize the Evolutly form extension points.
+ */
+Evolutly.forms = {
+  updateProfile: {},
+  updateProjects: {},
+  updateCampaigns: {},
+  updateTasks: {},
+  updateSubtasks: {}
+};
+
+/**
+ * Load the Evolutly form helper class.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+__webpack_require__(195);
+
+/**
+ * Define the Evolutly form Error collection class.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+__webpack_require__(193);
+
+/**
+ * Add additional HTTP / form helpers to the Evolutly object.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+$.extend(Evolutly, __webpack_require__(196));
+
+/***/ }),
+/* 195 */
+/***/ (function(module, exports) {
+
+/**
+ * EvolutlyForm helper class. Used to set common properties on all forms.
+ */
+window.EvolutlyForm = function (data) {
+    var form = this;
+
+    $.extend(this, data);
+
+    /**
+     * Create the form error helper instance.
+     */
+    this.errors = new EvolutlyFormErrors();
+
+    this.busy = false;
+    this.successful = false;
+
+    /**
+     * Start processing the form.
+     */
+    this.startProcessing = function () {
+        form.errors.forget();
+        form.busy = true;
+        form.successful = false;
+    };
+
+    /**
+     * Finish processing the form.
+     */
+    this.finishProcessing = function () {
+        form.busy = false;
+        form.successful = true;
+    };
+
+    /**
+     * Reset the errors and other state for the form.
+     */
+    this.resetStatus = function () {
+        form.errors.forget();
+        form.busy = false;
+        form.successful = false;
+    };
+
+    /**
+     * Set the errors on the form.
+     */
+    this.setErrors = function (errors) {
+        form.busy = false;
+        form.errors.set(errors);
+    };
+};
+
+/***/ }),
+/* 196 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * Helper method for making POST HTTP requests.
+     */
+    post: function post(uri, form) {
+        return Evolutly.sendForm('post', uri, form);
+    },
+
+
+    /**
+     * Helper method for making PUT HTTP requests.
+     */
+    put: function put(uri, form) {
+        return Evolutly.sendForm('put', uri, form);
+    },
+
+
+    /**
+     * Helper method for making PATCH HTTP requests.
+     */
+    patch: function patch(uri, form) {
+        return Evolutly.sendForm('patch', uri, form);
+    },
+
+
+    /**
+     * Helper method for making DELETE HTTP requests.
+     */
+    delete: function _delete(uri, form) {
+        return Evolutly.sendForm('delete', uri, form);
+    },
+
+
+    /**
+     * Send the form to the back-end server.
+     *
+     * This function will clear old errors, update "busy" status, etc.
+     */
+    sendForm: function sendForm(method, uri, form) {
+        return new Promise(function (resolve, reject) {
+            form.startProcessing();
+
+            axios[method](uri, JSON.parse(JSON.stringify(form))).then(function (response) {
+                form.finishProcessing();
+
+                resolve(response.data);
+            }).catch(function (errors) {
+                form.setErrors(errors.response.data);
+
+                reject(errors.response.data);
+            });
+        });
+    }
+};
+
+/***/ }),
+/* 197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Load Vue & Vue-Resource.
+ *
+ * Vue is the JavaScript framework used by Evolutly.
+ */
+if (window.Vue === undefined) {
+  window.Vue = __webpack_require__(182);
+
+  window.Bus = new Vue();
+}
+
+/**
+ * Load Vue Global Mixin.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+Vue.mixin(__webpack_require__(152));
+
+/**
+ * Define the Vue filters.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+__webpack_require__(151);
+
+/**
+ * Load the Evolutly form utilities.
+ */
+// relative path: 
+// resources/assets/js/evolutly
+__webpack_require__(194);
+
+/***/ }),
 /* 198 */,
 /* 199 */,
 /* 200 */,
@@ -46157,10 +46175,15 @@ module.exports = {
 /* 295 */,
 /* 296 */,
 /* 297 */,
-/* 298 */
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(191);
+module.exports = __webpack_require__(186);
 
 
 /***/ })

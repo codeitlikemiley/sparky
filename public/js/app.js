@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 297);
+/******/ 	return __webpack_require__(__webpack_require__.s = 302);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(176)("./" + name);
+            __webpack_require__(171)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -5161,7 +5161,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(177)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(172)))
 
 /***/ }),
 /* 4 */
@@ -19080,220 +19080,6 @@ Vue.filter('currency', function (value) {
 
 /***/ }),
 /* 152 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Initialize the Spark form extension points.
- */
-Spark.forms = {
-  register: {},
-  updateContactInformation: {},
-  updateTeamMember: {}
-};
-
-/**
- * Load the SparkForm helper class.
- */
-__webpack_require__(154);
-
-/**
- * Define the SparkFormError collection class.
- */
-__webpack_require__(153);
-
-/**
- * Add additional HTTP / form helpers to the Spark object.
- */
-$.extend(Spark, __webpack_require__(155));
-
-/***/ }),
-/* 153 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
- * Spark form error collection class.
- */
-window.SparkFormErrors = function () {
-    this.errors = {};
-
-    /**
-     * Determine if the collection has any errors.
-     */
-    this.hasErrors = function () {
-        return !_.isEmpty(this.errors);
-    };
-
-    /**
-     * Determine if the collection has errors for a given field.
-     */
-    this.has = function (field) {
-        return _.indexOf(_.keys(this.errors), field) > -1;
-    };
-
-    /**
-     * Get all of the raw errors for the collection.
-     */
-    this.all = function () {
-        return this.errors;
-    };
-
-    /**
-     * Get all of the errors for the collection in a flat array.
-     */
-    this.flatten = function () {
-        return _.flatten(_.toArray(this.errors));
-    };
-
-    /**
-     * Get the first error message for a given field.
-     */
-    this.get = function (field) {
-        if (this.has(field)) {
-            return this.errors[field][0];
-        }
-    };
-
-    /**
-     * Set the raw errors for the collection.
-     */
-    this.set = function (errors) {
-        if ((typeof errors === 'undefined' ? 'undefined' : _typeof(errors)) === 'object') {
-            this.errors = errors;
-        } else {
-            this.errors = { 'form': ['Something went wrong. Please try again or contact customer support.'] };
-        }
-    };
-
-    /**
-     * Remove errors from the collection.
-     */
-    this.forget = function (field) {
-        if (typeof field === 'undefined') {
-            this.errors = {};
-        } else {
-            Vue.delete(this.errors, field);
-        }
-    };
-};
-
-/***/ }),
-/* 154 */
-/***/ (function(module, exports) {
-
-/**
- * SparkForm helper class. Used to set common properties on all forms.
- */
-window.SparkForm = function (data) {
-    var form = this;
-
-    $.extend(this, data);
-
-    /**
-     * Create the form error helper instance.
-     */
-    this.errors = new SparkFormErrors();
-
-    this.busy = false;
-    this.successful = false;
-
-    /**
-     * Start processing the form.
-     */
-    this.startProcessing = function () {
-        form.errors.forget();
-        form.busy = true;
-        form.successful = false;
-    };
-
-    /**
-     * Finish processing the form.
-     */
-    this.finishProcessing = function () {
-        form.busy = false;
-        form.successful = true;
-    };
-
-    /**
-     * Reset the errors and other state for the form.
-     */
-    this.resetStatus = function () {
-        form.errors.forget();
-        form.busy = false;
-        form.successful = false;
-    };
-
-    /**
-     * Set the errors on the form.
-     */
-    this.setErrors = function (errors) {
-        form.busy = false;
-        form.errors.set(errors);
-    };
-};
-
-/***/ }),
-/* 155 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    /**
-     * Helper method for making POST HTTP requests.
-     */
-    post: function post(uri, form) {
-        return Spark.sendForm('post', uri, form);
-    },
-
-
-    /**
-     * Helper method for making PUT HTTP requests.
-     */
-    put: function put(uri, form) {
-        return Spark.sendForm('put', uri, form);
-    },
-
-
-    /**
-     * Helper method for making PATCH HTTP requests.
-     */
-    patch: function patch(uri, form) {
-        return Spark.sendForm('patch', uri, form);
-    },
-
-
-    /**
-     * Helper method for making DELETE HTTP requests.
-     */
-    delete: function _delete(uri, form) {
-        return Spark.sendForm('delete', uri, form);
-    },
-
-
-    /**
-     * Send the form to the back-end server.
-     *
-     * This function will clear old errors, update "busy" status, etc.
-     */
-    sendForm: function sendForm(method, uri, form) {
-        return new Promise(function (resolve, reject) {
-            form.startProcessing();
-
-            axios[method](uri, JSON.parse(JSON.stringify(form))).then(function (response) {
-                form.finishProcessing();
-
-                resolve(response.data);
-            }).catch(function (errors) {
-                form.setErrors(errors.response.data);
-
-                reject(errors.response.data);
-            });
-        });
-    }
-};
-
-/***/ }),
-/* 156 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -19328,7 +19114,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 157 */
+/* 153 */
 /***/ (function(module, exports) {
 
 window.braintreeCheckout = [];
@@ -19384,7 +19170,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 158 */
+/* 154 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -19486,7 +19272,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 159 */
+/* 155 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -19583,55 +19369,25 @@ module.exports = {
 };
 
 /***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Load Vue & Vue-Resource.
- *
- * Vue is the JavaScript framework used by Spark.
- */
-if (window.Vue === undefined) {
-  window.Vue = __webpack_require__(187);
-
-  window.Bus = new Vue();
-}
-
-/**
- * Load Vue Global Mixin.
- */
-Vue.mixin(__webpack_require__(156));
-
-/**
- * Define the Vue filters.
- */
-__webpack_require__(151);
-
-/**
- * Load the Spark form utilities.
- */
-__webpack_require__(152);
-
-/***/ }),
-/* 161 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-__webpack_require__(173)
+__webpack_require__(168)
+__webpack_require__(158)
+__webpack_require__(159)
+__webpack_require__(160)
+__webpack_require__(161)
+__webpack_require__(162)
 __webpack_require__(163)
+__webpack_require__(167)
 __webpack_require__(164)
 __webpack_require__(165)
 __webpack_require__(166)
-__webpack_require__(167)
-__webpack_require__(168)
-__webpack_require__(172)
-__webpack_require__(169)
-__webpack_require__(170)
-__webpack_require__(171)
-__webpack_require__(162)
+__webpack_require__(157)
 
 /***/ }),
-/* 162 */
+/* 157 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19799,7 +19555,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 163 */
+/* 158 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -19899,7 +19655,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 164 */
+/* 159 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20030,7 +19786,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 165 */
+/* 160 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20273,7 +20029,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 166 */
+/* 161 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20491,7 +20247,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 167 */
+/* 162 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -20662,7 +20418,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 168 */
+/* 163 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21007,7 +20763,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 169 */
+/* 164 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21121,7 +20877,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 170 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21299,7 +21055,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 171 */
+/* 166 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21460,7 +21216,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 172 */
+/* 167 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -21986,7 +21742,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 173 */
+/* 168 */
 /***/ (function(module, exports) {
 
 /* ========================================================================
@@ -22051,7 +21807,7 @@ __webpack_require__(162)
 
 
 /***/ }),
-/* 174 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31872,7 +31628,7 @@ return jQuery;
 
 
 /***/ }),
-/* 175 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -32047,7 +31803,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 176 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -32296,10 +32052,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 176;
+webpackContext.id = 171;
 
 /***/ }),
-/* 177 */
+/* 172 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -32489,17 +32245,17 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 178 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(182)
+module.exports = __webpack_require__(177)
 
 
 /***/ }),
-/* 179 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32519,7 +32275,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 
 
 /***/ }),
-/* 180 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32633,7 +32389,7 @@ Promise.prototype['catch'] = function (onRejected) {
 
 
 /***/ }),
-/* 181 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32656,22 +32412,22 @@ Promise.prototype['finally'] = function (f) {
 
 
 /***/ }),
-/* 182 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = __webpack_require__(2);
+__webpack_require__(174);
+__webpack_require__(176);
+__webpack_require__(175);
+__webpack_require__(178);
 __webpack_require__(179);
-__webpack_require__(181);
-__webpack_require__(180);
-__webpack_require__(183);
-__webpack_require__(184);
 
 
 /***/ }),
-/* 183 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32808,7 +32564,7 @@ Promise.prototype.nodeify = function (callback, ctx) {
 
 
 /***/ }),
-/* 184 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32877,7 +32633,7 @@ Promise.disableSynchronous = function() {
 
 
 /***/ }),
-/* 185 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -34432,7 +34188,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 
 
 /***/ }),
-/* 186 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36695,7 +36451,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 187 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -46387,7 +46143,7 @@ return Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 188 */
+/* 183 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -46534,7 +46290,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 189 */
+/* 184 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -46577,7 +46333,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 190 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -46591,17 +46347,17 @@ module.exports = {
 
 __webpack_require__(198);
 
-__webpack_require__(192);
+__webpack_require__(187);
 
 var app = new Vue({
   // You Are Actually Calling This From
   // vendor/laravel/spark/resources/assets/js/spark.js
-  mixins: [__webpack_require__(296)]
+  mixins: [__webpack_require__(300)]
 });
 
 /***/ }),
-/* 191 */,
-/* 192 */
+/* 186 */,
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -46617,10 +46373,10 @@ var app = new Vue({
 
 __webpack_require__(201);
 
-__webpack_require__(193);
+__webpack_require__(188);
 
 /***/ }),
-/* 193 */
+/* 188 */
 /***/ (function(module, exports) {
 
 Vue.component('home', {
@@ -46632,6 +46388,11 @@ Vue.component('home', {
 });
 
 /***/ }),
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
 /* 194 */,
 /* 195 */,
 /* 196 */,
@@ -46642,12 +46403,12 @@ Vue.component('home', {
 /*
  * Load various JavaScript modules that assist Spark.
  */
-window.URI = __webpack_require__(186);
+window.URI = __webpack_require__(181);
 window.axios = __webpack_require__(133);
-window._ = __webpack_require__(185);
+window._ = __webpack_require__(180);
 window.moment = __webpack_require__(0);
-window.Promise = __webpack_require__(178);
-window.Cookies = __webpack_require__(175);
+window.Promise = __webpack_require__(173);
+window.Cookies = __webpack_require__(170);
 
 /*
  * Define Moment locales
@@ -46676,17 +46437,17 @@ window.moment.locale('en');
  * Load jQuery and Bootstrap jQuery, used for front-end interaction.
  */
 if (window.$ === undefined || window.jQuery === undefined) {
-    window.$ = window.jQuery = __webpack_require__(174);
+    window.$ = window.jQuery = __webpack_require__(169);
 }
 // Remove Since We Have it On Metro Ui JS
-__webpack_require__(161);
+__webpack_require__(156);
 
 /**
  * Load Vue if this application is using Vue as its framework.
  * Load Vue & Vue-Resource.
  */
 if ($('#spark-app').length > 0) {
-    __webpack_require__(160);
+    __webpack_require__(301);
 }
 
 /**
@@ -46842,7 +46603,7 @@ __webpack_require__(202);
 /* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(250);
+var base = __webpack_require__(254);
 
 Vue.component('spark-kiosk-add-discount', {
     mixins: [base]
@@ -46852,7 +46613,7 @@ Vue.component('spark-kiosk-add-discount', {
 /* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(251);
+var base = __webpack_require__(255);
 
 Vue.component('spark-kiosk-announcements', {
     mixins: [base]
@@ -46862,7 +46623,7 @@ Vue.component('spark-kiosk-announcements', {
 /* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(252);
+var base = __webpack_require__(256);
 
 Vue.component('spark-kiosk', {
     mixins: [base]
@@ -46872,7 +46633,7 @@ Vue.component('spark-kiosk', {
 /* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(253);
+var base = __webpack_require__(257);
 
 Vue.component('spark-kiosk-metrics', {
     mixins: [base]
@@ -46882,7 +46643,7 @@ Vue.component('spark-kiosk-metrics', {
 /* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(254);
+var base = __webpack_require__(258);
 
 Vue.component('spark-kiosk-profile', {
     mixins: [base]
@@ -46892,7 +46653,7 @@ Vue.component('spark-kiosk-profile', {
 /* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(255);
+var base = __webpack_require__(259);
 
 Vue.component('spark-kiosk-users', {
     mixins: [base]
@@ -46902,7 +46663,7 @@ Vue.component('spark-kiosk-users', {
 /* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(256);
+var base = __webpack_require__(260);
 
 Vue.component('spark-navbar', {
     mixins: [base]
@@ -46912,7 +46673,7 @@ Vue.component('spark-navbar', {
 /* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(257);
+var base = __webpack_require__(261);
 
 Vue.component('spark-notifications', {
     mixins: [base]
@@ -46922,7 +46683,7 @@ Vue.component('spark-notifications', {
 /* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(258);
+var base = __webpack_require__(262);
 
 Vue.component('spark-api', {
     mixins: [base]
@@ -46932,7 +46693,7 @@ Vue.component('spark-api', {
 /* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(259);
+var base = __webpack_require__(263);
 
 Vue.component('spark-create-token', {
     mixins: [base]
@@ -46942,7 +46703,7 @@ Vue.component('spark-create-token', {
 /* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(260);
+var base = __webpack_require__(264);
 
 Vue.component('spark-tokens', {
     mixins: [base]
@@ -46952,7 +46713,7 @@ Vue.component('spark-tokens', {
 /* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(261);
+var base = __webpack_require__(265);
 
 Vue.component('spark-invoices', {
     mixins: [base]
@@ -46962,7 +46723,7 @@ Vue.component('spark-invoices', {
 /* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(262);
+var base = __webpack_require__(266);
 
 Vue.component('spark-invoice-list', {
     mixins: [base]
@@ -46972,7 +46733,7 @@ Vue.component('spark-invoice-list', {
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(263);
+var base = __webpack_require__(267);
 
 Vue.component('spark-update-extra-billing-information', {
     mixins: [base]
@@ -46982,7 +46743,7 @@ Vue.component('spark-update-extra-billing-information', {
 /* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(264);
+var base = __webpack_require__(268);
 
 Vue.component('spark-payment-method-braintree', {
     mixins: [base]
@@ -46992,7 +46753,7 @@ Vue.component('spark-payment-method-braintree', {
 /* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(265);
+var base = __webpack_require__(269);
 
 Vue.component('spark-payment-method-stripe', {
     mixins: [base]
@@ -47002,7 +46763,7 @@ Vue.component('spark-payment-method-stripe', {
 /* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(266);
+var base = __webpack_require__(270);
 
 Vue.component('spark-redeem-coupon', {
     mixins: [base]
@@ -47012,7 +46773,7 @@ Vue.component('spark-redeem-coupon', {
 /* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(267);
+var base = __webpack_require__(271);
 
 Vue.component('spark-update-payment-method-braintree', {
     mixins: [base]
@@ -47022,7 +46783,7 @@ Vue.component('spark-update-payment-method-braintree', {
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(268);
+var base = __webpack_require__(272);
 
 Vue.component('spark-update-payment-method-stripe', {
     mixins: [base]
@@ -47032,7 +46793,7 @@ Vue.component('spark-update-payment-method-stripe', {
 /* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(269);
+var base = __webpack_require__(273);
 
 Vue.component('spark-update-vat-id', {
     mixins: [base]
@@ -47042,7 +46803,7 @@ Vue.component('spark-update-vat-id', {
 /* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(270);
+var base = __webpack_require__(274);
 
 Vue.component('spark-profile', {
     mixins: [base]
@@ -47052,7 +46813,7 @@ Vue.component('spark-profile', {
 /* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(271);
+var base = __webpack_require__(275);
 
 Vue.component('spark-update-contact-information', {
     mixins: [base]
@@ -47062,7 +46823,7 @@ Vue.component('spark-update-contact-information', {
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(272);
+var base = __webpack_require__(276);
 
 Vue.component('spark-update-profile-photo', {
     mixins: [base]
@@ -47072,7 +46833,7 @@ Vue.component('spark-update-profile-photo', {
 /* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(273);
+var base = __webpack_require__(277);
 
 Vue.component('spark-security', {
     mixins: [base]
@@ -47082,7 +46843,7 @@ Vue.component('spark-security', {
 /* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(274);
+var base = __webpack_require__(278);
 
 Vue.component('spark-disable-two-factor-auth', {
     mixins: [base]
@@ -47092,7 +46853,7 @@ Vue.component('spark-disable-two-factor-auth', {
 /* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(275);
+var base = __webpack_require__(279);
 
 Vue.component('spark-enable-two-factor-auth', {
     mixins: [base]
@@ -47102,7 +46863,7 @@ Vue.component('spark-enable-two-factor-auth', {
 /* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(276);
+var base = __webpack_require__(280);
 
 Vue.component('spark-update-password', {
     mixins: [base]
@@ -47112,7 +46873,7 @@ Vue.component('spark-update-password', {
 /* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(277);
+var base = __webpack_require__(281);
 
 Vue.component('spark-settings', {
     mixins: [base]
@@ -47122,7 +46883,7 @@ Vue.component('spark-settings', {
 /* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(278);
+var base = __webpack_require__(282);
 
 Vue.component('spark-subscription', {
     mixins: [base]
@@ -47132,7 +46893,7 @@ Vue.component('spark-subscription', {
 /* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(279);
+var base = __webpack_require__(283);
 
 Vue.component('spark-cancel-subscription', {
     mixins: [base]
@@ -47142,7 +46903,7 @@ Vue.component('spark-cancel-subscription', {
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(280);
+var base = __webpack_require__(284);
 
 Vue.component('spark-resume-subscription', {
     mixins: [base]
@@ -47152,7 +46913,7 @@ Vue.component('spark-resume-subscription', {
 /* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(281);
+var base = __webpack_require__(285);
 
 Vue.component('spark-subscribe-braintree', {
     mixins: [base]
@@ -47162,7 +46923,7 @@ Vue.component('spark-subscribe-braintree', {
 /* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(282);
+var base = __webpack_require__(286);
 
 Vue.component('spark-subscribe-stripe', {
     mixins: [base]
@@ -47172,7 +46933,7 @@ Vue.component('spark-subscribe-stripe', {
 /* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(283);
+var base = __webpack_require__(287);
 
 Vue.component('spark-update-subscription', {
     mixins: [base]
@@ -47182,7 +46943,7 @@ Vue.component('spark-update-subscription', {
 /* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(284);
+var base = __webpack_require__(288);
 
 Vue.component('spark-teams', {
     mixins: [base]
@@ -47192,7 +46953,7 @@ Vue.component('spark-teams', {
 /* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(285);
+var base = __webpack_require__(289);
 
 Vue.component('spark-create-team', {
     mixins: [base]
@@ -47202,7 +46963,7 @@ Vue.component('spark-create-team', {
 /* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(286);
+var base = __webpack_require__(290);
 
 Vue.component('spark-current-teams', {
     mixins: [base]
@@ -47212,7 +46973,7 @@ Vue.component('spark-current-teams', {
 /* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(287);
+var base = __webpack_require__(291);
 
 Vue.component('spark-mailed-invitations', {
     mixins: [base]
@@ -47222,7 +46983,7 @@ Vue.component('spark-mailed-invitations', {
 /* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(288);
+var base = __webpack_require__(292);
 
 Vue.component('spark-pending-invitations', {
     mixins: [base]
@@ -47232,7 +46993,7 @@ Vue.component('spark-pending-invitations', {
 /* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(289);
+var base = __webpack_require__(293);
 
 Vue.component('spark-send-invitation', {
     mixins: [base]
@@ -47242,7 +47003,7 @@ Vue.component('spark-send-invitation', {
 /* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(290);
+var base = __webpack_require__(294);
 
 Vue.component('spark-team-members', {
     mixins: [base]
@@ -47252,7 +47013,7 @@ Vue.component('spark-team-members', {
 /* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(291);
+var base = __webpack_require__(295);
 
 Vue.component('spark-team-membership', {
     mixins: [base]
@@ -47262,7 +47023,7 @@ Vue.component('spark-team-membership', {
 /* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(292);
+var base = __webpack_require__(296);
 
 Vue.component('spark-team-profile', {
     mixins: [base]
@@ -47272,7 +47033,7 @@ Vue.component('spark-team-profile', {
 /* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(293);
+var base = __webpack_require__(297);
 
 Vue.component('spark-team-settings', {
     mixins: [base]
@@ -47282,7 +47043,7 @@ Vue.component('spark-team-settings', {
 /* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(294);
+var base = __webpack_require__(298);
 
 Vue.component('spark-update-team-name', {
     mixins: [base]
@@ -47292,7 +47053,7 @@ Vue.component('spark-update-team-name', {
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var base = __webpack_require__(295);
+var base = __webpack_require__(299);
 
 Vue.component('spark-update-team-photo', {
     mixins: [base]
@@ -47306,7 +47067,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(157), __webpack_require__(4), __webpack_require__(188)],
+    mixins: [__webpack_require__(153), __webpack_require__(4), __webpack_require__(183)],
 
     /**
      * The component's data.
@@ -47438,7 +47199,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(188), __webpack_require__(4), __webpack_require__(189)],
+    mixins: [__webpack_require__(183), __webpack_require__(4), __webpack_require__(184)],
 
     /**
      * The component's data.
@@ -47672,6 +47433,220 @@ module.exports = {
 /* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/**
+ * Initialize the Spark form extension points.
+ */
+Spark.forms = {
+  register: {},
+  updateContactInformation: {},
+  updateTeamMember: {}
+};
+
+/**
+ * Load the SparkForm helper class.
+ */
+__webpack_require__(252);
+
+/**
+ * Define the SparkFormError collection class.
+ */
+__webpack_require__(251);
+
+/**
+ * Add additional HTTP / form helpers to the Spark object.
+ */
+$.extend(Spark, __webpack_require__(253));
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/**
+ * Spark form error collection class.
+ */
+window.SparkFormErrors = function () {
+    this.errors = {};
+
+    /**
+     * Determine if the collection has any errors.
+     */
+    this.hasErrors = function () {
+        return !_.isEmpty(this.errors);
+    };
+
+    /**
+     * Determine if the collection has errors for a given field.
+     */
+    this.has = function (field) {
+        return _.indexOf(_.keys(this.errors), field) > -1;
+    };
+
+    /**
+     * Get all of the raw errors for the collection.
+     */
+    this.all = function () {
+        return this.errors;
+    };
+
+    /**
+     * Get all of the errors for the collection in a flat array.
+     */
+    this.flatten = function () {
+        return _.flatten(_.toArray(this.errors));
+    };
+
+    /**
+     * Get the first error message for a given field.
+     */
+    this.get = function (field) {
+        if (this.has(field)) {
+            return this.errors[field][0];
+        }
+    };
+
+    /**
+     * Set the raw errors for the collection.
+     */
+    this.set = function (errors) {
+        if ((typeof errors === 'undefined' ? 'undefined' : _typeof(errors)) === 'object') {
+            this.errors = errors;
+        } else {
+            this.errors = { 'form': ['Something went wrong. Please try again or contact customer support.'] };
+        }
+    };
+
+    /**
+     * Remove errors from the collection.
+     */
+    this.forget = function (field) {
+        if (typeof field === 'undefined') {
+            this.errors = {};
+        } else {
+            Vue.delete(this.errors, field);
+        }
+    };
+};
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports) {
+
+/**
+ * SparkForm helper class. Used to set common properties on all forms.
+ */
+window.SparkForm = function (data) {
+    var form = this;
+
+    $.extend(this, data);
+
+    /**
+     * Create the form error helper instance.
+     */
+    this.errors = new SparkFormErrors();
+
+    this.busy = false;
+    this.successful = false;
+
+    /**
+     * Start processing the form.
+     */
+    this.startProcessing = function () {
+        form.errors.forget();
+        form.busy = true;
+        form.successful = false;
+    };
+
+    /**
+     * Finish processing the form.
+     */
+    this.finishProcessing = function () {
+        form.busy = false;
+        form.successful = true;
+    };
+
+    /**
+     * Reset the errors and other state for the form.
+     */
+    this.resetStatus = function () {
+        form.errors.forget();
+        form.busy = false;
+        form.successful = false;
+    };
+
+    /**
+     * Set the errors on the form.
+     */
+    this.setErrors = function (errors) {
+        form.busy = false;
+        form.errors.set(errors);
+    };
+};
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    /**
+     * Helper method for making POST HTTP requests.
+     */
+    post: function post(uri, form) {
+        return Spark.sendForm('post', uri, form);
+    },
+
+
+    /**
+     * Helper method for making PUT HTTP requests.
+     */
+    put: function put(uri, form) {
+        return Spark.sendForm('put', uri, form);
+    },
+
+
+    /**
+     * Helper method for making PATCH HTTP requests.
+     */
+    patch: function patch(uri, form) {
+        return Spark.sendForm('patch', uri, form);
+    },
+
+
+    /**
+     * Helper method for making DELETE HTTP requests.
+     */
+    delete: function _delete(uri, form) {
+        return Spark.sendForm('delete', uri, form);
+    },
+
+
+    /**
+     * Send the form to the back-end server.
+     *
+     * This function will clear old errors, update "busy" status, etc.
+     */
+    sendForm: function sendForm(method, uri, form) {
+        return new Promise(function (resolve, reject) {
+            form.startProcessing();
+
+            axios[method](uri, JSON.parse(JSON.stringify(form))).then(function (response) {
+                form.finishProcessing();
+
+                resolve(response.data);
+            }).catch(function (errors) {
+                form.setErrors(errors.response.data);
+
+                reject(errors.response.data);
+            });
+        });
+    }
+};
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
 function kioskAddDiscountForm() {
     return {
         type: 'amount',
@@ -47682,7 +47657,7 @@ function kioskAddDiscountForm() {
 }
 
 module.exports = {
-    mixins: [__webpack_require__(158)],
+    mixins: [__webpack_require__(154)],
 
     /**
      * The component's data.
@@ -47737,7 +47712,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 251 */
+/* 255 */
 /***/ (function(module, exports) {
 
 var announcementsCreateForm = function announcementsCreateForm() {
@@ -47862,7 +47837,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 252 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -47871,7 +47846,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(159)],
+    mixins: [__webpack_require__(155)],
 
     /**
      * Prepare the component.
@@ -47898,7 +47873,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 253 */
+/* 257 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48188,7 +48163,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 254 */
+/* 258 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48340,7 +48315,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 255 */
+/* 259 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48469,7 +48444,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 256 */
+/* 260 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48494,7 +48469,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 257 */
+/* 261 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48577,7 +48552,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 258 */
+/* 262 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48640,7 +48615,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 259 */
+/* 263 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48786,7 +48761,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 260 */
+/* 264 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48895,7 +48870,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 261 */
+/* 265 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48945,7 +48920,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 262 */
+/* 266 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -48962,7 +48937,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 263 */
+/* 267 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49008,7 +48983,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 264 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49017,7 +48992,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(158)],
+    mixins: [__webpack_require__(154)],
 
     /**
      * The componetn's data.
@@ -49086,7 +49061,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 265 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49095,7 +49070,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(158)],
+    mixins: [__webpack_require__(154)],
 
     /**
      * The componetn's data.
@@ -49131,7 +49106,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 266 */
+/* 270 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49175,7 +49150,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 267 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49184,7 +49159,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(157)],
+    mixins: [__webpack_require__(153)],
 
     /**
      * The component's data.
@@ -49272,7 +49247,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 268 */
+/* 272 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49458,7 +49433,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 269 */
+/* 273 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49502,7 +49477,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 270 */
+/* 274 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49510,7 +49485,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 271 */
+/* 275 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49551,7 +49526,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 272 */
+/* 276 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49618,7 +49593,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 273 */
+/* 277 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49649,7 +49624,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 274 */
+/* 278 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49678,7 +49653,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 275 */
+/* 279 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49723,7 +49698,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 276 */
+/* 280 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49752,7 +49727,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 277 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49761,7 +49736,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(159)],
+    mixins: [__webpack_require__(155)],
 
     /**
      * The component's data.
@@ -49783,7 +49758,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 278 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49833,7 +49808,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 279 */
+/* 283 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -49882,7 +49857,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 280 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49924,7 +49899,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 281 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -49933,7 +49908,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(157), __webpack_require__(4), __webpack_require__(12)],
+    mixins: [__webpack_require__(153), __webpack_require__(4), __webpack_require__(12)],
 
     /**
      * The component's data.
@@ -50018,7 +49993,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 282 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -50027,7 +50002,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(4), __webpack_require__(12), __webpack_require__(189)],
+    mixins: [__webpack_require__(4), __webpack_require__(12), __webpack_require__(184)],
 
     /**
      * The component's data.
@@ -50223,7 +50198,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 283 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -50318,7 +50293,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 284 */
+/* 288 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50326,7 +50301,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 285 */
+/* 289 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50478,7 +50453,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 286 */
+/* 290 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50564,7 +50539,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 287 */
+/* 291 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50585,7 +50560,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 288 */
+/* 292 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50662,7 +50637,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 289 */
+/* 293 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50784,7 +50759,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 290 */
+/* 294 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50931,7 +50906,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 291 */
+/* 295 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50976,7 +50951,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 292 */
+/* 296 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -50984,7 +50959,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 293 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
@@ -50993,7 +50968,7 @@ module.exports = {
     /**
      * Load mixins for the component.
      */
-    mixins: [__webpack_require__(159)],
+    mixins: [__webpack_require__(155)],
 
     /**
      * The component's data.
@@ -51043,7 +51018,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 294 */
+/* 298 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -51083,7 +51058,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 295 */
+/* 299 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -51159,7 +51134,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 296 */
+/* 300 */
 /***/ (function(module, exports) {
 
 /**
@@ -51432,10 +51407,40 @@ module.exports = {
 };
 
 /***/ }),
-/* 297 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(190);
+/*
+ * Load Vue & Vue-Resource.
+ *
+ * Vue is the JavaScript framework used by Spark.
+ */
+if (window.Vue === undefined) {
+  window.Vue = __webpack_require__(182);
+
+  window.Bus = new Vue();
+}
+
+/**
+ * Load Vue Global Mixin.
+ */
+Vue.mixin(__webpack_require__(152));
+
+/**
+ * Define the Vue filters.
+ */
+__webpack_require__(151);
+
+/**
+ * Load the Spark form utilities.
+ */
+__webpack_require__(250);
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(185);
 
 
 /***/ })
