@@ -6,10 +6,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Client\Notifications\ResetPasswordNotification;
 use App\Traits\ModelBuilder\ClientBuilder;
+use Laravel\Spark\HasApiTokens;
 
 class Client extends Authenticatable
 {
-    use ClientBuilder, Notifiable;
+    use ClientBuilder, Notifiable, HasApiTokens;
 
     protected $table ='clients';
 
