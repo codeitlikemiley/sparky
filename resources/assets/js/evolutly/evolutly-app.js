@@ -15,7 +15,7 @@ module.exports = {
         employeeId: Evolutly.employeeId,
         clientId: Evolutly.clientId,
         user: Evolutly.state.user,
-        projects: Evolutly.state.user.projects
+        projects: Evolutly.state.projects
     },
 
 
