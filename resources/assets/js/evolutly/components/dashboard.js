@@ -10,6 +10,11 @@ Vue.component('dashboard', {
         },
     },
     methods: {
-        
+        viewProject(id){
+            window.location.replace('dashboard/projects/'+id);
+        },
+        viewProgress(id){
+            window.location.replace('dashboard/projects/'+id+'/progress');
+        }
     }
 });
