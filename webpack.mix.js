@@ -50,6 +50,6 @@ mix.combine([
 if (mix.config.inProduction) {
     mix.version()
 }
-mix.browserSync({
-    proxy: 'sparky.dev'
-});
+// mix.browserSync({
+//     proxy: 'sparky.dev'
+// });
