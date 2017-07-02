@@ -28,7 +28,7 @@
                             </div>
                             <div class="content">
                                 <div class="tile-container row cells2">
-                                    <div class="tile bg-amber fg-white cell" data-role="tile">
+                                    <div class="tile bg-amber fg-white cell" data-role="tile" @click="viewProject(project.id)">
                                         <div class="tile-content iconic cell">
                                             <span class="icon fa fa-flag"></span>
                                             <span class="tile-badge bg-lightOrange" style="margin-right: -14px; margin-bottom: 2px;">5</span>
@@ -36,7 +36,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="tile bg-teal fg-white cell element-selected" data-role="tile">
+                                    <div class="tile bg-teal fg-white cell element-selected" data-role="tile" @click="viewProgress(project.id)">
                                         <div class="tile-content iconic cell">
                                             <span class="icon fa fa-tasks"></span>
                                             <div class="tile-label">Progress</div>
@@ -44,6 +44,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
