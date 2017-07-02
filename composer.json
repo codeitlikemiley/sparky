@@ -14,7 +14,9 @@
         "laravel/framework": "5.4.*",
         "laravel/spark": "~4.0",
         "laravel/tinker": "~1.0",
-        "spatie/laravel-activitylog": "dev-multiauth"
+        "laravelcollective/html": "^5.4.0",
+        "spatie/laravel-activitylog": "dev-multiauth",
+        "spatie/laravel-medialibrary": "5.0.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -37,9 +39,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Client\\": "client/",
-            "Employee\\": "employee/",
-            "Typeform\\": "typeform/"
+            "Modules\\": "modules/"
         },
         "files": [
             "app/Http/Helpers.php"
