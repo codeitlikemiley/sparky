@@ -28,7 +28,7 @@ class Task extends Model
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
-    protected $appends = ['progress'];
+    protected $appends = ['progress', 'total'];
 
     protected static $logOnlyDirty = true;
 
@@ -61,5 +61,10 @@ class Task extends Model
     public function getProgressAttribute()
     {
         return self::progress($this->id);
+    }
+
+    public function getTotalAttribute()
+    {
+        return self::total($this->id);
     }
 }
