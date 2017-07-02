@@ -25,6 +25,7 @@ class ComposerServiceProvider extends ServiceProvider
         $this->composeAppColor();
         $this->composeTenant();
         $this->composeGuard();
+        $this->composeFormBuilder();
         
     }
 
@@ -94,6 +95,18 @@ class ComposerServiceProvider extends ServiceProvider
         }
         $lock_images = $tdir;
         $view->with(compact('lock_images'));
+        });
+    }
+
+    private function composeFormBuilder()
+    {
+        view()->composer(['form::builder'], function($view){
+        $this->data['js']['be_html'] = 'metro/plugins/beautify/beautify-html.js';
+		$this->data['js']['zencode'] = 'metro/plugins/jQuery-ZenCoding.js';
+		$this->data['js']['HTML']    = 'metro/plugins/HTML.js';
+		$this->data['js']['pb']      = 'metro/plugins/powerbuilder/form.js';
+		$this->data['js']['jqui']    = 'metro/plugins/jquery-ui.min.js';
+        $view->with($this->data);
         });
     }
 }
