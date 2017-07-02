@@ -16,6 +16,7 @@ class CreateEmployeeSubtaskTable extends Migration
         Schema::create('employee_subtask', function (Blueprint $table) {
             $table->unsignedInteger('employee_id');
             $table->unsignedInteger('subtask_id');
+            $table->unsignedInteger('project_id');
         });
     }
 
