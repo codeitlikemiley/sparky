@@ -43935,7 +43935,7 @@ __webpack_require__(186);
 // Located at resources/assets/js/evolutly
 __webpack_require__(188);
 
-var evo = new Vue({
+window.Vue = new Vue({
     // Located at resources/assets/js/evolutly
     // mixins are all module.exports
     mixins: [__webpack_require__(189)]
@@ -44049,6 +44049,14 @@ Vue.component('dashboard', {
         projectChunks: function projectChunks() {
             return _.chunk(this.projects, 3);
         }
+    },
+    methods: {
+        viewProject: function viewProject(id) {
+            window.location.replace('dashboard/projects/' + id);
+        },
+        viewProgress: function viewProgress(id) {
+            window.location.replace('dashboard/projects/' + id + '/progress');
+        }
     }
 });
 
@@ -44079,7 +44087,7 @@ module.exports = {
         employeeId: Evolutly.employeeId,
         clientId: Evolutly.clientId,
         user: Evolutly.state.user,
-        projects: Evolutly.state.user.projects
+        projects: Evolutly.state.projects
     },
 
     /**
