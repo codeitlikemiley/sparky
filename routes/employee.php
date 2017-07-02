@@ -10,10 +10,13 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
   Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('employee.password.reset');
   // Admin Dashboard Route
-  Route::get('/dashboard', 'DashboardController@index')->name('employee.dashboard');
-  Route::get('/', function ($username) {
-    return auth()->guard('employee')->user();
-    // return redirect()->route('employee.dashboard',['username' => $username->username]);
+
+  Route::group(['prefix' => '/dashboard'], function () {
+      Route::get('/', 'DashboardController@index')->name('employee.dashboard');
+      // Route::get('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
+      Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
+      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
+      
   });
 });
 
