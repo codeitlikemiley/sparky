@@ -19,6 +19,9 @@ class EvolutlyServiceProvider extends ServiceProvider
         $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/task', 'task');
         $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/subtask', 'subtask');
         $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/form', 'form');
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/activity', 'activity');
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/comment', 'comment');
+        $this->loadViewsFrom(EVOLUTLY_PATH.'/resources/views/modules/css', 'css');
     }
 
     public function register()
