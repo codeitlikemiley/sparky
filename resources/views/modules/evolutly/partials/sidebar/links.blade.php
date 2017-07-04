@@ -133,14 +133,14 @@
     <!-- Fifth Menu SubLink -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='uicomponent'?'display:block':'') }}">
         <li class="{{ (Request::segment(3)=='workers'?'active':'') }}">
-            <a href="{{url('#')}}" class="">
+            <a href="{{url('/dashboard/employees')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Worker</span>
                     <span class="counter">Manage Worker</span>
                 </a>
         </li>
         <li class="{{ (Request::segment(3)=='clients'?'active':'') }}">
-            <a href="{{url('#')}}" class="">
+            <a href="{{url('/dashboard/clients')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Client</span>
                     <span class="counter">Manage Client</span>
