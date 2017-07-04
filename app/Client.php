@@ -33,4 +33,9 @@ class Client extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function projects()
+    {
+        return $this->hasMany('App\Project');
+    }
 }
