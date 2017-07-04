@@ -10,7 +10,12 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
   Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('client.password.reset');
   // Admin Dashboard Route
-  Route::get('/dashboard', 'DashboardController@index')->name('client.dashboard');
+  Route::group(['prefix' => '/dashboard'], function () {
+      Route::get('/', 'DashboardController@index')->name('client.dashboard');
+      Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
+      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
+      Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
+  });
 });
 
 
