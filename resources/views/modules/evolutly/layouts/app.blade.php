@@ -13,7 +13,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $tenant->name }}</title>
+    <title>
+         @if(isset($tenant)) 
+         {{ $tenant->name }} 
+         @else {{ auth()->user()->name }} 
+         @endif
+    </title>
     <!-- Styles -->
     <!-- This is the Compiled CSS of Spark and Metro Ui -->
     <link href="{{ mix('css/metro.css') }}" rel="stylesheet">
