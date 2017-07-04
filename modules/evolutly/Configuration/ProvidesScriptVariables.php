@@ -21,11 +21,30 @@ trait ProvidesScriptVariables
             'apiDomain' => 'api.'.config('app.domain'),
             'domain' => config('app.domain'),
             'appUrl' => config('app.url'),
-            'userId' => Auth::id(),
-            'employeeId' => Auth::guard('employee')->id(),
-            'clientId' => Auth::guard('client')->id(),
-            'state' => Evolutly::call(InitialFrontendState::class.'@forUser', [Auth::user()]),
-
+            'userId' => self::getTenantID(),
+            'employeeId' => self::getEmployeeID(),
+            'clientId' => self::getClientID(),
+            'state' => self::getState(),
         ];
+    }
+
+    protected static function getState()
+    {
+       return Evolutly::call(InitialFrontendState::class.'@forUser', [Auth::user()]);
+    }
+
+    protected static function getClientID()
+    {
+        return Auth::guard('client')->id();
+    }
+
+    protected static function getEmployeeID()
+    {
+        return Auth::guard('employee')->id();
+    }
+
+    protected static function getTenantID()
+    {
+        return Auth::guard('web')->id();
     }
 }
