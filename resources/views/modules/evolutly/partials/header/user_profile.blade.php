@@ -23,8 +23,13 @@
         <li><a href="{{url(config('app.url'))}}"><span class="mif-home icon" ></span>Front Page</a></li>
         <li class="divider"></li>
         <li><a href="{{route('client.logout',['username' => $tenant->username])}}"><span class="mif-exit icon" ></span> Logout</a>
+        @elseif(isset(request()->username))
+        <li><a href="{{route('dashboard',['username' => $tenant->username])}}"><span class="mif-windows icon" ></span>Dashboard</a></li>
+        <li><a href="/settings#/profile"><span class="mif-user icon" ></span> Profile</a></li>
+        <li class="divider"></li>
+        <li><a href="/logout"><span class="mif-exit icon" ></span> Logout</a></li>
         @else
-        <li><a href="{{route('dashboard')}}"><span class="mif-windows icon" ></span>Dashboard</a></li>
+        <li><a href="/dashboard"><span class="mif-windows icon" ></span>Dashboard</a></li>
         <li><a href="/settings#/profile"><span class="mif-user icon" ></span> Profile</a></li>
         <li class="divider"></li>
         <li><a href="/logout"><span class="mif-exit icon" ></span> Logout</a></li>
