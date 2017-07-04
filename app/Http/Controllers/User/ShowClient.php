@@ -26,6 +26,6 @@ class ShowClient extends BaseController
     public function __invoke()
     {
         $clients = Client::with('projects')->where('tenant_id',auth()->user()->id)->get();
-        return view('tenant::employee',['clients' => $clients]);
+        return view('tenant::client',['clients' => $clients]);
     }
 }

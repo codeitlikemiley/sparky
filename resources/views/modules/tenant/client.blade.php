@@ -19,23 +19,23 @@
 <div class="tabcontrol2 page-tab" data-role="tabcontrol">
     <ul class="tabs">
         <li>
-            <a href="#employee_list" data-url="/employees/edit/">employee List</a>
+            <a href="#client_list" data-url="/clients/edit/">Client List</a>
         </li>
     </ul>
     <div class="frames bg-white">
         <div class="padding10"></div>
-        <div id="employee_list">
+        <div id="client_list">
 
             <div class="section-wrapper animated fadeInRightBig">
                 <div class="panel widget-box">
                     <div class="heading">
-                        <div class="title">Manage Employee</div>
+                        <div class="title">Manage Client</div>
                     </div>
                     <div class="content">
                         <div class="text">
-                            <form action="{{ url('employees/table') }}" id="employeeTable" method="POST" data-page="1" data-ref="{{ url(" /employees
+                            <form action="{{ url('clients/table') }}" id="clientTable" method="POST" data-page="1" data-ref="{{ url(" /clients
                                 ")}}">
-                                <button class="button small-button primary create-item">Add Employee</button>
+                                <button class="button small-button primary create-item">Add Client</button>
                                 <div class="table-responsive ">
 
                                     <table class="table border bordered striped ">
@@ -48,12 +48,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($employees as $employee)
+                                            @foreach($clients as $client)
                                             <tr>
-                                                <td>{{$employee->name}}</td>
-                                                <td class="align-left">{{$employee->email}}</td>
+                                                <td>{{$client->name}}</td>
+                                                <td class="align-left">{{$client->email}}</td>
                                                 <td class="align-left">
-                                                    @foreach($employee->projects as $project)
+                                                    @foreach($client->projects as $project)
                                                     <span class="tag info">
                                                         <span class="icon mif-tag"></span>                                                    {{ $project->name }}
                                                     </span>
