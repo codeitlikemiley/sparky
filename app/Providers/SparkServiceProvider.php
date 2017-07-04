@@ -51,7 +51,7 @@ class SparkServiceProvider extends ServiceProvider
     public function booted()
     {
         Spark::useStripe();
-
+        Spark::afterLoginRedirectTo('/dashboard');
         Spark::plan('BASIC PLAN', 'spark_test_1')
             ->price(10)
             ->trialDays(7)
