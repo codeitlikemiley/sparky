@@ -16,4 +16,11 @@ Route::get('/', 'WelcomeController@show')->name('frontend');
 Route::get('/paid', ['middleware' => 'subscribed', function () {
     // Route ONLY for Subscribed User
 }]);
-Route::get('/dashboard', 'HomeController@show')->name('dashboard');
+
+Route::group(['prefix' => '/dashboard'], function () {
+      Route::get('/', 'HomeController@show')->name('dashboard');
+      // Route::get('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
+      Route::get('/projects/{projectID}', 'Project\ShowProject')->name('tenant.projects.view');
+      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
+      Route::get('/tasks/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
+  });
