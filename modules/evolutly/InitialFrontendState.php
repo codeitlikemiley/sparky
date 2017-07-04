@@ -4,6 +4,7 @@ namespace Modules\Evolutly;
 
 use Modules\Evolutly\Contracts\InitialFrontendState as Contract;
 use Illuminate\Auth\AuthManager;
+use App\Project;
 
 class InitialFrontendState implements Contract
 {
@@ -23,7 +24,12 @@ class InitialFrontendState implements Contract
 
     protected function projects()
     {
-        // return $this->currentUser()->with('projects.campaigns')->find($this->currentUser()->id)->toArray();
+        // if your a tenant fetch all projects with tenant ID
+        if(auth()->guard('web'))
+        {
+            return Project::where('tenant_id', auth()->user()->id)->get();
+        }
+        // Else we Just Fetch All The Project The Current User Has
         return $this->currentUser()->projects()->get();
     }
 
