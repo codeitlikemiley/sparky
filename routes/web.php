@@ -10,7 +10,9 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Route::group(['domain' => '{username}.'.config('app.domain')], function () {
+      Route::get('/', 'WelcomeController@show')->name('wildcard_frontend');
+});
 Route::get('/', 'WelcomeController@show')->name('frontend');
 
 Route::get('/paid', ['middleware' => 'subscribed', function () {
