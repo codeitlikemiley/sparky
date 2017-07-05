@@ -28,7 +28,7 @@
                                     <div class="tile bg-amber fg-white cell" data-role="tile" @click="viewProject(project.id)">
                                         <div class="tile-content iconic cell">
                                             <span class="icon fa fa-flag"></span>
-                                            <span class="tile-badge bg-lightOrange" style="margin-right: -14px; margin-bottom: 2px;">5</span>
+                                            <span class="tile-badge bg-lightOrange" style="margin-right: -14px; margin-bottom: 2px;">@{{ project.campaigns_count }}</span>
                                             <span class="tile-label">Campaigns</span>
                                         </div>
                                     </div>
