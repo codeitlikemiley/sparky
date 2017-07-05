@@ -2,18 +2,19 @@
 @push('critical_css')
 @include('css::grid')
 @include('css::footer')
-@endpush @section('content')
+@endpush 
+@section('content')
 <dashboard :user="user" :projects="projects" inline-template>
     <div>
         <div class="section-wrapper page-heading ">
             <h3>Welcome @{{ user.name }}</h3>
         </div>
         <div class="section-wrapper bg-white align-center">
-            <h1>Projects</h1>
+            <h1>All Projects</h1>
         </div>
 
         <div class="section-wrapper animated fadeInRightBig">
-            <div class="grid condensed demo-grid">
+            <div class="grid condensed demo-grid margin-bottom-90">
                 <div class="row cells3" v-for="item in projectChunks">
                     <div class="cell" v-for="project in item">
                         <div class="panel error">
@@ -25,7 +26,7 @@
                                     <div class="tile bg-amber fg-white cell" data-role="tile" @click="viewProject(project.id)">
                                         <div class="tile-content iconic cell">
                                             <span class="icon fa fa-flag"></span>
-                                            <span class="tile-badge bg-lightOrange" style="margin-right: -14px; margin-bottom: 2px;">5</span>
+                                            <span class="tile-badge bg-lightOrange" style="margin-right: -14px; margin-bottom: 2px;">@{{ project.campaigns_count }}</span>
                                             <span class="tile-label">Campaigns</span>
                                         </div>
                                     </div>
