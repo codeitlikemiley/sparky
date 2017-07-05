@@ -36,6 +36,24 @@
         </li>
     </ul>
 </li>
+<!-- Security -->
+<li class="{{ (Request::segment(2)=='password'?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+            <span class="mif-lock icon fg-yellow"></span>
+            <span class="title fg-amber">Security</span>
+            <span class="counter">Secure Your Account</span>
+    </a>
+    <!-- Password Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='password'?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='password'?'active':'') }}">
+            <a href="{{ route('employee.password',['username' => $tenant->username]) }}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Password</span>
+                    <span class="counter">Change Password</span>
+            </a>
+        </li>
+    </ul>
+</li>
 <!-- File Menu -->
 <li class="{{ (Request::segment(2)=='files'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
@@ -95,6 +113,24 @@
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Profile</span>
                     <span class="counter">Manage Profile</span>
+            </a>
+        </li>
+    </ul>
+</li>
+<!-- Security -->
+<li class="{{ (Request::segment(2)=='password'?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+            <span class="mif-lock icon fg-yellow"></span>
+            <span class="title fg-amber">Security</span>
+            <span class="counter">Secure Your Account</span>
+    </a>
+    <!-- Password Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='password'?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='password'?'active':'') }}">
+            <a href="{{ route('client.password',['username' => $tenant->username]) }}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Password</span>
+                    <span class="counter">Change Password</span>
             </a>
         </li>
     </ul>
