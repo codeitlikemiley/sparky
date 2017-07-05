@@ -13,11 +13,6 @@ trait UsersMutator
             throw new \Exception("Invalid email address.");
         }
 
-        // Ensure email does not exist
-        elseif (static::whereEmail($email)->count() > 0) {
-            throw new \Exception("Email already exists.");
-        }
-
         $this->attributes['email'] = $email;
     }
     
