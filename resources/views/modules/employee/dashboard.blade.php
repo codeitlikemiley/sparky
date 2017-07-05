@@ -1,11 +1,8 @@
 @extends('evolutly::layouts.app') 
 
 @push('critical_css')
-<style>
-    .demo-grid .row > .cell {
-    background-color: #002933;
-}
-</style>
+@include('css::grid')
+@include('css::footer')
 @endpush
 
 @section('content')
