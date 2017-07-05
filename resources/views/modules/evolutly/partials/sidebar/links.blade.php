@@ -1,15 +1,16 @@
 @if($guard === 'employee')
+<!-- Dashboard Menu-->
 <li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
-    <!-- First Menu Link -->
+
     <a href="#" class="dropdown-toggle">
 			<span class="mif-apps icon fg-steel"></span>
 			<span class="title fg-amber">Dashboard</span>
 			<span class="counter">Manage App</span>
-	    </a>
-    <!-- First Menu Sub Links -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
-            <a href="{{ url('#') }}">
+	</a>
+    <!-- Projects Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='dashboard'?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='dashboard'?'active':'') }}">
+            <a href="{{ route('employee.dashboard',['username' => $tenant->username]) }}">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Project</span>
                 <span class="counter">Manage Projects</span>
@@ -17,42 +18,42 @@
         </li>
     </ul>
 </li>
-<!-- Third Menu Link -->
-<li class="{{  (in_array(Request::segment(1),['users','groups'])?'active-container':'') }}">
+<!-- Profile Menu -->
+<li class="{{ (Request::segment(2)=='profile'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
             <span class="mif-profile icon fg-lime"></span>
             <span class="title fg-amber">Account Settings</span>
             <span class="counter">Manage Account</span>
-        </a>
-    <!-- Third Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(1),['users','groups'])?'display:block':'') }}">
+    </a>
+    <!-- Profile Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='profile'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
-            <a href="{{ url('/settings#/profile') }}" class="">
+            <a href="{{ route('employee.profile',['username' => $tenant->username]) }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Profile</span>
                     <span class="counter">Manage Profile</span>
-                </a>
+            </a>
         </li>
     </ul>
 </li>
-<!-- Sixth Menu Link -->
-<li class="{{ (Request::segment(2)=='gallery'?'active-container':'') }}">
+<!-- File Menu -->
+<li class="{{ (Request::segment(2)=='files'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
-            <span class="mif-images icon fg-lightOrange"></span>
-            <span class="title fg-amber">Uploads</span>
+            <span class="mif-file-upload icon fg-lightOrange"></span>
+            <span class="title fg-amber">Files</span>
             <span class="counter">Manage Uploads</span>
         </a>
-    <!-- Sixth Menu SubLink -->
+    <!-- File Links -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='gallery'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='gallery2'?'active':'') }}">
-            <a href="{{ url('admin/gallery/gallery2')}}" class="">
+        <li class="{{ (Request::segment(2)=='files'?'active':'') }}">
+            <a href="{{ url('/employee/files')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">File Management</span>
                     <span class="counter">Manage Files</span>
                 </a>
         </li>
-        <li class="{{ (Request::segment(3)=='gallery4'?'active':'') }}">
-            <a href="{{url('admin/gallery/dropzone')}}" class="">
+        <li class="{{ (Request::segment(3)=='upload'?'active':'') }}">
+            <a href="{{url('/employee/files/upload')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Upload Files</span>
                     <span class="counter">Drag n Drop file upload</span>
@@ -61,43 +62,18 @@
     </ul>
 </li>
 @elseif($guard === 'client')
+<!-- Dashboard Menu -->
 <li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
-    <!-- First Menu Link -->
+
     <a href="#" class="dropdown-toggle">
 			<span class="mif-apps icon fg-steel"></span>
 			<span class="title fg-amber">Dashboard</span>
 			<span class="counter">Manage App</span>
-	    </a>
-    <!-- First Menu Sub Links -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
-            <a href="{{ url('#') }}">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Projects</span>
-                <span class="counter">View Projects</span>
-			</a>
-        </li>
-        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
-            <a href="{{ url('#') }}">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Task</span>
-                <span class="counter">View Tasks</span>
-			</a>
-        </li>
-    </ul>
-</li>
-@else
-<li class="{{ (Request::segment(2)=='dashboard'?'active-container':'') }}">
-    <!-- First Menu Link -->
-    <a href="#" class="dropdown-toggle">
-			<span class="mif-apps icon fg-steel"></span>
-			<span class="title fg-amber">Dashboard</span>
-			<span class="counter">Manage App</span>
-	    </a>
-    <!-- First Menu Sub Links -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='projects'?'active':'') }}">
-            <a href="{{ url('#') }}">
+	</a>
+    <!-- Projects Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='dashboard'?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='dashboard'?'active':'') }}">
+            <a href="{{ route('client.dashboard',['username' => $tenant->username]) }}">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Project</span>
                 <span class="counter">Manage Projects</span>
@@ -105,16 +81,53 @@
         </li>
     </ul>
 </li>
-<!-- Third Menu Link -->
-<li class="{{  (in_array(Request::segment(1),['users','groups'])?'active-container':'') }}">
+<!-- Profile Menu -->
+<li class="{{ (Request::segment(2)=='profile'?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+            <span class="mif-profile icon fg-lime"></span>
+            <span class="title fg-amber">Account Settings</span>
+            <span class="counter">Manage Account</span>
+    </a>
+    <!-- Profile Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='profile'?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
+            <a href="{{ route('client.profile',['username' => $tenant->username]) }}" class="">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Profile</span>
+                    <span class="counter">Manage Profile</span>
+            </a>
+        </li>
+    </ul>
+</li>
+@else
+<!-- Dashboard Menu -->
+<li class="{{ (Request::segment(1)=='dashboard'?'active-container':'') }}">
+    <a href="#" class="dropdown-toggle">
+			<span class="mif-apps icon fg-steel"></span>
+			<span class="title fg-amber">Dashboard</span>
+			<span class="counter">Manage App</span>
+	    </a>
+    <!-- Projects Link -->
+    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
+        <li class="{{ (Request::segment(1)=='dashboard'?'active':'') }}">
+            <a href="/dashboard">
+                <span class="mif-chevron-right icon"></span>
+                <span class="title">Project</span>
+                <span class="counter">Manage Projects</span>
+			</a>
+        </li>
+    </ul>
+</li>
+<!-- Profile Menu -->
+<li class="">
     <a href="#" class="dropdown-toggle">
             <span class="mif-profile icon fg-lime"></span>
             <span class="title fg-amber">Account Settings</span>
             <span class="counter">Manage Account</span>
         </a>
-    <!-- Third Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(1),['users','groups'])?'display:block':'') }}">
-        <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
+    <!-- Profile Link -->
+    <ul class="d-menu" data-role="dropdown" style="">
+        <li class="">
             <a href="{{ url('/settings#/profile') }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Profile</span>
@@ -123,24 +136,26 @@
         </li>
     </ul>
 </li>
-<!-- Fifth Menu Link -->
-<li class="{{ (Request::segment(2)=='uicomponent'?'active-container':'') }}">
+<!-- Users Menu Link -->
+<li class="{{ (Request::segment(1)=='users'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
             <span class="mif-users icon fg-olive"></span>
             <span class="title fg-amber">User Management</span>
             <span class="counter">Manage Users</span>
         </a>
-    <!-- Fifth Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='uicomponent'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='workers'?'active':'') }}">
-            <a href="{{url('/dashboard/employees')}}" class="">
+    
+    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['employee','client'])?'display:block':'') }}">
+        <!-- Employee -->
+        <li class="{{ (Request::segment(2)=='employee'?'active':'') }}">
+            <a href="{{url('/users/employee')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Worker</span>
                     <span class="counter">Manage Worker</span>
                 </a>
         </li>
-        <li class="{{ (Request::segment(3)=='clients'?'active':'') }}">
-            <a href="{{url('/dashboard/clients')}}" class="">
+        <!-- Client -->
+        <li class="{{ (Request::segment(2)=='client'?'active':'') }}">
+            <a href="{{url('/users/client')}}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Client</span>
                     <span class="counter">Manage Client</span>
@@ -148,24 +163,24 @@
         </li>
     </ul>
 </li>
-<!-- Sixth Menu Link -->
-<li class="{{ (Request::segment(2)=='gallery'?'active-container':'') }}">
+<!-- File Menu -->
+<li class="{{ (Request::segment(1)=='files'?'active-container':'') }}">
     <a href="#" class="dropdown-toggle">
             <span class="mif-images icon fg-lightOrange"></span>
             <span class="title fg-amber">Uploads</span>
             <span class="counter">Manage Uploads</span>
         </a>
     <!-- Sixth Menu SubLink -->
-    <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='gallery'?'display:block':'') }}">
-        <li class="{{ (Request::segment(3)=='gallery2'?'active':'') }}">
-            <a href="{{ url('admin/gallery/gallery2')}}" class="">
+    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['/','upload'])?'display:block':'') }}">
+        <li class="{{ (Request::segment(2)=='/'?'active':'') }}">
+            <a href="/files" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">File Management</span>
                     <span class="counter">Manage Files</span>
                 </a>
         </li>
-        <li class="{{ (Request::segment(3)=='gallery4'?'active':'') }}">
-            <a href="{{url('admin/gallery/dropzone')}}" class="">
+        <li class="{{ (Request::segment(2)=='upload'?'active':'') }}">
+            <a href="/files/upload" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Upload Files</span>
                     <span class="counter">Drag n Drop file upload</span>
