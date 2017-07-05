@@ -23,9 +23,22 @@ class Project extends Model
 
     protected $slugKeyName = 'slug';
 
+    protected $appends = ['campaigns_count'];
+
     public function campaigns()
     {
         return $this->hasMany('App\Campaign', 'project_id', 'id');
+    }
+
+    public function campaignsCount()
+    {
+        return $this->hasMany('App\Campaign', 'project_id', 'id')->count();
+    }
+
+    // Only Return when you Use toArray()
+    public function getCampaignsCountAttribute()
+    {
+        return self::campaignscount();
     }
 
 }
