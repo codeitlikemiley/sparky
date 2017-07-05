@@ -1,5 +1,8 @@
 <?php
 Route::group(['domain' => '{username}.'.config('app.domain')], function () {
+  Route::get('/profile', 'Profile')->name('client.profile');
+  Route::put('/profile', 'UpdateProfile')->name('client.profile.update');
+  Route::put('/profile/upload', 'UploadAvatar')->name('client.profile.upload');
   // Authentication Routes
   Route::get('/login', 'Auth\LoginController@showLoginForm')->name('client.login');
   Route::post('/login', 'Auth\LoginController@login')->name('client.login.submit');
