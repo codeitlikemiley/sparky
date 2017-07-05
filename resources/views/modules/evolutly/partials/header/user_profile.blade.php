@@ -15,12 +15,12 @@
     <ul class="d-menu context place-right" data-role="dropdown">
         @if($guard ==='employee')
         <li><a href="{{route('employee.dashboard',['username' => $tenant->username])}}"><span class="mif-windows icon" ></span>Dashboard</a></li>
-        <li><a href="{{url(config('app.url'))}}"><span class="mif-home icon" ></span>Front Page</a></li>
+        <li><a href="{{route('wildcard_frontend',['username' => $tenant->username])}}"><span class="mif-home icon" ></span>Front Page</a></li>
         <li class="divider"></li>
         <li><a href="{{route('employee.logout',['username' => $tenant->username])}}"><span class="mif-exit icon" ></span> Logout</a>
         @elseif($guard === 'client')
         <li><a href="{{route('client.dashboard',['username' => $tenant->username])}}"><span class="mif-windows icon" ></span>Dashboard</a></li>
-        <li><a href="{{url(config('app.url'))}}"><span class="mif-home icon" ></span>Front Page</a></li>
+        <li><a href="{{route('wildcard_frontend',['username' => $tenant->username])}}"><span class="mif-home icon" ></span>Front Page</a></li>
         <li class="divider"></li>
         <li><a href="{{route('client.logout',['username' => $tenant->username])}}"><span class="mif-exit icon" ></span> Logout</a>
         @elseif(isset(request()->username))
