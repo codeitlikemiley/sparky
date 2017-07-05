@@ -60,7 +60,22 @@ class ComposerServiceProvider extends ServiceProvider
     private function composeTenant()
     {
         view()->composer('*', function($view){
-        $view->with(['tenant' => request()->username]);
+        $guard = $this->getAuthGuard();
+        if($guard === 'employee'){
+        $employee = auth()->guard($guard)->user();
+        $tenant = $employee->byTenant();
+        }
+        elseif($guard === 'client'){
+        $client = auth()->guard($guard)->user();
+        $tenant = $client->byTenant();
+        }
+        elseif($guard === 'web'){
+        $tenant = auth()->guard($guard)->user();
+        }
+        else{
+        $tenant = request()->username;
+        }
+        $view->with(['tenant' => $tenant]);
         });
     }
 
