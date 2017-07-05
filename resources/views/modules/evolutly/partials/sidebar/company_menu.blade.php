@@ -20,8 +20,8 @@
 <li class="">
     <a href="#" class="dropdown-toggle">
         <span class="mif-info icon fg-lightTeal"></span>
-        <span class="title fg-amber">About</span>
-        <span class="counter">Company Info</span>
+        <span class="title fg-amber">News</span>
+        <span class="counter">Latest Updates</span>
 	</a>
     <ul class="d-menu" data-role="dropdown">
         <!-- Change Log Link -->
@@ -29,39 +29,7 @@
             <a href="{{url('#')}}" class="">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Change Log</span>
-                <span class="counter">Read Our Updates</span>
-			</a>
-        </li>
-        <!-- TOS Link -->
-        <li>
-            <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">TOS</span>
-                <span class="counter">Read Our TOS</span>
-			</a>
-        </li>
-        <!-- Disclaimer Link -->
-        <li>
-            <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Disclaimer</span>
-                <span class="counter">Read Disclaimer</span>
-			</a>
-        </li>
-        <!-- Spam Link -->
-        <li>
-            <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Anti-Spam Policy</span>
-                <span class="counter">Read Spam Policy</span>
-			</a>
-        </li>
-        <!-- Legalities Link -->
-        <li>
-            <a href="{{url('#')}}" class="">
-                <span class="mif-chevron-right icon"></span>
-                <span class="title">Legalities</span>
-                <span class="counter">View Legalities</span>
+                <span class="counter">Read Changes On App</span>
 			</a>
         </li>
     </ul>

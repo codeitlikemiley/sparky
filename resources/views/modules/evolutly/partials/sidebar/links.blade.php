@@ -176,6 +176,7 @@
     </ul>
 </li>
 @include('evolutly::partials.sidebar.file_menu')
+@include('evolutly::partials.sidebar.company_menu')
 @endif
 <!-- Support Menu -->
 <li>
@@ -190,6 +191,6 @@
     <a class="sidebar-sizer">
         <span class="mif-tab icon fg-grayLighter mif-ani-horizontal mif-ani-slow " ></span>
         <span class="title" >Collapse Sidebar</span>
-        <span class="counter" >Toggle Small - Wide</span>
+        <span class="counter" >Toggle Sidebar</span>
 	</a>
 </li>
