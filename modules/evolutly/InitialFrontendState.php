@@ -27,10 +27,10 @@ class InitialFrontendState implements Contract
         // if your a tenant fetch all projects with tenant ID
         if(auth()->guard('web'))
         {
-            return Project::where('tenant_id', auth()->user()->id)->get();
+            return Project::where('tenant_id', auth()->user()->id)->get()->toArray();
         }
         // Else we Just Fetch All The Project The Current User Has
-        return $this->currentUser()->projects()->get();
+        return $this->currentUser()->projects()->get()->toArray();
     }
 
 
