@@ -6,7 +6,7 @@ trait ByTenant
 {
     public function byTenant()
     {
-        return $this->belongsTo('App\User', 'tenant_id', 'id')->select(['id','name','email']);
+        return $this->belongsTo('App\User', 'tenant_id', 'id')->select(['id','name','email'])->first();
     }
 
 }
