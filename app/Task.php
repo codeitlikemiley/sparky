@@ -34,7 +34,7 @@ class Task extends Model
 
     public function subtasks()
     {
-        return $this->hasMany('App\SubTask','task_id', 'id');
+        return $this->hasMany('App\Subtask','task_id', 'id');
     }
 
     public function campaign()
