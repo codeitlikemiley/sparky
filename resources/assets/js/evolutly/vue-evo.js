@@ -20,6 +20,14 @@ if (window.Vue === undefined) {
 Vue.mixin(require('initial_state'));
 
 Vue.use(vmodal)
+
+
+var progressBar = require('components/progress-bar');
+
+Vue.component('progress-bar', {
+    mixins: [progressBar]
+});
+
 /**
  * Define the Vue filters.
  */
