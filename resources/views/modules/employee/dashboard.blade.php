@@ -30,6 +30,7 @@
     <div class="grid condensed demo-grid">
         <div class="row cells3" v-for="item in projectChunks">
             <div class="cell" v-for="project in item">
+                
                 <div class="panel error">
 
                     <div class="heading">
@@ -46,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <div class="tile bg-teal fg-white cell element-selected" data-role="tile" @click="viewProgress(project.id)">
+                            <div class="tile bg-teal fg-white cell element-selected" data-role="tile" @click="viewProgress(project.id,project.slug)">
                                 <div class="tile-content iconic cell">
                                     <span class="icon fa fa-tasks"></span>
                                     <div class="tile-label">Progress</div>
@@ -56,6 +57,24 @@
                     </div>
 
                 </div>
+                <modal :name="project.slug">
+
+                        <div class="panel widget-box">
+                            <div class="heading">
+                                <div class="title">
+                                    @{{ project.name }}
+                                    <span @click="hide(project.slug)" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute;top:0px; right:0px;margin-top:-13px;">
+                                </span>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <div class="row" v-for="(campaign, index) in campaigns" :key="campaign.id" :index="index" :campaign="campaign">
+                                    <progress-bar :progress="campaign.progress" :name="campaign.name"></progress-bar>
+                                </div>
+                            </div>
+                        </div>
+
+                </modal>
             </div>
         </div>
     </div> 
