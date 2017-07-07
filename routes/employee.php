@@ -1,5 +1,6 @@
 <?php
 Route::group(['domain' => '{username}.'.config('app.domain')], function () {
+  // Profile Routes
   Route::get('/profile', 'Profile')->name('employee.profile');
   Route::put('/profile', 'UpdateProfile')->name('employee.profile.update');
   Route::put('/profile/upload', 'UploadAvatar')->name('employee.profile.upload');
@@ -18,7 +19,7 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
 
   Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'DashboardController@index')->name('employee.dashboard');
-      // Route::get('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
+      Route::post('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
       Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
