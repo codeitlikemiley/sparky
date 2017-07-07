@@ -1,3 +1,4 @@
+import vmodal from 'vue-js-modal'
 /*
  * Load Vue & Vue-Resource.
  *
@@ -18,6 +19,7 @@ if (window.Vue === undefined) {
 // This is  a Computed Properties For Evolutly Object
 Vue.mixin(require('initial_state'));
 
+Vue.use(vmodal)
 /**
  * Define the Vue filters.
  */
