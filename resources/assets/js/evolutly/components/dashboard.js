@@ -1,6 +1,6 @@
 Vue.component('dashboard', {
     props: ['user', 'projects'],
-
+    
     mounted() {
         //
     },
@@ -15,6 +15,12 @@ Vue.component('dashboard', {
         },
         viewProgress(id){
             window.location.replace('dashboard/projects/'+id+'/progress');
+        },
+        show(name) {
+            this.$modal.show(name);
+        },
+        hide(name) {
+            this.$modal.hide(name);
         }
     }
 });
