@@ -9,7 +9,13 @@
 
 <div class="section-wrapper page-heading ">
     <h3> Progress of {{ $project->name }}</h3>
+    @if($guard === 'employee')
+    <a href="/employee/dashboard" class="button info margin10"><span class="icon fa fa-caret-left"></span> Back</a>
+    @elseif($guard === 'client')
+    <a href="/client/dashboard" class="button info margin10"><span class="icon fa fa-caret-left"></span> Back</a>
+    @else 
     <a href="/dashboard" class="button info margin10"><span class="icon fa fa-caret-left"></span> Back</a>
+    @endif
 </div>
 
 @foreach($campaigns as $campaign)
