@@ -30,6 +30,9 @@ class RedirectIfAuthenticated
           break;
         default:
           if (Auth::guard($guard)->check()) {
+            if(isset($request->username->username)){
+              return redirect()->route('tenant.dashboard',['username' => $request->username->username]);
+            }
             return redirect()->route('dashboard');
           }
           break;
