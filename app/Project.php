@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ModelBuilder\ProjectBuilder;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Project extends Model
 {
     use ProjectBuilder;
+    use Sluggable;
 
     protected $table ='projects';
 
@@ -39,6 +41,19 @@ class Project extends Model
     public function getCampaignsCountAttribute()
     {
         return self::campaignscount();
+    }
+
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
+    public function forbiddenSlug()
+    {
+        return array();
     }
 
 }
