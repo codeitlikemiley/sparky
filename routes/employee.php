@@ -21,7 +21,7 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
       Route::get('/', 'DashboardController@index')->name('employee.dashboard');
       Route::post('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
-      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
+      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
   });
 });
