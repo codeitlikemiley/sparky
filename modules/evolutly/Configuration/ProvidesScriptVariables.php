@@ -18,12 +18,9 @@ trait ProvidesScriptVariables
         return [
             'csrfToken' => csrf_token(),
             'env' => config('app.env'),
-            'apiDomain' => 'api.'.config('app.domain'),
+            'api_endpoint' => 'api.'.config('app.domain'),
             'domain' => config('app.domain'),
-            'appUrl' => config('app.url'),
-            'userId' => self::getTenantID(),
-            'employeeId' => self::getEmployeeID(),
-            'clientId' => self::getClientID(),
+            'url' => config('app.url'),
             'state' => self::getState(),
         ];
     }
@@ -31,20 +28,5 @@ trait ProvidesScriptVariables
     protected static function getState()
     {
        return Evolutly::call(InitialFrontendState::class.'@forUser', [Auth::user()]);
-    }
-
-    protected static function getClientID()
-    {
-        return Auth::guard('client')->id();
-    }
-
-    protected static function getEmployeeID()
-    {
-        return Auth::guard('employee')->id();
-    }
-
-    protected static function getTenantID()
-    {
-        return Auth::guard('web')->id();
     }
 }
