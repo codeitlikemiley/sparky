@@ -8,14 +8,14 @@ module.exports = {
     /**
      * Initial FrontEnd State We Should Add this On The Backend
      */
+
     data: {
-        apiDomain: Evolutly.apiDomain,
-        domain: Evolutly.domain,
-        userId: Evolutly.userId,
-        employeeId: Evolutly.employeeId,
-        clientId: Evolutly.clientId,
         user: Evolutly.state.user,
-        projects: Evolutly.state.projects
+        tenant: Evolutly.state.tenant,
+        projects: (Evolutly.state.projects ? Evolutly.state.projects : []),
+        'current_project': (Evolutly.state.currentProject ? Evolutly.state.currentProject : null),
+        'project_files': (Evolutly.state.currentProjectFiles ? Evolutly.state.currentProjectFiles : []),
+        'project_workers': (Evolutly.state.currentProjectWorkers ? Evolutly.state.currentProjectWorkers : [])
     },
 
 
