@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 308);
+/******/ 	return __webpack_require__(__webpack_require__.s = 317);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -43929,22 +43929,47 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 // Interceptors , Depedencies ,
 // Same Level file
-__webpack_require__(186);
+__webpack_require__(187);
 
 // All Our Global Components
 // Located at resources/assets/js/evolutly
-__webpack_require__(188);
+__webpack_require__(189);
 
 window.Vue = new Vue({
     // Located at resources/assets/js/evolutly
     // mixins are all module.exports
-    mixins: [__webpack_require__(190)]
+    mixins: [__webpack_require__(191)]
 });
 
 /***/ }),
-/* 184 */,
+/* 184 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'progressBar',
+    props: ['name', 'progress']
+});
+
+/***/ }),
 /* 185 */,
-/* 186 */
+/* 186 */,
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -43953,7 +43978,7 @@ window.Vue = new Vue({
  */
 window.URI = __webpack_require__(179);
 window.axios = __webpack_require__(134);
-window._ = __webpack_require__(304);
+window._ = __webpack_require__(307);
 window.moment = __webpack_require__(0);
 window.Promise = __webpack_require__(172);
 window.Cookies = __webpack_require__(169);
@@ -43997,7 +44022,7 @@ __webpack_require__(155);
 if ($('#evolutly-app').length > 0) {
     // relative path: 
     // resources/assets/js/evolutly
-    __webpack_require__(196);
+    __webpack_require__(197);
 }
 
 /**
@@ -44035,7 +44060,7 @@ window.axios.interceptors.response.use(function (response) {
 });
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports) {
 
 Vue.component('dashboard', {
@@ -44078,71 +44103,107 @@ Vue.component('dashboard', {
 });
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Located at resources/assets/js/evolutly
-__webpack_require__(187);
-__webpack_require__(189);
+__webpack_require__(188);
+__webpack_require__(190);
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports) {
 
 Vue.component('projects', {
-    props: ['tenant', 'user', 'project', 'workers', 'campaigns'],
-
+    props: ['guard', 'tenant', 'user', 'project', 'workers', 'campaigns'],
+    // extra props we might need to add : files and forms
+    data: function data() {
+        return {
+            projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
+            campaignForm: new EvolutlyForm(Evolutly.forms.campaignForm),
+            taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
+            formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
+            currentCampaignId: null,
+            fileForm: new EvolutlyForm(Evolutly.forms.fileForm)
+        };
+    },
     mounted: function mounted() {
-        console.log('Projects Loaded...');
+        this.whenReady();
     },
 
     computed: {
         campaignChunks: function campaignChunks() {
-            // v-for
             return _.chunk(this.campaigns, 2);
         },
         employeeChunks: function employeeChunks() {
-            // v-for
             return _.chunk(this.workers, 4);
         }
     },
-
     methods: {
+        whenReady: function whenReady() {
+            this.projectForm.name = this.project.name;
+        },
+        showTask: function showTask(id) {
+            this.currentCampaignId = id;
+            this.$modal.show('add-task');
+        },
+        hideTask: function hideTask() {
+            this.currentCampaignId = null;
+            this.$modal.hide('add-task');
+        },
         viewTask: function viewTask(id) {
-            window.location.assign('dashboard/tasks/' + id);
+            var location = '/dashboard/tasks/';
+            if (this.guard === 'employee') {
+                location = '/employee/dashboard/tasks/';
+            }
+            url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location + id;
+
+            window.location.href = url;
         },
-        uploadFile: function uploadFile() {
-            axios.post('dashboard/projects/' + id + '/files/upload').then(function (response) {
-                // this will add task to specific campaign
-                this.project.files.push(response.data);
-            }.bind(this));
+        updateProject: function updateProject(id) {
+            var self = this;
+            axios.post('/dashboard/projects/' + id + '/edit', self.projectForm).then(function (response) {
+                self.project.name = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
-        createTask: function createTask(index, id) {
-            // id  = campaign id 
-            // index = campaign index
-            axios.post('dashboard/tasks/' + id + '/create').then(function (response) {
-                // this will add task to specific campaign
-                this.project.campaigns[index].push(response.data);
-            }.bind(this));
+        createTask: function createTask() {
+            var self = this;
+            axios.post('/dashboard/campaigns/' + self.currentCampaignId + '/create', self.taskForm).then(function (response) {
+                var index = _.findIndex(self.campaigns, { id: self.currentCampaignId });
+                self.campaigns[index].tasks.push(response.data);
+            });
+            this.$modal.hide('add-task');
         },
-        addTask: function addTask(name) {
-            this.$modal.show(name);
-            // show add task component modal
-        },
-        addCampaign: function addCampaign(name) {
-            this.$modal.show(name);
-            // show add campaign component modal
-        },
-        importCampaign: function importCampaign(name) {
-            this.$modal.show(name);
-            // show import campaign component modal
-        },
-        editProject: function editProject(name) {
-            this.$modal.show(name);
+        createCampaign: function createCampaign() {
+            var self = this;
+            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm).then(function (response) {
+                self.campaigns.push(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
 
-        // we will remove all method to get modal
-        // this is enough
+        // Soon To Be Added
+        createForm: function createForm(id) {
+            axios.post('dashboard/projects/' + id + '/forms/create', this.formBuilderForm).then(function (response) {
+                // we need to pass in the data
+                // We need to add forms as props
+                console.log('push this to forms array');
+            }.bind(this)).catch(function (error) {
+                console.log(error);
+            });
+        },
+        uploadFile: function uploadFile(project) {
+
+            this.fileForm = document.getElementById('file').files[0];
+            axios.post('dashboard/projects/' + project.id + '/files/upload', this.fileForm).then(function (response) {
+                console.log('push this to files array');
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         show: function show(name) {
             this.$modal.show(name);
         },
@@ -44153,7 +44214,7 @@ Vue.component('projects', {
 });
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports) {
 
 /**
@@ -44163,13 +44224,16 @@ module.exports = {
     el: '#evolutly-app',
 
     /**
-     * Initial FrontEnd State We Should Add this On The Backend
+     * Initial FrontEnd State
      */
 
     data: {
+        // loaded by default
         user: Evolutly.state.user,
         tenant: Evolutly.state.tenant,
+        // loaded depending on route
         projects: Evolutly.state.projects ? Evolutly.state.projects : [],
+        // for review if we will remove this or just use json_encode
         'current_project': Evolutly.state.currentProject ? Evolutly.state.currentProject : null,
         'project_files': Evolutly.state.currentProjectFiles ? Evolutly.state.currentProjectFiles : [],
         'project_workers': Evolutly.state.currentProjectWorkers ? Evolutly.state.currentProjectWorkers : []
@@ -44178,21 +44242,7 @@ module.exports = {
     /**
      * The component has been created by Vue.
      */
-    created: function created() {
-        var self = this;
-
-        Bus.$on('updateUserData', function () {
-            self.getAuthUser();
-        });
-
-        Bus.$on('updateEmployeeData', function () {
-            self.getAuthEmployee();
-        });
-
-        Bus.$on('updateClientData', function () {
-            self.getAuthClient();
-        });
-    },
+    created: function created() {},
 
 
     /**
@@ -44204,67 +44254,14 @@ module.exports = {
 
 
     methods: {
-        /**
-         * Finish bootstrapping the application.
-         */
         whenReady: function whenReady() {
             //
-        },
-
-
-        /**
-         * Load the data for an authenticated user.
-         */
-        loadDataForAuthenticatedUser: function loadDataForAuthenticatedUser() {
-            this.getAuthUser();
-        },
-        loadDataForAuthenticatedEmployee: function loadDataForAuthenticatedEmployee() {
-            this.getAuthEmployee();
-        },
-        loadDataForAuthenticatedClient: function loadDataForAuthenticatedClient() {
-            this.getAuthClient();
-        },
-
-
-        /*
-         * Get the current authenticated user
-         */
-        getAuthUser: function getAuthUser() {
-            var _this = this;
-
-            axios.get(this.apiDomain + '/auth/user').then(function (response) {
-                _this.user = response.data;
-            });
-        },
-
-
-        /*
-         * Get the current authenticated employee
-         */
-        getAuthEmployee: function getAuthEmployee() {
-            var _this2 = this;
-
-            axios.get(this.apiDomain + '/auth/employee').then(function (response) {
-                _this2.user = response.data;
-            });
-        },
-
-
-        /*
-         * Get the current authenticated Client
-         */
-        getAuthClient: function getAuthClient() {
-            var _this3 = this;
-
-            axios.get(this.apiDomain + '/auth/client').then(function (response) {
-                _this3.user = response.data;
-            });
         }
     }
 };
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -44336,43 +44333,96 @@ window.EvolutlyFormErrors = function () {
 };
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
- * Initialize the Evolutly form extension points.
+ * You Can Extend Some Forms, to Add Extra Field Without Messing Up With Your Current Field
+ *  Note: if You Declare Something Like On Your evolutly.js where we declare a new Vue Instance
+ *  Added Inside evolytly.js (main) 
+ *  Evolutly.forms.sampleForm = {
+ *  currency: ''
+ *  };
+ *  the field is added to the existing new EvolutlyForm
+ *  Add this inside your data() for props or data in the main vue instance
+ *  Example:
+ *  sampleForm: new EvolutlyForm({
+ *               name: '',
+ *               number: '',
+ *               cvc: '',
+ *               month: '',
+ *               year: '',
+ *           })
+ *  Note: to module.exports the component that contains the form
+ *  For Example We Declare sampleForm in our data() or data
+ *  sampleForm: $.extend(true, new EvolutlyForm({
+ *               invitation: null
+ *              }), Spark.forms.register)
+ *  
  */
+
 Evolutly.forms = {
-  updateProfile: {},
-  updateProjects: {},
-  updateCampaigns: {},
-  updateTasks: {},
-  updateSubtasks: {}
+    projectForm: {
+        name: ''
+    },
+    campaignForm: {
+        name: ''
+    },
+    taskForm: {
+        name: '',
+        description: '',
+        link: '',
+        points: 1
+    },
+    subtaskForm: {
+        name: '',
+        points: '',
+        priority: '',
+        link: '',
+        due_date: ''
+    },
+    commentForm: {
+        title: '',
+        body: ''
+    },
+    formBuilderForm: {
+        title: '',
+        body: ''
+    },
+    fileForm: {
+        name: '',
+        lastModified: '',
+        lastModifiedDate: '',
+        size: '',
+        type: '',
+        webkitRelativePath: ''
+    }
+
 };
 
 /**
  * Load the Evolutly form helper class.
  */
-// relative path: 
+// relative path set on our webpack.mix.js 
 // resources/assets/js/evolutly
-__webpack_require__(193);
+__webpack_require__(194);
 
 /**
  * Define the Evolutly form Error collection class.
  */
-// relative path: 
+// relative path set on our webpack.mix.js
 // resources/assets/js/evolutly
-__webpack_require__(191);
+__webpack_require__(192);
 
 /**
  * Add additional HTTP / form helpers to the Evolutly object.
  */
-// relative path: 
+// relative path set on our webpack.mix.js
 // resources/assets/js/evolutly
-$.extend(Evolutly, __webpack_require__(194));
+$.extend(Evolutly, __webpack_require__(195));
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports) {
 
 /**
@@ -44427,7 +44477,7 @@ window.EvolutlyForm = function (data) {
 };
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -44486,7 +44536,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -44501,12 +44551,12 @@ module.exports = {
 };
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_js_modal__ = __webpack_require__(306);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_js_modal__ = __webpack_require__(309);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_js_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_js_modal__);
 
 /*
@@ -44527,11 +44577,11 @@ if (window.Vue === undefined) {
 // resources/assets/js/evolutly
 
 // This is  a Computed Properties For Evolutly Object
-Vue.mixin(__webpack_require__(195));
+Vue.mixin(__webpack_require__(196));
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_js_modal___default.a);
 
-var progressBar = __webpack_require__(312);
+var progressBar = __webpack_require__(310);
 
 Vue.component('progress-bar', {
   mixins: [progressBar]
@@ -44542,17 +44592,17 @@ Vue.component('progress-bar', {
  */
 // relative path: 
 // resources/assets/js/evolutly
-__webpack_require__(197);
+__webpack_require__(198);
 
 /**
  * Load the Evolutly form utilities.
  */
 // relative path: 
 // resources/assets/js/evolutly
-__webpack_require__(192);
+__webpack_require__(193);
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports) {
 
 /**
@@ -44617,7 +44667,6 @@ Vue.filter('currency', function (value) {
 });
 
 /***/ }),
-/* 198 */,
 /* 199 */,
 /* 200 */,
 /* 201 */,
@@ -44723,7 +44772,71 @@ Vue.filter('currency', function (value) {
 /* 301 */,
 /* 302 */,
 /* 303 */,
-/* 304 */
+/* 304 */,
+/* 305 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(306)();
+exports.push([module.i, "\n.progress-container[data-v-40c190f0]{\r\n    width:100%;\r\n    position:relative;\n}\n.progress-bar[data-v-40c190f0] {\r\n  height: 20px;\r\n  border: 1px solid #3cba54;\r\n  border-radius: 3px;\r\n  background-image: \r\n    repeating-linear-gradient(\r\n      -45deg,\r\n      #3cba54,\r\n      #3cba54 11px,\r\n      #f4c20d 10px,\r\n      #f4c20d 20px /* determines size */\r\n    );\r\n  background-size: 28px 28px;\r\n  -webkit-animation: move .5s linear infinite;\r\n          animation: move .5s linear infinite;\r\n  padding:0;\r\n  margin: 0;\n}\n.inner[data-v-40c190f0] {\r\n    position: absolute;\n}\n.progress-percent[data-v-40c190f0]{\r\n    z-index:999 !important;\n}\n@-webkit-keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\n@keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\r\n", ""]);
+
+/***/ }),
+/* 306 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -61815,8 +61928,8 @@ Vue.filter('currency', function (value) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(6)(module)))
 
 /***/ }),
-/* 305 */,
-/* 306 */
+/* 308 */,
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -63012,114 +63125,18 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_16__;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 307 */,
-/* 308 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(183);
-
-
-/***/ }),
-/* 309 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'progressBar',
-    props: ['name', 'progress']
-});
-
-/***/ }),
 /* 310 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(311)();
-exports.push([module.i, "\n.progress-container[data-v-40c190f0]{\r\n    width:100%;\r\n    position:relative;\n}\n.progress-bar[data-v-40c190f0] {\r\n  height: 20px;\r\n  border: 1px solid #3cba54;\r\n  border-radius: 3px;\r\n  background-image: \r\n    repeating-linear-gradient(\r\n      -45deg,\r\n      #3cba54,\r\n      #3cba54 11px,\r\n      #f4c20d 10px,\r\n      #f4c20d 20px /* determines size */\r\n    );\r\n  background-size: 28px 28px;\r\n  -webkit-animation: move .5s linear infinite;\r\n          animation: move .5s linear infinite;\r\n  padding:0;\r\n  margin: 0;\n}\n.inner[data-v-40c190f0] {\r\n    position: absolute;\n}\n.progress-percent[data-v-40c190f0]{\r\n    z-index:999 !important;\n}\n@-webkit-keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\n@keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\r\n", ""]);
-
-/***/ }),
-/* 311 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(315)
+__webpack_require__(313)
 
-var Component = __webpack_require__(313)(
+var Component = __webpack_require__(311)(
   /* script */
-  __webpack_require__(309),
+  __webpack_require__(184),
   /* template */
-  __webpack_require__(314),
+  __webpack_require__(312),
   /* scopeId */
   "data-v-40c190f0",
   /* cssModules */
@@ -63146,7 +63163,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 313 */
+/* 311 */
 /***/ (function(module, exports) {
 
 // this module is a runtime utility for cleaner component module output and will
@@ -63203,7 +63220,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 314 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -63237,17 +63254,17 @@ if (false) {
 }
 
 /***/ }),
-/* 315 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(310);
+var content = __webpack_require__(305);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(316)("1e6ef3a2", content, false);
+var update = __webpack_require__(314)("1e6ef3a2", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -63263,7 +63280,7 @@ if(false) {
 }
 
 /***/ }),
-/* 316 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -63282,7 +63299,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(317)
+var listToStyles = __webpack_require__(315)
 
 /*
 type StyleObject = {
@@ -63484,7 +63501,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 317 */
+/* 315 */
 /***/ (function(module, exports) {
 
 /**
@@ -63514,6 +63531,14 @@ module.exports = function listToStyles (parentId, list) {
   }
   return styles
 }
+
+
+/***/ }),
+/* 316 */,
+/* 317 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(183);
 
 
 /***/ })
