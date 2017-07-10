@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Subtask;
+use App\Observers\SubtaskObserver;
+use Queue;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Subtask::observe(SubtaskObserver::class);
+        Queue::looping(function () {
+        while (DB::transactionLevel() > 0) {
+            DB::rollBack();
+        }
+});
+        
     }
 
     /**
