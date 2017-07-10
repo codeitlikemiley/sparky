@@ -5,7 +5,7 @@ namespace App\Traits\Methods;
 trait TaskProgressMethod
 {
 
-    private static function get_percentage($total, $number) : float
+    public static function get_percentage($total, $number) : float
     {
         if ( $total > 0 ) {
             return round($number / ($total / 100),2);
