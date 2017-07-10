@@ -20,10 +20,10 @@ trait CampaignProgressMethod
     public static function progress($modelOrID) : int
     {
         $campaign = self::normalize($modelOrID);
-        return round(self::percentage(self::total($campaign), self::done($campaign)));
+        return round(self::get_percentage(self::total($campaign), self::done($campaign)));
     }
 
-    private static function percentage($total, $number) : float
+    public static function get_percentage($total, $number) : float
     {
         if ( $total > 0 ) {
             return round($number / ($total / 100),2);
