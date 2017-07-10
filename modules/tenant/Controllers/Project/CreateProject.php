@@ -30,10 +30,10 @@ class CreateProject extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant)
+    public function __invoke($tenant=null)
     {
         $this->createProject($tenant);
-        return redirect()->back();
+        return response()->json(['success' => 'Project Created!'], 200);
     }
 
     private function hasClient($tenant)
@@ -45,23 +45,23 @@ class CreateProject extends BaseController
 
     private function createProject($tenant)
     {
-        $user = auth()->user();
+        if(!$tenant){
+            $tenant = auth()->user();
+        }
         $project = $this->project;
         $project->name = $this->input['project_name'];
-        $project->tenant_id = $tenant->id;
 
-        if($this->hasClient($tenant)){
-            $client = $this->getClient();
-            $client->projects()->save($project);
+        if($client = $this->hasClient($tenant)){
+            $project->client_id = $client->id;
         }
-        $user->projects()->save($project);
+        $tenant->projects()->save($project);
     }
 
     private function validateClient($tenant)
     {
         $client =  $this->getClient();
         if($client->tenant_id === $tenant->id){
-            return true;
+            return $client;
         }
         return false;
     }

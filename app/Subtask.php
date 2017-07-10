@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\ModelBuilder\CampaignBuilder;
+use App\Traits\ModelBuilder\SubtaskBuilder;
 
 class Subtask extends Model
 {
-    use CampaignBuilder;
+    use SubtaskBuilder;
 
     protected $table ='subtasks';
 

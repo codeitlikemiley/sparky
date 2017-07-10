@@ -34,7 +34,7 @@ class CreateProject extends BaseController
     {
         $tenant = auth()->user();
         $this->createProject($tenant);
-        return redirect()->back();
+        return response()->json(['success' => 'Project Created!'], 200);
     }
 
     private function hasClient($tenant)
@@ -46,23 +46,21 @@ class CreateProject extends BaseController
 
     private function createProject($tenant)
     {
-        $user = auth()->user();
+        $tenant = auth()->user();
         $project = $this->project;
         $project->name = $this->input['project_name'];
-        $project->tenant_id = $tenant->id;
-
-        if($this->hasClient($tenant)){
-            $client = $this->getClient();
-            $client->projects()->save($project);
+        // check if the client id is created by the tenant
+        if($client = $this->hasClient($tenant)){
+            $project->client_id = $client->id;
         }
-        $user->projects()->save($project);
+        $tenant->projects()->save($project);
     }
 
     private function validateClient($tenant)
     {
         $client =  $this->getClient();
         if($client->tenant_id === $tenant->id){
-            return true;
+            return $client;
         }
         return false;
     }
