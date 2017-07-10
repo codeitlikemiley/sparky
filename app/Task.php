@@ -28,7 +28,7 @@ class Task extends Model
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
-    protected $appends = ['progress', 'total'];
+    protected $appends = ['progress', 'total', 'done', 'percentage'];
 
     protected static $logOnlyDirty = true;
 
@@ -66,5 +66,15 @@ class Task extends Model
     public function getTotalAttribute()
     {
         return self::total($this->id);
+    }
+
+    public function getDoneAttribute()
+    {
+        return self::done($this->id);
+    }
+
+    public function getPercentageAttribute()
+    {
+        return round(self::get_percentage($this->total_points,$this->done_points));
     }
 }
