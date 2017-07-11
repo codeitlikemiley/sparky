@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Project;
 use App\Client;
+use App\User;
 
 class CreateProject extends BaseController
 {
@@ -32,42 +33,45 @@ class CreateProject extends BaseController
      */
     public function __invoke($tenant)
     {
-        $this->createProject($tenant);
-        return redirect()->back();
+        $this->createProject();
     }
 
-    private function hasClient($tenant)
+    private function createProject()
     {
-        if(isset($this->input['client_id'])){
-            return $this->validateClient($tenant);
+        $this->AddName();
+        $this->manageProjectsByTenant();
+        $this->saveByEmployee();
+    }
+
+    private function AddName()
+    {
+        $this->validate($this->input, [
+        'project_name' => 'required|max:30',
+        ]);
+        $this->project->name = $this->input['project_name'];
+    }
+
+    private function tenant()
+    {
+        return User::find(auth()->guard('employee')->user()->tenant_id);
+    }
+
+    private function manageProjectsByTenant()
+    {
+        $this->tenant()->manageProjects()->save($this->project);
+    }
+
+    private function employee()
+    {
+        return auth()->guard('employee')->user();
+    }
+
+    private function saveByEmployee()
+    {
+        $save = $this->employee()->projects()->save($this->project);
+        if(!$save){
+        return response()->json(['success' => 'Project Creation Failed.'], 400);
         }
-    }
-
-    private function createProject($tenant)
-    {
-        $user = auth()->guard('employee')->user();
-        $project = $this->project;
-        $project->name = $this->input['project_name'];
-        $project->tenant_id = $tenant->id;
-
-        if($this->hasClient($tenant)){
-            $client = $this->getClient();
-            $client->projects()->save($project);
-        }
-        $user->projects()->save($project);
-    }
-
-    private function validateClient($tenant)
-    {
-        $client =  $this->getClient();
-        if($client->tenant_id === $tenant->id){
-            return true;
-        }
-        return false;
-    }
-
-    private function getClient()
-    {
-        return $this->client->findOrFail($this->input['client_id']);
+        return response()->json(['success' => 'Project Created!'], 200);
     }
 }

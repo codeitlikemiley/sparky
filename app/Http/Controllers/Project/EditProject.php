@@ -4,76 +4,69 @@ namespace App\Controllers\Project;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
-use App\Client;
 
 class EditProject extends BaseController
 {
-    
     protected $input;
 
-    protected $client;
-
-    public function __construct(Request $request, Client $client)
+    public function __construct(Request $request)
     {
         $this->middleware('auth');
         $this->input = $request->all();
-        $this->client = $client;
     }
 
-    /**
-     * Receive Project Id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke($project)
     {
-        
-        
         $this->editProject($project);
-        return response()->json(['success' => 'Project Edited.'], 200);
     }
-
-
-
-    private function authorize($project)
-    {
-        $tenant = auth()->user();
-        if($project->ByTenant->id != $tenant->id)
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-        return $tenant;
-        
-    }
-
-
 
     private function editProject($project)
     {
-        $tenant = $this->authorize($project);
-        $project->name = $this->input['project_name'];
-
-        if($client = $this->hasClient($tenant)){
-            $project->client_id = $client;
-        }
-        $project->save();
+        $this->authorize($project);
+        $this->addName($project);
+        $this->AddClientIfAny($project);
+        $this->save($project);
     }
 
-    private function hasClients($tenant)
+    private function tenant()
+    {
+        return auth()->user();
+    }
+
+    private function authorize($project)
+    {
+        if($project->ByTenant->id != $this->tenant()->id)
+        {
+            return response()->json(['error' => 'UnAuthorized.'], 401);
+        }
+    }
+
+   private function AddName($project)
+    {
+        $this->validate($this->input, [
+        'project_name' => 'required|max:30',
+        ]);
+        $project->name = $this->input['project_name'];
+    }
+
+    private function AddClientIfAny($project)
     {
         if(isset($this->input['client_id'])){
-            return $this->validateClient($tenant);
+            $tenant_clients = $this->tenant()->clients->pluck('id')->toArray();
+            $client_id = $this->input['client_id'];
+            if(in_array($client_id,$tenant_clients))
+            {
+            $project->client_id = $client_id;
+            }
         }
     }
 
-    private function validateClient($tenant)
+    private function save($project)
     {
-        $client_id = $this->input['client_id'];
-        $client = $this->client->find($client_id);
-        if($client->tenant_id === $tenant->id)
-        {
-            return $client;
+        $save = $project->save($project);
+        if(!$save){
+        return response()->json(['success' => 'Editing Project Failed!'], 400);
         }
-        
+        return response()->json(['success' => 'Project Editted!'], 200);
     }
 }

@@ -29,66 +29,90 @@ class EditProject extends BaseController
     public function __invoke($tenant=null,$project)
     {
         $this->editProject($project);
-        return response()->json(['success' => 'Project Edited.'], 200);
+    }
+
+    private function editProject($project)
+    {
+        if($this->authorize($project) || $this->canAccessProject($project) || $this->createdBy($project))
+        {
+            $this->editName($project);
+            $this->AddClientIfAny($project);
+            $this->update($project);
+        }
+        return response()->json(['error' => 'UnAuthorized!'], 401);
     }
 
 
 
     private function authorize($project)
     {
-        $employee = auth()->guard('employee')->user();
-        if($project->ByTenant->id != $employee->tenant_id)
+        
+        if($project->ByTenant()->id != $this->employee()->tenant_id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
         }
-        return $employee;        
+        return true;
     }
 
-    private function canAccessProject($employee,$project)
+    private function employee()
+    {
+        return auth()->guard('employee')->user();
+    }
+
+    private function canAccessProject($project)
     {
         foreach($project->assignedEmployees as $assignedEmployee)
         {
 
-            if($assignedEmployee->id === $employee->id)
+            if($assignedEmployee->id === $this->employee()->id)
             {
-                return $employee;
+                return true;
             }
         }
-        return response()->json(['error' => 'Unauthenticated.'], 401);
+        return false;
     }
 
-
-
-    private function editProject($project)
+    private function createdBy()
     {
-        // checks if the project is of the same tenant
-        $employee = $this->authorize($project);
-        // checks if the project was assigned on the employee
-        $employee = $this->canAccessProject($employee,$project);
-
-        $project->name = $this->input['project_name'];
-
-        if($client = $this->hasClient($tenant)){
-            $project->client_id = $client;
+        $project = $this->employee()->projects()->find($this->project->id);
+        if($project)
+        {
+            return $true;
         }
-        $project->save();
     }
 
-    private function hasClients($tenant)
+    private function editName($project)
+    {
+        $this->validate($this->input, [
+        'project_name' => 'required|max:30',
+        ]);
+        $project->name = $this->input['project_name'];
+    }
+
+    private function AddClientIfAny($project)
     {
         if(isset($this->input['client_id'])){
-            return $this->validateClient($tenant);
+            $tenant_clients = $this->tenant()->clients->pluck('id')->toArray();
+            $client_id = $this->input['client_id'];
+            if(in_array($client_id,$tenant_clients))
+            {
+            $project->client_id = $client_id;
+            }
         }
     }
 
-    private function validateClient($tenant)
+    private function tenant()
     {
-        $client_id = $this->input['client_id'];
-        $client = $this->client->find($client_id);
-        if($client->tenant_id === $tenant->id)
-        {
-            return $client;
-        }
-        
+        return User::find(auth()->guard('employee')->user()->tenant_id);
     }
+
+    private function update($project)
+    {
+        $save = $project->save($project);
+        if(!$save){
+        return response()->json(['success' => 'Editing Project Failed!'], 400);
+        }
+        return response()->json(['success' => 'Project Editted!'], 200);
+    }
+    
 }

@@ -6,67 +6,70 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Project;
-use App\Client;
 
 class CreateProject extends BaseController
 {
-    
     protected $project;
 
     protected $input;
 
-    protected $client;
-
-    public function __construct(Project $project,Request $request, Client $client)
+    public function __construct(Project $project,Request $request)
     {
         $this->middleware('auth');
         $this->input = $request->all();
         $this->project = $project;
-        $this->client = $client;
     }
 
-    /**
-     * Receive Project Id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke()
     {
-        $tenant = auth()->user();
-        $this->createProject($tenant);
-        return response()->json(['success' => 'Project Created!'], 200);
+        $this->createProject();
     }
 
-    private function hasClient($tenant)
+    private function createProject()
+    {
+        $this->AddName();
+        $this->AddClientIfAny();
+        $this->manageProjectsByTenant();
+        $this->saveByTenant();
+        
+    }
+
+    private function tenant()
+    {
+        return auth()->user();
+    }
+
+    private function AddName()
+    {
+        $this->validate($this->input, [
+        'project_name' => 'required|max:30',
+        ]);
+        $this->project->name = $this->input['project_name'];
+    }
+
+    private function AddClientIfAny()
     {
         if(isset($this->input['client_id'])){
-            return $this->validateClient($tenant);
+            $tenant_clients = $this->tenant()->clients->pluck('id')->toArray();
+            $client_id = $this->input['client_id'];
+            if(in_array($client_id,$tenant_clients))
+            {
+            $this->project->client_id = $client_id;
+            }
         }
     }
 
-    private function createProject($tenant)
+    private function manageProjectsByTenant()
     {
-        $tenant = auth()->user();
-        $project = $this->project;
-        $project->name = $this->input['project_name'];
-        // check if the client id is created by the tenant
-        if($client = $this->hasClient($tenant)){
-            $project->client_id = $client->id;
-        }
-        $tenant->projects()->save($project);
+        $this->tenant()->manageProjects()->save($this->project);
     }
 
-    private function validateClient($tenant)
+    private function saveByTenant()
     {
-        $client =  $this->getClient();
-        if($client->tenant_id === $tenant->id){
-            return $client;
+        $save = $this->tenant()->projects()->save($this->project);
+        if(!$save){
+        return response()->json(['success' => 'Project Creation Failed.'], 400);
         }
-        return false;
-    }
-
-    private function getClient()
-    {
-        return $this->client->findOrFail($this->input['client_id']);
+        return response()->json(['success' => 'Project Created!'], 200);
     }
 }

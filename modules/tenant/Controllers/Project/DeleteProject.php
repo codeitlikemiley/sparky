@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller as BaseController;
 
 class DeleteProject extends BaseController
 {
+
+    protected $tenant;
     
     protected $input;
 
@@ -14,40 +16,35 @@ class DeleteProject extends BaseController
     {
         $this->middleware('auth');
         $this->input = $request->all();
+        $this->tenant = auth()->user();
     }
 
-    /**
-     * Receive Project Id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke($tenant=null,$project)
+    public function __invoke($tenant,$project)
     {
-        
-        $this->deleteProject($tenant,$project);
-        return response()->json(['success' => 'Project Edited.'], 200);
+        $this->deleteProject($project);
     }
 
-
-
-    private function authorize($tenant,$project)
+    private function deleteProject($project)
     {
-        if(!$tenant){
-        $tenant = auth()->user();
-        }
-        if($project->ByTenant->id != $tenant->id)
+        $this->authorize($project);
+        $this->delete($project);
+    }
+
+    private function authorize($project)
+    {
+        if($project->ByTenant->id != $this->tenant->id)
         {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        
     }
 
-
-
-    private function deleteProject($tenant,$project)
+    private function delete($project)
     {
-        $this->authorize($tenant,$project);
-        $project->delete();
+        $deleted = $project->delete();
+        if($deleted){
+            return response()->json(['success' => 'Project Deleted.'], 400);
+        }
+        response()->json(['error' => 'Project Deletion Failed!.'], 400);
     }
 
 }

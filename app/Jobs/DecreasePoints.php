@@ -2,12 +2,9 @@
 
 namespace App\Jobs;
 
-use DB;
 use Log;
-use App\Task;
 use Exception;
 use App\Subtask;
-use App\Campaign;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
