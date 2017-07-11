@@ -33,13 +33,13 @@ class EditProject extends BaseController
 
     private function editProject($project)
     {
-        if($this->authorize($project) || $this->canAccessProject($project) || $this->createdBy($project))
+        if($this->authorize($project) && $this->canAccessProject($project) || $this->createdBy($project))
         {
             $this->editName($project);
             $this->AddClientIfAny($project);
             $this->update($project);
         }
-        return response()->json(['error' => 'UnAuthorized!'], 401);
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
 
 

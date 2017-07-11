@@ -23,31 +23,69 @@ class DeleteCampaign extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($campaign)
+    public function __invoke($tenant=null,$campaign)
     {
-        
         $this->deleteCampaign($campaign);
-        return response()->json(['success' => 'Campaign Deleted.'], 200);
     }
 
+    private function deleteCampaign($campaign)
+    {
 
+        if($this->authorize($campaign) && $this->canAccessProject($campaign) || $this->createdBy($campaign))
+        {
+            $this->delete($campaign);
+        }
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
+    }
 
     private function authorize($campaign)
     {
-        $tenant = User::find(auth()->guard('employee')->user()->tenant_id);
-        if($campaign->project->ByTenant->id != $tenant->id)
+        if($campaign->project->ByTenant()->id != $this->tenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
         }
+        return true;
         
     }
 
-
-
-    private function deleteProject($campaign)
+    private function canAccessProject($campaign)
     {
-        $this->authorize($campaign);
-        $campaign->delete();
+        foreach($campaign->project->assignedEmployees as $assignedEmployee)
+        {
+
+            if($assignedEmployee->id === $this->employee()->id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function createdBy($campaign)
+    {
+        if($this->employee()->projects()->find($campaign->project->id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private function employee()
+    {
+       return  auth()->guard('employee')->user();
+    }
+    private function tenant()
+    {
+        return User::find($this->employee()->tenant_id);
+    }
+
+    private function delete($campaign)
+    {
+        $deleted = $campaign->delete();
+        if(!$deleted){
+        return response()->json(['success' => 'Failed To Delete Campaign!'], 400);
+        }
+        return response()->json(['success' => 'Campaign Deleted!'], 200);
     }
 
 }

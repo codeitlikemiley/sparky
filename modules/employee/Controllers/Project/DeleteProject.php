@@ -32,9 +32,9 @@ class DeleteProject extends BaseController
         if($this->createdBy($project))
         {
             $project->delete();
-            return response()->json(['success' => 'Project Deleted!'], 401);
+            return response()->json(['success' => 'Project Deleted!'], 200);
         }
-        return response()->json(['error' => 'UnAuthorized'], 401);
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
 
     private function employee()

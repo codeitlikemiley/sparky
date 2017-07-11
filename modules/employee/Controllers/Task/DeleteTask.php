@@ -22,43 +22,63 @@ class DeleteTask extends BaseController
      */
     public function __invoke($tenant=null,$task)
     {
-        $this->editTask($tenant,$task);
-        return response()->json(['success' => 'Task Created.'], 200);
-
+        $this->deleteTask($task);
     }
 
-    private function editTask($tenant,$task)
+    private function deleteTask($task)
     {
-        $employee = $this->authorize($tenant,$task);
-        $employee = $this->canAccessProject($employee,$task);
-        $task->delete();
+       if($this->authorize($task) && $this->canAccessProject($task) || $this->createdBy($task))
+        {
+            $this->delete($task);
+        }
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
 
-    private function authorize($tenant,$campaign)
+    private function authorize($task)
     {
-        $employee = auth()->guard('employee')->user();
-        if(!$tenant)
+        
+        if($task->campaign->project->ByTenant()->id != $this->employee()->tenant_id)
         {
-            $tenant = User::find($employee->tenant_id);
+            return false;
         }
-        if($campaign->project->ByTenant->id != $tenant->id)
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-        return $employee;
+        return true;
     }
 
-    private function canAccessProject($employee,$task)
+    private function employee()
+    {
+       return  auth()->guard('employee')->user();
+    }
+
+    private function canAccessProject($task)
     {
         foreach($task->campaign->project->assignedEmployees as $assignedEmployee)
         {
 
-            if($assignedEmployee->id === $employee->id)
+            if($assignedEmployee->id === $this->employee()->id)
             {
-                return $employee;
+                return true;
             }
         }
-        return response()->json(['error' => 'Unauthenticated.'], 401);
+        return false;
+    }
+
+    private function createdBy($task)
+    {
+        if($this->employee()->projects()->find($task->campaign->project->id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private function delete($task)
+    {
+        $deleted = $task->delete();
+        if(!$deleted)
+        {
+            return response()->json(['error' => 'Failed To Delete Task'], 400);
+        }
+        return response()->json(['success' => 'Task Deleted!'], 200);
     }
 
     

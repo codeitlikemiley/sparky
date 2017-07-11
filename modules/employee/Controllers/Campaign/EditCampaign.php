@@ -23,29 +23,82 @@ class EditCampaign extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($campaign)
+    public function __invoke($tenant=null,$campaign)
     {
         $this->editCampaign($campaign);
         return response()->json(['success' => 'Campaign Edited.'], 200);
     }
 
+    private function editCampaign($campaign)
+    {
+
+        if($this->authorize($campaign) && $this->canAccessProject($campaign) || $this->createdBy($campaign))
+        {
+            $this->editName($campaign);
+            $this->update($campaign);
+        }
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
+    }
+
     private function authorize($campaign)
     {
-        $tenant = User::find(auth()->guard('employee')->user()->tenant_id);
-        if($campaign->project->ByTenant->id != $tenant->id)
+        if($campaign->project->ByTenant()->id != $this->tenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
         }
-        return $tenant;
+        return true;
         
     }
 
-
-
-    private function editCampaign($campaign)
+    private function canAccessProject($campaign)
     {
-        $tenant = $this->authorize($campaign);
-        $campaign->name = $this->input['campaign_name'];
-        $campaign->save();
+        foreach($campaign->project->assignedEmployees as $assignedEmployee)
+        {
+
+            if($assignedEmployee->id === $this->employee()->id)
+            {
+                return true;
+            }
+        }
+        return false;
     }
+
+    private function createdBy($campaign)
+    {
+        if($this->employee()->projects()->find($campaign->project->id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private function employee()
+    {
+       return  auth()->guard('employee')->user();
+    }
+    private function tenant()
+    {
+        return User::find($this->employee()->tenant_id);
+    }
+
+    private function editName($campaign)
+    {
+        $this->validate($this->input, [
+        'campaign_name' => 'required|max:30',
+        ]);
+        $campaign->name = $this->input['project_name'];
+    }
+
+    private function update($campaign)
+    {
+        $save = $campaign->save();
+        if(!$save){
+            return response()->json(['error' => 'Failed To Edit Campaign'], 400);
+        }
+        return response()->json(['success' => 'Campaign Editted!'], 200);
+    }
+
+
+
+
 }

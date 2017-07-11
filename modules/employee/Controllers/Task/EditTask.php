@@ -24,44 +24,78 @@ class EditTask extends BaseController
      */
     public function __invoke($tenant=null,$task)
     {
-        $this->editTask($tenant,$task);
-        return response()->json(['success' => 'Task Created.'], 200);
-
+        $this->editTask($task);
     }
 
-    private function editTask($tenant,$task)
+    private function editTask($task)
     {
-        $employee = $this->authorize($tenant,$task);
-        $employee = $this->canAccessProject($employee,$task);
-        // validate
-        $task->update($this->input);
+       if($this->authorize($task) && $this->canAccessProject($task) || $this->createdBy($task))
+        {
+            $this->validateTask($task);
+            $this->update($task);
+        }
+        return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
 
-    private function authorize($tenant,$campaign)
+   private function authorize($task)
     {
-        $employee = auth()->guard('employee')->user();
-        if(!$tenant)
+        
+        if($task->campaign->project->ByTenant()->id != $this->employee()->tenant_id)
         {
-            $tenant = User::find($employee->tenant_id);
+            return false;
         }
-        if($campaign->project->ByTenant->id != $tenant->id)
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-        return $employee;
+        return true;
     }
 
-    private function canAccessProject($employee,$task)
+    private function employee()
+    {
+       return  auth()->guard('employee')->user();
+    }
+
+    private function canAccessProject($task)
     {
         foreach($task->campaign->project->assignedEmployees as $assignedEmployee)
         {
 
-            if($assignedEmployee->id === $employee->id)
+            if($assignedEmployee->id === $this->employee()->id)
             {
-                return $employee;
+                return true;
             }
         }
-        return response()->json(['error' => 'Unauthenticated.'], 401);
+        return false;
+    }
+
+    private function createdBy($task)
+    {
+        if($this->employee()->projects()->find($task->campaign->project->id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private function validateTask($task)
+    {
+        $this->validate($this->input, [
+        'task_name' => 'required|max:30',
+        'task_description' => 'max:30',
+        'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'task_done' => 'boolean'
+        ]);
+        $task->name = $this->input['task_name'];
+        $task->description = $this->input['task_description'];
+        $task->link = $this->input['task_link'];
+        $task->done = $this->input['task_done'];
+    }
+
+    private function update($task)
+    {
+        $save = $task->save();
+        if(!$save)
+        {
+            return response()->json(['error' => 'Failed To Edit Task'], 400);
+        }
+        return response()->json(['success' => 'Task Editted!'], 200);
     }
 
     
