@@ -15,11 +15,6 @@ class DeleteTask extends BaseController
         $this->middleware('auth:employee');
     }
 
-    /**
-     * Receive Project Id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke($tenant=null,$task)
     {
         $this->deleteTask($task);
