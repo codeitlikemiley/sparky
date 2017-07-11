@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\User;
 
-class EditSubtask extends BaseController
+class ToggleSubtask extends BaseController
 {
     protected $input;
 
@@ -18,14 +18,14 @@ class EditSubtask extends BaseController
 
     public function __invoke($tenant=null,$subtask)
     {
-        $this->editSubtask($subtask);
+        $this->toogleDone($subtask);
     }
 
-    private function editSubtask($subtask)
+    private function toogleDone($subtask)
     {
-       if($this->authorize($subtask) && $this->canAccessProject($subtask) || $this->createdBy($subtask))
+       if($this->authorize($subtask) && $this->canAccessProject($subtask))
         {
-            $this->validateTask($subtask);
+            $this->toggle($subtask);
             $this->update($subtask);
         }
         return response()->json(['error' => 'Actions Not Permitted!'], 401);
@@ -67,28 +67,14 @@ class EditSubtask extends BaseController
         }
         return false;
     }
-
-    private function validateTask($subtask)
+    private function toggle($subtask)
     {
-        $this->validate($this->input, [
-        'subtask_name' => 'required|max:30',
-        'subtask_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
-        'subtask_points' => 'integer|min:0',
-        'subtask_priority' => 'in:' . implode(',', $priority_array),
-        'subtask_due_date' => 'date_format:d/m/Y|after:tomorrow',
-        'subtask_done' => 'boolean',
-        ]);
-        $subtask->name = $this->input->subtask_name;
-        $subtask->points = $this->input->subtask_link;
-        $subtask->link = $this->input->subtask_points;
-        $subtask->priority = $this->input->subtask_priority;
-        $subtask->due_date = $this->input->subtask_due_date;
-        $subtask->done = $this->input->subtask_done;
-        
+        $subtask->done = !$subtask->done;
     }
 
     private function update($subtask)
     {
+        
         $save = $subtask->save();
         if(!$save)
         {

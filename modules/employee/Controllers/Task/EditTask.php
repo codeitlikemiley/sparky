@@ -95,7 +95,7 @@ class EditTask extends BaseController
         {
             return response()->json(['error' => 'Failed To Edit Task'], 400);
         }
-        return response()->json(['success' => 'Task Editted!'], 200);
+        return response()->json(['success' => 'Task Edited!'], 200);
     }
 
     
