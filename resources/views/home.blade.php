@@ -11,10 +11,10 @@
         <div class="section-wrapper page-heading">
 
             <div>
-                <h3 class="place-left alight-left">Welcome @{{ user.name }}</h3>
+                <h2 class="place-left alight-left fg-amber">Welcome! @{{ user.name }}</h2>
             </div>
 
-            <div class="place-right align-right" v-if="guard === 'web'">
+            <div class="place-right align-right" v-if="guard === 'web'" style="position:relative; top: 10px; right: 10px;">
                 <a href="#!">
                     <button @click="show('add-project')" class="button info"><span class="mif-plus"></span> Add New Project</button>
                 </a>
@@ -62,7 +62,7 @@
                 
             </div>
         </div>
-        <div v-else class="align-center v-align-middle" style="min-height: 500px;">
+        <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;" :class="styling">
             <h1 class="fg-teal">Create Your First Project.</h1>
         </div>
         @include('project::add-project-modal')

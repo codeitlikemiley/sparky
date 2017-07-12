@@ -44335,12 +44335,21 @@ Vue.component('dashboard', {
     data: function data() {
         return {
             campaigns: [],
-            projectForm: new EvolutlyForm({ project_name: '', client_id: '' })
+            projectForm: new EvolutlyForm({ project_name: '', client_id: '' }),
+            styling: {
+                clearBottom: false
+            }
         };
     },
     mounted: function mounted() {},
 
-    computed: {},
+    computed: {
+        hasNoProject: function hasNoProject() {
+            if (this.projects.length < 4) {
+                this.styling.clearBottom = true;
+            }
+        }
+    },
 
     methods: {
         projectChunks: function projectChunks(projects) {
@@ -44356,7 +44365,9 @@ Vue.component('dashboard', {
             var _this = this;
 
             if (this.guard === 'web') {
-                axios.post('dashboard/projects/create', this.projectForm).then(function (response) {
+                var location = '/dashboard/projects/create';
+                var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location;
+                axios.post(url, this.projectForm).then(function (response) {
                     this.$modal.hide('add-project');
                     this.projects.push(response.data.project);
                     this.projectForm.project_name = '';
@@ -44425,9 +44436,8 @@ __webpack_require__(202);
 
 /***/ }),
 /* 202 */
-/***/ (function(module, __webpack_exports__) {
+/***/ (function(module, exports) {
 
-"use strict";
 Vue.component('projects', {
     props: ['guard', 'clients', 'tenant', 'user', 'project', 'workers', 'campaigns'],
     // extra props we might need to add : files and forms

@@ -4,13 +4,21 @@ Vue.component('dashboard', {
         return {
             campaigns: [],
             projectForm: new EvolutlyForm({project_name: '', client_id: ''}),
+            styling: {
+                clearBottom: false,
+            }
         }
     },
 
     mounted() {
+
     },
     computed: {
-        
+        hasNoProject(){
+            if(this.projects.length < 4){
+                this.styling.clearBottom = true
+            }
+        }
     },
 
     methods: { 
@@ -29,7 +37,9 @@ Vue.component('dashboard', {
         {
             if(this.guard === 'web')
             {
-                axios.post('dashboard/projects/create', this.projectForm)
+                let location = '/dashboard/projects/create'
+                let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}`
+                axios.post(url, this.projectForm)
                 .then(function (response) {
                     this.$modal.hide('add-project');
                     this.projects.push(response.data.project)
