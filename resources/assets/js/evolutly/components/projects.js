@@ -22,8 +22,33 @@ Vue.component('projects', {
         },
     },
     methods: {
-        campaignChunks() {
-            return _.chunk(this.campaigns, 2)
+        slug: function(name) {
+        var slug = this.sanitizeName(name);
+        return slug;
+        },
+        sanitizeName: function(name) {
+        var slug = "";
+        // Change to lower case
+        var nameLower = name.toString().toLowerCase();
+        // Letter "e"
+        slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, 'e');
+        // Letter "a"
+        slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, 'a');
+        // Letter "o"
+        slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, 'o');
+        // Letter "u"
+        slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, 'u');
+        // Letter "d"
+        slug = slug.replace(/đ/gi, 'd');
+        // Trim the last whitespace
+        slug = slug.replace(/\s*$/g, '');
+        // Change whitespace to "-"
+        slug = slug.replace(/\s+/g, '-');
+        
+        return slug;
+        },
+        campaignChunks(campaigns) {
+            return _.chunk(campaigns, 2)
         },
         whenReady(){
             this.projectForm.project_name = this.project.name
@@ -87,22 +112,50 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
-        updateCampaign(id)
+        editCampaignModal(campaign)
         {
+            this.campaignForm.campaign_name = campaign.name
+            this.campaignForm.campaign_order = campaign.order
+            this.$modal.show(this.slug(campaign.name))
+        },
+        updateCampaign(campaign) {
             var self = this
             if (this.guard === 'web') {
-                axios.post('/dashboard/campaign/' + id + '/edit', self.projectForm)
+                axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm)
                     .then(function (response) {
-                        self.$modal.hide('edit-project');
+                        self.$modal.hide(self.slug(campaign.name))
+                        self.campaignForm.campaign_name = ''
+                        self.campaignForm.campaign_order = ''
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                     })
                     .catch(error => {
-                        self.$popup({ message: _.first(error.response.data.project_name) })
+                        self.$popup({ message: _.first(error.response.data.message) })
                     })
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' })
-            } 
+            }
         },
+
+        deleteCampaign(index,campaign) {
+            var self = this
+            if (this.guard === 'web') {
+                axios.post('/dashboard/campaigns/' + campaign.id + '/delete')
+                    .then(function (response) {
+                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                        self.campaigns.splice(index,1)
+                        // hack to rerender the dom
+                        self.campaignForm.campaign_name = response.data.campaign.name
+                        self.campaignForm.campaign_name = ''
+                        
+                    })
+                    .catch(error => {
+                        self.$popup({ message: _.first(error.response.data.message) })
+                    })
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+        },
+        
         // Soon To Be Added
         createForm(id) {
             axios.post('dashboard/projects/'+id+'/forms/create', this.formBuilderForm)
@@ -131,12 +184,6 @@ Vue.component('projects', {
         },
         hide(name) {
             this.$modal.hide(name)
-        }
-    },
-    components: { Multiselect },
-    watch: {
-        campaigns: function (value) {
-            
         }
     }
 })

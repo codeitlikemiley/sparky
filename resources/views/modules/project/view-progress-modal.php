@@ -1,4 +1,4 @@
-<modal :name="project.slug">
+<modal :name="project.slug" :adaptive="true" :resizable="true"> 
     <div class="panel widget-box">
         <div class="heading">
             <div class="title align-center">Progress <span @click="hide(project.slug)" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>

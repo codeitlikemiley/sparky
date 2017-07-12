@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Campaign;
+namespace App\Http\Controllers\Campaign;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
@@ -8,13 +8,17 @@ use App\Http\Controllers\Controller as BaseController;
 class DeleteCampaign extends BaseController
 {
     
-    protected $input;
+    protected $request;
+
+    protected $message = 'Campaign Deleted!';
+
+    protected $code = '200';
 
 
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        $this->input = $request->all();
+        $this->request = $request;
     }
 
     /**
@@ -24,29 +28,41 @@ class DeleteCampaign extends BaseController
      */
     public function __invoke($campaign)
     {
-        
         $this->deleteCampaign($campaign);
-        return response()->json(['success' => 'Project Edited.'], 200);
+        return response()->json(['message' => $this->message, 'campaign' => $campaign], $this->code);
     }
 
-
-
-    private function authorize($campaign)
+    private function tenant()
     {
-        $tenant = auth()->user();
-        if($campaign->project->ByTenant->id != $tenant->id)
+        return auth()->user();
+    }
+
+    private function allows($campaign)
+    {
+        if($campaign->project->byTenant()->id != $this->tenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            $this->message = 'UnAuthorized.';
+            $this->code = 401;
+            return false;
         }
+        return true;
         
     }
 
-
-
-    private function deleteProject($campaign)
+    private function deleteCampaign($campaign)
     {
-        $this->authorize($campaign);
-        $campaign->delete();
+        if($this->allows($campaign)){
+            $this->delete($campaign);
+        }
+    }
+
+    private function delete($campaign)
+    {
+        $deleted = $campaign->delete();
+        if(!$deleted){
+            $this->message = 'Failed To Delete Campaign';
+        }
+
     }
 
 }

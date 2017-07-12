@@ -44,12 +44,17 @@
                                     <div class="frame" id="tasks_tab">
                                         <div class="panel widget-box bg-grayLight">
 
-                                            <div class="row cells2 bg-grayLight" v-for="chunk in campaignChunks()" :chunk="chunk">
-                                                <div class="cell" v-for="campaign in chunk" :campaign="campaign">
+                                            <div class="row cells2 bg-grayLight" v-for="(chunk, index_chunk, key_chunk) in campaignChunks(campaigns)" :chunk="chunk" :index="index_chunk" :key="key_chunk">
+                                                <div class="cell" v-for="(campaign,index_campaign) in chunk" :campaign="campaign" :index="index_campaign" :key="campaign.id">
 
                                                     <div class="panel">
                                                         <div class="heading align-center">
-                                                            <span>@{{ campaign.name }}</span>
+                                                            <span class="">@{{ campaign.name }}</span>
+                                                            <span class="icon  fa fa-pencil-square-o" @click="editCampaignModal(campaign)"></span>
+                                                            
+                                                            <div @click="deleteCampaign(index_campaign,campaign)" class="bg-red place-right" style="position:absolute;top:0;right:0; width: 53px; height: 53px;">
+                                                                <i class="fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);" aria-hidden="true" ></i>
+                                                            </div>
                                                         </div>
                                                         <div class="content">
                                                             <div class="listview set-border padding10" data-role="listview">
@@ -85,7 +90,7 @@
 
                                                         </div>
                                                     </div>
-                                                    
+                                                   @include('campaign::edit-campaign-modal')
                                                 </div>
                                             </div>
 

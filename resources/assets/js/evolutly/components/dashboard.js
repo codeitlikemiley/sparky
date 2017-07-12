@@ -20,7 +20,11 @@ Vue.component('dashboard', {
     methods: { 
         campaignProgress(campaign)
         {
-            return Math.floor((campaign.done / campaign.total) * 100);
+            if(campaign.total > 0)
+            {
+                return Math.floor((campaign.done / campaign.total) * 100);
+            }
+            return 0;
         },
         createProject()
         {
@@ -47,13 +51,18 @@ Vue.component('dashboard', {
                 location = '/employee/dashboard/projects/'+id
             }
             let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}`
-
+            console.log(url)
             window.location.href = url
         },
         viewProgress(id,name) {
+            let location = '/dashboard/projects/' + id + '/progress'
+            if (this.guard === 'employee') {
+                location = '/employee/dashboard/projects/'+id + '/progress'
+            }
+            let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}`
             this.campaigns = [];
             // load a loader circle
-            axios.post('dashboard/projects/' + id + '/progress').then(function (response) {
+            axios.post(url).then(function (response) {
                 this.campaigns = response.data
                 this.$modal.show(name);
             }.bind(this))

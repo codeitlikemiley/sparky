@@ -9,6 +9,7 @@
     <div class="align-right place-right" v-if="progress < 100">
         <strong class="fg-darkCobalt">{{ progress }}%</strong>
     </div>
+
 </div>
 </template>
 

@@ -48,7 +48,9 @@ class EditProject extends BaseController
         {
             $this->code = 401;
             $this->message = 'UnAuthorized';
+            return false;
         }
+        return true;
     }
 
    private function AddName($project)
