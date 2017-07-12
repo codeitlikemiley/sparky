@@ -118,12 +118,13 @@ Vue.component('projects', {
             this.campaignForm.campaign_order = campaign.order
             this.$modal.show(this.slug(campaign.name))
         },
-        updateCampaign(campaign) {
+        updateCampaign(index,campaign) {
             var self = this
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm)
                     .then(function (response) {
                         self.$modal.hide(self.slug(campaign.name))
+                        self.campaigns.splice(index, 1, response.data.campaign)
                         self.campaignForm.campaign_name = ''
                         self.campaignForm.campaign_order = ''
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })

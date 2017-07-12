@@ -4,7 +4,7 @@
             <div class="title">Edit @{{campaignForm.campaign_name}} <span @click="hide(slug(campaign.name))" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
         </div>
         <div class="content">
-            <form @submit.prevent="updateCampaign(campaign)" role="form" class="padding10">
+            <form @submit.prevent="updateCampaign(index_campaign,campaign)" role="form" class="padding10">
                 <div class="row">
 
                     <div class="input-control text full-size">
