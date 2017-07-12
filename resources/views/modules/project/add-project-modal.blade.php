@@ -5,45 +5,18 @@
         </div>
         <div class="content">
             <div class="row">
-                <div class="input-control text full-size">
-                    @if($guard === 'employee')
-                    <form method="POST" action="{{ route('employee.projects.create',['username' => $tenant->username]) }}">
-                         {{ csrf_field() }}
-                        <input  type="text" placeholder="Type Project Name" name="project_name">
-                        <input type="hidden" placeholder="Type Project Name" name="client_id" value="1">
-                        <button type="submit" class="button info">
-                                <span class="icon mif-keyboard-return"></span>
-                        </button>
-                    </form>
-                    @elseif($guard === 'client')
-                    <form method="POST" action="{{ route('client.projects.create',['username' => $tenant->username]) }}">
+                    @if($guard === 'web')
+                    <div class="input-control text full-size">
+                    <form @submit.prevent="createProject()" role="form" class="padding10">
                         {{ csrf_field() }}
-                        <input type="text" placeholder="Type Project Name" name="project_name">
-                        
-                        <button type="submit" class="button info">
-                                <span class="icon mif-keyboard-return"></span>
+                        <input type="text" placeholder="Type Project Name" v-model="projectForm.project_name">
+                        <v-select v-if="clients.length > 0" v-model="projectForm.client_id" label="name" :options="clients"  placeholder="Choose a Client"></v-select>
+                        <button type="submit" class="button info place-right" style="position:absolute;top:100px;right: 10px;">
+                                <span class="icon mif-keyboard-return">ENTER</span>
                         </button>
                     </form>
-                    @elseif(isset($request->username) && $guard === 'web')
-                    <form method="POST" action="{{ route('tenant.projects.create',['username' => $tenant->username]) }}">
-                        {{ csrf_field() }}
-                        <input type="text" placeholder="Type Project Name" name="project_name">
-
-                        <button type="submit" class="button info">
-                                <span class="icon mif-keyboard-return"></span>
-                        </button>
-                    </form>
-                    @else
-                    <form method="POST" action="/dashboard/projects/create">
-                        {{ csrf_field() }}
-                        <input type="text" placeholder="Type Project Name" name="project_name">
-                        
-                        <button type="submit" class="button info">
-                                <span class="icon mif-keyboard-return"></span>
-                        </button>
-                    </form>
+                    </div>
                     @endif
-                </div>
             </div>
         </div>
     </div>

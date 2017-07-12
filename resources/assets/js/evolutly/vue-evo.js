@@ -1,4 +1,6 @@
+import VueUp from 'vueup'
 import vmodal from 'vue-js-modal'
+
 /*
  * Load Vue & Vue-Resource.
  *
@@ -20,6 +22,7 @@ if (window.Vue === undefined) {
 Vue.mixin(require('initial_state'));
 
 Vue.use(vmodal)
+Vue.use(VueUp)
 
 
 var progressBar = require('components/progress-bar');
@@ -27,6 +30,10 @@ var progressBar = require('components/progress-bar');
 Vue.component('progress-bar', {
     mixins: [progressBar]
 });
+import vSelect from 'vue-select'
+Vue.component('v-select', vSelect)
+
+
 
 /**
  * Define the Vue filters.

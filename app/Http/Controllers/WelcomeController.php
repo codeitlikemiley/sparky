@@ -13,6 +13,10 @@ class WelcomeController extends Controller
      */
     public function show()
     {
-        return view('welcome');
+        if(isset(request()->username))
+        {
+            $tenant = request()->username;
+        }
+        return view('welcome',['tenant' =>$tenant]);
     }
 }

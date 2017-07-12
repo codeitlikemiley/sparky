@@ -12,13 +12,17 @@ class CreateCampaign extends BaseController
     
     protected $campaign;
 
-    protected $input;
+    protected $request;
+
+    protected $message = 'Campaign Created!';
+
+    protected $code = '200';
 
 
     public function __construct(Campaign $campaign,Request $request)
     {
         $this->middleware('auth');
-        $this->input = $request->all();
+        $this->request = $request;
         $this->campaign = $campaign;
     }
 
@@ -29,24 +33,47 @@ class CreateCampaign extends BaseController
      */
     public function __invoke($project)
     {
+        $this->validate($this->request, [
+        'campaign_name' => 'required|max:30',
+        'campaign_order' => 'int|min:0'
+        ]);
         $this->createCampaign($project);
-        return response()->json(['success' => 'Campaign Edited.'], 200);
+        $campaign = $this->campaign->find($this->campaign->id);
+        return response()->json(['message' => $this->message, 'campaign' => $campaign], $this->code);
     }
 
     private function createCampaign($project)
     {
-        $this->authorize($project);
-        $campaign = $this->campaign;
-        $campaign->name = $this->input['campaign_name'];
-        $project->campaigns()->save($campaign);
+            $this->addName();
+            $this->addOrder();
+            $this->save($project);
+    }
+    private function tenant()
+    {
+        return auth()->user();
     }
 
-    private function authorize($project)
+    private function addName()
     {
-        if($project->ByTenant->id != auth()->user()->id)
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+        $this->campaign->name = $this->request->campaign_name;
+    }
+
+    private function addOrder()
+    {
+        if(isset($this->request->campaign_order)){
+        $this->campaign->order = $this->request->campaign_order;
         }
     }
+
+
+    private function save($project)
+    {
+        $save = $project->campaigns()->save($this->campaign);
+        if(!$save){
+        $this->message = 'Campaign Creation Failed!';
+        $this->code = 404;
+        }
+    }
+
 
 }

@@ -25,10 +25,12 @@
 
 Evolutly.forms = {
     projectForm: {
-        name: ''
+        project_name: '',
+        client_id: ''
     },
     campaignForm: {
-        name: ''
+        campaign_name: '',
+        campaign_order: 0
     },
     taskForm: {
         name: '',

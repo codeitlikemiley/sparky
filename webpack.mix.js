@@ -41,6 +41,7 @@ mix.combine([
     'node_modules/sweetalert/dist/sweetalert.min.js',
     'resources/assets/metro/js/metro.js',
     'resources/assets/metro/plugins/jquery-ui.min.js',
+    // 'resources/assets/metro/plugins/countup/countUp-ui.min.js',
     // added data tables // read more about this shit
     'resources/assets/metro/js/jquery.dataTables.min.js',
     // This Contains The Js For Sidebar

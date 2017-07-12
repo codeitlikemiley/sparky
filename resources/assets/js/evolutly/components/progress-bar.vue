@@ -3,10 +3,11 @@
     <div class="progress-bar inner" :style="{ 'width': progress+'%' }" :progress="progress" :name="name">
         <div class="inner">
             <strong class="fg-darkCobalt place-left">{{ name }}</strong>
+            <strong v-if="progress >= 100" class="fg-darkCobalt place-right completed">: 100% Completed</strong>
         </div>
     </div>
-    <div class="align-right place-right">
-        <strong class="fg-darkCobalt progress-percent">{{ progress }}%</strong>
+    <div class="align-right place-right" v-if="progress < 100">
+        <strong class="fg-darkCobalt">{{ progress }}%</strong>
     </div>
 </div>
 </template>
@@ -22,6 +23,7 @@ export default {
 .progress-container{
     width:100%;
     position:relative;
+    padding-top: 15px;
 }
 .progress-bar {
   height: 20px;
@@ -42,9 +44,6 @@ export default {
 }
 .inner {
     position: absolute;
-}
-.progress-percent{
-    z-index:999 !important;
 }
 
 

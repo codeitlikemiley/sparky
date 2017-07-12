@@ -11,24 +11,32 @@ class CreateProject extends BaseController
 {
     protected $project;
 
-    protected $input;
+    protected $request;
+
+    protected $message;
+
+    protected $code = '200';
 
     public function __construct(Project $project,Request $request)
     {
         $this->middleware('auth');
-        $this->input = $request->all();
+        $this->request = $request;
         $this->project = $project;
     }
 
     public function __invoke()
     {
+        $this->validate($this->request, [
+        'project_name' => 'required|max:30',
+        ]);
         $this->createProject();
+        return response()->json(['message' => $this->message, 'project' => $this->project], $this->code);
     }
 
     private function createProject()
     {
-        $this->AddName();
-        $this->AddClientIfAny();
+        $this->addName();
+        $this->addClientIfAny();
         $this->manageProjectsByTenant();
         $this->saveByTenant();
         
@@ -39,19 +47,18 @@ class CreateProject extends BaseController
         return auth()->user();
     }
 
-    private function AddName()
+    private function addName()
     {
-        $this->validate($this->input, [
-        'project_name' => 'required|max:30',
-        ]);
-        $this->project->name = $this->input['project_name'];
+       
+        $this->project->name = $this->request->project_name;
     }
 
-    private function AddClientIfAny()
+    private function addClientIfAny()
     {
-        if(isset($this->input['client_id'])){
+        if(isset($this->request->client_id['id']))
+        {
             $tenant_clients = $this->tenant()->clients->pluck('id')->toArray();
-            $client_id = $this->input['client_id'];
+            $client_id = $this->request->client_id['id'];
             if(in_array($client_id,$tenant_clients))
             {
             $this->project->client_id = $client_id;
@@ -68,8 +75,8 @@ class CreateProject extends BaseController
     {
         $save = $this->tenant()->projects()->save($this->project);
         if(!$save){
-        return response()->json(['success' => 'Project Creation Failed.'], 400);
+        $this->message = 'Project Creation Failed';
         }
-        return response()->json(['success' => 'Project Created!'], 200);
+        $this->message = 'Project Created!';
     }
 }

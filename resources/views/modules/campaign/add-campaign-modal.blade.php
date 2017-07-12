@@ -8,13 +8,14 @@
                 <div class="row">
 
                     <div class="input-control text full-size">
-                        <input type="text" placeholder="Add Campaign" v-model="campaignForm.name">
+                        <input type="text" placeholder="Add Campaign" v-model="campaignForm.campaign_name">
+                        <input type="number" placeholder="Campaign Order" v-model="campaignForm.campaign_order">
                         <button type="submit" class="button info" :disabled="campaignForm.busy">
                             <span class="icon mif-keyboard-return"></span>
                     </button>
                     </div>
-                    <span class="help-block" v-show="campaignForm.errors.has('name')">
-                        @{{ campaignForm.errors.get('name') }}
+                    <span class="help-block" v-show="campaignForm.errors.has('campaign_name')">
+                        @{{ campaignForm.errors.get('campaign_name') }}
                     </span>
 
                 </div>

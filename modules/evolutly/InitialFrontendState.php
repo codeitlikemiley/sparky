@@ -29,6 +29,7 @@ class InitialFrontendState implements Contract
         // we always return a user and a tenant
         $data = array_merge(array(),['user' => $this->currentUser()]);
         $data = array_merge($data,['tenant' => $this->getTenant()]);
+        $data = array_merge($data,['clients' => $this->getClients()]);
         // if we are on the dashboard of the all types of user
         $dashboardRoutes = array("dashboard", "tenant.dashboard", "employee.dashboard", "client.dashboard");
         if (in_array(Route::currentRouteName(), $dashboardRoutes)) {
@@ -49,9 +50,18 @@ class InitialFrontendState implements Contract
     {
         $user = $this->currentUser();
         if($user instanceOf User){
-            return $user; 
+            return $user->select('id','username','name','photo_url')->first(); 
         }
         return User::find($user->tenant_id)->select('id','username','name','photo_url')->first();
+    }
+
+    protected function getClients()
+    {
+        $user = $this->currentUser();
+        if($user instanceOf User){
+            return $user->clients()->select(['id','name'])->get();
+        }
+        return User::find($user->tenant_id)->clients->select(['id','name'])->get();
     }
     // Maybe we can do a eager loading here....
     protected function currentProject()

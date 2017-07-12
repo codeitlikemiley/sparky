@@ -5,7 +5,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'DashboardController@index')->name('tenant.dashboard');
       Route::post('/projects/create', 'Project\CreateProject')->name('tenant.projects.create');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('tenant.projects.view');
-      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
+      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
   });
 });

@@ -10,7 +10,8 @@
 @endpush
 
 @section('content')
-<projects :guard="{{ json_encode($guard) }}" :tenant="tenant" :user="user" :project="{{ json_encode($project) }}" :campaigns="{{ json_encode($project['campaigns']) }}" :workers="{{ json_encode($project['assignedEmployees']) }}" inline-template>
+<vue-up></vue-up>
+<projects :guard="{{ json_encode($guard) }}" :clients="clients" :tenant="tenant" :user="user" :project="{{ json_encode($project) }}" :campaigns="{{ json_encode($campaigns) }}" :workers="{{ json_encode($workers) }}" inline-template>
 
 <div class="section-wrapper animated fadeInRightBig">
     <br>
@@ -18,7 +19,7 @@
         <div class="content">
             <div class="text">
 
-                <h1>@{{project.name}}</h1>
+                <h1 v-text="projectForm.project_name"></h1>
                 <hr>
                 <div>
                     <a href="#!">
@@ -43,8 +44,8 @@
                                     <div class="frame" id="tasks_tab">
                                         <div class="panel widget-box bg-grayLight">
 
-                                            <div class="row cells2 bg-grayLight" v-for="(chunk, index) in campaignChunks" :key="chunk.id" :index="index" :chunk="chunk">
-                                                <div class="cell" v-for="(campaign, index) in chunk" :key="campaign.id" :index="index" :campaign="campaign">
+                                            <div class="row cells2 bg-grayLight" v-for="chunk in campaignChunks()" :chunk="chunk">
+                                                <div class="cell" v-for="campaign in chunk" :campaign="campaign">
 
                                                     <div class="panel">
                                                         <div class="heading align-center">
@@ -55,16 +56,16 @@
 
                                                                 <div class="list-group">
                                                                     <div class="list-group-content">
-                                                                        <div class="list" @click="viewTask(task.id)" v-for="(task, index) in campaign.tasks" :key="task.id" :index="index" :task="task">
+                                                                        <div v-if="campaign.tasks.length > 0" class="list" @click="viewTask(task.id)" v-for="task in campaign.tasks" :task="task">
                                                                             <span>
                                                                                 <span class="mif-clipboard fg-teal">
                                                                                 </span>
                                                                             </span>
                                                                             <span class="fg-amber">
-                                                                                @{{ task.progress }}
+                                                                                @{{ task.done_points }}
                                                                             </span>
                                                                             <strong class="fg-teal">/</strong>
-                                                                            <span class="fg-green">@{{ task.total}}</span>
+                                                                            <span class="fg-green">@{{ task.total_points}}</span>
                                                                             <span class="fg-teal">@{{ task.name }}</span>
                                                                             <a href="#!">
                                                                                 <span style="float: right;">

@@ -19,7 +19,7 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'DashboardController@index')->name('client.dashboard');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('client.projects.view');
-      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
+      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
   });
 });

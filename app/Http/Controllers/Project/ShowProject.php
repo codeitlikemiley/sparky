@@ -24,6 +24,8 @@ class ShowProject extends BaseController
      */
     public function __invoke($project)
     {
-        return view('project::view',['project' => $project]);
+        $campaigns = $project->campaigns;
+        $workers = $project->assignedEmployees;
+        return view('project::view',['project' => $project, 'campaigns' => $campaigns, 'workers' => $workers]);
     }
 }

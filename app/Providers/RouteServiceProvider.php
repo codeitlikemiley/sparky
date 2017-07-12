@@ -43,7 +43,7 @@ class RouteServiceProvider extends ServiceProvider
         try {
         return User::where('username', $value)->firstOrFail();
         }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return redirect()->to(config('app.url'));
+            abort('404');
         }
         });
         Route::pattern('username', '[a-z0-9_-]{3,16}');
@@ -52,7 +52,7 @@ class RouteServiceProvider extends ServiceProvider
         try {
         return Project::where('slug', $value)->firstOrFail();
         }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return redirect()->route('frontend');
+            abort('404');
         }
         });
 

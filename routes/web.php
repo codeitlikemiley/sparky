@@ -25,8 +25,10 @@ Route::get('/paid', ['middleware' => 'subscribed', function () {
 Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'HomeController@show')->name('dashboard');
       Route::post('/projects/create', 'Project\CreateProject')->name('tenant.projects.create');
+      Route::post('/projects/{projectID}/edit', 'Project\EditProject')->name('tenant.projects.edit');
+      Route::post('/projects/{projectID}/campaigns/create', 'Campaign\CreateCampaign')->name('tenant.campaigns.create');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('tenant.projects.view');
-      Route::get('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
+      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
   });
 

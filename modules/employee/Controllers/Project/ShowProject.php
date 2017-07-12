@@ -27,7 +27,7 @@ class ShowProject extends BaseController
     {
         // We need to Get the Current Workers
         // We need to Get All Files related to this Project
-        $project->load('campaigns.tasks','assignedEmployees')->toArray();
+        $project->load('campaigns.tasks','assignedEmployees')->get();
         return view('project::view',['project' => $project, 'tenant' => $tenant]);
     }
 }

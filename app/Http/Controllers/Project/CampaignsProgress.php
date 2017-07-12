@@ -25,7 +25,7 @@ class CampaignsProgress extends BaseController
 
     public function __invoke($project)
     {
-        $campaigns = $project->campaigns()->get()->toArray();
-        return view('project::progress',['campaigns' => $campaigns, 'project' => $project]);
+        $campaigns = $project->campaigns;
+        return $campaigns;
     }
 }
