@@ -40,7 +40,7 @@ if (window.$ === undefined || window.jQuery === undefined) {
 }
 // Remove Since We Have it On Metro Ui JS
 require('bootstrap/dist/js/npm');
-
+require('promise.prototype.finally');
 /**
  * Load Vue if this application is using Vue as its framework.
  * Load Vue & Vue-Resource.

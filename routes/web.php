@@ -26,6 +26,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'HomeController@show')->name('dashboard');
       Route::post('/projects/create', 'Project\CreateProject')->name('tenant.projects.create');
       Route::post('/projects/{projectID}/edit', 'Project\EditProject')->name('tenant.projects.edit');
+      Route::post('/projects/{projectID}/delete', 'Project\deleteProject')->name('tenant.projects.delete');
       Route::post('/projects/{projectID}/campaigns/create', 'Campaign\CreateCampaign')->name('tenant.campaigns.create');
       Route::post('/campaigns/{campaign}/edit', 'Campaign\EditCampaign')->name('tenant.campaigns.edit');
       Route::post('/campaigns/{campaign}/delete', 'Campaign\DeleteCampaign')->name('tenant.campaigns.delete');

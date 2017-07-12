@@ -19,7 +19,8 @@
         <div class="content">
             <div class="text">
 
-                <h1 v-text="projectForm.project_name"></h1>
+                <h1 v-text="projectForm.project_name">
+                </h1>
                 <hr>
                 <div>
                     <a href="#!">
@@ -27,6 +28,9 @@
                     </a>
                     <a href="#!">
                     <button @click="show('edit-project')" class="button info"><span class="mif-pencil"></span> Edit Project</button>
+                    </a>
+                    <a href="#!">
+                    <button @click="deleteProject()" class="button alert"><span class="icon fa fa-trash"></span> Delete Project</button>
                     </a>
                 </div>
                 <div class="grid responsive">

@@ -1,4 +1,3 @@
-import Multiselect from 'vue-multiselect'
 Vue.component('dashboard', {
     props: ['guard', 'tenant', 'user', 'projects' ,'clients'],
     data () {
@@ -11,13 +10,13 @@ Vue.component('dashboard', {
     mounted() {
     },
     computed: {
-        projectChunks() {
-            return _.chunk(this.projects, 3)
-        },
         
     },
 
     methods: { 
+        projectChunks(projects) {
+            return _.chunk(projects, 3)
+        },
         campaignProgress(campaign)
         {
             if(campaign.total > 0)
@@ -43,6 +42,23 @@ Vue.component('dashboard', {
                 })
             }else{
                 this.$popup({ message: 'Oops Cant Do That!' })
+            }
+        },
+        deleteProject(index,id) {
+            var self = this
+            if (this.guard === 'web') {
+                axios.post('/dashboard/projects/' + id + '/delete')
+                    .then(function (response) {
+                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                        self.projects.splice(index, 1)
+                        self.projectForm.project_name = response.data.project
+                        self.projectForm.project_name = ''
+                    })
+                    .catch(error => {
+                        self.$popup({ message: _.first(error.response.data.campaign_name) })
+                    })
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
         viewProject(id) {
@@ -74,5 +90,4 @@ Vue.component('dashboard', {
             this.$modal.hide(name);
         }
     },
-    components: { Multiselect },
 });

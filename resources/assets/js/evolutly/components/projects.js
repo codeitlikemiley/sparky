@@ -1,4 +1,3 @@
-import Multiselect from 'vue-multiselect'
 Vue.component('projects', {
     props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaigns'],
     // extra props we might need to add : files and forms
@@ -98,17 +97,33 @@ Vue.component('projects', {
         createCampaign() {
             var self = this
             if (this.guard === 'web') {
+            
             axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
             .then(function (response) {
-                self.$modal.hide('add-campaign')
-                self.campaigns.push(response.data.campaign)
-                self.campaignForm.campaign_name = ''
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
                 self.$popup({ message: _.first(error.response.data.campaign_name) })
             })
             }else {
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+            
+        },
+        deleteProject() {
+            var self = this
+            if (this.guard === 'web') {
+                axios.post('/dashboard/projects/' + self.project.id + '/delete')
+                    .then(function (response) {
+                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                        let location = '/dashboard'
+                        let url = `${window.location.protocol}//${self.tenant.username}.${Evolutly.domain}${location}`
+                        window.location.replace(url)
+                    })
+                    .catch(error => {
+                        self.$popup({ message: _.first(error.response.data.campaign_name) })
+                    })
+            } else {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },

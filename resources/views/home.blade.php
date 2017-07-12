@@ -10,8 +10,8 @@
 
         <div class="section-wrapper page-heading">
 
-            <div class="place-left alight-left">
-                <h3>Welcome @{{ user.name }}</h3>
+            <div>
+                <h3 class="place-left alight-left">Welcome @{{ user.name }}</h3>
             </div>
 
             <div class="place-right align-right" v-if="guard === 'web'">
@@ -23,16 +23,17 @@
         </div>
 
         <div class="section-wrapper bg-grayLighter align-center" style="margin-top:100px;">
-            <h1>Projects</h1>
+            <h1 v-show="projects.length >0">Projects</h1>
         </div>
         
-        <div class="section-wrapper animated fadeInRightBig margin-bottom-40">
+        <div v-if="projects.length >0" class="section-wrapper animated fadeInRightBig margin-bottom-40">
             <div class="grid condensed demo-grid">
-                <div class="row cells3" v-for="item in projectChunks">
-                    <div class="cell" v-for="project in item">
+                <div class="row cells3" v-for="(chunk, index_chunk, key_chunk) in projectChunks(projects)" :chunk="chunk" :index="index_chunk" :key="key_chunk">
+                    <div class="cell" v-for="(project,index_project) in chunk" :project="project" :index="index_project" :key="project.id">
                         <div class="panel error">
                             <div class="heading">
                                 <span class="title">@{{ project.name }}</span>
+                                   <span @click="deleteProject(index_project,project.id)" class="bg-red alert icon fa fa-trash"></span>
                             </div>
                             
                             <div class="content">
@@ -58,7 +59,11 @@
                          @include('project::view-progress-modal')
                     </div>
                 </div>
+                
             </div>
+        </div>
+        <div v-else class="align-center v-align-middle" style="min-height: 500px;">
+            <h1 class="fg-teal">Create Your First Project.</h1>
         </div>
         @include('project::add-project-modal')
         
