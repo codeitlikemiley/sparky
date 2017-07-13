@@ -47,18 +47,22 @@
                                 <div class="frames bg-white">
                                     <div class="frame bg-white" id="tasks_tab">
                                         
-                                        <div class="panel widget-box bg-white">
+                                        <div class="panel widget-box">
 
-                                            <div class="row cells2 bg-teal" style="padding: 20px;" v-for="(chunk, keyChunk) in campaignChunks(campaigns)" :key="keyChunk">
-                                                
-                                                <draggable class="cell" v-for="campaign in chunk" :options="{group: 'campaign'}" :key="campaign.id">
-                                                    
+                                            <div class="row cells2" style="padding: 20px;background-color:#bbdefb;" v-for="(chunk, keyChunk) in campaignChunks(campaigns)" :key="keyChunk">
+                                                <draggable class="cell" v-for="(campaign, cKey) in chunk" :options="{group: 'campaign'}"
+                                                 :data-id="campaign.id" :key="cKey"
+                                                 @end="onEnd"
+                                                 style="min-height: 150px;"
+                                                 :leftOrRight="cKey" :max="keyChunk" :data-id="campaign.id"
+                                                 >
                                                     <div class="panel">
-                                                        <div class="heading align-center">
+                                                        
+                                                        <div class="heading align-center bg-lightBlue" style="cursor:move;">
                                                             <span class="">@{{ campaign.name }}</span>
-                                                            <span class="icon  fa fa-pencil-square-o" @click="editCampaignModal(campaign)"></span>
+                                                            <span class="icon  fa fa-pencil-square-o bg-steel" @click="editCampaignModal(campaign)" style="cursor:pointer;"></span>
                                                             
-                                                            <div @click="deleteCampaign(campaign)" class="bg-red place-right" style="position:absolute;top:0;right:0; width: 53px; height: 53px;">
+                                                            <div @click="deleteCampaign(campaign)" class="bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;">
                                                                 <i class="fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);" aria-hidden="true" ></i>
                                                             </div>
                                                         </div>

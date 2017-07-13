@@ -27,10 +27,8 @@ class ReOrderCampaign extends BaseController
      */
     public function __invoke($campaign)
     {
-         $this->validate($this->request, [
-        'campaign_order' => 'required|int|min:0'
-        ]);
-        $this->editCampaign($campaign);
+        
+        $this->switchOrder($campaign);
         
         return response()->json(['message' => $this->message, 'campaign' => $campaign], $this->code);
         
@@ -52,7 +50,7 @@ class ReOrderCampaign extends BaseController
     private function addOrder($campaign)
     {
         if(isset($this->request->campaign_order)){
-        $campaign->order = $this->request->campaign_order;
+        $campaign->order = abs($this->request->campaign_order);
         }
     }
     private function tenant()
@@ -60,7 +58,7 @@ class ReOrderCampaign extends BaseController
         return auth()->user();
     }
 
-    private function editCampaign($campaign)
+    private function switchOrder($campaign)
     {
         if($this->allows($campaign)){
             $this->addOrder($campaign);

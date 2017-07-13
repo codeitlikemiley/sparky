@@ -12,6 +12,8 @@ Vue.component('projects', {
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
+            order_from: '',
+            order_to: ''
         }
     },
     mounted() {
@@ -165,24 +167,50 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
-        switchCampaign(campaign) {
+        onStart(e){
+
+        },
+        onEnd(e){
             var self = this
+            // if 0 then we are going right
+            // if 1 then we are going left
+            let left = 0
+            let right = 1
+            let leftOrRight = parseInt(e.target.getAttribute('leftOrRight'))
+            let max = parseInt(e.target.getAttribute('max'))
+            let id = e.target.getAttribute('data-id')
+            let order = ((max + 1) * 2)
+            let position = null
+            
+            if(leftOrRight === left)
+            {
+                position = order - 1
+                
+            }else{
+                position = order
+            }
+            console.log(position)
+            self.switchCampaign(position,id)
+            
+        },
+
+        switchCampaign(position,id) {
+            var self = this
+            self.campaignOrderForm.campaign_order = parseInt(position)
             if (this.guard === 'web') {
-                axios.post('/dashboard/campaigns/' + campaign.id + '/reorder', self.campaignOrderForm)
+                axios.post('/dashboard/campaigns/' + id + '/reorder', self.campaignOrderForm)
                     .then(function (response) {
-                        let index = _.findIndex(self.campaigns, { id: campaign.id })
-                        console.log(index)
-                        self.$set(self.campaigns, index, response.data.campaign)
-                        // we need to switch it now...
-                        // hack to re render
-                        self.campaignOrderForm.campaign_order = ''
+                        
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                        return true;
                     })
                     .catch(error => {
-                        self.$popup({ message: _.first(error.response.data.message) })
+                        self.$popup({ message: error.response.data.message })
+                        return false;
                     })
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' })
+                return false;
             }
         },
         // works like charm
