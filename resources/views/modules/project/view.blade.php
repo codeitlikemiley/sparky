@@ -50,7 +50,8 @@
                                         <div class="panel widget-box">
 
                                             <div class="row cells2" style="padding: 20px;background-color:#bbdefb;" v-for="(chunk, keyChunk) in campaignChunks(campaigns)" :key="keyChunk">
-                                                <draggable class="cell" v-for="(campaign, cKey) in chunk" :options="{group: 'campaign'}"
+                                                <draggable class="cell draghandle" v-for="(campaign, cKey) in chunk" 
+                                                :options="{group: 'campaign',handle: '.draghandle',filter: '.v--modal-box,.v--modal',scroll: true,preventOnFilter: false,}"
                                                  :data-id="campaign.id" :key="cKey"
                                                  @end="onEnd"
                                                  style="min-height: 150px;"
