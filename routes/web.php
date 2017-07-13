@@ -29,6 +29,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::post('/projects/{projectID}/delete', 'Project\deleteProject')->name('tenant.projects.delete');
       Route::post('/projects/{projectID}/campaigns/create', 'Campaign\CreateCampaign')->name('tenant.campaigns.create');
       Route::post('/campaigns/{campaign}/edit', 'Campaign\EditCampaign')->name('tenant.campaigns.edit');
+      Route::post('/campaigns/{campaign}/reorder', 'Campaign\ReOrderCampaign')->name('tenant.campaigns.reorder');
       Route::post('/campaigns/{campaign}/delete', 'Campaign\DeleteCampaign')->name('tenant.campaigns.delete');
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('tenant.projects.view');
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');

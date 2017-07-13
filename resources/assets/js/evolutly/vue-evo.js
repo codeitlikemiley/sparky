@@ -1,5 +1,6 @@
 import VueUp from 'vueup'
 import vmodal from 'vue-js-modal'
+var draggable = require('vuedraggable')
 
 /*
  * Load Vue & Vue-Resource.
@@ -32,6 +33,7 @@ Vue.component('progress-bar', {
 });
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
+Vue.component('draggable', draggable)
 
 
 

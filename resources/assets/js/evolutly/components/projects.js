@@ -1,3 +1,5 @@
+
+
 Vue.component('projects', {
     props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaigns'],
     // extra props we might need to add : files and forms
@@ -5,6 +7,7 @@ Vue.component('projects', {
         return {
             projectForm: new EvolutlyForm({ project_name: '', client_id: '' }),
             campaignForm: new EvolutlyForm(Evolutly.forms.campaignForm),
+            campaignOrderForm: new EvolutlyForm(Evolutly.forms.campaignOrderForm),
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
@@ -48,6 +51,9 @@ Vue.component('projects', {
         },
         campaignChunks(campaigns) {
             return _.chunk(campaigns, 2)
+        },
+        twoColumn(campaigns){
+            return Math.floor(campaigns.length /2)
         },
         whenReady(){
             this.projectForm.project_name = this.project.name
@@ -100,6 +106,10 @@ Vue.component('projects', {
             
             axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
             .then(function (response) {
+                self.$modal.hide('add-campaign');
+                self.campaigns.push(response.data.campaign)
+                self.campaignForm.campaign_name = ''
+                self.campaignForm.campaign_order = 0
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
@@ -133,13 +143,17 @@ Vue.component('projects', {
             this.campaignForm.campaign_order = campaign.order
             this.$modal.show(this.slug(campaign.name))
         },
-        updateCampaign(index,campaign) {
+        //works like charm
+        updateCampaign(campaign) {
             var self = this
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm)
                     .then(function (response) {
                         self.$modal.hide(self.slug(campaign.name))
-                        self.campaigns.splice(index, 1, response.data.campaign)
+                        let index = _.findIndex(self.campaigns, { id: campaign.id })
+                        console.log(index)
+                        self.$set(self.campaigns, index, response.data.campaign)
+                        // hack to rerender the dom
                         self.campaignForm.campaign_name = ''
                         self.campaignForm.campaign_order = ''
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -151,17 +165,40 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
-
-        deleteCampaign(index,campaign) {
+        switchCampaign(campaign) {
+            var self = this
+            if (this.guard === 'web') {
+                axios.post('/dashboard/campaigns/' + campaign.id + '/reorder', self.campaignOrderForm)
+                    .then(function (response) {
+                        let index = _.findIndex(self.campaigns, { id: campaign.id })
+                        console.log(index)
+                        self.$set(self.campaigns, index, response.data.campaign)
+                        // we need to switch it now...
+                        // hack to re render
+                        self.campaignOrderForm.campaign_order = ''
+                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                    })
+                    .catch(error => {
+                        self.$popup({ message: _.first(error.response.data.message) })
+                    })
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+        },
+        // works like charm
+        deleteCampaign(campaign) {
             var self = this
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/delete')
                     .then(function (response) {
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                        self.campaigns.splice(index,1)
+                        let index = _.findIndex(self.campaigns, { id: campaign.id })
+                        console.log(index)
+                        self.$delete(self.campaigns, index)
                         // hack to rerender the dom
                         self.campaignForm.campaign_name = response.data.campaign.name
                         self.campaignForm.campaign_name = ''
+                        self.campaignForm.campaign_order = 0
                         
                     })
                     .catch(error => {
@@ -201,5 +238,6 @@ Vue.component('projects', {
         hide(name) {
             this.$modal.hide(name)
         }
-    }
+    },
+
 })

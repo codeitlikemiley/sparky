@@ -23,6 +23,7 @@
     "vue-js-modal": "^1.2.3",
     "vue-select": "github:sagalbot/vue-select",
     "vue-timeago": "^3.3.5",
+    "vuedraggable": "^2.14.1",
     "vueup": "^1.0.0"
   }
 }

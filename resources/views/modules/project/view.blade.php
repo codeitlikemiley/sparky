@@ -44,19 +44,21 @@
                                     <li><a href="#files_tab">Files</a></li>
                                     <li><a href="#people_tab">People</a></li>
                                 </ul>
-                                <div class="frames bg-grayLight">
-                                    <div class="frame" id="tasks_tab">
-                                        <div class="panel widget-box bg-grayLight">
+                                <div class="frames bg-white">
+                                    <div class="frame bg-white" id="tasks_tab">
+                                        
+                                        <div class="panel widget-box bg-white">
 
-                                            <div class="row cells2 bg-grayLight" v-for="(chunk, index_chunk, key_chunk) in campaignChunks(campaigns)" :chunk="chunk" :index="index_chunk" :key="key_chunk">
-                                                <div class="cell" v-for="(campaign,index_campaign) in chunk" :campaign="campaign" :index="index_campaign" :key="campaign.id">
-
+                                            <div class="row cells2 bg-teal" style="padding: 20px;" v-for="(chunk, keyChunk) in campaignChunks(campaigns)" :key="keyChunk">
+                                                
+                                                <draggable class="cell" v-for="campaign in chunk" :options="{group: 'campaign'}" :key="campaign.id">
+                                                    
                                                     <div class="panel">
                                                         <div class="heading align-center">
                                                             <span class="">@{{ campaign.name }}</span>
                                                             <span class="icon  fa fa-pencil-square-o" @click="editCampaignModal(campaign)"></span>
                                                             
-                                                            <div @click="deleteCampaign(index_campaign,campaign)" class="bg-red place-right" style="position:absolute;top:0;right:0; width: 53px; height: 53px;">
+                                                            <div @click="deleteCampaign(campaign)" class="bg-red place-right" style="position:absolute;top:0;right:0; width: 53px; height: 53px;">
                                                                 <i class="fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);" aria-hidden="true" ></i>
                                                             </div>
                                                         </div>
@@ -65,7 +67,7 @@
 
                                                                 <div class="list-group">
                                                                     <div class="list-group-content">
-                                                                        <div v-if="campaign.tasks.length > 0" class="list" @click="viewTask(task.id)" v-for="task in campaign.tasks" :task="task">
+                                                                        <div v-if="campaign.tasks.length > 0" class="list" @click="viewTask(task.id)" v-for="(task, index_task) in campaign.tasks">
                                                                             <span>
                                                                                 <span class="mif-clipboard fg-teal">
                                                                                 </span>
@@ -93,9 +95,10 @@
                                                             </div>
 
                                                         </div>
-                                                    </div>
+                                                    </draggable>
                                                    @include('campaign::edit-campaign-modal')
                                                 </div>
+
                                             </div>
 
                                         </div>
