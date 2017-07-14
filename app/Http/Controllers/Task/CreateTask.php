@@ -5,18 +5,23 @@ namespace App\Http\Controllers\Task;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Task;
+use App\Campaign;
 
 class CreateTask extends BaseController
 {
     protected $task;
 
-    protected $input;
+    protected $request;
+
+    protected $message = 'Task Created!';
+
+    protected $code = '200';
 
     public function __construct(Task $task, Request $request)
     {
         $this->middleware('auth');
         $this->task = $task;
-        $this->input = $request->all();
+        $this->request = $request;
     }
 
     /**
@@ -26,24 +31,71 @@ class CreateTask extends BaseController
      */
     public function __invoke($campaign)
     {
-        $this->createTask($task);
-        return response()->json(['success' => 'Task Created.'], 200);
-
+        $validator = $this->sanitize();
+        if($validator->fails()){
+        $this->message = 'Failed To Create Task';
+        $this->code = 400;
+        return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
+        }
+        $this->createTask();
+        $this->save($campaign);
+        $task = $this->task->find($this->task->id);
+        return response()->json(['message' => $this->message, 'task' => $task], $this->code);
+    }
+    private function sanitize()
+    {
+       return $validator = \Validator::make($this->request->all(), $this->rules(), $this->messages());
+    }
+    private function rules(){
+        return 
+        [
+        'task_name' => 'required|max:30',
+        'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'task_description' => 'max:200'
+        ];
     }
 
-    private function authorize($campaign)
+    private function messages(){
+        return [
+            'task_name.required' => 'Name Your Task',
+            'task_name.max' => 'Task Name Too Long',
+            'task_description.max' => 'Description Too Long',
+            'task_link.regex' => 'Enter Valid Url',
+        ];
+    }
+
+    private function createTask()
     {
-        if($campaign->project->ByTenant->id != auth()->user()->id)
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+        $this->addName();
+        $this->addLink();
+        $this->addDescription();
+    }
+
+    private function addName()
+    {
+        $this->task->name = $this->request->task_name;
+    }
+
+    private function addLink()
+    {
+        if(isset($this->request->task_link)){
+        $this->task->link = $this->request->task_link;
         }
     }
 
-    private function createTask($campaign)
+    private function addDescription()
     {
-        $this->authorize($campaign);
-        // validate
-        $task = $this->task->fill($this->input);
-        $campaign->tasks()->save($task);
+        if(isset($this->request->task_description)){
+        $this->task->description = $this->request->task_description;
+        }
+    }
+
+    private function save($campaign)
+    {
+        $save = $campaign->tasks()->save($this->task);
+        if(!$save){
+        $this->message = 'Task Creation Failed!';
+        $this->code = 404;
+        }
     }
 }

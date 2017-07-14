@@ -51,7 +51,7 @@
 
                                             <div class="row cells2" style="padding: 20px;background-color:#bbdefb;" v-for="(chunk, keyChunk) in campaignChunks(campaigns)" :key="keyChunk">
                                                 <draggable class="cell draghandle" v-for="(campaign, cKey) in chunk" 
-                                                :options="{group: 'campaign',handle: '.draghandle',filter: '.v--modal-box,.v--modal',scroll: true,preventOnFilter: false,}"
+                                                :options="{group: 'campaign',handle: '.draghandle',filter: '.v--modal-box,.v--modal',scroll: true,preventOnFilter: false}"
                                                  :data-id="campaign.id" :key="cKey"
                                                  @end="onEnd"
                                                  style="min-height: 150px;"
@@ -72,7 +72,7 @@
 
                                                                 <div class="list-group">
                                                                     <div class="list-group-content">
-                                                                        <div v-if="campaign.tasks.length > 0" class="list" @click="viewTask(task.id)" v-for="(task, index_task) in campaign.tasks">
+                                                                        <div class="list" @click="viewTask(task.id)" v-for="(task, tKey) in campaign.tasks" :key="tKey">
                                                                             <span>
                                                                                 <span class="mif-clipboard fg-teal">
                                                                                 </span>

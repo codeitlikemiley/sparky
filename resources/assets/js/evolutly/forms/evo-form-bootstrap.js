@@ -36,10 +36,9 @@ Evolutly.forms = {
         campaign_order: ''
     },
     taskForm: {
-        name: '',
-        description: '',
-        link: '',
-        points: 1
+        task_name: '',
+        task_description: '',
+        task_link: '',
     },
     subtaskForm:{
         name: '',

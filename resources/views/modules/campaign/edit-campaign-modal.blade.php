@@ -1,7 +1,7 @@
-<modal :name="slug(campaign.name)">
+<modal :name="'campaign-'+ campaign.id">
     <div class="panel widget-box">
         <div class="heading">
-            <div class="title">Edit @{{campaignForm.campaign_name}} <span @click="hide(slug(campaign.name))" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
+            <div class="title">Edit @{{campaignForm.campaign_name}} <span @click="hide('campaign-'+ campaign.id)" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
         </div>
         <div class="content">
             <form @submit.prevent="updateCampaign(campaign)" role="form" class="padding10">

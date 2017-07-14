@@ -34,6 +34,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('tenant.projects.view');
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
+      Route::post('/campaigns/{campaign}/tasks/create', 'Task\CreateTask')->name('tenant.tasks.create');
   });
 
   Route::group(['prefix' => '/users'], function () {

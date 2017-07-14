@@ -5,15 +5,13 @@ Vue.component('projects', {
     // extra props we might need to add : files and forms
     data () {
         return {
-            projectForm: new EvolutlyForm({ project_name: '', client_id: '' }),
+            projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
             campaignForm: new EvolutlyForm(Evolutly.forms.campaignForm),
             campaignOrderForm: new EvolutlyForm(Evolutly.forms.campaignOrderForm),
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
-            order_from: '',
-            order_to: ''
         }
     },
     mounted() {
@@ -26,40 +24,12 @@ Vue.component('projects', {
         },
     },
     methods: {
-        slug: function(name) {
-        var slug = this.sanitizeName(name);
-        return slug;
-        },
-        sanitizeName: function(name) {
-        var slug = "";
-        // Change to lower case
-        var nameLower = name.toString().toLowerCase();
-        // Letter "e"
-        slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, 'e');
-        // Letter "a"
-        slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, 'a');
-        // Letter "o"
-        slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, 'o');
-        // Letter "u"
-        slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, 'u');
-        // Letter "d"
-        slug = slug.replace(/đ/gi, 'd');
-        // Trim the last whitespace
-        slug = slug.replace(/\s*$/g, '');
-        // Change whitespace to "-"
-        slug = slug.replace(/\s+/g, '-');
-        
-        return slug;
+        whenReady() {
+            this.projectForm.project_name = this.project.name
+            this.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
         },
         campaignChunks(campaigns) {
             return _.chunk(campaigns, 2)
-        },
-        twoColumn(campaigns){
-            return Math.floor(campaigns.length /2)
-        },
-        whenReady(){
-            this.projectForm.project_name = this.project.name
-            this.projectForm.client_id = _.find(this.clients, {id: this.project.client_id})
         },
         showTask(id) {
             this.currentCampaignId = id
@@ -79,6 +49,31 @@ Vue.component('projects', {
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             window.location.href = url
         },
+        createTask() {
+            var self = this
+
+            let location = `/dashboard/campaigns/${self.currentCampaignId}/tasks/create`
+            let url = `${window.location.protocol}//${self.tenant.username}.${Evolutly.domain}${location}`
+
+            if (this.guard === 'web') {
+
+                axios.post(url, self.taskForm).then(function (response) {
+                    let index = _.findIndex(self.campaigns, { id: self.currentCampaignId })
+                    self.campaigns[index].tasks.push(response.data.task)
+                    self.taskForm.resetStatus()
+                    self.taskForm = new EvolutlyForm(Evolutly.forms.taskForm)
+
+                    self.$popup({ message: response.data.message })
+                })
+                    .catch(error => {
+                        self.taskForm.errors.set(error.response.data.errors)
+                        self.$popup({ message: error.response.data.message })
+                    })
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+
+        },
         updateProject(id) {
             var self = this
             if (this.guard === 'web') {
@@ -93,34 +88,6 @@ Vue.component('projects', {
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
-        },
-        createTask() {
-            var self = this
-            axios.post('/dashboard/campaigns/' + self.currentCampaignId + '/create', self.taskForm).then(function (response) {
-                let index = _.findIndex(self.campaigns, { id: self.currentCampaignId })
-                self.campaigns[index].tasks.push(response.data)
-            })
-            this.$modal.hide('add-task')
-        },
-        createCampaign() {
-            var self = this
-            if (this.guard === 'web') {
-            
-            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
-            .then(function (response) {
-                self.$modal.hide('add-campaign');
-                self.campaigns.push(response.data.campaign)
-                self.campaignForm.campaign_name = ''
-                self.campaignForm.campaign_order = 0
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.campaign_name) })
-            })
-            }else {
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
-            
         },
         deleteProject() {
             var self = this
@@ -139,11 +106,32 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
+        createCampaign() {
+            var self = this
+            if (this.guard === 'web') {
+            
+            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
+            .then(function (response) {
+                self.$modal.hide('add-campaign');
+                self.campaigns.push(response.data.campaign)
+                self.campaignForm.campaign_name = ''
+                self.campaignForm.campaign_order = 0
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
+            })
+            }else {
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+            
+        },
+        
         editCampaignModal(campaign)
         {
             this.campaignForm.campaign_name = campaign.name
             this.campaignForm.campaign_order = campaign.order
-            this.$modal.show(this.slug(campaign.name))
+            this.$modal.show('campaign-'+campaign.id)
         },
         //works like charm
         updateCampaign(campaign) {
@@ -151,7 +139,7 @@ Vue.component('projects', {
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm)
                     .then(function (response) {
-                        self.$modal.hide(self.slug(campaign.name))
+                        self.$modal.hide('campaign-'+ campaign.id)
                         let index = _.findIndex(self.campaigns, { id: campaign.id })
                         console.log(index)
                         self.$set(self.campaigns, index, response.data.campaign)
@@ -166,9 +154,6 @@ Vue.component('projects', {
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
-        },
-        onStart(e){
-
         },
         onEnd(e){
             var self = this
@@ -193,7 +178,6 @@ Vue.component('projects', {
             self.switchCampaign(position,id)
             
         },
-
         switchCampaign(position,id) {
             var self = this
             self.campaignOrderForm.campaign_order = parseInt(position)
