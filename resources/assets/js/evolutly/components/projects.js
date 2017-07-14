@@ -1,3 +1,5 @@
+import FileUpload from 'vue-upload-component'
+
 Vue.component('projects', {
     props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaigns'],
     // extra props we might need to add : files and forms
@@ -10,6 +12,7 @@ Vue.component('projects', {
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
+            files: []
         }
     },
     mounted() {
@@ -252,5 +255,8 @@ Vue.component('projects', {
             this.$modal.hide(name)
         }
     },
+    components: {
+        FileUpload
+    }
 
 })
