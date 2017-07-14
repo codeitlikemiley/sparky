@@ -1,3 +1,13 @@
+@push('critical_css')
+<style>
+.truncate {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
+@endpush
 <div class="frame bg-white margin-bottom-90" id="tasks_tab">
     <div class="panel widget-box collapsible" data-role="panel">
         <div class="row cells2" v-for="(chunk, keyChunk) in campaignChunks(campaigns)"
@@ -8,15 +18,19 @@
                 :data-id="campaign.id">
                 <div class="panel">
 
-                    <div class="heading align-center bg-lightBlue" style="cursor:move;">
-                        <span data-role="hint" data-hint-mode="2" data-hint="Switch|Re-Order Campaign" data-hint-position="top">@{{ campaign.name }}</span>
-                        <div @click="editCampaignModal(campaign)" class="bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
+                    <div class="heading  bg-lightBlue" style="cursor:move;">
+                        <div class="truncate" style="cursor:pointer;position:absolute;top:12px;margin-left:136px;">
+                            <span data-role="hint" data-hint-mode="2" data-hint="Switch|Re-Order Campaign" data-hint-position="top">
+                                @{{ campaign.name }}
+                            </span>
+                        </div>
+                        <div @click="editCampaignModal(campaign)" class="align-center bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
                             <span class="icon  fa fa-pencil-square-o" style="position: relative;top: 50% !important; transform: translateY(-50%) !important;"></span>
                         </div>
-                        <div @click="showTask(campaign.id)" class="bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Task" data-hint-position="top">
+                        <div @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Task" data-hint-position="top">
                             <span class="icon mif-plus" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
-                        <div @click="deleteCampaign(campaign)" class="bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
+                        <div @click="deleteCampaign(campaign)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
                             <span class="icon fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
                     </div>
