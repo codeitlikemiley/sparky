@@ -43,3 +43,6 @@
         </div>
     </div>
 </div>
+@push('footer_js')
+
+@endpush
