@@ -3,6 +3,7 @@
 @push('critical_css')
 @include('css::footer')
 @include('css::formbuilder')
+@include('css::fraction')
 @endpush
 
 @push('header_js')

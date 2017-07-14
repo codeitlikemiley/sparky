@@ -20,6 +20,7 @@
     "underscore": "^1.8.3",
     "urijs": "^1.17.0",
     "vue": "2.*",
+    "vue-checkbox-radio": "^0.5.1",
     "vue-js-modal": "^1.2.3",
     "vue-select": "github:sagalbot/vue-select",
     "vue-sortable": "^0.1.3",

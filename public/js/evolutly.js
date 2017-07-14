@@ -44439,8 +44439,6 @@ __webpack_require__(202);
 /* 202 */
 /***/ (function(module, exports) {
 
-
-
 Vue.component('projects', {
     props: ['guard', 'clients', 'tenant', 'user', 'project', 'workers', 'campaigns'],
     // extra props we might need to add : files and forms
@@ -44488,6 +44486,9 @@ Vue.component('projects', {
             url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location + id;
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             window.location.href = url;
+        },
+        isTaskDone: function isTaskDone(task) {
+            return task.done == 1;
         },
         createTask: function createTask() {
             var self = this;
