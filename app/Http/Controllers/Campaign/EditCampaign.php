@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Campaign;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
+use App\Campaign;
 
 class EditCampaign extends BaseController
 {
@@ -32,6 +33,7 @@ class EditCampaign extends BaseController
         'campaign_order' => 'int|min:0'
         ]);
         $this->editCampaign($campaign);
+        $campaign = Campaign::with('tasks')->where('id',$campaign->id)->first();
         
         return response()->json(['message' => $this->message, 'campaign' => $campaign], $this->code);
         
