@@ -44357,8 +44357,8 @@ Vue.component('dashboard', {
             return _.chunk(projects, 3);
         },
         campaignProgress: function campaignProgress(campaign) {
-            if (campaign.total > 0) {
-                return Math.floor(campaign.done / campaign.total * 100);
+            if (campaign.total_points > 0) {
+                return Math.floor(campaign.done_points / campaign.total_points * 100);
             }
             return 0;
         },

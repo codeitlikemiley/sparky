@@ -26,7 +26,7 @@ class DeleteProject extends BaseController
      */
     public function __invoke($project)
     {
-         $this->deleteProject($project);
+        $this->deleteProject($project);
         return response()->json(['message' => $this->message, 'project' => $project], $this->code);
     }
 

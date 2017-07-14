@@ -27,9 +27,9 @@ Vue.component('dashboard', {
         },
         campaignProgress(campaign)
         {
-            if(campaign.total > 0)
+            if(campaign.total_points > 0)
             {
-                return Math.floor((campaign.done / campaign.total) * 100);
+                return Math.floor((campaign.done_points / campaign.total_points) * 100);
             }
             return 0;
         },
