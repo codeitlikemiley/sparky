@@ -19,7 +19,11 @@ class DeleteProject extends BaseController
         $this->middleware('auth');
         $this->request = $request;
     }
-
+    /**
+     * Receive Project Id
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function __invoke($project)
     {
          $this->deleteProject($project);
