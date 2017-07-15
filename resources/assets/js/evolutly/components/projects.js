@@ -11,8 +11,30 @@ Vue.component('projects', {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
+
+            // all about files
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
-            files: []
+            files: [],
+            accept: 'image/png,image/gif,image/jpeg,image/webp',
+            size: 1024 * 1024 * 10,
+            extensions: 'gif,jpg,jpeg,png,webp',
+            // extensions: ['gif', 'jpg', 'jpeg','png', 'webp'],
+            // extensions: /\.(gif|jpe?g|png|webp)$/i,
+            multiple: true,
+            directory: false,
+            drop: true,
+            dropDirectory: false,
+            thread: 3,
+            name: 'file',
+            postAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/upload`,
+            putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
+            headers: {
+                "X-Csrf-Token": Evolutly.csrfToken,
+            },
+            data: {
+                "_csrf_token": Evolutly.csrfToken,
+            },
+            auto: false,
         }
     },
     mounted() {
@@ -23,11 +45,30 @@ Vue.component('projects', {
         employeeChunks() {
             return _.chunk(this.workers, 4)
         },
+        hasFiles()
+        {
+            if(this.files.length > 0)
+            {
+                return true
+            }
+        },
+        noFile()
+        {
+            if(this.files.length == 0)
+            {
+                return true
+            }
+        },
     },
     methods: {
+
         whenReady() {
             this.projectForm.project_name = this.project.name
             this.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
+        },
+        
+        isTaskDone(task){
+            return task.done == 1;
         },
         campaignChunks(campaigns) {
             return _.chunk(campaigns, 2)
@@ -46,7 +87,7 @@ Vue.component('projects', {
             {
                 location = '/employee/dashboard/tasks/'
             }
-            url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}${id}`
+            let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}${id}`
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             window.location.href = url
         },
@@ -237,6 +278,12 @@ Vue.component('projects', {
                 console.log(error)
             })
         },
+        show(name) {
+            this.$modal.show(name)
+        },
+        hide(name) {
+            this.$modal.hide(name)
+        },
         uploadFile(project) {
 
             this.fileForm = document.getElementById('file').files[0]
@@ -248,15 +295,65 @@ Vue.component('projects', {
                 console.log(error)
             })
         },
-        show(name) {
-            this.$modal.show(name)
+        addFiles(files) {
+            this.files = files
         },
-        hide(name) {
-            this.$modal.hide(name)
-        }
+        addDirectory() {
+            this.directory = true
+            this.$nextTick(() => {
+                this.$refs.upload.$el.querySelector('input').click()
+                this.directory = false
+            })
+        },
+        filter(file) {
+            // min size
+            if (file.size < 100 * 1024) {
+                file = this.$refs.upload.update(file, { error: 'size' })
+            }
+            return file
+        },
+        inputFile(newFile, oldFile) {
+            if (newFile && !oldFile) {
+                console.log('add', newFile)
+                var URL = window.URL || window.webkitURL
+                if (URL && URL.createObjectURL) {
+                    this.$refs.upload.update(newFile, { blob: URL.createObjectURL(newFile.file) })
+                }
+            }
+            if (newFile && oldFile) {
+                console.log('update', newFile, oldFile)
+                if (newFile.progress != oldFile.progress) {
+                    console.log('progress', newFile.progress)
+                }
+            }
+            if (!newFile && oldFile) {
+                console.log('remove', oldFile)
+            }
+            if (this.auto && !this.$refs.upload.uploaded && !this.$refs.upload.active) {
+                this.$refs.upload.active = true
+            }
+        },
+        abort(file) {
+            this.$refs.upload.update(file, { active: false })
+            // or
+            // this.$refs.upload.update(file, {error: 'abort'})
+        },
+        customError(file) {
+            this.$refs.upload.update(file, { error: 'custom' })
+        },
+        remove(file) {
+            this.$refs.upload.remove(file)
+        },
     },
     components: {
         FileUpload
-    }
+    },
+    watch: {
+        auto(auto) {
+            if (auto && !this.$refs.upload.uploaded && !this.$refs.upload.active) {
+                this.$refs.upload.active = true
+            }
+        }
+    },
 
 })
