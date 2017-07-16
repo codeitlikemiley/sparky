@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFileProjectTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,17 @@ class CreateFileProjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('file_project', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->string('filename');
+            $table->nullableMorphs('uploadable');
+            $table->string('path');
+            $table->string('name',60);
+            $table->string('filename')->unique();
+            $table->string('mime_type',30);
+            $table->char('extension',10);
+            $table->unsignedInteger('size');
             $table->timestamps();
         });
     }
@@ -29,6 +35,6 @@ class CreateFileProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('file_project');
+        Schema::dropIfExists('files');
     }
 }

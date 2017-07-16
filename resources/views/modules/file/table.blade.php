@@ -3,7 +3,7 @@
         <div class="title">
             <div class="align-center"  data-role="hint"
                 data-hint-mode="2" data-hint="Click Or Drag|Files Here" data-hint-position="top">
-                <file-upload class="primary" :name="name" :post-action="postAction" :put-action="putAction" :extensions="extensions" :accept="accept"
+                <file-upload class="primary" :name="name" :post-action="postAction" :extensions="extensions" :accept="accept"
                     :multiple="multiple" :directory="directory" :size="size || 0" :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
                     :headers="headers" :data="data" :drop="drop" :drop-directory="dropDirectory" v-model="files" @input-file="inputFile"
                     ref="upload">

@@ -44443,10 +44443,6 @@ __webpack_require__(202);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_upload_component__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_upload_component__);
-var _methods;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 Vue.component('projects', {
@@ -44464,9 +44460,9 @@ Vue.component('projects', {
             // all about files
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
             files: [],
-            accept: 'image/png,image/gif,image/jpeg,image/webp',
+            accept: 'image/png,image/gif,image/jpeg,image/webp,image/bmp,image/vnd.adobe.photoshop,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,text/plain,application/vnd.oasis.opendocument.text',
             size: 1024 * 1024 * 10,
-            extensions: 'gif,jpg,jpeg,png,webp',
+            extensions: 'gif,jpg,jpeg,png,webp,bmp,psd,pdf,ppt,pptx,doc,docx,dotx,xls,txt,odt',
             // extensions: ['gif', 'jpg', 'jpeg','png', 'webp'],
             // extensions: /\.(gif|jpe?g|png|webp)$/i,
             multiple: true,
@@ -44475,8 +44471,8 @@ Vue.component('projects', {
             dropDirectory: false,
             thread: 3,
             name: 'file',
-            postAction: window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + '/files/upload',
-            putAction: window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + '/files/update',
+            postAction: window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + '/files/upload/' + this.project.id,
+            // putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
             headers: {
                 "X-Csrf-Token": Evolutly.csrfToken
             },
@@ -44505,7 +44501,7 @@ Vue.component('projects', {
             }
         }
     },
-    methods: (_methods = {
+    methods: {
         whenReady: function whenReady() {
             this.projectForm.project_name = this.project.name;
             this.projectForm.client_id = _.find(this.clients, { id: this.project.client_id });
@@ -44532,213 +44528,238 @@ Vue.component('projects', {
             var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location + id;
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             window.location.href = url;
-        }
-    }, _defineProperty(_methods, 'isTaskDone', function isTaskDone(task) {
-        return task.done == 1;
-    }), _defineProperty(_methods, 'createTask', function createTask() {
-        var self = this;
+        },
+        createTask: function createTask() {
+            var self = this;
 
-        var location = '/dashboard/campaigns/' + self.currentCampaignId + '/tasks/create';
-        var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+            var location = '/dashboard/campaigns/' + self.currentCampaignId + '/tasks/create';
+            var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
 
-        if (this.guard === 'web') {
+            if (this.guard === 'web') {
 
-            axios.post(url, self.taskForm).then(function (response) {
-                var index = _.findIndex(self.campaigns, { id: self.currentCampaignId });
-                self.campaigns[index].tasks.push(response.data.task);
-                self.taskForm.resetStatus();
-                self.taskForm = new EvolutlyForm(Evolutly.forms.taskForm);
+                axios.post(url, self.taskForm).then(function (response) {
+                    var index = _.findIndex(self.campaigns, { id: self.currentCampaignId });
+                    self.campaigns[index].tasks.push(response.data.task);
+                    self.taskForm.resetStatus();
+                    self.taskForm = new EvolutlyForm(Evolutly.forms.taskForm);
 
-                self.$popup({ message: response.data.message });
-            }).catch(function (error) {
-                self.taskForm.errors.set(error.response.data.errors);
-                self.$popup({ message: error.response.data.message });
-            });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'updateProject', function updateProject(id) {
-        var self = this;
-        if (this.guard === 'web') {
-            axios.post('/dashboard/projects/' + id + '/edit', self.projectForm).then(function (response) {
-                self.$modal.hide('edit-project');
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-            }).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.project_name) });
-            });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'deleteProject', function deleteProject() {
-        var self = this;
-        if (this.guard === 'web') {
-            axios.post('/dashboard/projects/' + self.project.id + '/delete').then(function (response) {
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                var location = '/dashboard';
-                var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
-                window.location.replace(url);
-            }).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.campaign_name) });
-            });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'createCampaign', function createCampaign() {
-        var self = this;
-        if (this.guard === 'web') {
+                    self.$popup({ message: response.data.message });
+                }).catch(function (error) {
+                    self.taskForm.errors.set(error.response.data.errors);
+                    self.$popup({ message: error.response.data.message });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        updateProject: function updateProject(id) {
+            var self = this;
+            if (this.guard === 'web') {
+                axios.post('/dashboard/projects/' + id + '/edit', self.projectForm).then(function (response) {
+                    self.$modal.hide('edit-project');
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.project_name) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        deleteProject: function deleteProject() {
+            var self = this;
+            if (this.guard === 'web') {
+                axios.post('/dashboard/projects/' + self.project.id + '/delete').then(function (response) {
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                    var location = '/dashboard';
+                    var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+                    window.location.replace(url);
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.campaign_name) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        createCampaign: function createCampaign() {
+            var self = this;
+            if (this.guard === 'web') {
 
-            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm).then(function (response) {
-                self.$modal.hide('add-campaign');
-                self.campaigns.push(response.data.campaign);
-                self.campaignForm.campaign_name = '';
-                self.campaignForm.campaign_order = 0;
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-            }).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'editCampaignModal', function editCampaignModal(campaign) {
-        this.campaignForm.campaign_name = campaign.name;
-        this.campaignForm.campaign_order = campaign.order;
-        this.$modal.show('campaign-' + campaign.id);
-    }), _defineProperty(_methods, 'updateCampaign', function updateCampaign(campaign) {
-        var self = this;
-        if (this.guard === 'web') {
-            axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm).then(function (response) {
-                self.$modal.hide('campaign-' + campaign.id);
-                var index = _.findIndex(self.campaigns, { id: campaign.id });
-                console.log(index);
-                self.$set(self.campaigns, index, response.data.campaign);
-                // hack to rerender the dom
-                self.campaignForm.campaign_name = '';
-                self.campaignForm.campaign_order = '';
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-            }).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'onEnd', function onEnd(e) {
-        var self = this;
-        // if 0 then we are going right
-        // if 1 then we are going left
-        var left = 0;
-        var right = 1;
-        var leftOrRight = parseInt(e.target.getAttribute('leftOrRight'));
-        var max = parseInt(e.target.getAttribute('max'));
-        var id = e.target.getAttribute('data-id');
-        var order = (max + 1) * 2;
-        var position = null;
+                axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm).then(function (response) {
+                    self.$modal.hide('add-campaign');
+                    self.campaigns.push(response.data.campaign);
+                    self.campaignForm.campaign_name = '';
+                    self.campaignForm.campaign_order = 0;
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.message) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        editCampaignModal: function editCampaignModal(campaign) {
+            this.campaignForm.campaign_name = campaign.name;
+            this.campaignForm.campaign_order = campaign.order;
+            this.$modal.show('campaign-' + campaign.id);
+        },
 
-        if (leftOrRight === left) {
-            position = order - 1;
-        } else {
-            position = order;
-        }
-        console.log(position);
-        self.switchCampaign(position, id);
-    }), _defineProperty(_methods, 'switchCampaign', function switchCampaign(position, id) {
-        var self = this;
-        self.campaignOrderForm.campaign_order = parseInt(position);
-        if (this.guard === 'web') {
-            axios.post('/dashboard/campaigns/' + id + '/reorder', self.campaignOrderForm).then(function (response) {
+        //works like charm
+        updateCampaign: function updateCampaign(campaign) {
+            var self = this;
+            if (this.guard === 'web') {
+                axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm).then(function (response) {
+                    self.$modal.hide('campaign-' + campaign.id);
+                    var index = _.findIndex(self.campaigns, { id: campaign.id });
+                    console.log(index);
+                    self.$set(self.campaigns, index, response.data.campaign);
+                    // hack to rerender the dom
+                    self.campaignForm.campaign_name = '';
+                    self.campaignForm.campaign_order = '';
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.message) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        onEnd: function onEnd(e) {
+            var self = this;
+            // if 0 then we are going right
+            // if 1 then we are going left
+            var left = 0;
+            var right = 1;
+            var leftOrRight = parseInt(e.target.getAttribute('leftOrRight'));
+            var max = parseInt(e.target.getAttribute('max'));
+            var id = e.target.getAttribute('data-id');
+            var order = (max + 1) * 2;
+            var position = null;
 
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                return true;
-            }).catch(function (error) {
-                self.$popup({ message: error.response.data.message });
+            if (leftOrRight === left) {
+                position = order - 1;
+            } else {
+                position = order;
+            }
+            console.log(position);
+            self.switchCampaign(position, id);
+        },
+        switchCampaign: function switchCampaign(position, id) {
+            var self = this;
+            self.campaignOrderForm.campaign_order = parseInt(position);
+            if (this.guard === 'web') {
+                axios.post('/dashboard/campaigns/' + id + '/reorder', self.campaignOrderForm).then(function (response) {
+
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                    return true;
+                }).catch(function (error) {
+                    self.$popup({ message: error.response.data.message });
+                    return false;
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
                 return false;
+            }
+        },
+
+        // works like charm
+        deleteCampaign: function deleteCampaign(campaign) {
+            var self = this;
+            if (this.guard === 'web') {
+                axios.post('/dashboard/campaigns/' + campaign.id + '/delete').then(function (response) {
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                    var index = _.findIndex(self.campaigns, { id: campaign.id });
+                    console.log(index);
+                    self.$delete(self.campaigns, index);
+                    // hack to rerender the dom
+                    self.campaignForm.campaign_name = response.data.campaign.name;
+                    self.campaignForm.campaign_name = '';
+                    self.campaignForm.campaign_order = 0;
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.message) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+
+
+        // Soon To Be Added
+        createForm: function createForm(id) {
+            axios.post('dashboard/projects/' + id + '/forms/create', this.formBuilderForm).then(function (response) {
+                // we need to pass in the data
+                // We need to add forms as props
+                console.log('push this to forms array');
+            }.bind(this)).catch(function (error) {
+                console.log(error);
             });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-            return false;
-        }
-    }), _defineProperty(_methods, 'deleteCampaign', function deleteCampaign(campaign) {
-        var self = this;
-        if (this.guard === 'web') {
-            axios.post('/dashboard/campaigns/' + campaign.id + '/delete').then(function (response) {
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                var index = _.findIndex(self.campaigns, { id: campaign.id });
-                console.log(index);
-                self.$delete(self.campaigns, index);
-                // hack to rerender the dom
-                self.campaignForm.campaign_name = response.data.campaign.name;
-                self.campaignForm.campaign_name = '';
-                self.campaignForm.campaign_order = 0;
+        },
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
+        uploadFile: function uploadFile(project) {
+
+            this.fileForm = document.getElementById('file').files[0];
+            axios.post('dashboard/projects/' + project.id + '/files/upload', this.fileForm).then(function (response) {
+                console.log('push this to files array');
             }).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
+                console.log(error);
             });
-        } else {
-            self.$popup({ message: 'Oops Cant Do That!' });
-        }
-    }), _defineProperty(_methods, 'createForm', function createForm(id) {
-        axios.post('dashboard/projects/' + id + '/forms/create', this.formBuilderForm).then(function (response) {
-            // we need to pass in the data
-            // We need to add forms as props
-            console.log('push this to forms array');
-        }.bind(this)).catch(function (error) {
-            console.log(error);
-        });
-    }), _defineProperty(_methods, 'show', function show(name) {
-        this.$modal.show(name);
-    }), _defineProperty(_methods, 'hide', function hide(name) {
-        this.$modal.hide(name);
-    }), _defineProperty(_methods, 'uploadFile', function uploadFile(project) {
+        },
+        addFiles: function addFiles(files) {
+            this.files = files;
+        },
+        addDirectory: function addDirectory() {
+            var _this = this;
 
-        this.fileForm = document.getElementById('file').files[0];
-        axios.post('dashboard/projects/' + project.id + '/files/upload', this.fileForm).then(function (response) {
-            console.log('push this to files array');
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }), _defineProperty(_methods, 'addFiles', function addFiles(files) {
-        this.files = files;
-    }), _defineProperty(_methods, 'addDirectory', function addDirectory() {
-        var _this = this;
-
-        this.directory = true;
-        this.$nextTick(function () {
-            _this.$refs.upload.$el.querySelector('input').click();
-            _this.directory = false;
-        });
-    }), _defineProperty(_methods, 'filter', function filter(file) {
-        // min size
-        if (file.size < 100 * 1024) {
-            file = this.$refs.upload.update(file, { error: 'size' });
-        }
-        return file;
-    }), _defineProperty(_methods, 'inputFile', function inputFile(newFile, oldFile) {
-        if (newFile && !oldFile) {
-            console.log('add', newFile);
-            var URL = window.URL || window.webkitURL;
-            if (URL && URL.createObjectURL) {
-                this.$refs.upload.update(newFile, { blob: URL.createObjectURL(newFile.file) });
+            this.directory = true;
+            this.$nextTick(function () {
+                _this.$refs.upload.$el.querySelector('input').click();
+                _this.directory = false;
+            });
+        },
+        filter: function filter(file) {
+            // min size
+            if (file.size < 100 * 1024) {
+                file = this.$refs.upload.update(file, { error: 'size' });
             }
-        }
-        if (newFile && oldFile) {
-            console.log('update', newFile, oldFile);
-            if (newFile.progress != oldFile.progress) {
-                console.log('progress', newFile.progress);
+            return file;
+        },
+        inputFile: function inputFile(newFile, oldFile) {
+            if (newFile && !oldFile) {
+                console.log('add', newFile);
+                var URL = window.URL || window.webkitURL;
+                if (URL && URL.createObjectURL) {
+                    this.$refs.upload.update(newFile, { blob: URL.createObjectURL(newFile.file) });
+                }
             }
+            if (newFile && oldFile) {
+                console.log('update', newFile, oldFile);
+                if (newFile.progress != oldFile.progress) {
+                    console.log('progress', newFile.progress);
+                }
+            }
+            if (!newFile && oldFile) {
+                console.log('remove', oldFile);
+            }
+            if (this.auto && !this.$refs.upload.uploaded && !this.$refs.upload.active) {
+                this.$refs.upload.active = true;
+            }
+        },
+        abort: function abort(file) {
+            this.$refs.upload.update(file, { active: false });
+            // or
+            // this.$refs.upload.update(file, {error: 'abort'})
+        },
+        customError: function customError(file) {
+            this.$refs.upload.update(file, { error: 'custom' });
+        },
+        remove: function remove(file) {
+            this.$refs.upload.remove(file);
         }
-        if (!newFile && oldFile) {
-            console.log('remove', oldFile);
-        }
-        if (this.auto && !this.$refs.upload.uploaded && !this.$refs.upload.active) {
-            this.$refs.upload.active = true;
-        }
-    }), _defineProperty(_methods, 'abort', function abort(file) {
-        this.$refs.upload.update(file, { active: false });
-        // or
-        // this.$refs.upload.update(file, {error: 'abort'})
-    }), _defineProperty(_methods, 'customError', function customError(file) {
-        this.$refs.upload.update(file, { error: 'custom' });
-    }), _defineProperty(_methods, 'remove', function remove(file) {
-        this.$refs.upload.remove(file);
-    }), _methods),
+    },
     components: {
         FileUpload: __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default.a
     },

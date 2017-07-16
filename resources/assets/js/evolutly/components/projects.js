@@ -15,9 +15,9 @@ Vue.component('projects', {
             // all about files
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
             files: [],
-            accept: 'image/png,image/gif,image/jpeg,image/webp',
+            accept: 'image/png,image/gif,image/jpeg,image/webp,image/bmp,image/vnd.adobe.photoshop,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,text/plain,application/vnd.oasis.opendocument.text',
             size: 1024 * 1024 * 10,
-            extensions: 'gif,jpg,jpeg,png,webp',
+            extensions: 'gif,jpg,jpeg,png,webp,bmp,psd,pdf,ppt,pptx,doc,docx,dotx,xls,txt,odt',
             // extensions: ['gif', 'jpg', 'jpeg','png', 'webp'],
             // extensions: /\.(gif|jpe?g|png|webp)$/i,
             multiple: true,
@@ -26,8 +26,8 @@ Vue.component('projects', {
             dropDirectory: false,
             thread: 3,
             name: 'file',
-            postAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/upload`,
-            putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
+            postAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/upload/${this.project.id}`,
+            // putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
             headers: {
                 "X-Csrf-Token": Evolutly.csrfToken,
             },
@@ -90,9 +90,6 @@ Vue.component('projects', {
             let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}${id}`
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             window.location.href = url
-        },
-        isTaskDone(task){
-            return task.done == 1;
         },
         createTask() {
             var self = this

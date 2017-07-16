@@ -41,3 +41,6 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/employee', 'User\ShowEmployee')->name('tenant.employees.index');
       Route::get('/client', 'User\ShowClient')->name('tenant.clients.index');
   });
+
+Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('uploader');
+// Route::put('/files/update', 'File/UploadController@multiple_upload')->name('tenant.files.upload');

@@ -7,8 +7,9 @@ use App\Traits\Mutators\UsersMutator;
 use App\Traits\Methods\UsersMethod;
 use App\Traits\MorphTo\Clientable;
 use App\Traits\Relationship\HasComments;
+use App\Traits\Relationship\CanManageFiles;
 
 trait ClientBuilder {
     use ByTenant, UsersMutator, UsersMethod, 
-    Clientable, HasComments;
+    Clientable, HasComments, CanManageFiles;
 }

@@ -8,6 +8,7 @@ use App\Traits\Relationship\HasProjects;
 use App\Traits\Relationship\CanManageClients;
 use App\Traits\Relationship\CanManageEmployees;
 use App\Traits\Relationship\CanManageProjects;
+use App\Traits\Relationship\CanManageFiles;
 use App\Traits\Mutators\UsersMutator;
 use App\Traits\Methods\UsersMethod;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -21,5 +22,5 @@ trait UserBuilder {
         CanManageClients, CanManageEmployees, CanManageProjects,
         UsersMutator, UsersMethod,
         Sluggable, SluggableScopeHelpers, UserSluggable,
-        HasComments, HasActivities;
+        HasComments, HasActivities, CanManageFiles;
 }
