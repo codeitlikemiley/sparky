@@ -62,12 +62,9 @@
         </div>
 
         <div class="row cells12">
-        <div class="cell colspan6 align-left">
-            <p class="place-left fg-blue">File Types: <span class="tag info" v-text="accept"></span></p>
-        </div>
-        <div class="cell colspan6 align-left">
-            <p class="place-right fg-blue">Extensions: <span class="tag info" v-text="extensions"></span></p>
-        </div>
+            <div class="cell colspan12">
+                <p class="place-left fg-blue">File Extensions Allowed: <span class="tag info" v-text="extensions"></span></p>
+            </div>
         </div>
         <div class="row" v-show="$refs.upload && $refs.upload.dropActive" class="drop-active align-center">
             <span class="fg-blue icon fa fa-cloud-upload" style="font-size:5em;"></span>
