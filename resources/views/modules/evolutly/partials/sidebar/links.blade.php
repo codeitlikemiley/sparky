@@ -118,7 +118,7 @@
 			<span class="mif-apps icon fg-steel"></span>
 			<span class="title fg-amber">Dashboard</span>
 			<span class="counter">Manage App</span>
-	    </a>
+    </a>
     <!-- Projects Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='dashboard'?'display:block':'') }}">
         <li class="{{ (Request::segment(1)=='dashboard'?'active':'') }}">
@@ -136,15 +136,15 @@
             <span class="mif-profile icon fg-lime"></span>
             <span class="title fg-amber">Account Settings</span>
             <span class="counter">Manage Account</span>
-        </a>
+    </a>
     <!-- Profile Link -->
     <ul class="d-menu" data-role="dropdown" style="">
         <li class="">
             <a href="{{ url('/settings#/profile') }}" class="">
-                    <span class="mif-chevron-right icon"></span>
-                    <span class="title">Profile</span>
-                    <span class="counter">Manage Profile</span>
-                </a>
+                <span class="mif-chevron-right icon"></span>
+                <span class="title">Profile</span>
+                <span class="counter">Manage Profile</span>
+            </a>
         </li>
     </ul>
 </li>
@@ -154,8 +154,7 @@
             <span class="mif-users icon fg-olive"></span>
             <span class="title fg-amber">User Management</span>
             <span class="counter">Manage Users</span>
-        </a>
-    
+    </a>
     <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['employee','client'])?'display:block':'') }}">
         <!-- Employee -->
         <li class="{{ (Request::segment(2)=='employee'?'active':'') }}">
@@ -171,7 +170,7 @@
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Client</span>
                     <span class="counter">Manage Client</span>
-                </a>
+            </a>
         </li>
     </ul>
 </li>

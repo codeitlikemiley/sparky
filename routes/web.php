@@ -10,13 +10,12 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('/', 'WelcomeController@show')->name('frontend');
 Route::group(['domain' => '{username}.'.config('app.domain')], function () {
       Route::get('/', 'WelcomeController@show')->name('wildcard_frontend');
     //   Route::get('/login', 'WelcomeController@show')->name('wildcard_frontend.login');
     // Route::get('/', 'DashboardController@index')->name('tenant.dashboard');
 });
-
-Route::get('/', 'WelcomeController@show')->name('frontend');
 
 Route::get('/paid', ['middleware' => 'subscribed', function () {
     // Route ONLY for Subscribed User
@@ -41,6 +40,6 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/employee', 'User\ShowEmployee')->name('tenant.employees.index');
       Route::get('/client', 'User\ShowClient')->name('tenant.clients.index');
   });
-
+Route::get('/files', 'File\Index')->name('tenant.files.index');
 Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('uploader');
 // Route::put('/files/update', 'File/UploadController@multiple_upload')->name('tenant.files.upload');
