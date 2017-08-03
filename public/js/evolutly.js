@@ -44441,7 +44441,7 @@ __webpack_require__(202);
 /***/ (function(module, exports) {
 
 Vue.component('file-management', {
-    props: ['files', 'tenant'],
+    props: ['files', 'tenant', 'guard'],
     data: function data() {
         return {
             fileForm: new EvolutlyForm(EvolutlyForm.fileForm)
@@ -44480,6 +44480,12 @@ Vue.component('file-management', {
                 return 'https://blogsimages.adobe.com/conversations/files/2012/03/Photoshop-CS6-Icon.jpg';
             }
             return 'http://4vector.com/i/free-vector-text-file-icon_101919_Text_File_Icon.png';
+        },
+        editFile: function editFile(file) {
+            console.log('file edited', file);
+        },
+        deleteFile: function deleteFile(file) {
+            console.log('file deleted', file);
         }
     }
 });

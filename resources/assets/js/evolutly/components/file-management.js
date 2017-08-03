@@ -1,5 +1,5 @@
 Vue.component('file-management', {
-    props: ['files', 'tenant'],
+    props: ['files', 'tenant', 'guard'],
     data () {
         return {
             fileForm: new EvolutlyForm(EvolutlyForm.fileForm),
@@ -16,12 +16,10 @@ Vue.component('file-management', {
         fileChunks(files) {
             return _.chunk(files, 3)
         },
-        getSourceFile(file)
-        {
+        getSourceFile(file) {
             return `${file.path}${file.filename}.${file.extension}`
         },
-        getImageByExtension(file)
-        {
+        getImageByExtension(file) {
             let images = ['png','jpeg','gif','bmp', 'tiff','exif']
             let pdf = ['pdf','epub','mobi']
             let docs = ['doc','dot','docx','dotx','odt']
@@ -43,6 +41,12 @@ Vue.component('file-management', {
             }
                 return 'http://4vector.com/i/free-vector-text-file-icon_101919_Text_File_Icon.png'
 
+        },
+        editFile(file){
+            console.log('file edited', file)
+        },
+        deleteFile(file){
+            console.log('file deleted', file)
         }
     }
 });

@@ -41,5 +41,8 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/client', 'User\ShowClient')->name('tenant.clients.index');
   });
 Route::get('/files', 'File\Index')->name('tenant.files.index');
-Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('uploader');
-// Route::put('/files/update', 'File/UploadController@multiple_upload')->name('tenant.files.upload');
+Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('tenant.file.uploader');
+Route::put('/files/edit/{fileID}', 'File\EditFile')->name('tenant.file.edit');
+Route::put('/files/delete/{fileID}', 'File\DeleteFile')->name('tenant.file.delete');
+Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('tenant.files.show');
+
