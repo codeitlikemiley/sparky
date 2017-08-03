@@ -18,7 +18,7 @@ class AdminDataSeeder extends Seeder
         User::create([
             'name' => 'admin',
             'username' => 'admin',
-            'email' => 'admin@evolutly.info',
+            'email' => 'admin@clientmanagement.pro',
             'password' => 'admin'
         ]);
     }
