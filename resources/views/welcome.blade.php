@@ -5,8 +5,8 @@
         <div class="grid no-margin-top">
             <div class="row cells align-center padding-top-90">
                 <div class="cell fg-white text-shadow ">
-                    <div class="leader">Evolutly</div>
-                    <div class="header">"Easy Task Management"</div>
+                    <div class="leader">Client Management Pro</div>
+                    <div class="header">"Manage Task For Your Clients Like Pro"</div>
                 </div>
             </div>
             <div class="row cells3 align-center padding-top-50">
