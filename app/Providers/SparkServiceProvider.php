@@ -13,8 +13,8 @@ class SparkServiceProvider extends ServiceProvider
      * @var array
      */
     protected $details = [
-        'vendor' => 'Your Company',
-        'product' => 'Your Product',
+        'vendor' => 'Evolutly',
+        'product' => 'Task Management App',
         'street' => 'PO Box 111',
         'location' => 'Your Town, NY 12345',
         'phone' => '555-555-5555',
@@ -25,7 +25,7 @@ class SparkServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $sendSupportEmailsTo = null;
+    protected $sendSupportEmailsTo = 'admin@evolutly.info';
 
     /**
      * All of the application developer e-mail addresses.
@@ -33,7 +33,7 @@ class SparkServiceProvider extends ServiceProvider
      * @var array
      */
     protected $developers = [
-        //
+        'admin@evolutly.info'
     ];
 
     /**
@@ -56,17 +56,9 @@ class SparkServiceProvider extends ServiceProvider
         }else{
             Spark::afterLoginRedirectTo('/dashboard');
         }
-        
         Spark::plan('BASIC PLAN', 'spark_test_1')
             ->price(10)
             ->trialDays(7)
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-        Spark::plan('BASIC PLAN YEARLY', 'spark_test_yearly_1')
-            ->price(100)
-            ->trialDays(7)
-            ->yearly()
             ->features([
                 'First', 'Second', 'Third'
             ]);
@@ -76,27 +68,6 @@ class SparkServiceProvider extends ServiceProvider
             ->features([
                 'First', 'Second', 'Third'
             ]);
-        Spark::plan('BASIC PLAN YEARLY', 'spark_test_yearly_2')
-            ->price(300)
-            ->trialDays(7)
-            ->yearly()
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-        Spark::plan('VIP PLAN', 'spark_test_3')
-            ->price(60)
-            ->trialDays(7)
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-        Spark::plan('VIP PLAN YEARLY', 'spark_test_yearly_3')
-            ->price(600)
-            ->trialDays(7)
-            ->yearly()
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-        Spark::promotion('10USDOFF');
         Spark::collectBillingAddress();
         
     }
