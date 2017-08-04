@@ -160,8 +160,8 @@
         <li class="{{ (Request::segment(2)=='employee'?'active':'') }}">
             <a href="{{url('/users/employee')}}" class="">
                     <span class="mif-chevron-right icon"></span>
-                    <span class="title">Worker</span>
-                    <span class="counter">Manage Worker</span>
+                    <span class="title">Team Member</span>
+                    <span class="counter">Manage Member</span>
                 </a>
         </li>
         <!-- Client -->
