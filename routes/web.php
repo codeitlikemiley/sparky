@@ -21,7 +21,7 @@ Route::get('/paid', ['middleware' => 'subscribed', function () {
     // Route ONLY for Subscribed User
 }]);
 
-Route::group(['prefix' => '/dashboard', 'middleware' => 'cors'], function () {
+Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'HomeController@show')->name('dashboard');
       Route::post('/projects/create', 'Project\CreateProject')->name('tenant.projects.create');
       Route::post('/projects/{projectID}/edit', 'Project\EditProject')->name('tenant.projects.edit');
