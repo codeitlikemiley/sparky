@@ -79,7 +79,7 @@ window.axios.interceptors.response.use(function (response) {
             break;
         // Payment required Permission
         case 402:
-            // window.location = '/settings#/subscription';
+            window.location = '/settings#/subscription';
             break;
     }
 

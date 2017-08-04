@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Laravel\Spark\Spark;
 use Laravel\Spark\Providers\AppServiceProvider as ServiceProvider;
+use App\EligibilityChecker;
 
 class SparkServiceProvider extends ServiceProvider
 {
@@ -13,8 +14,8 @@ class SparkServiceProvider extends ServiceProvider
      * @var array
      */
     protected $details = [
-        'vendor' => 'Evolutly',
-        'product' => 'Task Management App',
+        'vendor' => 'Client Management Pro',
+        'product' => 'Client Management Pro',
         'street' => 'PO Box 111',
         'location' => 'Your Town, NY 12345',
         'phone' => '555-555-5555',
@@ -25,7 +26,7 @@ class SparkServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $sendSupportEmailsTo = 'admin@evolutly.info';
+    protected $sendSupportEmailsTo = 'admin@clientmanagement.pro';
 
     /**
      * All of the application developer e-mail addresses.
@@ -33,7 +34,7 @@ class SparkServiceProvider extends ServiceProvider
      * @var array
      */
     protected $developers = [
-        'admin@evolutly.info'
+        'admin@clientmanagement.pro'
     ];
 
     /**
@@ -60,17 +61,13 @@ class SparkServiceProvider extends ServiceProvider
         ->features([
             '3 Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
         ]);
-        Spark::plan('pro', 'spark_test_2')
+        Spark::plan('VIP', 'spark_test_2')
             ->price(30)
             ->features([
-                'Unlimited Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
+                'Unlimited Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks', 'Unlimited Employees', 'Unlimited Clients'
             ]);
         Spark::collectBillingAddress();
-        Spark::checkPlanEligibilityUsing(function ($user, $plan) {
-            if ($plan->name == 'free' && count($user->projects) > 3) {
-                return false;
-            }
-        });
+        // Spark::checkPlanEligibilityUsing('EligibilityChecker@handle');
         
     }
 }

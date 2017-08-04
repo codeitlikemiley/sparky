@@ -44320,7 +44320,7 @@ window.axios.interceptors.response.use(function (response) {
             break;
         // Payment required Permission
         case 402:
-            // window.location = '/settings#/subscription';
+            window.location = '/settings#/subscription';
             break;
     }
 
@@ -44363,27 +44363,27 @@ Vue.component('dashboard', {
             return 0;
         },
         createProject: function createProject() {
-            var _this = this;
-
-            if (this.guard === 'web') {
+            var self = this;
+            if (self.guard === 'web') {
                 var location = '/dashboard/projects/create';
-                var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location;
-                axios.post(url, this.projectForm).then(function (response) {
-                    this.$modal.hide('add-project');
-                    this.projects.push(response.data.project);
-                    this.projectForm.project_name = '';
-                    this.projectForm.client_id = '';
-                    this.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                }.bind(this)).catch(function (error) {
-                    _this.$popup({ message: 'Name is required' });
+                var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+                axios.post(url, self.projectForm).then(function (response) {
+                    self.$modal.hide('add-project');
+                    self.projects.push(response.data.project);
+                    self.projectForm.project_name = '';
+                    self.projectForm.client_id = '';
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }).catch(function (error) {
+                    console.log(error.response);
+                    self.$popup({ message: error.response.data.message });
                 });
             } else {
-                this.$popup({ message: 'Oops Cant Do That!' });
+                self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
         deleteProject: function deleteProject(index, id) {
             var self = this;
-            if (this.guard === 'web') {
+            if (self.guard === 'web') {
                 axios.post('/dashboard/projects/' + id + '/delete').then(function (response) {
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                     self.projects.splice(index, 1);

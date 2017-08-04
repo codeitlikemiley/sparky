@@ -57,6 +57,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'subscribed' => \Laravel\Spark\Http\Middleware\VerifyUserIsSubscribed::class,
         'teamSubscribed' => \Laravel\Spark\Http\Middleware\VerifyTeamIsSubscribed::class,
-        'cors' => \Barryvdh\Cors\HandleCors::class
+        'cors' => \Barryvdh\Cors\HandleCors::class,
+        'free-plan' => \App\Http\Middleware\LimitProjectForFreeUser::class
     ];
 }

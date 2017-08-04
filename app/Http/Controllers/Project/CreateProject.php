@@ -19,7 +19,7 @@ class CreateProject extends BaseController
 
     public function __construct(Project $project,Request $request)
     {
-        $this->middleware('auth');
+        $this->middleware(['auth','free-plan']);
         $this->request = $request;
         $this->project = $project;
     }
