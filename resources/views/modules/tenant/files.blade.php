@@ -2,6 +2,7 @@
 
 @push('critical_css')
 @include('css::footer')
+@include('css::crop')
 @endpush
 
 @section('content')
@@ -28,13 +29,14 @@
             <div class="row cells3" v-for="item in fileChunks(files)">
                 <div class="cell gallery" v-for="file in item">
                     <div class="image">
-                        <div class="image-inner">
-                            <a :href="getSourceFile(file)">
-                                <img  :src="getImageByExtension(file)" alt="" />
-                            </a>
-                            <p class="image-caption">
-                                @{{ file.name }}
-                            </p>
+                        <div class="image-inner crop">
+                                <a :href="getSourceFile(file)">
+                                    <img  :src="getImageByExtension(file)" alt="" class="portrait"/>
+                                </a>
+                                <p class="image-caption">
+                                        @{{ file.name }}
+                                </p>
+                           
                         </div>
                         <div class="image-info">
                             <h5 class="title">@{{ file.name }}</h5>
