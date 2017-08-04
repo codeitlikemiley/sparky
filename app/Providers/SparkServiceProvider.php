@@ -50,25 +50,27 @@ class SparkServiceProvider extends ServiceProvider
      */
     public function booted()
     {
-        Spark::useStripe();
+        Spark::useStripe()->noCardUpFront()->trialDays(10);
         if(isset(request()->username->username)){
             Spark::afterLoginRedirectTo(route('tenant.dashboard',['username' => request()->username->username]));
         }else{
             Spark::afterLoginRedirectTo('/dashboard');
         }
-        Spark::plan('BASIC PLAN', 'spark_test_1')
-            ->price(10)
-            ->trialDays(7)
-            ->features([
-                'First', 'Second', 'Third'
-            ]);
-        Spark::plan('PRO PLAN', 'spark_test_2')
+        Spark::freePlan()
+        ->features([
+            '3 Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
+        ]);
+        Spark::plan('pro', 'spark_test_2')
             ->price(30)
-            ->trialDays(7)
             ->features([
-                'First', 'Second', 'Third'
+                'Unlimited Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
             ]);
         Spark::collectBillingAddress();
+        Spark::checkPlanEligibilityUsing(function ($user, $plan) {
+            if ($plan->name == 'free' && count($user->projects) > 3) {
+                return false;
+            }
+        });
         
     }
 }

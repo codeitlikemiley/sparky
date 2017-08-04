@@ -11,7 +11,7 @@ Vue.component('dashboard', {
     },
 
     mounted() {
-
+        
     },
     computed: {
         hasNoProject(){

@@ -189,6 +189,7 @@ return [
         App\Providers\SparkServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         Modules\Evolutly\Providers\EvolutlyServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
