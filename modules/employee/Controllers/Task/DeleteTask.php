@@ -15,7 +15,7 @@ class DeleteTask extends BaseController
         $this->middleware('auth:employee');
     }
 
-    public function __invoke($tenant=null,$task)
+    public function __invoke($task)
     {
         $this->deleteTask($task);
     }

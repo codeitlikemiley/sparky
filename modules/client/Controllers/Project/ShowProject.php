@@ -22,8 +22,8 @@ class ShowProject extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant,$project)
+    public function __invoke($project)
     {
-        return view('project::view',['project' => $project, 'tenant' => $tenant]);
+        return view('project::view',['project' => $project]);
     }
 }

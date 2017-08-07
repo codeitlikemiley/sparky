@@ -43,7 +43,9 @@
 <div class="login-form padding20 fg-white ">
     <form class="form-horizontal" role="form" method="POST" action="/login">
         {{ csrf_field() }}
-        <h3 class="text-light text-shadow">{{config('app.name')}} Login</h3>
+        <div class="align-center">
+            <img src="{{ config('app.url').'/img/logo.png' }}" class="logo" style="height: 50px;width:175px;">
+        </div>
         <hr class="bg-white" />
         <br />
         <div class="input-control text full-size" data-role="input">

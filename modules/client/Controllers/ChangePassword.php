@@ -23,7 +23,7 @@ class ChangePassword extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant,Request $request)
+    public function __invoke(Request $request)
     {
         $user = auth()->guard('client')->user();
         $this->validate($request, [
@@ -33,13 +33,13 @@ class ChangePassword extends BaseController
 
         if (! Hash::check($request->current_password, $user->password)) {
             $failed = 'The given password does not match our records.';
-            return view('client::password',['tenant' => $tenant, 'failed' => $failed]);
+            return view('client::password',['failed' => $failed]);
         }
 
         $user->forceFill([
             'password' => $request->password
         ])->save();
         $success = 'You Have Successfully Changed A New Password!';
-        return view('client::password',['tenant' => $tenant, 'success' => $success]);
+        return view('client::password',['success' => $success]);
     }
 }

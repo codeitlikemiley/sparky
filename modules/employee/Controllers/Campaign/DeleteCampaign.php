@@ -23,7 +23,7 @@ class DeleteCampaign extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant=null,$campaign)
+    public function __invoke($campaign)
     {
         $this->deleteCampaign($campaign);
     }

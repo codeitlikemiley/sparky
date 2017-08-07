@@ -31,7 +31,7 @@ class CreateProject extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant)
+    public function __invoke()
     {
         $this->createProject();
     }

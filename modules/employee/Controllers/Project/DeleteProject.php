@@ -22,7 +22,7 @@ class DeleteProject extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant=null,$project)
+    public function __invoke($project)
     {
         $this->deleteProject($project);
     }

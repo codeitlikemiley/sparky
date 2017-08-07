@@ -1,5 +1,4 @@
 <?php
-Route::group(['domain' => '{username}.'.config('app.domain')], function () {
   // Update Profile
   Route::get('/profile', 'Profile')->name('client.profile');
   Route::put('/profile', 'UpdateProfile')->name('client.profile.update');
@@ -22,6 +21,5 @@ Route::group(['domain' => '{username}.'.config('app.domain')], function () {
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
   });
-});
 
 

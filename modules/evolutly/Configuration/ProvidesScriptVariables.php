@@ -18,7 +18,7 @@ trait ProvidesScriptVariables
         return [
             'csrfToken' => csrf_token(),
             'env' => config('app.env'),
-            'api_endpoint' => 'api.'.config('app.domain'),
+            'api_endpoint' => config('app.domain').'/api',
             'domain' => config('app.domain'),
             'url' => config('app.url'),
             'state' => self::getState(),

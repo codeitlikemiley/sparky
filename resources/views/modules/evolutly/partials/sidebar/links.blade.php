@@ -10,7 +10,7 @@
     <!-- Projects Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='dashboard'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='dashboard'?'active':'') }}">
-            <a href="{{ route('employee.dashboard',['username' => $tenant->username]) }}">
+            <a href="{{ route('employee.dashboard') }}">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Project</span>
                 <span class="counter">Manage Projects</span>
@@ -28,7 +28,7 @@
     <!-- Profile Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='profile'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
-            <a href="{{ route('employee.profile',['username' => $tenant->username]) }}" class="">
+            <a href="{{ route('employee.profile') }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Profile</span>
                     <span class="counter">Manage Profile</span>
@@ -46,7 +46,7 @@
     <!-- Password Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='password'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='password'?'active':'') }}">
-            <a href="{{ route('employee.password',['username' => $tenant->username]) }}" class="">
+            <a href="{{ route('employee.password') }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Password</span>
                     <span class="counter">Change Password</span>
@@ -67,7 +67,7 @@
     <!-- Projects Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='dashboard'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='dashboard'?'active':'') }}">
-            <a href="{{ route('client.dashboard',['username' => $tenant->username]) }}">
+            <a href="{{ route('client.dashboard') }}">
                 <span class="mif-chevron-right icon"></span>
                 <span class="title">Project</span>
                 <span class="counter">Manage Projects</span>
@@ -85,7 +85,7 @@
     <!-- Profile Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='profile'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='profile'?'active':'') }}">
-            <a href="{{ route('client.profile',['username' => $tenant->username]) }}" class="">
+            <a href="{{ route('client.profile') }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Profile</span>
                     <span class="counter">Manage Profile</span>
@@ -103,7 +103,7 @@
     <!-- Password Link -->
     <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(2)=='password'?'display:block':'') }}">
         <li class="{{ (Request::segment(2)=='password'?'active':'') }}">
-            <a href="{{ route('client.password',['username' => $tenant->username]) }}" class="">
+            <a href="{{ route('client.password') }}" class="">
                     <span class="mif-chevron-right icon"></span>
                     <span class="title">Password</span>
                     <span class="counter">Change Password</span>

@@ -29,7 +29,7 @@ class LoginController extends BaseController
       // Attempt to log the user in
       if (Auth::guard('client')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
         // if successful, then redirect to their intended location
-        return redirect()->route('client.dashboard',['username' => $request->username->username]);
+        return redirect()->route('client.dashboard');
       }
 
       // if unsuccessful, then redirect back to the login with the form data
@@ -39,6 +39,6 @@ class LoginController extends BaseController
     public function logout()
     {
         Auth::guard('client')->logout();
-        return redirect(route('wildcard_frontend',['username' => request()->username->username]));
+        return redirect()->route('frontend');
     }
 }

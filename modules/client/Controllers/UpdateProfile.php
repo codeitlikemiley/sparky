@@ -22,7 +22,7 @@ class UpdateProfile extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant, Request $request)
+    public function __invoke(Request $request)
     {
         $client = auth()->guard('client')->user();
         $client->name = $request->input('name');

@@ -13,13 +13,10 @@ module.exports = {
         // loaded by default
         user: Evolutly.state.user,
         tenant: Evolutly.state.tenant,
+        employees: Evolutly.state.employees,
         clients: Evolutly.state.clients,
         // loaded depending on route
         projects: (Evolutly.state.projects ? Evolutly.state.projects : []),
-        // for review if we will remove this or just use json_encode
-        'current_project': (Evolutly.state.currentProject ? Evolutly.state.currentProject : null),
-        'project_files': (Evolutly.state.currentProjectFiles ? Evolutly.state.currentProjectFiles : []),
-        'project_workers': (Evolutly.state.currentProjectWorkers ? Evolutly.state.currentProjectWorkers : [])
     },
 
     /**

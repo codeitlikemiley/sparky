@@ -26,8 +26,7 @@ Vue.component('projects', {
             dropDirectory: false,
             thread: 3,
             name: 'file',
-            postAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/upload/${this.project.id}`,
-            // putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
+            postAction: `${window.location.protocol}//${Evolutly.domain}/files/upload/${this.project.id}`,
             headers: {
                 "X-Csrf-Token": Evolutly.csrfToken,
             },
@@ -85,9 +84,9 @@ Vue.component('projects', {
             let location = '/dashboard/tasks/'
             if(this.guard==='employee')
             {
-                location = '/employee/dashboard/tasks/'
+                location = '/team/dashboard/tasks/'
             }
-            let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}${id}`
+            let url = `${window.location.protocol}//${Evolutly.domain}${location}${id}`
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             window.location.href = url
         },
@@ -95,7 +94,7 @@ Vue.component('projects', {
             var self = this
 
             let location = `/dashboard/campaigns/${self.currentCampaignId}/tasks/create`
-            let url = `${window.location.protocol}//${self.tenant.username}.${Evolutly.domain}${location}`
+            let url = `${window.location.protocol}//${Evolutly.domain}${location}`
 
             if (this.guard === 'web') {
 
@@ -138,7 +137,7 @@ Vue.component('projects', {
                     .then(function (response) {
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                         let location = '/dashboard'
-                        let url = `${window.location.protocol}//${self.tenant.username}.${Evolutly.domain}${location}`
+                        let url = `${window.location.protocol}//${Evolutly.domain}${location}`
                         window.location.replace(url)
                     })
                     .catch(error => {

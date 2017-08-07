@@ -22,8 +22,8 @@ class ShowTask extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant,$task)
+    public function __invoke($task)
     {
-        return view('task::view',['task' => $task, 'tenant' => $tenant]);
+        return view('task::view',['task' => $task]);
     }
 }

@@ -18,12 +18,12 @@ class DeleteSubtask extends BaseController
         $this->input = $request->all();
     }
 
-    public function __invoke($tenant=null,$subtask)
+    public function __invoke($subtask)
     {
-        $this->deleteSubtask($tenant,$subtask);
+        $this->deleteSubtask($subtask);
     }
 
-    private function deleteSubtask($tenant,$subtask)
+    private function deleteSubtask($subtask)
     {
         if($this->authorize($tenant,$subtask) && $this->canAccessProject($this->getAuth(),$subtask))
         {
@@ -35,24 +35,15 @@ class DeleteSubtask extends BaseController
         return response()->json(['error' => 'UnAuthorized.'], 401);
     }
 
-    private function authorize($tenant,$subtask)
+    private function authorize($subtask)
     {
-        $employee = $this->getAuth();
-        if(!$tenant)
-        {
-            $tenant = User::find($employee->tenant_id);
-        }
-        if($subtask->task->campaign->project->ByTenant->id != $tenant->id)
+        if($subtask->task->campaign->project->ByTenant()->id != $this->employee()->tenant_id)
         {
             return false;
         }
         return true;
     }
 
-    private function getAuth()
-    {
-        return $employee = auth()->guard('employee')->user();
-    }
     // void or unauthorized
     private function canAccessProject($employee,$subtask)
     {
@@ -65,6 +56,11 @@ class DeleteSubtask extends BaseController
             }
         }
         return false;
+    }
+
+    private function employee()
+    {
+       return  auth()->guard('employee')->user();
     }
 
 }

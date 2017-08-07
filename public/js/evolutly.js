@@ -44366,7 +44366,7 @@ Vue.component('dashboard', {
             var self = this;
             if (self.guard === 'web') {
                 var location = '/dashboard/projects/create';
-                var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+                var url = window.location.protocol + '//' + Evolutly.domain + location;
                 axios.post(url, self.projectForm).then(function (response) {
                     self.$modal.hide('add-project');
                     self.projects.push(response.data.project);
@@ -44399,18 +44399,18 @@ Vue.component('dashboard', {
         viewProject: function viewProject(id) {
             var location = '/dashboard/projects/' + id;
             if (this.guard === 'employee') {
-                location = '/employee/dashboard/projects/' + id;
+                location = '/team/dashboard/projects/' + id;
             }
-            var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location;
+            var url = window.location.protocol + '//' + Evolutly.domain + location;
             console.log(url);
             window.location.href = url;
         },
         viewProgress: function viewProgress(id, name) {
             var location = '/dashboard/projects/' + id + '/progress';
             if (this.guard === 'employee') {
-                location = '/employee/dashboard/projects/' + id + '/progress';
+                location = '/team/dashboard/projects/' + id + '/progress';
             }
-            var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location;
+            var url = window.location.protocol + '//' + Evolutly.domain + location;
             this.campaigns = [];
             // load a loader circle
             axios.post(url).then(function (response) {
@@ -44526,8 +44526,7 @@ Vue.component('projects', {
             dropDirectory: false,
             thread: 3,
             name: 'file',
-            postAction: window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + '/files/upload/' + this.project.id,
-            // putAction: `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}/files/update`,
+            postAction: window.location.protocol + '//' + Evolutly.domain + '/files/upload/' + this.project.id,
             headers: {
                 "X-Csrf-Token": Evolutly.csrfToken
             },
@@ -44578,9 +44577,9 @@ Vue.component('projects', {
         viewTask: function viewTask(id) {
             var location = '/dashboard/tasks/';
             if (this.guard === 'employee') {
-                location = '/employee/dashboard/tasks/';
+                location = '/team/dashboard/tasks/';
             }
-            var url = window.location.protocol + '//' + this.tenant.username + '.' + Evolutly.domain + location + id;
+            var url = window.location.protocol + '//' + Evolutly.domain + location + id;
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             window.location.href = url;
         },
@@ -44588,7 +44587,7 @@ Vue.component('projects', {
             var self = this;
 
             var location = '/dashboard/campaigns/' + self.currentCampaignId + '/tasks/create';
-            var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+            var url = window.location.protocol + '//' + Evolutly.domain + location;
 
             if (this.guard === 'web') {
 
@@ -44626,7 +44625,7 @@ Vue.component('projects', {
                 axios.post('/dashboard/projects/' + self.project.id + '/delete').then(function (response) {
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                     var location = '/dashboard';
-                    var url = window.location.protocol + '//' + self.tenant.username + '.' + Evolutly.domain + location;
+                    var url = window.location.protocol + '//' + Evolutly.domain + location;
                     window.location.replace(url);
                 }).catch(function (error) {
                     self.$popup({ message: _.first(error.response.data.campaign_name) });
@@ -44846,13 +44845,10 @@ module.exports = {
         // loaded by default
         user: Evolutly.state.user,
         tenant: Evolutly.state.tenant,
+        employees: Evolutly.state.employees,
         clients: Evolutly.state.clients,
         // loaded depending on route
-        projects: Evolutly.state.projects ? Evolutly.state.projects : [],
-        // for review if we will remove this or just use json_encode
-        'current_project': Evolutly.state.currentProject ? Evolutly.state.currentProject : null,
-        'project_files': Evolutly.state.currentProjectFiles ? Evolutly.state.currentProjectFiles : [],
-        'project_workers': Evolutly.state.currentProjectWorkers ? Evolutly.state.currentProjectWorkers : []
+        projects: Evolutly.state.projects ? Evolutly.state.projects : []
     },
 
     /**

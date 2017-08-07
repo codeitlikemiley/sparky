@@ -52,11 +52,7 @@ class SparkServiceProvider extends ServiceProvider
     public function booted()
     {
         Spark::useStripe()->noCardUpFront()->trialDays(10);
-        if(isset(request()->username->username)){
-            Spark::afterLoginRedirectTo(route('tenant.dashboard',['username' => request()->username->username]));
-        }else{
-            Spark::afterLoginRedirectTo('/dashboard');
-        }
+        Spark::afterLoginRedirectTo('/dashboard');
         Spark::freePlan()
         ->features([
             '3 Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
@@ -68,6 +64,5 @@ class SparkServiceProvider extends ServiceProvider
             ]);
         Spark::collectBillingAddress();
         // Spark::checkPlanEligibilityUsing('EligibilityChecker@handle');
-        
     }
 }

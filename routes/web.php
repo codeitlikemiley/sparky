@@ -11,15 +11,6 @@
 |
 */
 Route::get('/', 'WelcomeController@show')->name('frontend');
-Route::group(['domain' => '{username}.'.config('app.domain')], function () {
-      Route::get('/', 'WelcomeController@show')->name('wildcard_frontend');
-    //   Route::get('/login', 'WelcomeController@show')->name('wildcard_frontend.login');
-    // Route::get('/', 'DashboardController@index')->name('tenant.dashboard');
-});
-
-Route::get('/paid', ['middleware' => 'subscribed', function () {
-    // Route ONLY for Subscribed User
-}]);
 
 Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'HomeController@show')->name('dashboard');

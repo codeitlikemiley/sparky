@@ -20,7 +20,7 @@ class CreateSubtask extends BaseController
         $this->input = $request->all();
     }
 
-    public function __invoke($tenant=null,$task)
+    public function __invoke($task)
     {
         $this->createSubtask($task);
     }

@@ -73,6 +73,6 @@ class Handler extends ExceptionHandler
             return redirect()->guest(route($login));
             break;
         }
-            return redirect()->guest(route($login,['tenant' => $request->username]));
+            return redirect()->guest(route($login));
     }
 }

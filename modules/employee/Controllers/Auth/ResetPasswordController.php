@@ -104,7 +104,7 @@ class ResetPasswordController extends BaseController
 
     protected function sendResetResponse($response)
     {
-        return redirect()->route('employee.dashboard',['username' => request()->username->username])->with('status', trans($response));
+        return redirect()->route('employee.dashboard')->with('status', trans($response));
     }
 
     protected function sendResetFailedResponse(Request $request, $response)

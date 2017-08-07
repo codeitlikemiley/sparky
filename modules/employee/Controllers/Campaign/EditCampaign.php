@@ -23,7 +23,7 @@ class EditCampaign extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant=null,$campaign)
+    public function __invoke($campaign)
     {
         $this->editCampaign($campaign);
         return response()->json(['success' => 'Campaign Edited.'], 200);

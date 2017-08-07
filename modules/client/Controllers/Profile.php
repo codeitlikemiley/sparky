@@ -22,9 +22,9 @@ class Profile extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant)
+    public function __invoke()
     {
         $user = auth()->guard('client')->user();
-        return view('client::profile',['tenant' => $tenant, 'user' => $user]);
+        return view('client::profile',['user' => $user]);
     }
 }

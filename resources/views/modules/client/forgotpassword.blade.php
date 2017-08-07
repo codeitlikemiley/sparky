@@ -50,16 +50,9 @@
 </style>
 @endpush @section('content')
 <div class="login-form padding20 fg-white ">
-    <form class="form-horizontal" role="form" method="POST" action="{{ route('client.login.submit',['username' => $tenant->username]) }}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ route('client.login.submit') }}">
         {{ csrf_field() }}
-        <div class="align-center">
-            <a href="#" class="icon">
-        <img src="{{$tenant->photo_url}}" class="avatar">
-        </a>
-        </div>
-        <h3 class="align-center">{{ $tenant->name }}'s</h3>
         <h4 class="align-center">Client Forgot Password Page</h4>
-
         <hr class="bg-white" />
         <br />
         <div class="input-control text full-size" data-role="input">
@@ -72,7 +65,7 @@
         <div class="form-actions">
 
             <button type="submit" class="button primary">Reset Password</button>
-            <a href="{{route('client.login',['username' => $tenant->username])}}" type="button " class="button fg-white link "><span class="mif-blocked mif-ani-horizontal mif-ani-fast"></span> Cancel</a>
+            <a href="{{route('client.login')}}" type="button " class="button fg-white link "><span class="mif-blocked mif-ani-horizontal mif-ani-fast"></span> Cancel</a>
         </div>
     </form>
 </div>

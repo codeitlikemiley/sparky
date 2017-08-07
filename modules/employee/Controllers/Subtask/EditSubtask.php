@@ -16,7 +16,7 @@ class EditSubtask extends BaseController
         $this->input = $request->all();
     }
 
-    public function __invoke($tenant=null,$subtask)
+    public function __invoke($subtask)
     {
         $this->editSubtask($subtask);
     }

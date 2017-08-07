@@ -28,8 +28,6 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $client_namespace = 'Modules\Client\Controllers';
 
-    protected $tenant_namespace = 'Modules\Tenant\Controllers';
-
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -95,8 +93,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapApiRoutes($router);
 
-        $this->mapTenantRoutes($router);
-
         $this->mapClientRoutes($router);
 
         $this->mapEmployeeRoutes($router);
@@ -131,26 +127,8 @@ class RouteServiceProvider extends ServiceProvider
         $router->group([
             'namespace' => $this->app_namespace,
             'middleware' => 'api',
-            'domain' => 'api.'. config('app.domain'),
         ], function ($router) {
             require base_path('routes/api.php');
-        });
-    }
-
-    /**
-     * Define the "tenant" routes for the application.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    protected function mapTenantRoutes(Router $router)
-    {
-        $router->group([
-            'namespace' => $this->tenant_namespace,
-            'middleware' => 'web',
-            'domain' => '{username}.'.config('app.domain'),
-        ], function ($router) {
-            require base_path('routes/tenant.php');
         });
     }
 
@@ -165,7 +143,6 @@ class RouteServiceProvider extends ServiceProvider
         $router->group([
             'namespace' => $this->client_namespace,
             'middleware' => 'web',
-            'domain' => '{username}.'.config('app.domain'),
             'prefix' => 'client',
         ], function ($router) {
             require base_path('routes/client.php');
@@ -183,8 +160,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->group([
             'namespace' => $this->employee_namespace,
             'middleware' => 'web',
-            'domain' => '{username}.'.config('app.domain'),
-            'prefix' => 'employee',
+            'prefix' => 'team',
         ], function ($router) {
             require base_path('routes/employee.php');
         });

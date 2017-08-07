@@ -68,12 +68,8 @@ class ComposerServiceProvider extends ServiceProvider
         elseif($guard === 'client'){
         $client = auth()->guard($guard)->user();
         $tenant = $client->byTenant();
-        }
-        elseif($guard === 'web'){
-        $tenant = auth()->guard($guard)->user();
-        }
-        else{
-        $tenant = request()->username;
+        } else {
+        $tenant = auth()->guard('web')->user();
         }
         $view->with(['tenant' => $tenant]);
         });

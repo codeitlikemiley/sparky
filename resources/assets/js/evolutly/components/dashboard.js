@@ -39,7 +39,7 @@ Vue.component('dashboard', {
             if(self.guard === 'web')
             {
                 let location = '/dashboard/projects/create'
-                let url = `${window.location.protocol}//${self.tenant.username}.${Evolutly.domain}${location}`
+                let url = `${window.location.protocol}//${Evolutly.domain}${location}`
                 axios.post(url, self.projectForm)
                 .then(function (response) {
                     self.$modal.hide('add-project');
@@ -76,18 +76,18 @@ Vue.component('dashboard', {
         viewProject(id) {
             let location = '/dashboard/projects/'+id
             if (this.guard === 'employee') {
-                location = '/employee/dashboard/projects/'+id
+                location = '/team/dashboard/projects/'+id
             }
-            let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}`
+            let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             console.log(url)
             window.location.href = url
         },
         viewProgress(id,name) {
             let location = '/dashboard/projects/' + id + '/progress'
             if (this.guard === 'employee') {
-                location = '/employee/dashboard/projects/'+id + '/progress'
+                location = '/team/dashboard/projects/'+id + '/progress'
             }
-            let url = `${window.location.protocol}//${this.tenant.username}.${Evolutly.domain}${location}`
+            let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             this.campaigns = [];
             // load a loader circle
             axios.post(url).then(function (response) {

@@ -23,7 +23,7 @@ class CampaignsProgress extends BaseController
      * @return \Illuminate\Http\Response
      */
 
-    public function __invoke($tenant,$project)
+    public function __invoke($project)
     {
         $campaigns = $project->campaigns()->get()->toArray();
         return response()->json($campaigns);

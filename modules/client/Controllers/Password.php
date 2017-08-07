@@ -22,8 +22,8 @@ class Password extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant)
+    public function __invoke()
     {
-        return view('client::password',['tenant' => $tenant]);
+        return view('client::password');
     }
 }

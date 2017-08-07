@@ -22,7 +22,7 @@ class EditTask extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant=null,$task)
+    public function __invoke($task)
     {
         $this->editTask($task);
     }

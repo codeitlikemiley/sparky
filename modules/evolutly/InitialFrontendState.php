@@ -30,8 +30,9 @@ class InitialFrontendState implements Contract
         $data = array_merge(array(),['user' => $this->currentUser()]);
         $data = array_merge($data,['tenant' => $this->getTenant()]);
         $data = array_merge($data,['clients' => $this->getClients()]);
+        $data = array_merge($data,['employees' => $this->getEmployees()]);
         // if we are on the dashboard of the all types of user
-        $dashboardRoutes = array("dashboard", "tenant.dashboard", "employee.dashboard", "client.dashboard");
+        $dashboardRoutes = array("dashboard", "employee.dashboard", "client.dashboard");
         if (in_array(Route::currentRouteName(), $dashboardRoutes)) {
         $data = array_merge($data,['projects' => $this->projects()]);
         }
@@ -52,34 +53,43 @@ class InitialFrontendState implements Contract
         if($user instanceOf User){
             return $user->select('id','username','name','photo_url')->first(); 
         }
-        return User::find($user->tenant_id)->select('id','username','name','photo_url')->first();
+        return $user->byTenant();
     }
 
     protected function getClients()
     {
         $user = $this->currentUser();
         if($user instanceOf User){
-            return $user->clients()->select(['id','name'])->get();
+            $clients = $user->clients;
+            if(count($clients)){
+                return $clients;
+            }
+            return [];
         }
-        return User::find($user->tenant_id)->clients->select(['id','name'])->get();
+        $clients = User::find($user->tenant_id)->clients;
+        if(count($clients)){
+            return $clients;
+        }
+        return [];
     }
-    // Maybe we can do a eager loading here....
-    protected function currentProject()
+
+    protected function getEmployees()
     {
-        // invoke here a controller to get url segment for example {id}
-        // then fetch the currentProject
-        return Project::find(1);
+        $user = $this->currentUser();
+        if($user instanceOf User){
+            $employees = $user->employees;
+            if(count($employees)){
+                return $employees;
+            }
+            return [];
+        }
+        $employees = User::find($user->tenant_id)->employees;
+        if(count($employees)){
+            return $employees;
+        }
+        return [];
     }
-    protected function currentProjectFiles()
-    {
-        // $this->currentProject()
-        return Task::all();
-    }
-    protected function currentProjectWorkers()
-    {
-        // $this->currentProject()
-        return Employee::all();
-    }
+    
 
     // default should only be the user
     // for dashboard we add projects
@@ -87,13 +97,17 @@ class InitialFrontendState implements Contract
 
     protected function projects()
     {
-        // if your a tenant fetch all projects with tenant ID
-        if(auth()->guard('web'))
+        $user = $this->currentUser();
+        
+        if($user instanceOf User)
         {
-            return Project::where('tenant_id', auth()->user()->id)->get()->toArray();
+            return Project::where('tenant_id', $user->id)->get()->toArray();
+        }elseif($user instanceOf Employee){
+            // We Should Return Here All the Assigned Projects to the Current Employee...
+           return $user->assignedSubtasks()->get()->toArray();
+        }elseif($user instanceOf Client) {
+            return $user->projects()->get()->toArray();
         }
-        // Else we Just Fetch All The Project The Current User Has
-        return $this->currentUser()->projects()->get()->toArray();
     }
 
 

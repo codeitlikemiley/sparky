@@ -34,7 +34,7 @@
                                         <img src="{{$user->photo_url}}" class="avatar">
                                     </a>
                             </div>
-                            <form class="form-horizontal" role="form" method="POST" action="{{ route('client.profile.update',['username' => $tenant->username]) }}">
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('client.profile.update') }}">
                                 {{ method_field('PUT') }} 
                                 {{ csrf_field() }}
                                 <div class="row">
@@ -57,7 +57,7 @@
                                     <button class="button caption info" name="submit" value="submit" data-form-builder="button">Update Profile</button>
                                 </div>
                             </form>
-                            <form enctype="multipart/form-data" class="form-horizontal" role="form" method="POST" action="{{ route('client.profile.upload',['username' => $tenant->username]) }}">
+                            <form enctype="multipart/form-data" class="form-horizontal" role="form" method="POST" action="{{ route('client.profile.upload') }}">
                                 {{ method_field('PUT') }} 
                                 {{ csrf_field() }}
                                 <div class="row">

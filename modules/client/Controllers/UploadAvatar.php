@@ -22,7 +22,7 @@ class UploadAvatar extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant, Request $request)
+    public function __invoke(Request $request)
     {
         if($request->hasFile('avatar')){
     		$avatar = $request->file('avatar');

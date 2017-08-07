@@ -24,7 +24,7 @@
 
                         <div class="text">
 
-                            <form class="form-horizontal" role="form" method="POST" action="{{ route('employee.password.change',['username' => $tenant->username]) }}">
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('employee.password.change') }}">
                                 {{ method_field('PUT') }} 
                                 {{ csrf_field() }}
                                 <div class="row">

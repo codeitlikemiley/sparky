@@ -16,7 +16,7 @@ class ToggleSubtask extends BaseController
         $this->input = $request->all();
     }
 
-    public function __invoke($tenant=null,$subtask)
+    public function __invoke($subtask)
     {
         $this->toogleDone($subtask);
     }

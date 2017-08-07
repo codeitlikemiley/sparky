@@ -26,7 +26,7 @@ class EditProject extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($tenant=null,$project)
+    public function __invoke($project)
     {
         $this->editProject($project);
     }
