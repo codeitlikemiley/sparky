@@ -99,13 +99,27 @@ class InitialFrontendState implements Contract
     {
         $user = $this->currentUser();
         
-        if($user instanceOf User)
-        {
-            return Project::where('tenant_id', $user->id)->get()->toArray();
+        if($user instanceOf User){
+            return $user->manageProjects()->get()->toArray();
         }elseif($user instanceOf Employee){
-            // We Should Return Here All the Assigned Projects to the Current Employee...
-           return $user->assignedSubtasks()->get()->toArray();
-        }elseif($user instanceOf Client) {
+           // we get the tenant of employee
+           $tenant = $user->byTenant();
+           // we get list of project ids
+           $project_list = $tenant->manageProjects()->pluck('id')->toArray();
+           $projects = array();
+           $count = 0;
+           // filter the projects in employee_subtasks table using the product id
+           foreach ($project_list as $id) {
+               $project = Project::find($id);
+               $employees = $project->assignedEmployees()->pluck('id')->toArray();
+               if(in_array($user->id,$employees)){
+               $projects = array_merge($projects,[$count => $project]);
+               $count++;
+               }
+           }
+           // return Only Projects Assigned to that Employee
+           return $projects;
+        }elseif($user instanceOf Client){
             return $user->projects()->get()->toArray();
         }
     }

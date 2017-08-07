@@ -40,11 +40,11 @@
                         </div>
                         <div class="image-info">
                             <h5 class="title">@{{ file.name }}</h5>
-                            <div class="pull-right">
-                                <small>Uploaded By:</small> <a style="cursor:pointer;">@{{ file.uploadable.name }}</a>
+                            <div class="row">
+                                <span>Uploaded By: </span> <a style="cursor:pointer;">  @{{ file.uploadable.name }}</a>
                             </div>
-                            <div class="pull-left">
-                                    <small>Project:</small> <a style="cursor:pointer;">@{{ file.project.name }}</a>
+                            <div class="row">
+                                <span>Project: </span> <a style="cursor:pointer;">  @{{ file.project.name }}</a>
                             </div>
                             <div class="row cells2" style="min-height:35px; padding-top:5px;cursor:pointer;">
                                 <div class="cell bg-blue align-center sub-alt-header" @click="editFile(file)">

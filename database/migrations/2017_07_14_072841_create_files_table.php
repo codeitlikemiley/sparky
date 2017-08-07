@@ -15,8 +15,10 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('project_id')->unsigned();
+            $table->integer('project_id')->unsigned()->nullable();
             $table->foreign('project_id')->references('id')->on('projects');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->nullableMorphs('uploadable');
             $table->string('path');
             $table->string('name',60);

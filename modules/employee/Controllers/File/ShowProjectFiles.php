@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\File;
+namespace Modules\Employee\Controllers\File;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,15 +10,12 @@ class ShowProjectFiles extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:web');
+        $this->middleware('auth:employee');
     }
     
     public function __invoke($projectID)
     {
-        // we have the current instance of project...
-        // we just select all files related to this project
-        $this->getAuth();
+        // We Can View All Upload Related to this Project An Employee Can Access
         return File::with('uploadable')->where('project_id',$projectID->id)->get();
-        // for editing and deleting it should only be done by the one who upload or by the admin.
     }
 }

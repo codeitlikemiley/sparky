@@ -7,13 +7,15 @@
                     <ul class="tabs">
                         <li><a href="#tasks_tab">Tasks</a></li>
                         <li><a href="#onboarding_tab">Onboarding</a></li>
-                        <li><a href="#files_tab">Files</a></li>
+                        <li><a href="#uploads_tab">Upload</a></li>
+                        <li><a href="#uploaded_tab">Files</a></li>
                         <li><a href="#people_tab">People</a></li>
                     </ul>
                     <div class="frames bg-white">
                         @include('task::tab')
                         @include('form::tab')
                         @include('file::tab')
+                        @include('file::uploaded')
                         @include('employee::tab')
                     </div>
                 </div>

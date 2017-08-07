@@ -40,6 +40,7 @@ class UploadController extends BaseController {
         {
             $this->attachProject($project);
             $this->uploadedBy();
+            $this->ownsByTenant();
         }
 
         return response()->json(['success' => true]);
@@ -79,7 +80,12 @@ class UploadController extends BaseController {
 
     private function uploadedBy()
     {
-        $this->getAuth()->files()->save($this->file);
+        $this->getAuth()->canUploadFiles()->save($this->file);
+    }
+
+    private function ownsByTenant()
+    {
+        $this->getTenant()->files()->save($this->file);
     }
 
     private function getAllMimes()

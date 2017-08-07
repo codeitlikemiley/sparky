@@ -5,6 +5,7 @@ namespace App\Traits\ModelBuilder;
 use App\Traits\Relationship\HasClients;
 use App\Traits\Relationship\HasEmployees;
 use App\Traits\Relationship\HasProjects;
+use App\Traits\Relationship\HasFiles;
 use App\Traits\Relationship\CanManageClients;
 use App\Traits\Relationship\CanManageEmployees;
 use App\Traits\Relationship\CanManageProjects;
@@ -22,5 +23,5 @@ trait UserBuilder {
         CanManageClients, CanManageEmployees, CanManageProjects,
         UsersMutator, UsersMethod,
         Sluggable, SluggableScopeHelpers, UserSluggable,
-        HasComments, HasActivities, CanManageFiles;
+        HasComments, HasActivities, CanManageFiles ,HasFiles;
 }

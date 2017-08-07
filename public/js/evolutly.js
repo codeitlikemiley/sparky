@@ -44400,6 +44400,8 @@ Vue.component('dashboard', {
             var location = '/dashboard/projects/' + id;
             if (this.guard === 'employee') {
                 location = '/team/dashboard/projects/' + id;
+            } else if (this.guard === 'client') {
+                location = '/client/dashboard/projects/' + id;
             }
             var url = window.location.protocol + '//' + Evolutly.domain + location;
             console.log(url);
@@ -44409,6 +44411,8 @@ Vue.component('dashboard', {
             var location = '/dashboard/projects/' + id + '/progress';
             if (this.guard === 'employee') {
                 location = '/team/dashboard/projects/' + id + '/progress';
+            } else if (this.guard === 'client') {
+                location = '/client/dashboard/projects/' + id + '/progress';
             }
             var url = window.location.protocol + '//' + Evolutly.domain + location;
             this.campaigns = [];
@@ -44435,6 +44439,7 @@ Vue.component('dashboard', {
 __webpack_require__(200);
 __webpack_require__(203);
 __webpack_require__(202);
+__webpack_require__(352);
 
 /***/ }),
 /* 202 */
@@ -44533,7 +44538,16 @@ Vue.component('projects', {
             data: {
                 "_csrf_token": Evolutly.csrfToken
             },
-            auto: false
+            auto: false,
+            draggableOptions: {
+                group: 'campaign',
+                handle: '.draghandle',
+                filter: '.v--modal-box,.v--modal',
+                scroll: true,
+                preventOnFilter: false,
+                disabled: this.guard === 'web' ? false : true
+            },
+            moveable: this.guard === 'web' ? 'move' : 'initial'
         };
     },
     mounted: function mounted() {
@@ -44578,6 +44592,8 @@ Vue.component('projects', {
             var location = '/dashboard/tasks/';
             if (this.guard === 'employee') {
                 location = '/team/dashboard/tasks/';
+            } else if (this.guard === 'client') {
+                location = '/client/dashboard/tasks/';
             }
             var url = window.location.protocol + '//' + Evolutly.domain + location + id;
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
@@ -71156,6 +71172,83 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 module.exports = __webpack_require__(195);
 
+
+/***/ }),
+/* 352 */
+/***/ (function(module, exports) {
+
+Vue.component('uploaded-files', {
+    props: ['tenant', 'guard'],
+    data: function data() {
+        return {
+            files: []
+        };
+    },
+    mounted: function mounted() {
+        console.log('uploaded files component loaded!');
+        this.fetchUploadedFiles();
+    },
+
+    computed: {},
+    methods: {
+        fileChunks: function fileChunks(files) {
+            return _.chunk(files, 3);
+        },
+        getSourceFile: function getSourceFile(file) {
+            return window.location.protocol + '//' + window.location.hostname + '/' + file.path + file.filename + '.' + file.extension;
+        },
+        getImageByExtension: function getImageByExtension(file) {
+            var images = ['png', 'jpeg', 'gif', 'bmp', 'tiff', 'exif'];
+            var pdf = ['pdf', 'epub', 'mobi'];
+            var docs = ['doc', 'dot', 'docx', 'dotx', 'odt'];
+            var xls = ['xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm', 'xltm', 'xlam', 'xlsb'];
+            var ppt = ['ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm'];
+            var psd = ['psd'];
+            if (_.includes(images, file.extension)) {
+                return '' + file.path + file.filename + '.' + file.extension;
+            } else if (_.includes(pdf, file.extension)) {
+                return 'https://visual-integrity.com/wp-content/uploads/2016/02/pdf-page.png';
+            } else if (_.includes(docs, file.extension)) {
+                return 'https://davescomputertips.com/wp-content/uploads/2014/03/microsoft-word-logo.jpg';
+            } else if (_.includes(xls, file.extension)) {
+                return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Microsoft_Excel_2013_logo.svg/2000px-Microsoft_Excel_2013_logo.svg.png';
+            } else if (_.includes(ppt, file.extension)) {
+                return 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Microsoft_PowerPoint_2013_logo.svg/1043px-Microsoft_PowerPoint_2013_logo.svg.png';
+            } else if (_.includes(psd, file.extension)) {
+                return 'https://blogsimages.adobe.com/conversations/files/2012/03/Photoshop-CS6-Icon.jpg';
+            }
+            return 'http://4vector.com/i/free-vector-text-file-icon_101919_Text_File_Icon.png';
+        },
+        editFile: function editFile(file) {
+            console.log('file edited', file);
+        },
+        deleteFile: function deleteFile(file) {
+            console.log('file deleted', file);
+        },
+        fetchUploadedFiles: function fetchUploadedFiles() {
+            var pathArray = window.location.pathname.split('/');
+            var projectID = null;
+            var self = this;
+            if (this.guard === 'web') {
+                projectID = pathArray[3];
+                axios.get('/files/show/' + projectID).then(function (response) {
+                    self.files = response.data;
+                });
+            } else if (this.guard === 'employee') {
+                projectID = pathArray[4];
+                axios.get('/team/files/show/' + projectID).then(function (response) {
+                    self.files = response.data;
+                });
+            } else if (this.guard === 'client') {
+                projectID = pathArray[4];
+                axios.get('/client/files/show/' + projectID).then(function (response) {
+                    self.files = response.data;
+                });
+            }
+        },
+        pushNewUpload: function pushNewUpload() {}
+    }
+});
 
 /***/ })
 /******/ ]);

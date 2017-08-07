@@ -20,18 +20,18 @@ class RedirectIfAuthenticated
         switch ($guard) {
         case 'employee':
           if (Auth::guard($guard)->check()) {
-            return redirect()->route('employee.dashboard',['username' => $request->username->username]);
+            return redirect()->route('employee.dashboard');
           }
           break;
         case 'client':
           if (Auth::guard($guard)->check()) {
-            return redirect()->route('client.dashboard',['username' => $request->username->username]);
+            return redirect()->route('client.dashboard');
           }
           break;
         default:
           if (Auth::guard($guard)->check()) {
             if(isset($request->username->username)){
-              return redirect()->route('tenant.dashboard',['username' => $request->username->username]);
+              return redirect()->route('tenant.dashboard');
             }
             return redirect()->route('dashboard');
           }

@@ -77,6 +77,8 @@ Vue.component('dashboard', {
             let location = '/dashboard/projects/'+id
             if (this.guard === 'employee') {
                 location = '/team/dashboard/projects/'+id
+            }else if(this.guard === 'client'){
+                location = '/client/dashboard/projects/'+id
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             console.log(url)
@@ -86,6 +88,8 @@ Vue.component('dashboard', {
             let location = '/dashboard/projects/' + id + '/progress'
             if (this.guard === 'employee') {
                 location = '/team/dashboard/projects/'+id + '/progress'
+            }else if(this.guard === 'client'){
+                location = '/client/dashboard/projects/'+id + '/progress'
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             this.campaigns = [];

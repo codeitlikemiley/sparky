@@ -3,24 +3,29 @@
         <div class="row cells2" v-for="(chunk, keyChunk) in campaignChunks(campaigns)"
             :key="keyChunk">
 
-            <draggable class="cell colspan1" v-for="(campaign, cKey) in chunk" :options="{group: 'campaign',handle: '.draghandle',filter: '.v--modal-box,.v--modal',scroll: true,preventOnFilter: false}"
+            <draggable class="cell colspan1" v-for="(campaign, cKey) in chunk" :options="draggableOptions"
                 :data-id="campaign.id" :key="cKey" @end="onEnd" style="min-height: 150px;" :leftOrRight="cKey" :max="keyChunk"
                 :data-id="campaign.id">
                 <div class="panel">
 
-                    <div class="heading draghandle bg-lightBlue" style="cursor:move;">
-                        <div style="position:absolute;top:12px;margin-left:136px;">
+                    <div class="heading draghandle bg-lightBlue" :style="{cursor: moveable}">
+                        <div v-if="guard === 'web'" style="position:absolute;top:12px;margin-left:136px;">
                             <span data-role="hint" data-hint-mode="2" data-hint="Switch|Re-Order Campaign" data-hint-position="top">
                                 @{{ campaign.name }}
                             </span>
                         </div>
-                        <div @click="editCampaignModal(campaign)" class="align-center bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
+                        <div v-else style="position:absolute;top:12px;margin-left:136px;">
+                                <span>
+                                    @{{ campaign.name }}
+                                </span>
+                            </div>
+                        <div v-if="guard === 'web'" @click="editCampaignModal(campaign)" class="align-center bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
                             <span class="icon  fa fa-pencil-square-o" style="position: relative;top: 50% !important; transform: translateY(-50%) !important;"></span>
                         </div>
-                        <div @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Task" data-hint-position="top">
+                        <div v-if="guard === 'web'" @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Task" data-hint-position="top">
                             <span class="icon mif-plus" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
-                        <div @click="deleteCampaign(campaign)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
+                        <div v-if="guard === 'web'" @click="deleteCampaign(campaign)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
                             <span class="icon fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
                     </div>

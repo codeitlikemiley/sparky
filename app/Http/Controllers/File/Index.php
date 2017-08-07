@@ -15,7 +15,8 @@ class Index extends BaseController
 
     public function __invoke()
     {
-        $files = File::with('uploadable','project')->get();
+        $tenant = $this->getTenant();
+        $files = File::with('uploadable','project')->where('user_id',$tenant->id)->get();
         return view('tenant::files',['files' => $files]);
     }
 }

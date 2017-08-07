@@ -21,5 +21,7 @@
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
   });
+Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('client.files.show');
+
 
 

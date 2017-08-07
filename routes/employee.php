@@ -24,5 +24,7 @@
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
   });
 
+Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('employee.files.show');
+
 
 

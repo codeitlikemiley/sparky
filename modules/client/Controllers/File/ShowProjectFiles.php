@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\File;
+namespace Modules\Client\Controllers\File;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,7 +10,7 @@ class ShowProjectFiles extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:web');
+        $this->middleware('auth:client');
     }
     
     public function __invoke($projectID)

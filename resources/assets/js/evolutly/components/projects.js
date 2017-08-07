@@ -34,6 +34,15 @@ Vue.component('projects', {
                 "_csrf_token": Evolutly.csrfToken,
             },
             auto: false,
+            draggableOptions: {
+                group: 'campaign',
+                handle: '.draghandle',
+                filter: '.v--modal-box,.v--modal',
+                scroll: true,
+                preventOnFilter: false, 
+                disabled: (this.guard === 'web' ? false : true)
+            },
+            moveable: (this.guard === 'web' ? 'move' : 'initial')
         }
     },
     mounted() {
@@ -85,6 +94,8 @@ Vue.component('projects', {
             if(this.guard==='employee')
             {
                 location = '/team/dashboard/tasks/'
+            }else if(this.guard==='client'){
+                location = '/client/dashboard/tasks/'
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}${id}`
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })

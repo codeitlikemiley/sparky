@@ -3,6 +3,7 @@
 namespace App\Traits\Methods;
 
 use Illuminate\Auth\AuthManager;
+use App\User;
 
 trait MultiAuth
 {
@@ -41,6 +42,6 @@ trait MultiAuth
                 return $guard;
             }
         }
-        return $auth->getDefaultDriver();
+        return auth()->getDefaultDriver();
     }
 }
