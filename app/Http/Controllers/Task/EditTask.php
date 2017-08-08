@@ -7,15 +7,20 @@ use App\Http\Controllers\Controller as BaseController;
 
 class EditTask extends BaseController
 {
-    protected $input;
+
+    protected $request;
+
+    protected $message = 'Task Edited!';
+
+    protected $code = '200';
 
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        $this->input = $request->all();
+        $this->request = $request;
 
     }
-
+    
     /**
      * Receive Project Id
      *
@@ -23,23 +28,103 @@ class EditTask extends BaseController
      */
     public function __invoke($task)
     {
-        $this->editTask($task);
-        return response()->json(['success' => 'Task Edited.'], 200);
+        $validator = $this->sanitize();
+        if($validator->fails())
+        {
+            $this->message = 'Failed To Edit '. $task->name;
+            $this->code = 400;
+            return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
+        }
+        if($this->allowed($task) || $this->createdBy($task))
+        {
+            $this->editTask($task);
+            $this->save($task);
+            return response()->json(['message' => 'Task: '.$task->name. ' Edited!', 'task' => $task], 200);
+        }
+        
 
     }
-    private function authorize($task)
+
+    private function sanitize()
     {
-        if($task->campaign->project->ByTenant->id != auth()->user()->id)
+       return $validator = \Validator::make($this->request->all(), $this->rules(), $this->messages());
+    }
+
+    private function rules(){
+        return 
+        [
+        'task_name' => 'required|max:30',
+        'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'task_description' => 'max:200'
+        ];
+    }
+    private function messages(){
+        return [
+            'task_name.required' => 'Name Your Task',
+            'task_name.max' => 'Task Name Too Long',
+            'task_description.max' => 'Description Too Long',
+            'task_link.regex' => 'Enter Valid Url',
+        ];
+    }
+    private function allowed($task)
+    {
+        
+        if($task->campaign->project->byTenant()->id != $this->getTenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
         }
+        return true;
+    }
+
+    private function createdBy($task)
+    {
+        if($this->getTenant()->projects()->find($task->campaign->project->id))
+        {
+            return true;
+        }
+        return false;
     }
 
     private function editTask($task)
     {
-        $this->authorize($task);
-        // validate
-        $task->fill($this->input);
-        $task->save();
+        $this->addName($task);
+        $this->addLink($task);
+        $this->addDescription($task);
+    }
+
+    private function validateTask(){
+        $this->validate($this->input, [
+            'task_name' => 'required|max:30',
+            'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+            'task_description' => 'max:200',
+            ]);
+    }
+
+    private function addName($task)
+    {
+        $task->name = $this->request->task_name;
+    }
+
+    private function addLink($task)
+    {
+        if(isset($this->request->task_link)){
+        $task->link = $this->request->task_link;
+        }
+    }
+
+    private function addDescription($task)
+    {
+        if(isset($this->request->task_description)){
+        $task->description = $this->request->task_description;
+        }
+    }
+
+    private function save($task)
+    {
+        $save = $task->save();
+        if(!$save){
+        $this->message = 'Editing Task Failed!';
+        $this->code = 404;
+        }
     }
 }

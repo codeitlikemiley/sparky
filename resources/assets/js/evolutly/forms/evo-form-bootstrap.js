@@ -62,6 +62,17 @@ Evolutly.forms = {
         size: '',
         type: '',
         webkitRelativePath: ''
+    },
+    assignEmployeeForm: {
+        user_ids: []
+    },
+    ratingForm: {
+        rating: 1
+    },
+    commentForm: {
+        to: '',
+        from: '', // Should be Defaulted to The Current Auth User
+        message: ''
     }
 
 

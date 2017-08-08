@@ -22,6 +22,7 @@
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
+      Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('employee.subtasks.index');
   });
 
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('employee.files.show');

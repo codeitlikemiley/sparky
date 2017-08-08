@@ -1,10 +1,14 @@
-@extends('evolutly::layouts.app') 
+@extends('evolutly::layouts.dashboard') 
+
 @push('critical_css')
 @include('css::footer')
 @include('css::progressbar')
 @endpush 
+
 @section('content')
 <!-- Section Wrapper -->
+<vue-up></vue-up>
+<task :guard="{{json_encode($guard)}}" :activities="{{json_encode($activities)}}" :campaign="{{ json_encode($campaign) }}" :client="{{json_encode($client)}}" :workers="{{json_encode($workers)}}" :tenant="tenant" :user="user" :task="{{json_encode($task)}}" :project="{{json_encode($project)}}" inline-template>
 <div class="section-wrapper animated fadeInRightBig">
     <br>
     <!-- Panel box -->
@@ -21,7 +25,7 @@
                 <br>
                 <hr>
                 <!-- Header -->
-
+                
                 <!-- Grid -->
                 <div class="grid">
                     <!-- Task Points -->
@@ -33,6 +37,7 @@
                     <div class="row">
                         <!-- Task Status -->
                         @include('task::progress')
+                        
                     </div>
                    
                     <!-- Subtask table -->
@@ -47,9 +52,9 @@
                             @include('activity::logs')
                         </div>
                         <!-- Comments -->
-                        <row class="row">
+                        <div class="row">
                             @include('comment::box')
-                        </row>
+                        </div>
                     </div>
                 </div>
                 <!-- Grid -->
@@ -58,8 +63,11 @@
         </div>
         <!-- Content -->
     </div>
+    @include('task::edit-task-modal')
     <!-- Panel box -->
-
 </div>
+
 <!-- Section Wrapper -->
+</task>
+
 @endsection

@@ -20,6 +20,7 @@
       Route::get('/projects/{projectID}', 'Project\ShowProject')->name('client.projects.view');
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
+      Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('client.subtasks.index');
   });
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('client.files.show');
 

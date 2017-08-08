@@ -1,15 +1,18 @@
 <div class="example" data-text="Link">
     <blockquote class="place-right">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-        <small><cite title="Source Title">Description</cite></small>
+        <p v-text="taskForm.task_description" v-if="taskForm.task_description"></p>
+        <p v-else @click="editTaskModal()"><span class="tag info">Add Description</span></p>
+        <small><cite title="Source Title">@{{ taskForm.task_name }}</cite></small>
     </blockquote>
-    <a href="http://google.com" class="tag info">
-        <span class="tag info">http://www.facebook.com</span>
+    <a @click="viewLink()" class="tag info" v-if="taskForm.task_link">
+        <span class="tag info">@{{ taskForm.task_link }}</span>
     </a>
+    <a v-else @click="editTaskModal()"><span class="tag info">Add Link</span></a>
 </div>
-<a href="javascript:void(0);" onclick="alert('Please Create A Component to Delete Task');" class="place-right margin10">
+<a @click="deleteTaskModal()" class="place-right margin10">
     <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Task</button>
 </a>
-<a href="javascript:void(0);" onclick="alert('Please Create A Component to Edit Task');" class="place-right margin10">
+<a @click="editTaskModal()" class="place-right margin10">
+    <!-- Open Modal To Edit Task -->
     <button class="button info"><span class="mif-pencil"></span> Edit Task</button>
 </a>

@@ -25,6 +25,14 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('tenant.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
       Route::post('/campaigns/{campaign}/tasks/create', 'Task\CreateTask')->name('tenant.tasks.create');
+      Route::put('/tasks/{task}/edit', 'Task\EditTask')->name('tenant.tasks.edit');
+
+      Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('tenant.subtasks.index');
+      Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
+      Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
+    //   Route::post('/tasks/{task}/subtasks/create', 'Subtask\CreateSubtask')->name('tenant.subtasks.create');
+    //   Route::put('/tasks/{task}/subtasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
+    //   Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
   });
 
   Route::group(['prefix' => '/users'], function () {

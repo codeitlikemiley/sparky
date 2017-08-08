@@ -18,43 +18,34 @@ class DeleteSubtask extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($subtask)
+    public function __invoke($task,$subtask)
     {
-        $this->deleteSubtask($subtask);
-
-    }
-
-    private function deleteSubtask($subtask)
-    {
-        if($this->authorize($subtask) || $this->createdBy($subtask))
+        if($this->allowed($subtask) || $this->createdBy($subtask))
         {
             $this->detachEmployees($subtask);
             $this->delete($task);
-            
+            return response()->json(['message' => 'Subtask: '.$subtask->name. ' Deleted!'], 200);
         }
         return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
 
-    private function authorize($subtask)
+    private function allowed($subtask)
     {
-        if($subtask->task->campaign->project->ByTenant->id != auth()->user()->id)
+        
+        if($subtask->task->campaign->project->byTenant()->id != $this->getTenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
         }
+        return true;
     }
 
     private function createdBy($subtask)
     {
-        if($this->tenant()->projects()->find($subtask->task->campaign->project->id))
+        if($this->getTenant()->projects()->find($subtask->task->campaign->project->id))
         {
             return true;
         }
         return false;
-    }
-
-    private function tenant()
-    {
-       return  auth()->user();
     }
 
     private function detachEmployees($subtask)

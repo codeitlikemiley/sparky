@@ -6,7 +6,7 @@
             </div>
             <div class="content">
                 <div class="sub-heading bg-chess">
-                    <a href="javascript:void(0);" onclick="alert('Please Create A Component to Add Subtask');">
+                    <a @click="showAddSubtaskModal()">
                     <button class="button info"><span class="mif-plus"></span> Add Subtask</button>
                     </a>
                 </div>
@@ -27,60 +27,57 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody v-for="(subtask, subtaskKey) in subtasks">
                                 <tr>
-                                    <td>Create Wordpress Site</td>
-                                    <td class="align-center">5</td>
+                                    <td>@{{ subtask.name }}</td>
+                                    <td class="align-center">@{{ subtask.points }}</td>
                                     <td class="align-center">
-                                        <span class="icon mif-star-full fg-amber">
-                                        </span>
-                                        <span class="icon mif-star-full fg-amber">
-                                        </span>
-                                        <span class="icon mif-star-full fg-amber">
-                                        </span>
-                                        <span class="icon mif-star-full fg-amber">
-                                        </span>
-                                        <span class="icon mif-star-full fg-amber">
+                                        <span class="icon mif-star-full fg-amber" v-for="(priority, priorityKey) in parseInt(subtask.priority)">
                                         </span>
                                     </td>
                                     <td class="align-center">
-                                        <span class="tag info">
-                                            <span class="icon mif-play">
+                                        <span class="tag info" style="cursor: pointer;">
+                                            <span class="icon mif-play" @click="viewVideoLink(subtask)">
                                             </span>
                                         </span>
                                     </td>
                                     <td class="align-center">
-                                        <span class="tag bg-amber fg-white">Ongoing
+                                        <span class="tag bg-green fg-white" v-if="subtask.done">Done
+                                        </span>
+                                        <span class="tag bg-amber fg-white" v-else>Ongoing
                                         </span>
                                     </td>
                                     <td>
-                                    May 31, 2017
+                                    @{{ subtask.due_date | date }}
                                     </td>
                                     <td>
-                                        <span class="tag bg-amber fg-white">user1
-                                        </span>
-                                        <span class="tag bg-amber fg-white">user2
-                                        </span>
-                                        <span class="tag bg-amber fg-white">user3
+                                        <span class="tag bg-blue fg-white" v-for="(employee,employeeKey) in subtask.employees">@{{ employee.name }}
                                         </span>
                                     </td>
                                     <td class="align-center" style="font-size: 1.25rem">
-                                        <span class="fg-lightBlue icon mif-pencil">
+                                        <span class="fg-lightBlue icon mif-pencil" @click="editSubtask(subtask)" style="cursor:pointer;"
+                                        data-role="hint" data-hint-mode="2" :data-hint="`Edit Subtask:|${subtask.name}`" data-hint-position="top"
+                                        >
                                         </span>
-                                        <span class="fg-red icon fa fa-trash">
+                                        <span class="fg-red icon fa fa-trash" @click="deleteSubtask(subtask)" style="cursor:pointer;"
+                                        data-role="hint" data-hint-mode="2" :data-hint="`Delete Subtask:|${subtask.name}`" data-hint-position="top"
+                                        >
                                         </span>
 
-                                        <span class="tag success">
-                                            <span class="icon mif-checkmark">
-                                                 
+                                        <span class="tag" :class="{success: !subtask.done}" @click="toggleDone(subtask)" style="cursor:pointer;"
+                                        data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Subtask" data-hint-position="top"
+                                        >
+                                            <span class="icon mif-checkmark" v-if="!subtask.done">
+                                            </span>
+                                            <span class="fg-amber icon mif-blocked" v-else>
                                             </span>
                                         </span>
-                                        <span class="fg-amber icon mif-blocked">
-                                        </span>
+                                        
                                     </td>
                                 </tr>
                                 
                             </tbody>
+                            
                         </table>
 
                     </div>
