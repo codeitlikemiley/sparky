@@ -48,7 +48,7 @@
                     <!-- Activity and Comment Section -->
                     <div class="row margin-bottom-90">
                         <!-- Activity -->
-                        <div class="row">
+                        <div class="row" v-if="guard != 'client'">
                             @include('activity::logs')
                         </div>
                         <!-- Comments -->

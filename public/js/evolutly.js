@@ -44864,7 +44864,12 @@ Vue.component('task', {
             progress: '0%',
             total: 0,
             done: 0,
-            logs: null
+            logs: null,
+            endpoints: {
+                web: null,
+                team: null,
+                client: null
+            }
 
         };
     },
@@ -44874,48 +44879,90 @@ Vue.component('task', {
 
     computed: {},
     methods: {
+        // Overried pass array of valid guard from backend
+        // By Default Uses This Array
+        // Passed A Callback Function To Execute For Example Api Calls
+        guardAllowed: function guardAllowed() {
+            var guards = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['web', 'employee', 'client'];
+            var callback = arguments[1];
+
+            var self = this;
+            if (_.includes(guards, self.guard)) {
+                callback;
+                self.resetEndpoints();
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        resetEndpoints: function resetEndpoints() {
+            this.endpoints = {
+                web: null,
+                team: null,
+                client: null
+            };
+        },
+        guardedLocation: function guardedLocation() {
+            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.endpoints,
+                web = _ref.web,
+                team = _ref.team,
+                client = _ref.client;
+
+            var self = this;
+            if (self.guard === 'client') {
+                return client;
+            } else if (self.guard === 'employee') {
+                return team;
+            } else {
+                return web;
+            }
+        },
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
         whenReady: function whenReady() {
-            this.fetchSubtasks();
-            this.setInitialTask();
-            this.setInitialTaskPoints();
-            this.setInitialLogs();
+            var self = this;
+            self.guardAllowed(self.fetchSubtasks());
+            self.setInitialTask();
+            self.setInitialTaskPoints();
+            self.setInitialLogs();
         },
         fetchSubtasks: function fetchSubtasks() {
-            var location = '';
             var self = this;
-            if (self.guard === 'employee') {
-                location = '/team/dashboard/tasks/' + self.task.id + '/subtasks';
-            } else if (self.guard === 'client') {
-                location = '/client/dashboard/tasks/' + self.task.id + '/subtasks';
-            } else {
-                location = '/dashboard/tasks/' + self.task.id + '/subtasks';
-            }
-            axios.get(location).then(function (response) {
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/subtasks';
+            self.endpoints.team = '/team/dashboard/tasks/' + self.task.id + '/subtasks';
+            self.endpoints.client = '/client/dashboard/tasks/' + self.task.id + '/subtasks';
+            axios.get(self.guardedLocation()).then(function (response) {
                 self.subtasks = response.data.subtasks;
             });
         },
         setInitialTask: function setInitialTask() {
-            this.taskForm.task_name = this.task.name;
-            this.taskForm.task_link = this.task.link;
-            this.taskForm.task_description = this.task.description;
+            var self = this;
+            self.taskForm.task_name = self.task.name;
+            self.taskForm.task_link = self.task.link;
+            self.taskForm.task_description = self.task.description;
         },
         setInitialTaskPoints: function setInitialTaskPoints() {
-            this.total = this.task.total_points;
-            this.done = this.task.done_points;
+            var self = this;
+            self.total = self.task.total_points;
+            self.done = self.task.done_points;
         },
         setInitialLogs: function setInitialLogs() {
-            this.logs = this.activities;
+            var self = this;
+            self.logs = self.activities;
         },
         computeProgress: function computeProgress() {
             var self = this;
             var total = _.sum(_.map(self.subtasks, 'points'));
-            this.total = total ? total : 0;
+            self.total = total ? total : 0;
             var done = _.sum(_.map(self.subtasks, function (subtask) {
                 if (subtask.done) {
                     return subtask.points;
                 }
             }));
-            this.done = done ? done : 0;
+            self.done = done ? done : 0;
             var percent = Math.floor(done / total * 100);
             if (isNaN(percent)) {
                 self.progress = '0%';
@@ -44924,173 +44971,188 @@ Vue.component('task', {
             }
         },
         editTaskModal: function editTaskModal() {
-            this.show('edit-task-modal');
+            var self = this;
+            self.guardAllowed(['web'], self.show('edit-task-modal'));
         },
         updateTask: function updateTask() {
-            var location = '';
             var self = this;
-            if (self.guard === 'web') {
-                location = '/dashboard/tasks/' + self.task.id + '/edit';
-                axios.put(location, self.taskForm).then(function (response) {
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                    self.$modal.hide('edit-task-modal');
-                    self.taskForm.resetStatus();
-                    self.updateLogs(response.data.log);
-                }).catch(function (error) {
-                    self.taskForm.errors.set(error.response.data.errors);
-                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
-                });
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
+            self.guardAllowed(['web'], self.callApiUpdateTask());
+        },
+        callApiUpdateTask: function callApiUpdateTask() {
+            var self = this;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/edit';
+            axios.put(self.guardedLocation(), self.taskForm).then(function (response) {
+                self.taskForm.resetStatus();
+                self.updateLogs(response.data.log);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                self.$modal.hide('edit-task-modal');
+            }).catch(function (error) {
+                self.taskForm.errors.set(error.response.data.errors);
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
         },
         updateLogs: function updateLogs(log) {
             this.logs.push(log);
         },
         deleteTaskModal: function deleteTaskModal() {
-            this.show('delete-task-modal');
-            console.log('Delete Task Modal Launched!');
+            var self = this;
+            self.guardAllowed(['web'], self.show('delete-task-modal'));
         },
         deleteTask: function deleteTask() {
             var self = this;
-            if (self.guard === 'web') {
-                axios.delete('/dashboard/tasks/' + self.task.id + '/delete').then(function (response) {
-                    window.location.href = '/dashboard/projects/' + self.project.id;
-                });
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
+            self.guardAllowed(['web'], self.callApiDeleteTask());
         },
-        addSubtask: function addSubtask() {
+        callApiDeleteTask: function callApiDeleteTask() {
             var self = this;
-            axios.post('dashboard/subtasks/create', self.subtaskForm).then(function (response) {
-                self.subtasks.push(response.data);
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/delete';
+            axios.delete(self.guardedLocation()).then(function (response) {
+                window.location.href = '/dashboard/projects/' + self.project.id;
             });
-            if (this.guard === 'web') {
-
-                axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm).then(function (response) {
-                    self.$modal.hide('add-campaign');
-                    self.campaigns.push(response.data.campaign);
-                    self.campaignForm.campaign_name = '';
-                    self.campaignForm.campaign_order = 0;
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                }).catch(function (error) {
-                    self.$popup({ message: _.first(error.response.data.message) });
-                });
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
-        },
-        editSubtask: function editSubtask(subtask) {
-            var self = this;
-            axios.post('dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/edit', self.subtaskForm).then(function (response) {});
-        },
-        deleteSubtask: function deleteSubtask(subtask) {
-            var self = this;
-            if (this.guard === 'web') {
-                axios.delete('/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/delete').then(function (response) {
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                    var index = _.findIndex(self.subtasks, { id: subtask.id });
-                    self.$delete(self.subtasks, index);
-                }).catch(function (error) {
-                    self.$popup({ message: _.first(error.response.data.message) });
-                });
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
         },
         toggleDone: function toggleDone(subtask) {
             var self = this;
-            var location = '';
-            if (self.guard === 'employee') {
-                location = '/team/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/toggle';
-                axios.put(location).then(function (response) {
-                    var index = _.findIndex(self.subtasks, { id: subtask.id }).console.log(index);
-                    self.$set(self.subtasks, index, response.data.subtask);
-                    console.log(response.data.subtask);
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                });
-            } else if (self.guard === 'web') {
-                location = '/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/toggle';
-                axios.put(location).then(function (response) {
-                    var index = _.findIndex(self.subtasks, { id: subtask.id });
-                    self.$set(self.subtasks, index, response.data.subtask);
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                });
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
+            self.guardAllowed(['web', 'employee'], self.callApiToggleSubtask(subtask));
         },
-        assignEmployee: function assignEmployee() {
+        callApiToggleSubtask: function callApiToggleSubtask(subtask) {
             var self = this;
-            var location = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtasks.id + '/assignEmployee';
-
-            axios.post(location, self.assignEmployeeForm).then(function (response) {});
-        },
-        setRating: function setRating() {
-            var self = this;
-            var location = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtasks.id + '/setRating';
-
-            axios.post(location, self.ratingForm).then(function (response) {});
-        },
-        fetchActivityLogs: function fetchActivityLogs() {
-            var self = this;
-            axios.get('dashboard/tasks/' + self.task.id + '/activitylogs').then(function (response) {
-                self.activities = response.data;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/toggle';
+            self.endpoints.team = '/team/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/toggle';
+            axios.put(self.guardedLocation()).then(function (response) {
+                var index = _.findIndex(self.subtasks, { id: subtask.id });
+                self.$set(self.subtasks, index, response.data.subtask);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             });
         },
-        fetchComments: function fetchComments() {
+        deleteSubtask: function deleteSubtask(subtask) {
             var self = this;
-            axios.get('dashboard/tasks/' + self.task.id + '/comments').then(function (response) {
-                self.comments = response.data;
+            self.guardAllowed(['web'], self.callApiDeleteSubtask(subtask));
+        },
+        callApiDeleteSubtask: function callApiDeleteSubtask(subtask) {
+            var self = this;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/delete';
+            axios.delete(self.guardedLocation()).then(function (response) {
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                var index = _.findIndex(self.subtasks, { id: subtask.id });
+                self.$delete(self.subtasks, index);
+            }).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
             });
-        },
-        addComment: function addComment() {
-            var location = '';
-            var self = this;
-            if (self.guard === 'employee') {
-                location = 'team/dashboard/tasks/' + task.id + '/addComment';
-            } else if (self.guard === 'client') {
-                location = 'client/dashboard/tasks/' + task.id + '/addComment';
-            } else {
-                location = 'dashboard/tasks/' + tasks.id + '/addComment';
-            }
-            axios.post(location, self.commentForm).then(function (response) {});
-        },
-        editComment: function editComment() {
-            var location = '';
-            var self = this;
-            if (self.guard === 'employee') {
-                location = 'team/dashboard/tasks/' + task.id + '/editComment';
-            } else if (self.guard === 'client') {
-                location = 'client/dashboard/tasks/' + task.id + '/editComment';
-            } else {
-                location = 'dashboard/tasks/' + tasks.id + '/editComment';
-            }
-            axios.post(location, self.commentForm).then(function (response) {});
-        },
-        deleteComment: function deleteComment() {
-            if (self.guard === 'web') {
-                axios.post('dashboard/tasks/' + task.id + '/deleteComment', self.commentForm).then(function (response) {});
-            } else {
-                console.log('Unauthorized!');
-            }
         },
         viewLink: function viewLink() {
-            var self = this;
-            window.open(self.task.link, '_blank');
+            window.open(this.task.link, '_blank');
         },
         viewVideoLink: function viewVideoLink(subtask) {
             window.open(subtask.link, '_blank');
         },
+
+        // not yet done
         showAddSubtaskModal: function showAddSubtaskModal() {
-            console.log('showing add subtask modal');
+            var self = this;
+            self.guardAllowed(['web'], self.show('add-subtask-modal'));
         },
-        show: function show(name) {
-            this.$modal.show(name);
+        addSubtask: function addSubtask() {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiAddSubTask());
         },
-        hide: function hide(name) {
-            this.$modal.hide(name);
+        callApiAddSubTask: function callApiAddSubTask() {
+            var self = this;
+            self.endpoints.web = '/dashboard/';
+            axios.post(self.guardedLocation(), self.subtaskForm).then(function (response) {
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            }).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        showEditSubtaskModal: function showEditSubtaskModal(subtask) {
+            var self = this;
+            self.guardAllowed(['web'], self.show('edit-subtask-modal-' + subtask.id));
+        },
+        editSubtask: function editSubtask(subtask) {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiEditSubtask(subtask));
+        },
+        callApiEditSubtask: function callApiEditSubtask(subtask) {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/edit';
+            axios.post(self.guardedLocation(), self.subtaskForm).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        assignEmployee: function assignEmployee(subtask) {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiAssignEmployees(subtask));
+        },
+        callApiAssignEmployees: function callApiAssignEmployees(subtask) {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtasks.id + '/assignEmployee';
+            axios.post(self.guardedLocation(), self.assignEmployeeForm).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        setRating: function setRating(subtask) {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiSetRatings(subtask));
+        },
+        callApiSetRatings: function callApiSetRatings(subtask) {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtasks.id + '/setRating';
+            axios.post(self.guardedLocation(), self.ratingForm).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        fetchComments: function fetchComments() {
+            var self = this;
+            self.guardAllowed(self.callApiGetComments);
+        },
+        callApiGetComments: function callApiGetComments() {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/comments';
+            self.endpoints.team = 'dashboard/tasks/' + self.task.id + '/comments';
+            self.endpoints.client = 'dashboard/tasks/' + self.task.id + '/comments';
+
+            axios.get(self.guardedLocation()).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        addComment: function addComment() {
+            var self = this;
+            self.guardAllowed(self.callApiAddComment());
+        },
+        callApiAddComment: function callApiAddComment() {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + tasks.id + '/addComment';
+            self.endpoints.team = 'team/dashboard/tasks/' + task.id + '/addComment';
+            self.endpoints.client = 'client/dashboard/tasks/' + task.id + '/addComment';
+
+            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        editComment: function editComment() {
+            var self = this;
+            self.guardAllowed(self.callApiEditComment());
+        },
+        callApiEditComment: function callApiEditComment() {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + tasks.id + '/editComment';
+            self.endpoints.team = 'team/dashboard/tasks/' + task.id + '/editComment';
+            self.endpoints.client = 'client/dashboard/tasks/' + task.id + '/editComment';
+
+            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
+        },
+        deleteComment: function deleteComment() {
+            var self = this;
+            self.guardAllowed(self.callApiDeleteComment());
+        },
+        callApiDeleteComment: function callApiDeleteComment() {
+            var self = this;
+            self.endpoints.web = 'dashboard/tasks/' + task.id + '/deleteComment';
+
+            axios.delete(self.guardedLocation()).then(function (response) {}).catch(function (error) {
+                self.$popup({ message: _.first(error.response.data.message) });
+            });
         }
     },
     watch: {

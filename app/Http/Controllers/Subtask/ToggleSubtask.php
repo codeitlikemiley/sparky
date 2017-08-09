@@ -14,7 +14,7 @@ class ToggleSubtask extends BaseController
     }
 
     /**
-     * Receive Project Id
+     * Receive Task Id
      *
      * @return \Illuminate\Http\Response
      */

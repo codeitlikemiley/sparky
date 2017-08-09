@@ -6,7 +6,7 @@
             </div>
             <div class="content">
                 <div class="sub-heading bg-chess">
-                    <a @click="showAddSubtaskModal()">
+                    <a v-if="guard != 'client'" @click="showAddSubtaskModal()">
                     <button class="button info"><span class="mif-plus"></span> Add Subtask</button>
                     </a>
                 </div>
@@ -19,23 +19,23 @@
                                 <tr>
                                     <th>Subtask</th>
                                     <th>Points</th>
-                                    <th>Priority</th>
-                                    <th>Video</th>
+                                    <th v-if="guard != 'client'">Priority</th>
+                                    <th v-if="guard != 'client'">Video</th>
                                     <th>Status</th>
                                     <th>Due Date</th>
-                                    <th>Assigned To</th>
-                                    <th>Action</th>
+                                    <th v-if="guard != 'client'">Assigned To</th>
+                                    <th v-if="guard != 'client'">Action</th>
                                 </tr>
                             </thead>
                             <tbody v-for="(subtask, subtaskKey) in subtasks">
                                 <tr>
                                     <td>@{{ subtask.name }}</td>
                                     <td class="align-center">@{{ subtask.points }}</td>
-                                    <td class="align-center">
+                                    <td v-if="guard != 'client'" class="align-center">
                                         <span class="icon mif-star-full fg-amber" v-for="(priority, priorityKey) in parseInt(subtask.priority)">
                                         </span>
                                     </td>
-                                    <td class="align-center">
+                                    <td v-if="guard != 'client'" class="align-center">
                                         <span class="tag info" style="cursor: pointer;">
                                             <span class="icon mif-play" @click="viewVideoLink(subtask)">
                                             </span>
@@ -50,16 +50,16 @@
                                     <td>
                                     @{{ subtask.due_date | date }}
                                     </td>
-                                    <td>
+                                    <td v-if="guard != 'client'">
                                         <span class="tag bg-blue fg-white" v-for="(employee,employeeKey) in subtask.employees">@{{ employee.name }}
                                         </span>
                                     </td>
-                                    <td class="align-center" style="font-size: 1.25rem">
-                                        <span class="fg-lightBlue icon mif-pencil" @click="editSubtask(subtask)" style="cursor:pointer;"
+                                    <td v-if="guard != 'client'" class="align-center" style="font-size: 1.25rem">
+                                        <span v-if="guard === 'web'" class="fg-lightBlue icon mif-pencil" @click="editSubtask(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" :data-hint="`Edit Subtask:|${subtask.name}`" data-hint-position="top"
                                         >
                                         </span>
-                                        <span class="fg-red icon fa fa-trash" @click="deleteSubtask(subtask)" style="cursor:pointer;"
+                                        <span v-if="guard === 'web'" class="fg-red icon fa fa-trash" @click="deleteSubtask(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" :data-hint="`Delete Subtask:|${subtask.name}`" data-hint-position="top"
                                         >
                                         </span>

@@ -15,6 +15,11 @@ Vue.component('task', {
             total: 0,
             done: 0,
             logs: null,
+            endpoints: {
+                web: null,
+                team: null,
+                client: null,
+            }
 
 
         }
@@ -26,49 +31,82 @@ Vue.component('task', {
         
     },
     methods: {
+        // Overried pass array of valid guard from backend
+        // By Default Uses This Array
+        // Passed A Callback Function To Execute For Example Api Calls
+        guardAllowed(guards = ['web', 'employee', 'client'],callback){
+            let self = this
+            if(_.includes(guards, self.guard)){
+                callback
+                self.resetEndpoints()
+            }else{
+                self.$popup({ message: 'Oops Cant Do That!' })
+            }
+        },
+        resetEndpoints(){
+            this.endpoints = {
+                web: null,
+                team: null,
+                client: null,
+            }
+        },
+        guardedLocation({web,team,client} = this.endpoints){
+            let self = this
+            if(self.guard === 'client'){
+                return client
+            }else if(self.guard === 'employee'){
+                return team
+            }else{
+                return web
+            }
+        },
+        show(name) {
+            this.$modal.show(name)
+        },
+        hide(name) {
+            this.$modal.hide(name)
+        },
         whenReady() {
-            this.fetchSubtasks()
-            this.setInitialTask()
-            this.setInitialTaskPoints()
-            this.setInitialLogs()
+            let self = this
+            self.guardAllowed(self.fetchSubtasks())
+            self.setInitialTask()
+            self.setInitialTaskPoints()
+            self.setInitialLogs()
         },
         fetchSubtasks(){
-            let location = ''
             let self = this
-            if(self.guard === 'employee'){
-                location = `/team/dashboard/tasks/${self.task.id}/subtasks`
-            }else if(self.guard === 'client') {
-                location = `/client/dashboard/tasks/${self.task.id}/subtasks`
-            }else{
-                location = `/dashboard/tasks/${self.task.id}/subtasks`
-            }
-            axios.get(location).then((response) => {
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks`
+            self.endpoints.team = `/team/dashboard/tasks/${self.task.id}/subtasks`
+            self.endpoints.client = `/client/dashboard/tasks/${self.task.id}/subtasks`
+            axios.get(self.guardedLocation()).then((response) => {
                 self.subtasks = response.data.subtasks
-                
             })
         },
         setInitialTask(){
-            this.taskForm.task_name = this.task.name
-            this.taskForm.task_link = this.task.link
-            this.taskForm.task_description = this.task.description
+            let self = this
+            self.taskForm.task_name = self.task.name
+            self.taskForm.task_link = self.task.link
+            self.taskForm.task_description = self.task.description
         },
         setInitialTaskPoints(){
-            this.total = this.task.total_points
-            this.done = this.task.done_points
+            let self = this
+            self.total = self.task.total_points
+            self.done = self.task.done_points
         },
         setInitialLogs(){
-            this.logs = this.activities
+            let self = this
+            self.logs = self.activities
         },
         computeProgress(){
             let self = this
             let total = _.sum(_.map(self.subtasks, 'points'))
-            this.total = total ? total : 0
+            self.total = total ? total : 0
             let done =_.sum(_.map(self.subtasks, (subtask) => {
                 if(subtask.done){
                     return subtask.points
                 }
             }))
-            this.done = done ? done : 0
+            self.done = done ? done : 0
             let percent = Math.floor((done / total) * 100)
              if(isNaN(percent)){
                 self.progress = '0%'
@@ -77,196 +115,224 @@ Vue.component('task', {
              }
         },
         editTaskModal(){
-            this.show('edit-task-modal')
+            let self = this
+            self.guardAllowed(['web'],self.show('edit-task-modal'))
         },
         updateTask(){
-            let location = ''
             let self = this
-            if(self.guard === 'web'){
-                location = `/dashboard/tasks/${self.task.id}/edit`
-                axios.put(location,self.taskForm).then(function (response) { 
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                    self.$modal.hide('edit-task-modal')
-                    self.taskForm.resetStatus()
-                    self.updateLogs(response.data.log)
-                    
-                }).catch(error => {
-                    self.taskForm.errors.set(error.response.data.errors)
-                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
-                })
-            }else{
-                self.$popup({ message: 'Oops Cant Do That!' }) 
-            }
-            
+            self.guardAllowed(['web'],self.callApiUpdateTask())
+        },
+        callApiUpdateTask(){
+            let self = this
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/edit`
+            axios.put(self.guardedLocation(),self.taskForm).then( (response) => { 
+                self.taskForm.resetStatus()
+                self.updateLogs(response.data.log)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                self.$modal.hide('edit-task-modal')
+                
+            }).catch(error => {
+                self.taskForm.errors.set(error.response.data.errors)
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
+            })
         },
         updateLogs(log){
             this.logs.push(log)
         },
-
         deleteTaskModal(){
-            this.show('delete-task-modal')
-            console.log('Delete Task Modal Launched!')
+            let self = this
+            self.guardAllowed(['web'],self.show('delete-task-modal'))
         },
         deleteTask(){
             let self = this
-            if(self.guard === 'web'){
-                axios.delete(`/dashboard/tasks/${self.task.id}/delete`).then((response) => {
-                    window.location.href = `/dashboard/projects/${self.project.id}`
-                })
-            }else{
-                self.$popup({ message: 'Oops Cant Do That!' }) 
-            }
-            
+            self.guardAllowed(['web'],self.callApiDeleteTask())
+        },
+        callApiDeleteTask(){
+            let self = this
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/delete`
+            axios.delete(self.guardedLocation()).then((response) => {
+                window.location.href = `/dashboard/projects/${self.project.id}`
+            })
+        },
+        toggleDone(subtask){
+            let self = this
+            self.guardAllowed(['web','employee'],self.callApiToggleSubtask(subtask))
+        },
+        callApiToggleSubtask(subtask){
+            let self = this
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
+            self.endpoints.team = `/team/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
+            axios.put(self.guardedLocation()).then((response) => {
+                let index = _.findIndex(self.subtasks, { id: subtask.id })
+                self.$set(self.subtasks, index, response.data.subtask)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
+        },
+        deleteSubtask(subtask){
+            var self = this
+            self.guardAllowed(['web'],self.callApiDeleteSubtask(subtask))
+        },
+        callApiDeleteSubtask(subtask){
+            var self = this
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/delete`
+            axios.delete(self.guardedLocation())
+            .then(function (response) {
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                let index = _.findIndex(self.subtasks, { id: subtask.id })
+                self.$delete(self.subtasks, index)
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
+            })
+        },
+        viewLink(){
+            window.open(this.task.link, '_blank');
+        },
+        viewVideoLink(subtask){
+            window.open(subtask.link, '_blank');
+        },
+        // not yet done
+        showAddSubtaskModal(){
+            let self = this
+            self.guardAllowed(['web'],self.show('add-subtask-modal'))
         },
         addSubtask(){
             let self = this
-            axios.post(`dashboard/subtasks/create`,self.subtaskForm).then((response) => {
-                self.subtasks.push(response.data)
-            })
-            if (this.guard === 'web') {
-            
-            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
+            self.guardAllowed(['web'],self.callApiAddSubTask())
+        },
+        callApiAddSubTask(){
+            let self = this
+            self.endpoints.web = `/dashboard/`
+            axios.post(self.guardedLocation(), self.subtaskForm)
             .then(function (response) {
-                self.$modal.hide('add-campaign');
-                self.campaigns.push(response.data.campaign)
-                self.campaignForm.campaign_name = ''
-                self.campaignForm.campaign_order = 0
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
                 self.$popup({ message: _.first(error.response.data.message) })
             })
-            }else {
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
+        },
+        showEditSubtaskModal(subtask){
+            let self = this
+            self.guardAllowed(['web'],self.show('edit-subtask-modal-'+subtask.id))
         },
         editSubtask(subtask){
             let self = this
-            axios.post(`dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/edit`,self.subtaskForm).then((response) => {
-                
-            })
-        },
-        deleteSubtask(subtask){
-            var self = this
-            if (this.guard === 'web') {
-                axios.delete(`/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/delete`)
-                    .then(function (response) {
-                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                        let index = _.findIndex(self.subtasks, { id: subtask.id })
-                        self.$delete(self.subtasks, index)
-                    })
-                    .catch(error => {
-                        self.$popup({ message: _.first(error.response.data.message) })
-                    })
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
-        },
-        toggleDone(subtask){
-            let self = this
-            let location = ''
-            if(self.guard === 'employee'){
-                location = `/team/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
-                axios.put(location).then((response) => {
-                    let index = _.findIndex(self.subtasks, { id: subtask.id }).
-                    console.log(index)
-                    self.$set(self.subtasks, index, response.data.subtask)
-                    console.log(response.data.subtask)
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                })
-            }else if(self.guard === 'web'){
-                location = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
-                axios.put(location).then((response) => {
-                    let index = _.findIndex(self.subtasks, { id: subtask.id })
-                    self.$set(self.subtasks, index, response.data.subtask)
-                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                })
-            }else{
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
+            self.guardAllowed(['web'],self.callApiEditSubtask(subtask))
             
         },
-        assignEmployee(){
+        callApiEditSubtask(subtask){
             let self = this
-            let location = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/assignEmployee`
-
-            axios.post(location,self.assignEmployeeForm).then((response) => {
+            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/edit`
+            axios.post(self.guardedLocation(),self.subtaskForm)
+            .then((response) => {
 
             })
-        },
-        setRating(){
-            let self = this
-            let location = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/setRating`
-
-            axios.post(location,self.ratingForm).then((response) => {
-
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
             })
         },
-        fetchActivityLogs(){
+        assignEmployee(subtask){
             let self = this
-            axios.get(`dashboard/tasks/${self.task.id}/activitylogs`).then((response) => {
-                self.activities = response.data
+            self.guardAllowed(['web'],self.callApiAssignEmployees(subtask))
+            
+        },
+        callApiAssignEmployees(subtask){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/assignEmployee`
+            axios.post(self.guardedLocation(),self.assignEmployeeForm)
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
+            })
+        },
+        setRating(subtask){
+            let self = this
+            self.guardAllowed(['web'],self.callApiSetRatings(subtask))
+            
+        },
+        callApiSetRatings(subtask){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/setRating`
+            axios.post(self.guardedLocation(),self.ratingForm)
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
             })
         },
         fetchComments(){
             let self = this
-            axios.get(`dashboard/tasks/${self.task.id}/comments`).then((response) => {
-                self.comments = response.data
+            self.guardAllowed(self.callApiGetComments)
+        },
+        callApiGetComments(){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${self.task.id}/comments`
+            self.endpoints.team = `dashboard/tasks/${self.task.id}/comments`
+            self.endpoints.client = `dashboard/tasks/${self.task.id}/comments`
+
+            axios.get(self.guardedLocation())
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
             })
         },
         addComment(){
-            let location = ''
             let self = this
-            if(self.guard === 'employee'){
-                location = `team/dashboard/tasks/${task.id}/addComment`
-            }else if(self.guard === 'client') {
-                location = `client/dashboard/tasks/${task.id}/addComment`
-            }else{
-                location = `dashboard/tasks/${tasks.id}/addComment`
-            }
-            axios.post(location,self.commentForm).then((response) => {
+            self.guardAllowed(self.callApiAddComment())
+        },
+        callApiAddComment(){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${tasks.id}/addComment`
+            self.endpoints.team =`team/dashboard/tasks/${task.id}/addComment`
+            self.endpoints.client = `client/dashboard/tasks/${task.id}/addComment`
 
+            axios.post(self.guardedLocation(),self.commentForm)
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
             })
         },
         editComment(){
-            let location = ''
             let self = this
-            if(self.guard === 'employee'){
-                location = `team/dashboard/tasks/${task.id}/editComment`
-            }else if(self.guard === 'client') {
-                location = `client/dashboard/tasks/${task.id}/editComment`
-            }else{
-                location = `dashboard/tasks/${tasks.id}/editComment`
-            }
-            axios.post(location,self.commentForm).then((response) => {
+            self.guardAllowed(self.callApiEditComment())
+        },
+        callApiEditComment(){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${tasks.id}/editComment`
+            self.endpoints.team =`team/dashboard/tasks/${task.id}/editComment`
+            self.endpoints.client = `client/dashboard/tasks/${task.id}/editComment`
 
+            axios.post(self.guardedLocation(),self.commentForm)
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
             })
         },
         deleteComment(){
-            if(self.guard === 'web'){
-                axios.post(`dashboard/tasks/${task.id}/deleteComment`,self.commentForm).then((response) => {
-                    
-                })
-            }else{
-                console.log('Unauthorized!')
-            }
-        },
-        viewLink(){
             let self = this
-            window.open(self.task.link, '_blank');
+            self.guardAllowed(self.callApiDeleteComment())
         },
-        viewVideoLink(subtask){
-            window.open(subtask.link, '_blank');
-        },
-        showAddSubtaskModal(){
-            console.log('showing add subtask modal')
-        },
-        show(name) {
-            this.$modal.show(name)
-        },
-        hide(name) {
-            this.$modal.hide(name)
-        },
+        callApiDeleteComment(){
+            let self = this
+            self.endpoints.web = `dashboard/tasks/${task.id}/deleteComment`
+
+            axios.delete(self.guardedLocation())
+            .then((response) => {
+
+            })
+            .catch(error => {
+                self.$popup({ message: _.first(error.response.data.message) })
+            })
+        }
     },
     watch: {
         subtasks(newValue){

@@ -9,10 +9,10 @@
     </a>
     <a v-else @click="editTaskModal()"><span class="tag info">Add Link</span></a>
 </div>
-<a @click="deleteTaskModal()" class="place-right margin10">
+<a v-if="guard ==='web'" @click="deleteTaskModal()" class="place-right margin10">
     <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Task</button>
 </a>
-<a @click="editTaskModal()" class="place-right margin10">
+<a v-if="guard ==='web'" @click="editTaskModal()" class="place-right margin10">
     <!-- Open Modal To Edit Task -->
     <button class="button info"><span class="mif-pencil"></span> Edit Task</button>
 </a>
