@@ -1,4 +1,4 @@
-<modal name="add-task" :width="500" :height="400" draggable=".window-header">
+<modal name="add-task" :width="500" :height="550" draggable=".window-header">
     <form @submit.prevent="createTask()" role="form" class="">
     <div class="panel widget-box">
 
@@ -12,7 +12,7 @@
 
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
-                            <span class="prepend-icon mif-file-text"></span>
+                            <span class="prepend-icon mif-file-text fg-lime"></span>
                             <input type="text" placeholder="Add Name" v-model="taskForm.task_name">
                             <span class="fg-red" v-show="taskForm.errors.has('task_name')">
                         @{{ taskForm.errors.get('task_name') }}
@@ -22,14 +22,55 @@
 
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
-                            <span class="prepend-icon mif-link"></span>
+                            <span class="prepend-icon mif-link fg-darkCyan"></span>
                             <input type="text" placeholder="Add Link" v-model="taskForm.task_link">
                             <span class="fg-red" v-show="taskForm.errors.has('task_link')">
                         @{{ taskForm.errors.get('task_link') }}
                         </span>
                         </div>
                     </div>
-
+                    <div  class="row" style="padding:5px;margin-top:15px;">
+                        <div class="input-control text full-size">
+                            <label class="switch">
+                                <input type="checkbox" v-model="taskForm.task_recurring">
+                                <span class="check"></span>
+                                <span class="caption">Repeat?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div v-if="taskForm.task_recurring" class="row" style="padding:5px; margin-top:-50px;">
+                        <div class="cell">
+                            <label class="input-control checkbox">
+                                    <input type="radio" :value="1" v-model.number="taskForm.task_interval">
+                                    <span class="check"></span>
+                                    <span class="caption">Daily</span>
+                            </label>
+                            <label class="input-control checkbox">
+                                    <input type="radio" :value="7"  v-model.number="taskForm.task_interval">
+                                    <span class="check"></span>
+                                    <span class="caption">Weekly</span>
+                            </label>
+                            <label class="input-control checkbox">
+                                    <input type="radio" :value="30"  v-model.number="taskForm.task_interval">
+                                    <span class="check"></span>
+                                    <span class="caption">Monthly</span>
+                            </label>
+                            <label class="input-control checkbox">
+                                    <input type="radio" :value="365"  v-model.number="taskForm.task_interval">
+                                    <span class="check"></span>
+                                    <span class="caption">Yearly</span>
+                            </label>
+                        </div>                                    
+                    </div>
+                    <div class="row" style="padding:5px;" v-if="taskForm.task_recurring">
+                            <div class="input-control text full-size" >
+                                    <span class="prepend-icon mif-sun fg-yellow"></span>
+                                    <input type="number" placeholder="No. Of Days" v-model="taskForm.task_interval">
+                                    <span class="fg-red" v-show="taskForm.errors.has('task_interval')">
+                                        @{{ taskForm.errors.get('task_interval') }}
+                                    </span>
+                            </div>
+                    </div>
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
                             <textarea placeholder="Add Description" v-model="taskForm.task_description"></textarea>

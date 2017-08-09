@@ -19,7 +19,7 @@ Vue.component('task', {
                 web: null,
                 team: null,
                 client: null,
-            }
+            },
 
 
         }

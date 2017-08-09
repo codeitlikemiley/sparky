@@ -45403,7 +45403,9 @@ Evolutly.forms = _defineProperty({
     taskForm: {
         task_name: '',
         task_description: '',
-        task_link: ''
+        task_link: '',
+        task_recurring: false,
+        task_interval: 0
     },
     subtaskForm: {
         name: '',
