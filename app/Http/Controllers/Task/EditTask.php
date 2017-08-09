@@ -57,7 +57,9 @@ class EditTask extends BaseController
         [
         'task_name' => 'required|max:30',
         'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
-        'task_description' => 'max:200'
+        'task_description' => 'max:200',
+        'task_recurring' => 'boolean',
+        'task_interval' => 'integer|min:0|max:999'
         ];
     }
     private function messages(){
@@ -66,6 +68,10 @@ class EditTask extends BaseController
             'task_name.max' => 'Task Name Too Long',
             'task_description.max' => 'Description Too Long',
             'task_link.regex' => 'Enter Valid Url',
+            'task_recurring.boolean' => 'Recurring Value Must Be Either True or False',
+            'task_interval.integer' => 'Task Interval Provided is Not Integer',
+            'task_interval.min' => 'Task Interval Lowest Value: 0',
+            'task_interval.max' => 'Task Interval Highest Value: 999'
         ];
     }
     private function allowed($task)
@@ -91,6 +97,8 @@ class EditTask extends BaseController
     {
         $this->addName($task);
         $this->addLink($task);
+        $this->addRecurring($task);
+        $this->addInterval($task);
         $this->addDescription($task);
     }
 
@@ -112,6 +120,18 @@ class EditTask extends BaseController
         if(isset($this->request->task_link)){
         $task->link = $this->request->task_link;
         }
+    }
+
+    private function addRecurring($task){
+        if(isset($this->request->task_recurring)){
+            $task->recurring = $this->request->task_recurring;
+            }
+    }
+
+    private function addInterval($task){
+        if(isset($this->request->task_interval)){
+            $task->interval = $this->request->task_interval;
+            }
     }
 
     private function addDescription($task)

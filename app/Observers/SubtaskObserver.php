@@ -33,9 +33,19 @@ class SubtaskObserver
     public  function updating(Subtask $subtask)
     {
            $this->processDonePoints($subtask);
-           $this->processTotalPoints($subtask); 
-
-         
+           $this->processTotalPoints($subtask);
+           $this->updateTaskStatus($subtask);
+    }
+    private function updateTaskStatus($subtask){
+        if($subtask->task->total_points === $subtask->task->done_points && $subtask->task->total_points){
+            $task = $subtask->task;
+            $task->done = true;
+            $task->save();
+        }else{
+         $task = $subtask->task;
+         $task->done = false;
+         $task->save();
+        }
     }
     private function processTotalPoints($subtask)
     {

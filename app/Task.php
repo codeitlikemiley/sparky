@@ -19,12 +19,13 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'done' => 'boolean'
+        'done' => 'boolean',
+        'recurring' => 'boolean'
     ];
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected static $logAttributes = ['name', 'description', 'link', 'maxpoints'];
+    protected static $logAttributes = ['name', 'description', 'link', 'done', 'recurring', 'interval'];
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 

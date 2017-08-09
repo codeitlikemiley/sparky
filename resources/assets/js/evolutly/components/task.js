@@ -87,6 +87,8 @@ Vue.component('task', {
             self.taskForm.task_name = self.task.name
             self.taskForm.task_link = self.task.link
             self.taskForm.task_description = self.task.description
+            self.taskForm.task_recurring = self.task.recurring
+            self.taskForm.task_interval = self.task.interval
         },
         setInitialTaskPoints(){
             let self = this

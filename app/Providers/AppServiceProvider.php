@@ -19,11 +19,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Subtask::observe(SubtaskObserver::class);
         Queue::looping(function () {
-        while (DB::transactionLevel() > 0) {
-            DB::rollBack();
-        }
-});
-        
+            while (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
+        });
     }
 
     /**
