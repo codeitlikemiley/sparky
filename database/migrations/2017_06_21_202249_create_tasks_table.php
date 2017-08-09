@@ -20,6 +20,9 @@ class CreateTasksTable extends Migration
             $table->string('description')->nullable();
             $table->string('link')->nullable();
             $table->boolean('done')->default(0);
+            $table->boolean('recurring')->default(0);
+            $table->enum('interval', ['never','daily','periodically' ,'weekly','monthly','yearly'])->default('never');
+            $table->integer('period')->nullable();
             $table->timestamps();
         });
     }
