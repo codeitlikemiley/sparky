@@ -167,6 +167,7 @@ Vue.component('task', {
             axios.put(self.guardedLocation()).then((response) => {
                 let index = _.findIndex(self.subtasks, { id: subtask.id })
                 self.$set(self.subtasks, index, response.data.subtask)
+                self.updateLogs(response.data.log)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
         },
