@@ -53,9 +53,9 @@ class Task extends Model
            }
         }
         if(!$name){
-            return "This model has been {$eventName}";
+            return "Task has been {$eventName}";
         }
-        return "{$eventName} by: {$name}";
+        return "Task {$eventName} by: {$name}";
     }
     // Only Return when you Use toArray()
     // public function getProgressAttribute()
