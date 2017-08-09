@@ -5,9 +5,9 @@
             <!-- Add Here Variable For Task Total and Progress -->
             <span class="title">Task Points 
                 <span  style="padding-right:50px;">
-                    <span class="fg-amber">@{{ task.done_points }}</span>
+                    <span class="fg-amber">@{{ done }}</span>
                     <span class="fg-white"> / </span>
-                    <span class="fg-white">@{{ task.total_points }}</span>
+                    <span class="fg-white">@{{ total }}</span>
                 </span>
                 </span>
         </div>

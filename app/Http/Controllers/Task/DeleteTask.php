@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller as BaseController;
 
 class DeleteTask extends BaseController
 {
-    protected $input;
+
+    protected $message = 'Failed To Delete Task';
+    
+    protected $code = 400;
     /**
      * Create a new controller instance.
      *
@@ -16,7 +19,6 @@ class DeleteTask extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
-        $this->input = $request->all();
     }
 
     /**
@@ -26,21 +28,40 @@ class DeleteTask extends BaseController
      */
     public function __invoke($task)
     {
-        $this->deleteTask($task);
-        return response()->json(['success' => 'Task Edited.'], 200);
+        if($this->allowed($task) || $this->createdBy($task)){
+            $this->removeAssignedEmployees($task);
+            $task->delete();
+            $this->message = 'Task Deleted!';
+            $this->code = 204;
+            return response()->json([], $this->code);
+        }
+        return response()->json(['message' => $this->message], $this->code);
     }
 
-    private function deleteTask($task)
-    {
-        $this->authorize($task);
-        $task->delete();
-    }
 
-    private function authorize($task)
+    private function allowed($task)
     {
-        if($task->campaign->project->ByTenant->id != auth()->user()->id)
+        
+        if($task->campaign->project->byTenant()->id != $this->getTenant()->id)
         {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return false;
+        }
+        return true;
+    }
+
+    private function createdBy($task)
+    {
+        if($this->getTenant()->projects()->find($task->campaign->project->id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private function removeAssignedEmployees($task){
+        $subtasks = $task->subtasks;
+        foreach($subtasks as $subtask){
+            $subtask->employees()->sync([]);
         }
     }
 }

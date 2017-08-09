@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Task;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
+use Spatie\Activitylog\Models\Activity;
 
 class EditTask extends BaseController
 {
@@ -39,7 +40,8 @@ class EditTask extends BaseController
         {
             $this->editTask($task);
             $this->save($task);
-            return response()->json(['message' => 'Task: '.$task->name. ' Edited!', 'task' => $task], 200);
+            $log = Activity::where('subject_type', 'App\Task')->where('subject_id', $task->id)->latest()->first();
+            return response()->json(['message' => 'Task: '.$task->name. ' Edited!', 'log' => $log], 200);
         }
         
 

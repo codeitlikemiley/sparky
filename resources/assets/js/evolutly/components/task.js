@@ -1,7 +1,7 @@
 
 Vue.component('task', {
     props: ['guard','workers', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
-    // task with project
+    // remove activity logs props
     data () {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
@@ -11,6 +11,11 @@ Vue.component('task', {
             commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
             subtasks: [],
             comments: [],
+            progress: '0%',
+            total: 0,
+            done: 0,
+            logs: null,
+
 
         }
     },
@@ -22,21 +27,10 @@ Vue.component('task', {
     },
     methods: {
         whenReady() {
-            console.log('tasks components created!')
             this.fetchSubtasks()
-            
-            this.taskForm.task_name = this.task.name
-            this.taskForm.task_link = this.task.link
-            this.taskForm.task_description = this.task.description
-        },
-        percentageDone(){
-            let self = this
-            let percent = Math.floor((self.task.done_points / self.task.total_points) * 100)
-            if(isNaN(percent)){
-                return '0%'
-            }else{
-                return percent+'%'
-            }
+            this.setInitialTask()
+            this.setInitialTaskPoints()
+            this.setInitialLogs()
         },
         fetchSubtasks(){
             let location = ''
@@ -50,7 +44,37 @@ Vue.component('task', {
             }
             axios.get(location).then((response) => {
                 self.subtasks = response.data.subtasks
+                
             })
+        },
+        setInitialTask(){
+            this.taskForm.task_name = this.task.name
+            this.taskForm.task_link = this.task.link
+            this.taskForm.task_description = this.task.description
+        },
+        setInitialTaskPoints(){
+            this.total = this.task.total_points
+            this.done = this.task.done_points
+        },
+        setInitialLogs(){
+            this.logs = this.activities
+        },
+        computeProgress(){
+            let self = this
+            let total = _.sum(_.map(self.subtasks, 'points'))
+            this.total = total ? total : 0
+            let done =_.sum(_.map(self.subtasks, (subtask) => {
+                if(subtask.done){
+                    return subtask.points
+                }
+            }))
+            this.done = done ? done : 0
+            let percent = Math.floor((done / total) * 100)
+             if(isNaN(percent)){
+                self.progress = '0%'
+             }else{
+                self.progress = `${percent}%`
+             }
         },
         editTaskModal(){
             this.show('edit-task-modal')
@@ -61,16 +85,13 @@ Vue.component('task', {
             if(self.guard === 'web'){
                 location = `/dashboard/tasks/${self.task.id}/edit`
                 axios.put(location,self.taskForm).then(function (response) { 
-                    console.log(response)
-                    self.taskForm.task_name = response.data.task.name
-                    self.taskForm.task_link = response.data.task.link
-                    self.taskForm.task_description = response.data.task.description
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                    self.$modal.hide('edit-task-modal')
                     self.taskForm.resetStatus()
-                    self.$modal.hide('edit-task-modal');
+                    self.updateLogs(response.data.log)
+                    
                 }).catch(error => {
                     self.taskForm.errors.set(error.response.data.errors)
-                    self.$popup({ message: error.response.data.message })
                     self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
                 })
             }else{
@@ -78,17 +99,24 @@ Vue.component('task', {
             }
             
         },
+        updateLogs(log){
+            this.logs.push(log)
+        },
+
         deleteTaskModal(){
-            this.show('edit-task')
+            this.show('delete-task-modal')
             console.log('Delete Task Modal Launched!')
         },
         deleteTask(){
             let self = this
-            axios.post(`dashboard/tasks/${self.task.id}/delete`).then((response) => {
-                self.task = ''
-                window.location.href = `dashboard/projects/${self.task.project.id}`
-            })
-            console.log('task deleted')
+            if(self.guard === 'web'){
+                axios.delete(`/dashboard/tasks/${self.task.id}/delete`).then((response) => {
+                    window.location.href = `/dashboard/projects/${self.project.id}`
+                })
+            }else{
+                self.$popup({ message: 'Oops Cant Do That!' }) 
+            }
+            
         },
         addSubtask(){
             let self = this
@@ -240,6 +268,11 @@ Vue.component('task', {
             this.$modal.hide(name)
         },
     },
+    watch: {
+        subtasks(newValue){
+            this.computeProgress()
+        }
+    }
 
 
 })

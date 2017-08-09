@@ -64,6 +64,7 @@
         <!-- Content -->
     </div>
     @include('task::edit-task-modal')
+    @include('task::delete-task-modal')
     <!-- Panel box -->
 </div>
 
