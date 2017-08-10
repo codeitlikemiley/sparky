@@ -25,7 +25,7 @@ class Task extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected static $logAttributes = ['name', 'description', 'link', 'done', 'recurring', 'interval'];
+    protected static $logAttributes = ['name', 'description', 'link', 'recurring', 'interval'];
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
