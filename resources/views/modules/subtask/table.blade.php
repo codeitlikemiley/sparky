@@ -31,9 +31,8 @@
                                 <tr>
                                     <td>@{{ subtask.name }}</td>
                                     <td class="align-center">@{{ subtask.points }}</td>
-                                    <td v-if="guard != 'client'" class="align-center">
-                                        <span class="icon mif-star-full fg-amber" v-for="(priority, priorityKey) in parseInt(subtask.priority)">
-                                        </span>
+                                    <td v-if="guard != 'client'" class="align-center" @mouseover="setCurrentSubtask(subtask)">
+                                                    <star-rating @rating-selected="setRating" v-model="subtask.priority" :star-size="30" :show-rating="false"></star-rating>
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center">
                                         <span class="tag info" style="cursor: pointer;">
@@ -63,10 +62,8 @@
                                         data-role="hint" data-hint-mode="2" :data-hint="`Delete Subtask:|${subtask.name}`" data-hint-position="top"
                                         >
                                         </span>
-
                                         <span class="tag" :class="{success: !subtask.done}" @click="toggleDone(subtask)" style="cursor:pointer;"
-                                        data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Subtask" data-hint-position="top"
-                                        >
+                                        data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Subtask" data-hint-position="top">
                                             <span class="icon mif-checkmark" v-if="!subtask.done">
                                             </span>
                                             <span class="fg-amber icon mif-blocked" v-else>

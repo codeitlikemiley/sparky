@@ -28,6 +28,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::put('/tasks/{task}/edit', 'Task\EditTask')->name('tenant.tasks.edit');
       Route::delete('/tasks/{task}/delete', 'Task\DeleteTask')->name('tenant.tasks.delete');
 
+      Route::put('/ratings/{subtask}','Subtask\UpdateRatings')->name('tenant.subtasks.ratings');
       Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('tenant.subtasks.index');
       Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
       Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');

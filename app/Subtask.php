@@ -20,7 +20,8 @@ class Subtask extends Model
     ];
 
     protected $casts = [
-        'done' => 'boolean'
+        'done' => 'boolean',
+        'priority' => 'integer'
     ];
 
     protected $dates = ['created_at', 'updated_at', 'due_date'];

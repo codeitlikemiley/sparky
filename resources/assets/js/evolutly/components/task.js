@@ -1,3 +1,4 @@
+import StarRating from 'vue-star-rating'
 
 Vue.component('task', {
     props: ['guard','workers', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
@@ -20,6 +21,8 @@ Vue.component('task', {
                 team: null,
                 client: null,
             },
+            rating: 0,
+            currentSubtask: null
 
 
         }
@@ -101,11 +104,11 @@ Vue.component('task', {
         },
         computeProgress(){
             let self = this
-            let total = _.sum(_.map(self.subtasks, 'points'))
+            let total = _.sumBy(_.map(self.subtasks, 'points'), (val) => { return parseInt(val) })
             self.total = total ? total : 0
             let done =_.sum(_.map(self.subtasks, (subtask) => {
                 if(subtask.done){
-                    return subtask.points
+                    return parseInt(subtask.points)
                 }
             }))
             self.done = done ? done : 0
@@ -129,7 +132,7 @@ Vue.component('task', {
             self.endpoints.web = `/dashboard/tasks/${self.task.id}/edit`
             axios.put(self.guardedLocation(),self.taskForm).then( (response) => { 
                 self.taskForm.resetStatus()
-                self.updateLogs(response.data.log)
+                // self.updateLogs(response.data.log)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 self.$modal.hide('edit-task-modal')
                 
@@ -167,7 +170,7 @@ Vue.component('task', {
             axios.put(self.guardedLocation()).then((response) => {
                 let index = _.findIndex(self.subtasks, { id: subtask.id })
                 self.$set(self.subtasks, index, response.data.subtask)
-                self.updateLogs(response.data.log)
+                // self.updateLogs(response.data.log)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
         },
@@ -193,6 +196,33 @@ Vue.component('task', {
         },
         viewVideoLink(subtask){
             window.open(subtask.link, '_blank');
+        },
+        setRating(rating){
+            let self = this
+            self.rating = rating
+        },
+        setCurrentSubtask(subtask){
+            this.currentSubtask = subtask
+        },
+        updateRating(newValue){
+            let self = this
+            self.ratingForm.subtask_priority = newValue
+            self.guardAllowed(['web'],self.callApiSetRatings(self.currentSubtask))
+        },
+        callApiSetRatings(subtask){
+            let self = this
+            self.endpoints.web = `/dashboard/ratings/${subtask.id}`
+            axios.put(self.guardedLocation(),self.ratingForm)
+            .then((response) => {
+                self.ratingForm.subtask_priority = 1
+                let index = _.findIndex(self.subtasks, { id: subtask.id })
+                self.$set(self.subtasks, index, response.data.subtask)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
+            .catch(error => {
+                self.ratingForm.errors.set(error.response.data.errors)
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
+            })
         },
         // not yet done
         showAddSubtaskModal(){
@@ -249,23 +279,7 @@ Vue.component('task', {
             .catch(error => {
                 self.$popup({ message: _.first(error.response.data.message) })
             })
-        },
-        setRating(subtask){
-            let self = this
-            self.guardAllowed(['web'],self.callApiSetRatings(subtask))
-            
-        },
-        callApiSetRatings(subtask){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/setRating`
-            axios.post(self.guardedLocation(),self.ratingForm)
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        },
+        },  
         fetchComments(){
             let self = this
             self.guardAllowed(self.callApiGetComments)
@@ -340,8 +354,13 @@ Vue.component('task', {
     watch: {
         subtasks(newValue){
             this.computeProgress()
-        }
+        },
+        rating(newValue){
+            this.updateRating(newValue)
+        },
+    },
+    components: {
+        StarRating
     }
-
 
 })

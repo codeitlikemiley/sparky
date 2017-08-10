@@ -69,7 +69,7 @@ Evolutly.forms = {
         user_ids: []
     },
     ratingForm: {
-        rating: 1
+        subtask_priority: 1
     },
     commentForm: {
         to: '',

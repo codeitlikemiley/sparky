@@ -50,7 +50,7 @@ class DummyDataSeeder extends Seeder
     foreach($tasks as $task)
     {
         $task = Task::find($task);
-        $task->subtasks()->saveMany(factory(Subtask::class,1)->create(['task_id'=> $task->id]));
+        $task->subtasks()->saveMany(factory(Subtask::class,2)->create(['task_id'=> $task->id]));
     }
     $subtasks = Subtask::all()->pluck('id')->toArray();
     foreach($subtasks as $subtask)
