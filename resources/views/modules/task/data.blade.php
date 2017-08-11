@@ -8,6 +8,9 @@
         <span class="tag info">@{{ taskForm.task_link }}</span>
     </a>
     <a v-else @click="editTaskModal()" style="cursor:pointer;"><span class="tag info">Add Link</span></a>
+    <a v-if="taskForm.task_recurring" style="position:absolute;bottom:0;right:35px;font-size:1em;">
+        <span class="tag success"><span class="icon mif-loop"></span> Repeat Task Every @{{ taskForm.task_interval }} Day</span>
+    </a>
 </div>
 <a v-if="guard ==='web'" @click="deleteTaskModal()" class="place-right margin10">
     <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Task</button>
