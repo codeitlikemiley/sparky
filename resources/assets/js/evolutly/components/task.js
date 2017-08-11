@@ -260,7 +260,6 @@ Vue.component('task', {
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
-        // not yet done
         editSubtaskModal(subtask){
             let self = this
             self.guardAllowed(['web'],self.show('edit-subtask-modal-'+subtask.id))
@@ -305,22 +304,7 @@ Vue.component('task', {
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
-        assignEmployee(subtask){
-            let self = this
-            self.guardAllowed(['web'],self.callApiAssignEmployees(subtask))
-            
-        },
-        callApiAssignEmployees(subtask){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtasks.id}/assignEmployee`
-            axios.post(self.guardedLocation(),self.assignEmployeeForm)
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        },  
+        // not yet done  
         fetchComments(){
             let self = this
             self.guardAllowed(self.callApiGetComments)

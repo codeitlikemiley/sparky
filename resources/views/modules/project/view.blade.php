@@ -18,7 +18,7 @@
         <div class="row cells12">
             <div class="cell colspan12">
                 <div class="panel widget-box">
-                    @include('project::heading')
+                    @include('project::breadcrumbs')
                     @include('project::content')
                 </div>
             </div>
