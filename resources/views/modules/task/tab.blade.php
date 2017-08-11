@@ -31,8 +31,8 @@
                     </div>
                     <div class="content">
                         <div class="text">
-                            <ul class="todo-list">
-                                <li v-for="(task, tKey) in campaign.tasks" :key="tKey" style="padding:10px;">
+                            <ul class="todo-list" v-if="campaign.tasks">
+                                <li v-for="(task, tKey, tIndex) in campaign.tasks" :key="tKey" :index="tIndex" style="padding:10px;">
                                     <label class="input-control checkbox" onclick="return false;" style="cursor:default;">
                                         <input type="checkbox" class="todo-cb" v-model="task.done">
                                         <span class="check"></span>

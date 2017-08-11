@@ -1,7 +1,7 @@
 import FileUpload from 'vue-upload-component'
 
 Vue.component('projects', {
-    props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaigns'],
+    props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaignlist'],
     // extra props we might need to add : files and forms
     data () {
         return {
@@ -11,6 +11,8 @@ Vue.component('projects', {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
+            campaigns: null,
+            oldCampaigns: null,
 
             // all about files
             fileForm: new EvolutlyForm(Evolutly.forms.fileForm),
@@ -47,6 +49,7 @@ Vue.component('projects', {
     },
     mounted() {
         this.whenReady()
+        this.campaigns = this.campaignlist
     },
     computed: {
         
@@ -112,6 +115,7 @@ Vue.component('projects', {
                 axios.post(url, self.taskForm).then(function (response) {
                     let index = _.findIndex(self.campaigns, { id: self.currentCampaignId })
                     self.campaigns[index].tasks.push(response.data.task)
+                    // bug here
                     self.taskForm.resetStatus()
                     self.taskForm = new EvolutlyForm(Evolutly.forms.taskForm)
 
@@ -165,7 +169,10 @@ Vue.component('projects', {
             axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
             .then(function (response) {
                 self.$modal.hide('add-campaign');
-                self.campaigns.push(response.data.campaign)
+                let campaign = response.data.campaign
+                campaign['tasks'] = [];
+                self.campaigns.push(campaign)
+                console.log(campaign);
                 self.campaignForm.campaign_name = ''
                 self.campaignForm.campaign_order = 0
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -360,7 +367,12 @@ Vue.component('projects', {
             if (auto && !this.$refs.upload.uploaded && !this.$refs.upload.active) {
                 this.$refs.upload.active = true
             }
-        }
+        },
+        campaigns: {
+            handler(newValue){
+            },
+            deep: true
+          }
     },
 
 })

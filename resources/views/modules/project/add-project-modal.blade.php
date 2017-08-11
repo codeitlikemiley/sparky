@@ -1,3 +1,10 @@
+@push('critical_css')
+<style>
+    div.dropdown-toggle::before {
+        display:none
+    }
+</style>
+@endpush
 <modal name="add-project">
     <div class="panel widget-box">
         <div class="heading">

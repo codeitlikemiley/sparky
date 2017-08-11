@@ -10,13 +10,17 @@ class CreateSubtask extends BaseController
 {
     protected $subtask;
 
-    protected $input;
+    protected $request;
+
+    protected $message = 'Subtask Created!';
+
+    protected $code = '200';
 
     public function __construct(Subtask $subtask, Request $request)
     {
         $this->middleware('auth');
         $this->subtask = $subtask;
-        $this->input = $request->all();
+        $this->request = $request;
     }
 
     /**
@@ -26,71 +30,100 @@ class CreateSubtask extends BaseController
      */
     public function __invoke($task)
     {
-        $this->createSubtask($task);
-    }
-    private function createSubtask($task)
-    {
-        if($this->authorize($task) || $this->createdBy($task))
-        {
-            $this->validateSubtask($task);
-            $this->assignEmployeesIfAny($task);
-            $this->create($task);
-            
+        $validator = $this->sanitize();
+        if($validator->fails()){
+    $this->message = 'Failed To Create Subtask';
+        $this->code = 422;
+        return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
-        return response()->json(['error' => 'Actions Not Permitted!'], 401);
+        $this->createSubtask();
+        $task->subtasks()->save($this->subtask);
+        
+        
+        $this->assignEmployeesIfAny($task);
+        $this->subtask->employees;
+        return response()->json(['message' => $this->message, 'subtask' => $this->subtask], $this->code);
+    }
+    private function sanitize()
+    {
+       return $validator = \Validator::make($this->request->all(), $this->rules(), $this->messages());
     }
 
-    private function authorize($task)
+    private function rules(){
+        return 
+        [
+        'name' => 'required|max:30',
+        'points' => 'required|min:1',
+        'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'priority' => 'in:1,2,3,4,5',
+        'due_date' => 'date|after_or_equal:tomorrow',
+        'employees' => 'array'
+        ];
+    }
+
+    private function messages(){
+        return [
+            'name.required' => 'Define Your Subtask',
+            'name.max' => 'Subtask Name Too Long Max(30)',
+            'points.required' => 'Points is Required',
+            'points.min' => 'Minimum Point is 1',
+            'link.regex' => 'Enter Valid Url',
+            'priority.in' => 'Subtask Value Is Not In Rage 1-5',
+            'due_date.date' => 'Should Be A Date',
+            'due_date.after_or_equal' => 'Set Date Tomorrow Or Later',
+            'employees.array' => 'Subtask Team Should Be An Array'
+        ];
+    }
+    private function createSubtask()
     {
         
-        if($task->campaign->project->ByTenant()->id != $this->tenant()->id)
-        {
-            return false;
+        $this->addLink();
+        $this->addPriority();
+        $this->addPoints();
+        $this->addDueDate();
+        $this->addName();
+    }
+
+    private function addName()
+    {
+        if(isset($this->request->name)){
+            $this->subtask->name = $this->request->name;
         }
-        return true;
     }
 
-    private function createdBy($task)
+    private function addLink()
     {
-        if($this->tenant()->projects()->find($task->campaign->project->id))
-        {
-            return true;
+        if(isset($this->request->link)){
+            $this->subtask->name = $this->request->link;
         }
-        return false;
     }
 
-    private function tenant()
+    private function addPriority(){
+        if(isset($this->request->priority)){
+            $this->subtask->priority = $this->request->priority;
+            }
+    }
+
+    private function addPoints(){
+        if(isset($this->request->points)){
+            $this->subtask->points = $this->request->points;
+            }
+    }
+
+    private function addDueDate()
     {
-       return  auth()->user();
+        if(isset($this->request->due_date)){
+            $this->subtask->due_date = $this->request->due_date;
+        }
     }
 
-    private function validateSubtask($task)
-    {
-        $priority_array = [1,2,3,4,5];
-        $this->validate($this->input, [
-        'subtask_name' => 'required|max:30',
-        'subtask_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
-        'subtask_points' => 'integer|min:0',
-        'subtask_priority' => 'in:' . implode(',', $priority_array),
-        'subtask_due_date' => 'date_format:d/m/Y|after:tomorrow',
-        'subtask_done' => 'boolen',
-        ]);
-        $this->subtask->name = $this->input->subtask_name;
-        $this->subtask->link = $this->input->subtask_link;
-        $this->subtask->points = $this->input->subtask_points;
-        $this->subtask->priority = $this->input->subtask_priority;
-        $this->subtask->due_date = $this->input->subtask_due_date;
-        $this->subtask->done = $this->input->subtask_done;
-    }
-
-
-
+    
 
     private function assignEmployeesIfAny($task)
     {
         $project = $task->campaign->project;
         $employee_lists = $this->hasAssignedEmployees();
-        if($employee_lists)
+        if(count($employee_lists))
         {   
             $data = array();
             foreach($employee_lists as $id){
@@ -102,26 +135,37 @@ class CreateSubtask extends BaseController
 
     private function hasAssignedEmployees()
     {
-        $employee_ids = $this->input->employees_id;
-        $employees = array();
-        if(isset($employee_ids))
-        {
-            $employee_list = $this->tenant()->employees->pluck('id')->toArray();
-        
-            $employees = array_intersect($employee_list,$employee_ids);
+        $employees = $this->request->employees;
+        $employee_ids = array();
+        $selected = array();
+        if($employees){
+            
+            for ($i=0; $i < count($employees); $i++) { 
+                array_push($employee_ids,$employees[$i]['id']);
+            }
+            $employee_list = $this->getTenant()->employees->pluck('id')->toArray();
+            $selected = array_intersect($employee_list,$employee_ids);
         }
-        return $employees;
+        return $selected;
     }
 
-    private function create($task)
+    private function allowed($task)
     {
-        $save = $task->subtasks()->save($this->subtask);
         
-        if(!$save)
+        if($task->campaign->project->byTenant()->id != $this->getTenant()->id)
         {
-            return response()->json(['error' => 'Failed To Create Subtask'], 400);
+            return false;
         }
-        return response()->json(['success' => 'Subtask Created!'], 200);
+        return true;
+    }
+
+    private function createdBy($task)
+    {
+        if($this->getTenant()->projects()->find($task->campaign->project->id))
+        {
+            return true;
+        }
+        return false;
     }
 
     

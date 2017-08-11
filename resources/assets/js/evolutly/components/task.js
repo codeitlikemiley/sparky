@@ -1,7 +1,7 @@
 import StarRating from 'vue-star-rating'
 
 Vue.component('task', {
-    props: ['guard','workers', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
+    props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
     // remove activity logs props
     data () {
         return {
@@ -21,7 +21,8 @@ Vue.component('task', {
                 team: null,
                 client: null,
             },
-            rating: 0,
+            rating: 1,
+            priority: 1,
             currentSubtask: null
 
 
@@ -207,6 +208,7 @@ Vue.component('task', {
         updateRating(newValue){
             let self = this
             self.ratingForm.subtask_priority = newValue
+            self.subtaskForm.priority = newValue
             self.guardAllowed(['web'],self.callApiSetRatings(self.currentSubtask))
         },
         callApiSetRatings(subtask){
@@ -224,8 +226,12 @@ Vue.component('task', {
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
+        setPriority(rating){
+            let self = this
+            self.priority = rating
+        },
         // not yet done
-        showAddSubtaskModal(){
+        addSubtaskModal(){
             let self = this
             self.guardAllowed(['web'],self.show('add-subtask-modal'))
         },
@@ -235,13 +241,17 @@ Vue.component('task', {
         },
         callApiAddSubTask(){
             let self = this
-            self.endpoints.web = `/dashboard/`
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/add`
             axios.post(self.guardedLocation(), self.subtaskForm)
-            .then(function (response) {
+            .then((response) => {
+                self.subtaskForm.resetStatus()
+                self.subtasks.push(response.data.subtask)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                $self.hide('add-subtask-modal')
             })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
+            .catch((error) => {
+                self.subtaskForm.errors.set(error.response.data.errors)
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
         showEditSubtaskModal(subtask){
@@ -357,7 +367,12 @@ Vue.component('task', {
         },
         rating(newValue){
             this.updateRating(newValue)
+            
         },
+        priority(newValue){
+            this.setPriority(newValue)
+            this.subtaskForm.priority = newValue
+        }
     },
     components: {
         StarRating

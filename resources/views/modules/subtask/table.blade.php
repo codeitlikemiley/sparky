@@ -6,7 +6,7 @@
             </div>
             <div class="content">
                 <div class="sub-heading bg-chess">
-                    <a v-if="guard != 'client'" @click="showAddSubtaskModal()">
+                    <a v-if="guard != 'client'" @click="addSubtaskModal()">
                     <button class="button info"><span class="mif-plus"></span> Add Subtask</button>
                     </a>
                 </div>
@@ -72,7 +72,7 @@
                                         
                                     </td>
                                 </tr>
-                                
+                                <!-- Add Here Dynamic Modal For Edit Subtask -->
                             </tbody>
                             
                         </table>

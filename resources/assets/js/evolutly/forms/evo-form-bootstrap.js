@@ -44,10 +44,11 @@ Evolutly.forms = {
     },
     subtaskForm:{
         name: '',
-        points: '',
-        priority: '',
+        points: 1,
+        priority: 1,
         link: '',
-        due_date: ''
+        due_date:  moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
+        employees: ''
     },
     commentForm: {
         title: '',
