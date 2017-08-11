@@ -44976,6 +44976,11 @@ Vue.component('task', {
             var self = this;
             self.logs = self.activities;
         },
+        overDueDate: function overDueDate(subtask) {
+            if (subtask.done == false && subtask.due_date > moment(new Date()).format('YYYY-MM-DD')) {
+                return true;
+            }
+        },
         computeProgress: function computeProgress() {
             var self = this;
             var total = _.sumBy(_.map(self.subtasks, 'points'), function (val) {

@@ -46,6 +46,8 @@
                                     <td class="align-center">
                                         <span class="tag bg-green fg-white" v-if="subtask.done">Done
                                         </span>
+                                        <span class="tag bg-red fg-white" v-else-if="overDueDate(subtask)">Overdue
+                                        </span>
                                         <span class="tag bg-amber fg-white" v-else>Ongoing
                                         </span>
                                     </td>
