@@ -45115,6 +45115,7 @@ Vue.component('task', {
             self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/subtasks/add';
             axios.post(self.guardedLocation(), self.subtaskForm).then(function (response) {
                 self.subtaskForm.resetStatus();
+                self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
                 self.subtasks.push(response.data.subtask);
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 $self.hide('add-subtask-modal');
