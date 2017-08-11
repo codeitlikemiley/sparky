@@ -93,8 +93,8 @@ class CreateSubtask extends BaseController
 
     private function addLink()
     {
-        if(isset($this->request->link)){
-            $this->subtask->name = $this->request->link;
+        if($this->request->input('link')){
+            $this->subtask->link = $this->request->input('link');
         }
     }
 

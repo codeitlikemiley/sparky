@@ -35,8 +35,11 @@
                                                     <star-rating @rating-selected="setRating" v-model="subtask.priority" :star-size="30" :show-rating="false"></star-rating>
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center">
-                                        <span class="tag info" style="cursor: pointer;">
-                                            <span class="icon mif-play" @click="viewVideoLink(subtask)">
+                                        <span class="tag">
+                                            <span v-if="subtask.link" class="icon mif-play" @click="viewVideoLink(subtask)" style="cursor: pointer;">
+                                            </span>
+                                            <span v-else class="icon mif-minus fg-teal">
+
                                             </span>
                                         </span>
                                     </td>
