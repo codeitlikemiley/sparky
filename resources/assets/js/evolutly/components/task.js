@@ -104,7 +104,7 @@ Vue.component('task', {
             self.logs = self.activities
         },
         overDueDate(subtask){
-            if(subtask.done == false && subtask.due_date > moment(new Date).format('YYYY-MM-DD')){
+            if(subtask.done == false && subtask.due_date < moment(new Date).format('YYYY-MM-DD')){
                 return true
             }
         },
