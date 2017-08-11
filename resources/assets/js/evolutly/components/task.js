@@ -230,9 +230,9 @@ Vue.component('task', {
             let self = this
             self.priority = rating
         },
-        // not yet done
         addSubtaskModal(){
             let self = this
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
             self.guardAllowed(['web'],self.show('add-subtask-modal'))
         },
         addSubtask(){
@@ -248,16 +248,33 @@ Vue.component('task', {
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.subtasks.push(response.data.subtask)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                $self.hide('add-subtask-modal')
+                self.hide('add-subtask-modal')
             })
             .catch((error) => {
                 self.subtaskForm.errors.set(error.response.data.errors)
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
-        showEditSubtaskModal(subtask){
+        // not yet done
+        editSubtaskModal(subtask){
             let self = this
             self.guardAllowed(['web'],self.show('edit-subtask-modal-'+subtask.id))
+            self.guardAllowed(['web'],self.assignSubtaskToForm(subtask))
+        },
+        assignSubtaskToForm(subtask){
+            let self = this
+            self.subtaskForm.name = subtask.name
+            self.subtaskForm.link = subtask.link
+            self.subtaskForm.points = subtask.points 
+            self.subtaskForm.priority = subtask.priority
+            self.subtaskForm.employees = subtask.employees
+            self.subtaskForm.due_date = moment(subtask.due_date).format('YYYY-MM-DD')
+            self.subtaskForm.done = subtask.done
+        },
+        closeEditSubtask(subtask){
+            let self = this 
+            self.hide(`edit-subtask-modal-${subtask.id}`)
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
         },
         editSubtask(subtask){
             let self = this
@@ -266,13 +283,21 @@ Vue.component('task', {
         },
         callApiEditSubtask(subtask){
             let self = this
-            self.endpoints.web = `dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/edit`
-            axios.post(self.guardedLocation(),self.subtaskForm)
+            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/edit`
+            axios.put(self.guardedLocation(),self.subtaskForm)
             .then((response) => {
-
+                self.subtaskForm.resetStatus()
+                let index = _.findIndex(self.subtasks, { id: subtask.id })
+                self.$set(self.subtasks, index, response.data.subtask)
+                self.hide(`edit-subtask-modal-${subtask.id}`)
+                self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
+                if(error.response.data.errors){
+                self.subtaskForm.errors.set(error.response.data.errors)
+                }
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
         assignEmployee(subtask){

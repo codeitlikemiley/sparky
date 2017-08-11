@@ -36,7 +36,7 @@
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center">
                                         <span class="tag" :class="{ info: subtask.link}">
-                                            <span v-if="subtask.link" class="icon mif-play" @click="viewVideoLink(subtask)" style="cursor: pointer;">
+                                            <span v-if="subtask.link" class="icon mif-eye" @click="viewVideoLink(subtask)" style="cursor: pointer;">
                                             </span>
                                             <span v-else class="icon mif-minus fg-red">
 
@@ -57,10 +57,11 @@
                                         </span>
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center" style="font-size: 1.25rem">
-                                        <span v-if="guard === 'web'" class="fg-lightBlue icon mif-pencil" @click="editSubtask(subtask)" style="cursor:pointer;"
+                                        <span v-if="guard === 'web'" class="fg-lightBlue icon mif-pencil" @click="editSubtaskModal(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" :data-hint="`Edit Subtask:|${subtask.name}`" data-hint-position="top"
                                         >
                                         </span>
+                                        @include('subtask::edit-subtask-modal')
                                         <span v-if="guard === 'web'" class="fg-red icon fa fa-trash" @click="deleteSubtask(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" :data-hint="`Delete Subtask:|${subtask.name}`" data-hint-position="top"
                                         >

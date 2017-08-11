@@ -45100,10 +45100,9 @@ Vue.component('task', {
             var self = this;
             self.priority = rating;
         },
-
-        // not yet done
         addSubtaskModal: function addSubtaskModal() {
             var self = this;
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
             self.guardAllowed(['web'], self.show('add-subtask-modal'));
         },
         addSubtask: function addSubtask() {
@@ -45118,15 +45117,33 @@ Vue.component('task', {
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
                 self.subtasks.push(response.data.subtask);
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-                $self.hide('add-subtask-modal');
+                self.hide('add-subtask-modal');
             }).catch(function (error) {
                 self.subtaskForm.errors.set(error.response.data.errors);
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },
-        showEditSubtaskModal: function showEditSubtaskModal(subtask) {
+
+        // not yet done
+        editSubtaskModal: function editSubtaskModal(subtask) {
             var self = this;
             self.guardAllowed(['web'], self.show('edit-subtask-modal-' + subtask.id));
+            self.guardAllowed(['web'], self.assignSubtaskToForm(subtask));
+        },
+        assignSubtaskToForm: function assignSubtaskToForm(subtask) {
+            var self = this;
+            self.subtaskForm.name = subtask.name;
+            self.subtaskForm.link = subtask.link;
+            self.subtaskForm.points = subtask.points;
+            self.subtaskForm.priority = subtask.priority;
+            self.subtaskForm.employees = subtask.employees;
+            self.subtaskForm.due_date = moment(subtask.due_date).format('YYYY-MM-DD');
+            self.subtaskForm.done = subtask.done;
+        },
+        closeEditSubtask: function closeEditSubtask(subtask) {
+            var self = this;
+            self.hide('edit-subtask-modal-' + subtask.id);
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
         },
         editSubtask: function editSubtask(subtask) {
             var self = this;
@@ -45134,9 +45151,19 @@ Vue.component('task', {
         },
         callApiEditSubtask: function callApiEditSubtask(subtask) {
             var self = this;
-            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/edit';
-            axios.post(self.guardedLocation(), self.subtaskForm).then(function (response) {}).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/subtasks/' + subtask.id + '/edit';
+            axios.put(self.guardedLocation(), self.subtaskForm).then(function (response) {
+                self.subtaskForm.resetStatus();
+                var index = _.findIndex(self.subtasks, { id: subtask.id });
+                self.$set(self.subtasks, index, response.data.subtask);
+                self.hide('edit-subtask-modal-' + subtask.id);
+                self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            }).catch(function (error) {
+                if (error.response.data.errors) {
+                    self.subtaskForm.errors.set(error.response.data.errors);
+                }
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },
         assignEmployee: function assignEmployee(subtask) {
@@ -45473,7 +45500,8 @@ Evolutly.forms = _defineProperty({
         priority: 1,
         link: '',
         due_date: moment(new Date()).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
-        employees: ''
+        employees: '',
+        done: false
     },
     commentForm: {
         title: '',

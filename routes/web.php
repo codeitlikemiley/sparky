@@ -34,7 +34,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
       Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
     //   Route::post('/tasks/{task}/subtasks/create', 'Subtask\CreateSubtask')->name('tenant.subtasks.create');
-    //   Route::put('/tasks/{task}/subtasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
+      Route::put('/tasks/{task}/subtasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
     //   Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
   });
 
