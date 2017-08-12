@@ -4,10 +4,11 @@
             :key="keyChunk">
 
             <draggable class="cell colspan1" v-for="(campaign, cKey) in chunk" :options="draggableOptions"
-                :data-id="campaign.id" :key="cKey" @end="onEnd" style="min-height: 150px;" :leftOrRight="cKey" :max="keyChunk"
-                :data-id="campaign.id">
+                :data-id="campaign.id" :key="cKey" @start="onStart" @end="onEnd" style="min-height: 150px;" :cKey="cKey" :keyChunk="keyChunk"
+            >
+            
                 <div class="panel">
-
+                    @{{ (keyChunk + 1) * 2 }} | @{{ cKey }}
                     <div class="heading draghandle bg-lightBlue" :style="{cursor: moveable}">
                         <div v-if="guard === 'web'" style="position:absolute;top:12px;margin-left:136px;">
                             <span data-role="hint" data-hint-mode="2" data-hint="Switch|Re-Order Campaign" data-hint-position="top">

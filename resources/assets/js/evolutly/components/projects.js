@@ -44,7 +44,21 @@ Vue.component('projects', {
                 preventOnFilter: false, 
                 disabled: (this.guard === 'web' ? false : true)
             },
-            moveable: (this.guard === 'web' ? 'move' : 'initial')
+            moveable: (this.guard === 'web' ? 'move' : 'initial'),
+            from: {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            },
+            to: {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            }
         }
     },
     mounted() {
@@ -162,6 +176,18 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
+        resetCampaignForm(){
+            var self = this
+            let last_index = self.campaigns.length + 1
+            self.campaignForm.campaign_order = last_index
+            self.campaignForm.campaign_name = ''
+        },
+        showCampaignModal(){
+            var self = this
+            self.resetCampaignForm()
+            self.show('add-campaign')
+            
+        },
         createCampaign() {
             var self = this
             if (this.guard === 'web') {
@@ -172,9 +198,9 @@ Vue.component('projects', {
                 let campaign = response.data.campaign
                 campaign['tasks'] = [];
                 self.campaigns.push(campaign)
-                console.log(campaign);
-                self.campaignForm.campaign_name = ''
-                self.campaignForm.campaign_order = 0
+                // add a re-order function to reorder the campaigns
+                self.campaignForm.resetStatus()
+                self.resetCampaignForm()
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
@@ -185,11 +211,13 @@ Vue.component('projects', {
             }
             
         },
-        
-        editCampaignModal(campaign)
-        {
+        setCampaignFormFromCampaign(campaign){
             this.campaignForm.campaign_name = campaign.name
             this.campaignForm.campaign_order = campaign.order
+        },
+        editCampaignModal(campaign)
+        {
+            this.setCampaignFormFromCampaign(campaign)
             this.$modal.show('campaign-'+campaign.id)
         },
         //works like charm
@@ -201,10 +229,10 @@ Vue.component('projects', {
                         self.$modal.hide('campaign-'+ campaign.id)
                         let index = _.findIndex(self.campaigns, { id: campaign.id })
                         console.log(index)
+                        // add a re-order function to reorder the campaigns
                         self.$set(self.campaigns, index, response.data.campaign)
-                        // hack to rerender the dom
-                        self.campaignForm.campaign_name = ''
-                        self.campaignForm.campaign_order = ''
+                        self.campaignForm.resetStatus()
+                        self.resetCampaignForm()
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                     })
                     .catch(error => {
@@ -214,32 +242,61 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
-        onEnd(e){
-            var self = this
-            // if 0 then we are going right
-            // if 1 then we are going left
-            let left = 0
-            let right = 1
-            let leftOrRight = parseInt(e.target.getAttribute('leftOrRight'))
-            let max = parseInt(e.target.getAttribute('max'))
-            let id = e.target.getAttribute('data-id')
-            let order = ((max + 1) * 2)
-            let position = null
-            
-            if(leftOrRight === left)
-            {
-                position = order - 1
-                
-            }else{
-                position = order
+        setFrom(e){
+                this.from.index = e.oldIndex,
+                this.from.id = e.target.getAttribute('data-id'),
+                this.from.chunk = e.target.getAttribute('keyChunk'),
+                this.from.key = e.target.getAttribute('cKey')
+        },
+        setTo(e){
+                this.to.index = e.newIndex,
+                this.to.id = e.item.offsetParent.getAttribute('data-id'),
+                this.to.chunk = e.item.offsetParent.getAttribute('keyChunk'),
+                this.to.key = e.item.offsetParent.getAttribute('cKey')
+        },
+        resetFromAndTo(){
+            this.from = {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
             }
-            console.log(position)
-            self.switchCampaign(position,id)
+            this.to = {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            }
+        },
+        onStart(e){
+            let self = this
+            self.setFrom(e)
+            let campaign = self.getFromCampaign()
+            self.from.order = campaign.order
             
         },
-        switchCampaign(position,id) {
+        onEnd(e){
+            let self = this
+            self.setTo(e)
+            let campaign = self.getToCampaign()
+            self.to.order = campaign.order
+            self.switchCampaign(self.to.order,self.from.id)
+        },
+        getFromCampaign(){
+            let self = this
+            let index = _.findIndex(self.campaigns, function(o) { return o.id == self.from.id; })
+            return self.campaigns[index]
+        },
+        getToCampaign(){
+            let self = this
+            let index = _.findIndex(self.campaigns, function(o) { return o.id == self.to.id; })
+            return self.campaigns[index]
+        },
+        switchCampaign(order,id) {
             var self = this
-            self.campaignOrderForm.campaign_order = parseInt(position)
+            self.campaignOrderForm.campaign_order = parseInt(order)
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + id + '/reorder', self.campaignOrderForm)
                     .then(function (response) {

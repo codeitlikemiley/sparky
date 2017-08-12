@@ -1,6 +1,6 @@
 <div>
     <a href="#!" v-if="guard === 'web'">
-        <button @click="show('add-campaign')" class="button info"><span class="mif-plus"></span> Add New Campaign</button>
+        <button @click="showCampaignModal()" class="button info"><span class="mif-plus"></span> Add New Campaign</button>
     </a>
     <a href="#!" v-if="guard === 'web'">
         <button @click="show('edit-project')" class="button info"><span class="mif-pencil"></span> Edit Project</button>

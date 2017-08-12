@@ -44550,7 +44550,21 @@ Vue.component('projects', {
                 preventOnFilter: false,
                 disabled: this.guard === 'web' ? false : true
             },
-            moveable: this.guard === 'web' ? 'move' : 'initial'
+            moveable: this.guard === 'web' ? 'move' : 'initial',
+            from: {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            },
+            to: {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            }
         };
     },
     mounted: function mounted() {
@@ -44655,6 +44669,17 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
+        resetCampaignForm: function resetCampaignForm() {
+            var self = this;
+            var last_index = self.campaigns.length + 1;
+            self.campaignForm.campaign_order = last_index;
+            self.campaignForm.campaign_name = '';
+        },
+        showCampaignModal: function showCampaignModal() {
+            var self = this;
+            self.resetCampaignForm();
+            self.show('add-campaign');
+        },
         createCampaign: function createCampaign() {
             var self = this;
             if (this.guard === 'web') {
@@ -44664,9 +44689,9 @@ Vue.component('projects', {
                     var campaign = response.data.campaign;
                     campaign['tasks'] = [];
                     self.campaigns.push(campaign);
-                    console.log(campaign);
-                    self.campaignForm.campaign_name = '';
-                    self.campaignForm.campaign_order = 0;
+                    // add a re-order function to reorder the campaigns
+                    self.campaignForm.resetStatus();
+                    self.resetCampaignForm();
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
                     self.$popup({ message: _.first(error.response.data.message) });
@@ -44675,9 +44700,12 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
-        editCampaignModal: function editCampaignModal(campaign) {
+        setCampaignFormFromCampaign: function setCampaignFormFromCampaign(campaign) {
             this.campaignForm.campaign_name = campaign.name;
             this.campaignForm.campaign_order = campaign.order;
+        },
+        editCampaignModal: function editCampaignModal(campaign) {
+            this.setCampaignFormFromCampaign(campaign);
             this.$modal.show('campaign-' + campaign.id);
         },
 
@@ -44689,10 +44717,10 @@ Vue.component('projects', {
                     self.$modal.hide('campaign-' + campaign.id);
                     var index = _.findIndex(self.campaigns, { id: campaign.id });
                     console.log(index);
+                    // add a re-order function to reorder the campaigns
                     self.$set(self.campaigns, index, response.data.campaign);
-                    // hack to rerender the dom
-                    self.campaignForm.campaign_name = '';
-                    self.campaignForm.campaign_order = '';
+                    self.campaignForm.resetStatus();
+                    self.resetCampaignForm();
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
                     self.$popup({ message: _.first(error.response.data.message) });
@@ -44701,29 +44729,58 @@ Vue.component('projects', {
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
+        setFrom: function setFrom(e) {
+            this.from.index = e.oldIndex, this.from.id = e.target.getAttribute('data-id'), this.from.chunk = e.target.getAttribute('keyChunk'), this.from.key = e.target.getAttribute('cKey');
+        },
+        setTo: function setTo(e) {
+            this.to.index = e.newIndex, this.to.id = e.item.offsetParent.getAttribute('data-id'), this.to.chunk = e.item.offsetParent.getAttribute('keyChunk'), this.to.key = e.item.offsetParent.getAttribute('cKey');
+        },
+        resetFromAndTo: function resetFromAndTo() {
+            this.from = {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            };
+            this.to = {
+                index: null,
+                id: null,
+                chunk: null,
+                key: null,
+                order: null
+            };
+        },
+        onStart: function onStart(e) {
+            var self = this;
+            self.setFrom(e);
+            var campaign = self.getFromCampaign();
+            self.from.order = campaign.order;
+        },
         onEnd: function onEnd(e) {
             var self = this;
-            // if 0 then we are going right
-            // if 1 then we are going left
-            var left = 0;
-            var right = 1;
-            var leftOrRight = parseInt(e.target.getAttribute('leftOrRight'));
-            var max = parseInt(e.target.getAttribute('max'));
-            var id = e.target.getAttribute('data-id');
-            var order = (max + 1) * 2;
-            var position = null;
-
-            if (leftOrRight === left) {
-                position = order - 1;
-            } else {
-                position = order;
-            }
-            console.log(position);
-            self.switchCampaign(position, id);
+            self.setTo(e);
+            var campaign = self.getToCampaign();
+            self.to.order = campaign.order;
+            self.switchCampaign(self.to.order, self.from.id);
         },
-        switchCampaign: function switchCampaign(position, id) {
+        getFromCampaign: function getFromCampaign() {
             var self = this;
-            self.campaignOrderForm.campaign_order = parseInt(position);
+            var index = _.findIndex(self.campaigns, function (o) {
+                return o.id == self.from.id;
+            });
+            return self.campaigns[index];
+        },
+        getToCampaign: function getToCampaign() {
+            var self = this;
+            var index = _.findIndex(self.campaigns, function (o) {
+                return o.id == self.to.id;
+            });
+            return self.campaigns[index];
+        },
+        switchCampaign: function switchCampaign(order, id) {
+            var self = this;
+            self.campaignOrderForm.campaign_order = parseInt(order);
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + id + '/reorder', self.campaignOrderForm).then(function (response) {
 
@@ -44869,7 +44926,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 Vue.component('task', {
     props: ['guard', 'employees', 'tenant', 'user', 'task', 'project', 'client', 'campaign', 'activities'],
-    // remove activity logs props
     data: function data() {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),

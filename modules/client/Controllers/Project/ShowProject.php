@@ -25,7 +25,7 @@ class ShowProject extends BaseController
      */
     public function __invoke($project)
     {
-        $campaigns = Campaign::where('project_id', $project->id)->with('tasks')->get();
+        $campaigns = Campaign::where('project_id', $project->id)->with('tasks')->orderBy('order', 'asc')->get();
         $workers = $project->assignedEmployees;
         return view('project::view',['project' => $project, 'campaigns' => $campaigns, 'workers' => $workers]);
     }

@@ -2,7 +2,6 @@ import StarRating from 'vue-star-rating'
 
 Vue.component('task', {
     props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
-    // remove activity logs props
     data () {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
