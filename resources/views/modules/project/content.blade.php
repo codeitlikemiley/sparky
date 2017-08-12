@@ -6,7 +6,7 @@
                 <div class="tabcontrol" data-role="tabcontrol">
                     <ul class="tabs">
                         <li><a href="#tasks_tab">Tasks</a></li>
-                        <li><a href="#onboarding_tab">Onboarding</a></li>
+                        <li><a href="#onboarding_tab" v-if="guard ==='web'">Onboarding</a></li>
                         <li><a href="#uploads_tab">Upload</a></li>
                         <li><a href="#uploaded_tab">Files</a></li>
                         <li><a href="#people_tab">People</a></li>

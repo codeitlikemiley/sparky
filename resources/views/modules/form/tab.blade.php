@@ -1,4 +1,4 @@
-<div class="frame" id="onboarding_tab">
+<div class="frame" id="onboarding_tab" v-if="guard === 'web'">
     <div class="panel widget-box">
         <div class="heading">
             <div class="title">Visual Form Builder</div>
