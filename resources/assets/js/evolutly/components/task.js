@@ -1,4 +1,5 @@
 import StarRating from 'vue-star-rating'
+import comments from './comments.vue'
 
 Vue.component('task', {
     props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
@@ -8,9 +9,7 @@ Vue.component('task', {
             subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
             assignEmployeeForm: new EvolutlyForm(Evolutly.forms.assignEmployeeForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
-            commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
             subtasks: [],
-            comments: [],
             progress: '0%',
             total: 0,
             done: 0,
@@ -303,77 +302,7 @@ Vue.component('task', {
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
-        // not yet done  
-        fetchComments(){
-            let self = this
-            self.guardAllowed(self.callApiGetComments)
-        },
-        callApiGetComments(){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${self.task.id}/comments`
-            self.endpoints.team = `dashboard/tasks/${self.task.id}/comments`
-            self.endpoints.client = `dashboard/tasks/${self.task.id}/comments`
-
-            axios.get(self.guardedLocation())
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        },
-        addComment(){
-            let self = this
-            self.guardAllowed(self.callApiAddComment())
-        },
-        callApiAddComment(){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${tasks.id}/addComment`
-            self.endpoints.team =`team/dashboard/tasks/${task.id}/addComment`
-            self.endpoints.client = `client/dashboard/tasks/${task.id}/addComment`
-
-            axios.post(self.guardedLocation(),self.commentForm)
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        },
-        editComment(){
-            let self = this
-            self.guardAllowed(self.callApiEditComment())
-        },
-        callApiEditComment(){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${tasks.id}/editComment`
-            self.endpoints.team =`team/dashboard/tasks/${task.id}/editComment`
-            self.endpoints.client = `client/dashboard/tasks/${task.id}/editComment`
-
-            axios.post(self.guardedLocation(),self.commentForm)
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        },
-        deleteComment(){
-            let self = this
-            self.guardAllowed(self.callApiDeleteComment())
-        },
-        callApiDeleteComment(){
-            let self = this
-            self.endpoints.web = `dashboard/tasks/${task.id}/deleteComment`
-
-            axios.delete(self.guardedLocation())
-            .then((response) => {
-
-            })
-            .catch(error => {
-                self.$popup({ message: _.first(error.response.data.message) })
-            })
-        }
+        
     },
     watch: {
         subtasks(newValue){
@@ -389,7 +318,8 @@ Vue.component('task', {
         }
     },
     components: {
-        StarRating
+        StarRating,
+        comments
     }
 
 })

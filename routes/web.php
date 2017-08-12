@@ -36,6 +36,11 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
       Route::delete('/tasks/{task}/subtasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
       Route::put('/tasks/{task}/subtasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
+
+      Route::get('/tasks/{task}/comments', 'Comment\ShowComment')->name('tenant.comments.show');
+      Route::post('/tasks/{task}/comments/add/{comment?}','Comment\AddComment')->name('tenant.comments.add');
+      Route::put('/tasks/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('tenant.comments.edit');
+      Route::delete('/tasks/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('tenant.comments.delete');
   });
 
   Route::group(['prefix' => '/users'], function () {

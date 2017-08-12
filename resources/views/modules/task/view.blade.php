@@ -53,7 +53,8 @@
                         </div>
                         <!-- Comments -->
                         <div class="row">
-                            @include('comment::box')
+                            <comments :guard="guard" :employees="employees" :tenant="tenant" :user="user" :task="task" :client="client">
+                            </comments>
                         </div>
                     </div>
                 </div>

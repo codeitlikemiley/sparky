@@ -21,6 +21,11 @@
       Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
       Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('client.subtasks.index');
+
+      Route::get('/tasks/{task}/comments', 'Comment\ShowComment')->name('client.comments.show');
+      Route::post('/tasks/{task}/comments/add/{comment?}','Comment\AddComment')->name('client.comments.add');
+      Route::put('/tasks/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('client.comments.edit');
+      Route::delete('/tasks/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('client.comments.delete');
   });
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('client.files.show');
 

@@ -24,6 +24,11 @@
       Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
       Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('employee.subtasks.index');
       Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('employee.subtasks.toggle');
+
+      Route::get('/tasks/{task}/comments', 'Comment\ShowComment')->name('employee.comments.show');
+      Route::post('/tasks/{task}/comments/add/{comment?}','Comment\AddComment')->name('employee.comments.add');
+      Route::put('/tasks/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('employee.comments.edit');
+      Route::delete('/tasks/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('employee.comments.delete');
   });
 
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('employee.files.show');

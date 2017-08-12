@@ -44329,8 +44329,9 @@ window.axios.interceptors.response.use(function (response) {
 
 /***/ }),
 /* 200 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__) {
 
+"use strict";
 Vue.component('dashboard', {
     props: ['guard', 'tenant', 'user', 'projects', 'clients'],
     data: function data() {
@@ -44922,6 +44923,9 @@ Vue.component('projects', {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_star_rating__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_star_rating___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_star_rating__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__comments_vue__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__comments_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__comments_vue__);
+
 
 
 Vue.component('task', {
@@ -44932,9 +44936,7 @@ Vue.component('task', {
             subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
             assignEmployeeForm: new EvolutlyForm(Evolutly.forms.assignEmployeeForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
-            commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
             subtasks: [],
-            comments: [],
             progress: '0%',
             total: 0,
             done: 0,
@@ -45224,62 +45226,6 @@ Vue.component('task', {
                 }
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
-        },
-
-        // not yet done  
-        fetchComments: function fetchComments() {
-            var self = this;
-            self.guardAllowed(self.callApiGetComments);
-        },
-        callApiGetComments: function callApiGetComments() {
-            var self = this;
-            self.endpoints.web = 'dashboard/tasks/' + self.task.id + '/comments';
-            self.endpoints.team = 'dashboard/tasks/' + self.task.id + '/comments';
-            self.endpoints.client = 'dashboard/tasks/' + self.task.id + '/comments';
-
-            axios.get(self.guardedLocation()).then(function (response) {}).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
-        },
-        addComment: function addComment() {
-            var self = this;
-            self.guardAllowed(self.callApiAddComment());
-        },
-        callApiAddComment: function callApiAddComment() {
-            var self = this;
-            self.endpoints.web = 'dashboard/tasks/' + tasks.id + '/addComment';
-            self.endpoints.team = 'team/dashboard/tasks/' + task.id + '/addComment';
-            self.endpoints.client = 'client/dashboard/tasks/' + task.id + '/addComment';
-
-            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {}).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
-        },
-        editComment: function editComment() {
-            var self = this;
-            self.guardAllowed(self.callApiEditComment());
-        },
-        callApiEditComment: function callApiEditComment() {
-            var self = this;
-            self.endpoints.web = 'dashboard/tasks/' + tasks.id + '/editComment';
-            self.endpoints.team = 'team/dashboard/tasks/' + task.id + '/editComment';
-            self.endpoints.client = 'client/dashboard/tasks/' + task.id + '/editComment';
-
-            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {}).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
-        },
-        deleteComment: function deleteComment() {
-            var self = this;
-            self.guardAllowed(self.callApiDeleteComment());
-        },
-        callApiDeleteComment: function callApiDeleteComment() {
-            var self = this;
-            self.endpoints.web = 'dashboard/tasks/' + task.id + '/deleteComment';
-
-            axios.delete(self.guardedLocation()).then(function (response) {}).catch(function (error) {
-                self.$popup({ message: _.first(error.response.data.message) });
-            });
         }
     },
     watch: {
@@ -45295,7 +45241,8 @@ Vue.component('task', {
         }
     },
     components: {
-        StarRating: __WEBPACK_IMPORTED_MODULE_0_vue_star_rating___default.a
+        StarRating: __WEBPACK_IMPORTED_MODULE_0_vue_star_rating___default.a,
+        comments: __WEBPACK_IMPORTED_MODULE_1__comments_vue___default.a
     }
 
 });
@@ -71728,6 +71675,467 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 module.exports = __webpack_require__(195);
 
+
+/***/ }),
+/* 355 */,
+/* 356 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['guard', 'employees', 'tenant', 'user', 'task', 'client'],
+    data: function data() {
+        return {
+            commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
+            comments: [],
+            endpoints: {
+                web: null,
+                team: null,
+                client: null
+            }
+        };
+    },
+    mounted: function mounted() {
+        this.whenReady();
+    },
+
+    computed: {},
+    methods: {
+        // Overried pass array of valid guard from backend
+        // By Default Uses This Array
+        // Passed A Callback Function To Execute For Example Api Calls
+        guardAllowed: function guardAllowed() {
+            var guards = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['web', 'employee', 'client'];
+            var callback = arguments[1];
+
+            var self = this;
+            if (_.includes(guards, self.guard)) {
+                callback;
+                self.resetEndpoints();
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
+        },
+        resetEndpoints: function resetEndpoints() {
+            this.endpoints = {
+                web: null,
+                team: null,
+                client: null
+            };
+        },
+        guardedLocation: function guardedLocation() {
+            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.endpoints,
+                web = _ref.web,
+                team = _ref.team,
+                client = _ref.client;
+
+            var self = this;
+            if (self.guard === 'client') {
+                return client;
+            } else if (self.guard === 'employee') {
+                return team;
+            } else {
+                return web;
+            }
+        },
+        resetCommentForm: function resetCommentForm() {
+            var self = this;
+            self.commentForm = new EvolutlyForm(Evolutly.forms.commentForm);
+        },
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
+        whenReady: function whenReady() {
+            var self = this;
+            self.fetchComments();
+        },
+        showDropDown: function showDropDown(comment) {
+            console.log(comment);
+        },
+        fetchComments: function fetchComments() {
+            var self = this;
+            self.guardAllowed(self.callApiGetComments());
+        },
+        callApiGetComments: function callApiGetComments() {
+            var self = this;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/comments';
+            self.endpoints.team = '/dashboard/tasks/' + self.task.id + '/comments';
+            self.endpoints.client = '/dashboard/tasks/' + self.task.id + '/comments';
+
+            axios.get(self.guardedLocation()).then(function (response) {
+                self.comments = response.data.comments;
+            }).catch(function (error) {
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        },
+        addComment: function addComment() {
+            var commentID = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+            var self = this;
+            self.guardAllowed(self.callApiAddComment(commentID));
+        },
+        callApiAddComment: function callApiAddComment() {
+            var commentID = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+            var self = this;
+
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/comments/add/' + (commentID ? commentID : '');
+            self.endpoints.team = '/team/dashboard/tasks/' + self.task.id + '/comments/add/' + (commentID ? commentID : '');
+            self.endpoints.client = '/client/dashboard/tasks/' + self.task.id + '/comments/add/' + (commentID ? commentID : '');
+
+            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {
+                self.commentForm.resetStatus();
+                self.resetCommentForm();
+                if (response.data.comment.parent_id == null) {
+                    self.comments.push(response.data.comment);
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                } else {
+                    var index = _.findIndex(self.comments, { id: commentID });
+                    self.comments[index].children.push(response.data.comment);
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }
+            }).catch(function (error) {
+                self.commentForm.errors.set(error.response.data.errors);
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        },
+        assignCommentToForm: function assignCommentToForm(comment) {
+            var self = this;
+            self.commentForm.title = comment.title;
+            self.commentForm.body = comment.body;
+        },
+        editCommentModal: function editCommentModal(comment) {
+            var self = this;
+            self.guardAllowed(self.show('edit-comment-modal-' + comment.id));
+            self.guardAllowed(self.assignCommentToForm(comment));
+        },
+        editComment: function editComment(comment) {
+            var self = this;
+            self.guardAllowed(self.callApiEditComment(comment));
+        },
+        callApiEditComment: function callApiEditComment(comment) {
+            var self = this;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/comments/edit/' + comment.id;
+            self.endpoints.team = '/team/dashboard/tasks/' + self.task.id + '/comments/edit/' + comment.id;
+            self.endpoints.client = '/client/dashboard/tasks/' + self.task.id + '/comments/edit/' + comment.id;
+
+            axios.post(self.guardedLocation(), self.commentForm).then(function (response) {
+                self.commentForm.resetStatus();
+                self.resetCommentForm();
+                var index = _.findIndex(self.comments, { id: comment.id });
+                self.$set(self.comments, index, response.data.comment);
+            }).catch(function (error) {
+                self.commentForm.errors.set(error.response.data.errors);
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        },
+        deleteComment: function deleteComment(comment) {
+            var commentIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var childIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+            var self = this;
+            self.guardAllowed(self.callApiDeleteComment(comment, commentIndex, childIndex));
+        },
+        callApiDeleteComment: function callApiDeleteComment(comment) {
+            var commentIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var childIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+            var self = this;
+            self.endpoints.web = '/dashboard/tasks/' + self.task.id + '/comments/delete/' + comment.id;
+            self.endpoints.team = '/team/dashboard/tasks/' + self.task.id + '/comments/delete/' + comment.id;
+            self.endpoints.client = '/client/dashboard/tasks/' + self.task.id + '/comments/delete/' + comment.id;
+            axios.delete(self.guardedLocation()).then(function (response) {
+
+                if (comment.parent_id == null) {
+                    self.$delete(self.comments, commentIndex);
+                    self.$popup({ message: 'Thread Deleted!', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                } else {
+                    self.$delete(self.comments[commentIndex].children, childIndex);
+                    self.$popup({ message: 'Comment Deleted!', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                }
+            }).catch(function (error) {
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        }
+    },
+    watch: {}
+
+});
+
+/***/ }),
+/* 357 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(343)(
+  /* script */
+  __webpack_require__(356),
+  /* template */
+  __webpack_require__(358),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\comments.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] comments.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-430b271e", Component.options)
+  } else {
+    hotAPI.reload("data-v-430b271e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 358 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "cell"
+  }, [_c('div', {
+    staticClass: "panel widget-box success",
+    attrs: {
+      "data-role": "panel"
+    }
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [(_vm.comments.length > 0) ? _c('div', _vm._l((_vm.comments), function(comment, commentKey, commentIndex) {
+    return _c('ul', {
+      key: commentKey,
+      staticClass: "chat-list",
+      attrs: {
+        "index": commentIndex
+      }
+    }, [_c('li', [_c('a', {
+      staticClass: "place-left"
+    }, [_c('div', {
+      staticClass: "icon small"
+    }, [_c('img', {
+      staticClass: "circle fit-width",
+      attrs: {
+        "src": comment.creator.photo_url
+      }
+    })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(comment.title))]), _vm._v(" "), _c('div', [_vm._v(_vm._s(comment.body))])]), _vm._v(" "), _c('span', {
+      staticClass: "icon mif-minus fg-red",
+      staticStyle: {
+        "position": "relative",
+        "top": "-85px",
+        "right": "-550px"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteComment(comment, commentKey)
+        }
+      }
+    })]), _vm._v(" "), _c('ul', {
+      staticStyle: {
+        "list-style-type": "none"
+      }
+    }, _vm._l((comment.children), function(child, childKey, childIndex) {
+      return _c('li', {
+        key: childKey,
+        attrs: {
+          "index": childIndex
+        }
+      }, [_c('a', {
+        staticClass: "place-left",
+        attrs: {
+          "href": "#"
+        }
+      }, [_c('div', {
+        staticClass: "icon small"
+      }, [_c('img', {
+        staticClass: "circle fit-width",
+        attrs: {
+          "src": child.creator.photo_url
+        }
+      })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(child.title))]), _vm._v(" "), _c('div', [_vm._v(_vm._s(child.body))])]), _vm._v(" "), _c('span', {
+        staticClass: "icon mif-minus fg-red",
+        staticStyle: {
+          "position": "relative",
+          "top": "-75px",
+          "right": "-500px"
+        },
+        on: {
+          "click": function($event) {
+            _vm.deleteComment(child, commentKey, childKey)
+          }
+        }
+      })])
+    })), _vm._v(" "), _c('form', {
+      on: {
+        "submit": function($event) {
+          $event.preventDefault();
+          _vm.addComment(comment.id)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "input-control text full-size",
+      attrs: {
+        "data-role": "input"
+      }
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.commentForm.body),
+        expression: "commentForm.body"
+      }],
+      staticClass: "bg-grayLighter",
+      attrs: {
+        "type": "text",
+        "placeholder": ("Reply To " + (comment.creator.name) + "'s' Thread")
+      },
+      domProps: {
+        "value": (_vm.commentForm.body)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.commentForm.body = $event.target.value
+        }
+      }
+    }), _vm._v(" "), _vm._m(1, true)])])])
+  })) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "padding10"
+  }, [_c('form', {
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        _vm.addComment()
+      }
+    }
+  }, [_c('div', {
+    staticClass: "input-control text full-size",
+    staticStyle: {
+      "padding-bottom": "100px"
+    },
+    attrs: {
+      "data-role": "input"
+    }
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.commentForm.body),
+      expression: "commentForm.body"
+    }],
+    staticClass: "bg-grayLighter",
+    attrs: {
+      "placeholder": "Create A New Thread"
+    },
+    domProps: {
+      "value": (_vm.commentForm.body)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.commentForm.body = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _vm._m(2)])])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "heading align-center"
+  }, [_c('div', {
+    staticClass: "title"
+  }, [_vm._v("Discussion")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "button info"
+  }, [_c('span', {
+    staticClass: "icon mif-bubbles"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "button info"
+  }, [_c('span', {
+    staticClass: "icon mif-bubble"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-430b271e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

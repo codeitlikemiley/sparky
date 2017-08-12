@@ -12,6 +12,7 @@ use App\Project;
 use App\Campaign;
 use App\Task;
 use App\Subtask;
+use BrianFaust\Commentable\Comment;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -78,6 +79,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::pattern('subtask', '[0-9]+');
 
         Route::pattern('id', '[0-9]+');
+        Route::model('comment', Comment::class);
+        Route::pattern('comment', '[0-9]+');
         Route::pattern('nonwww', '[\/\w\.-]*');
     }
 

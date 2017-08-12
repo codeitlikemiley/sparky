@@ -36,13 +36,16 @@ class CreateSubtask extends BaseController
         $this->code = 422;
         return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
-        $this->createSubtask();
-        $task->subtasks()->save($this->subtask);
-        
-        
-        $this->assignEmployeesIfAny($task);
-        $this->subtask->employees;
-        return response()->json(['message' => $this->message, 'subtask' => $this->subtask], $this->code);
+        if($this->allowed($task) || $this->createdBy($task)){
+            $this->createSubtask();
+            $task->subtasks()->save($this->subtask);
+            $this->assignEmployeesIfAny($task);
+            $this->subtask->employees;
+            return response()->json(['message' => $this->message, 'subtask' => $this->subtask], $this->code);
+        }
+        $this->code = 401;
+        $this->message = 'UnAuthorized Request';
+        return response()->json(['message' => $this->message], $this->code);
     }
     private function sanitize()
     {
