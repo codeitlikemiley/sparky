@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Project;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
+use App\Client;
 
 class EditProject extends BaseController
 {
@@ -16,35 +17,62 @@ class EditProject extends BaseController
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        $this->input = $request;
+        $this->request = $request;
     }
 
     public function __invoke($project)
     {
-        $this->validate($this->input, [
-        'client_name' => 'required|max:30',
-        ]);
-        $this->editProject($project);
-        return response()->json(['message' => $this->message, 'project' => $project], $this->code);
-    }
-
-    private function editProject($project)
-    {
+        $validator = $this->sanitize();
+        if($validator->fails()){
+            $this->message = 'Failed To Edit Client';
+            $this->code = 400;
+            return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
+        }
         if($this->allows($project)){
             $this->addName($project);
-            $this->AddClientIfAny($project);
+            $this->createOrEditClient($project);
             $this->save($project);
         }
+        $clients = $this->getAuth()->clients;
+        $client = Client::find($project->client_id);
+        $project = $project;
+        return response()->json(['message' => $this->message, 'project' => $project,'clients' => $clients, 'client' => $client, 'project' => $project], $this->code);
     }
 
-    private function tenant()
+    private function sanitize()
     {
-        return auth()->user();
+       return $validator = \Validator::make($this->request->all(), $this->rules(), $this->messages());
+    }
+
+    private function rules(){
+        return 
+        [
+            'client_name' => 'required|max:60',
+            'newclient' => 'boolean',
+            'client.name' => 'sometimes|required|max:60',
+            'client.email' => 'sometimes|required|email',
+            'client.password' => 'sometimes|required|max:60',
+        ];
+        
+    }
+
+    private function messages(){
+        return [
+            'client_name.required' => 'Describe Your Client',
+            'client_name.max' => 'Client Description Too Long (60) Max',
+            'newclient.boolean' => 'Value of Existing Should be Boolean',
+            'client.name.required' => 'Client Name Is Required',
+            'client.name.max' => 'Client Name Too Long (60) Max',
+            'client.email.required' => 'Email is Required',
+            'client.email.email' => 'Email is Invalid Format',
+            'client.password.required' => 'Password Required',
+            'client.password.max' => 'Password Too Long (60) Max'
+        ];
     }
 
     private function allows($project)
     {
-        if($project->byTenant()->id != $this->tenant()->id)
+        if($project->byTenant()->id != $this->getTenant()->id)
         {
             $this->code = 401;
             $this->message = 'UnAuthorized';
@@ -56,15 +84,28 @@ class EditProject extends BaseController
    private function AddName($project)
     {
         
-        $project->name = $this->input->client_name;
+        $project->name = $this->request->client_name;
+    }
+    private function createOrEditClient($project){
+        if($this->request->newclient === true){
+            $client = Client::forceCreate([
+                'name' => $this->request->client['name'],
+                'email' => $this->request->client['email'],
+                'password' => $this->request->client['password'],
+            ]);
+            $this->getAuth()->clients()->save($client);
+            $project->client_id = $client->id;
+        }else{
+            $this->AddClientIfAny($project);
+        }
     }
 
     private function AddClientIfAny($project)
     {
-        if(isset($this->input->client_id['id']))
+        if(isset($this->request->client_id['id']))
         {
-            $tenant_clients = $this->tenant()->clients->pluck('id')->toArray();
-            $client_id = $this->input->client_id['id'];
+            $tenant_clients = $this->getTenant()->clients->pluck('id')->toArray();
+            $client_id = $this->request->client_id['id'];
             if(in_array($client_id,$tenant_clients))
             {
             $project->client_id = $client_id;

@@ -50,9 +50,9 @@ class CreateProject extends BaseController
         [
             'client_name' => 'required|max:60',
             'newclient' => 'boolean',
-            'user_name' => 'sometimes|required|max:60',
-            'user_email' => 'sometimes|required|email',
-            'user_password' => 'sometimes|required|max:60',
+            'client.name' => 'sometimes|required|max:60',
+            'client.email' => 'sometimes|required|email',
+            'client.password' => 'sometimes|required|max:60',
         ];
         
     }
@@ -62,12 +62,12 @@ class CreateProject extends BaseController
             'client_name.required' => 'Describe Your Client',
             'client_name.max' => 'Client Description Too Long (60) Max',
             'newclient.boolean' => 'Value of Existing Should be Boolean',
-            'user_name.required' => 'Client Name Is Required',
-            'user_name.max' => 'Client Name Too Long (60) Max',
-            'user_email.required' => 'Email is Required',
-            'user_email.email' => 'Email is Invalid Format',
-            'user_password.required' => 'Password Required',
-            'user_password.max' => 'Password Too Long (60) Max'
+            'client.name.required' => 'Client Name Is Required',
+            'client.name.max' => 'Client Name Too Long (60) Max',
+            'client.email.required' => 'Email is Required',
+            'client.email.email' => 'Email is Invalid Format',
+            'client.password.required' => 'Password Required',
+            'client.password.max' => 'Password Too Long (60) Max'
         ];
     }
 
@@ -95,9 +95,9 @@ class CreateProject extends BaseController
 
     private function createNewClient()
     {
-        $this->client->name = $this->request->user_name;
-        $this->client->email = $this->request->user_email;
-        $this->client->password = $this->request->user_password;
+        $this->client->name = $this->request->client['name'];
+        $this->client->email = $this->request->client['email'];
+        $this->client->password = $this->request->client['password'];
         $this->client->tenant_id = $this->getAuth()->id;
         $this->client->save();
         

@@ -24,7 +24,7 @@ Vue.component('dashboard', {
 
     methods: { 
         resetProjectForm(){
-            this.projectForm = new EvolutlyForm({client_name: '', client_id: '', newclient: false, user_name: '', user_email: '', user_password: ''})
+            this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm)
         },
         projectChunks(projects) {
             return _.chunk(projects, 3)
@@ -43,9 +43,7 @@ Vue.component('dashboard', {
             if(self.projectForm.newclient){
                 delete self.projectForm.client_id
             }else {
-                delete self.projectForm.user_name
-                delete self.projectForm.user_email
-                delete self.projectForm.user_password
+                delete self.projectForm.client
             }
             if(self.guard === 'web')
             {

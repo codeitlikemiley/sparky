@@ -11,7 +11,7 @@ Vue.component('projects', {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             formBuilderForm: new EvolutlyForm(Evolutly.forms.formBuilderForm),
             currentCampaignId: null,
-            campaigns: null,
+            campaigns: [],
             oldCampaigns: null,
 
             // all about files
@@ -93,7 +93,9 @@ Vue.component('projects', {
             this.projectForm.client_name = this.project.name
             this.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
         },
-        
+        resetProjectForm(){
+            this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm)
+        },
         isTaskDone(task){
             return task.done == 1;
         },
@@ -148,10 +150,19 @@ Vue.component('projects', {
         },
         updateProject(id) {
             var self = this
+            if(self.projectForm.newclient){
+                delete self.projectForm.client_id
+            }else {
+                delete self.projectForm.client
+            }
             if (this.guard === 'web') {
             axios.post('/dashboard/clients/' + id + '/edit', self.projectForm)
             .then(function (response) {
-                self.$modal.hide('edit-project');
+                self.$modal.hide('edit-project')
+                self.clients = response.data.clients
+                self.resetProjectForm()
+                self.projectForm.client_id = response.data.client
+                self.projectForm.client_name = response.data.project.name
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {

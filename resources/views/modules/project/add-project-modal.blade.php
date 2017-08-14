@@ -32,27 +32,27 @@
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-user fg-blue"></span>
-                                <input type="text" placeholder="Client Name" v-model="projectForm.user_name">
-                                <span class="fg-red" v-show="projectForm.errors.has('user_name')">
-                                @{{ projectForm.errors.get('user_name') }}
+                                <input type="text" placeholder="Client Name" v-model="projectForm.client.name">
+                                <span class="fg-red" v-show="projectForm.errors.has('client.name')">
+                                @{{ projectForm.errors.get('client.name') }}
                             </span>
                             </div>
                         </div>
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-mail fg-blue"></span>
-                                <input type="text" placeholder="Client Email" v-model="projectForm.user_email">
-                                <span class="fg-red" v-show="projectForm.errors.has('user_email')">
-                                @{{ projectForm.errors.get('user_email') }}
+                                <input type="text" placeholder="Client Email" v-model="projectForm.client.email">
+                                <span class="fg-red" v-show="projectForm.errors.has('client.email')">
+                                @{{ projectForm.errors.get('client.email') }}
                             </span>
                             </div>
                         </div>
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-spell-check fg-blue"></span>
-                                <input type="text" placeholder="Client Password" v-model="projectForm.user_password">
-                                <span class="fg-red" v-show="projectForm.errors.has('user_password')">
-                                @{{ projectForm.errors.get('user_password') }}
+                                <input type="text" placeholder="Client Password" v-model="projectForm.client.password">
+                                <span class="fg-red" v-show="projectForm.errors.has('client.password')">
+                                @{{ projectForm.errors.get('client.password') }}
                             </span>
                             </div>
                         </div>

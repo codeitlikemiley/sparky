@@ -1,4 +1,4 @@
-<div class="frame bg-white" id="people_tab" v-if="employees">
+<div class="frame bg-white" id="people_tab" v-if="workers.length > 0">
     <div class="row cells4" v-for="(chunk, index) in employeeChunks" :key="chunk.id" :index="index" :chunk="chunk">
         <div class="cell" v-for="(employee, index) in chunk" :key="employee.id" :index="index" :employee="employee">
             <a href="javascript:void(0);" onclick="alert('Please Create Show User Profile Component');">
