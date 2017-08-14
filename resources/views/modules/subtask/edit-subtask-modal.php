@@ -4,7 +4,7 @@
         <div class="panel widget-box">
     
             <div class="heading" style="background-color:#4db6ac;">
-                <div class="title window-header align-center">Edit {{ subtaskForm.name }} <span @click="closeEditSubtask(subtask)" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
+                <div class="title window-header align-center">Edit Task <span @click="closeEditSubtask(subtask)" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
             </div>
     
             <div class="content">

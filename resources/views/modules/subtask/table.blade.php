@@ -2,12 +2,12 @@
     <div class="cell">
         <div class="panel widget-box " data-role="panel">
             <div class="heading">
-                <div class="title">Subtasks</div>
+                <div class="title">Tasks</div>
             </div>
             <div class="content">
                 <div class="sub-heading bg-chess">
                     <a v-if="guard != 'client'" @click="addSubtaskModal()">
-                    <button class="button info"><span class="mif-plus"></span> Add Subtask</button>
+                    <button class="button info"><span class="mif-plus"></span> Add Task</button>
                     </a>
                 </div>
                 <div class="text">
@@ -17,7 +17,7 @@
                         <table class="table border bordered striped ">
                             <thead class="">
                                 <tr>
-                                    <th>Subtask</th>
+                                    <th>Task</th>
                                     <th>Points</th>
                                     <th v-if="guard != 'client'">Priority</th>
                                     <th v-if="guard != 'client'">Video</th>
@@ -60,16 +60,16 @@
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center" style="font-size: 1.25rem">
                                         <span v-if="guard === 'web'" class="fg-lightBlue icon mif-pencil" @click="editSubtaskModal(subtask)" style="cursor:pointer;"
-                                        data-role="hint" data-hint-mode="2" :data-hint="`Edit Subtask:|${subtask.name}`" data-hint-position="top"
+                                        data-role="hint" data-hint-mode="2" data-hint="Edit|Task" data-hint-position="top"
                                         >
                                         </span>
                                         @include('subtask::edit-subtask-modal')
                                         <span v-if="guard === 'web'" class="fg-red icon fa fa-trash" @click="deleteSubtask(subtask)" style="cursor:pointer;"
-                                        data-role="hint" data-hint-mode="2" :data-hint="`Delete Subtask:|${subtask.name}`" data-hint-position="top"
+                                        data-role="hint" data-hint-mode="2" data-hint="Delete|Task" data-hint-position="top"
                                         >
                                         </span>
                                         <span class="tag" :class="{success: !subtask.done}" @click="toggleDone(subtask)" style="cursor:pointer;"
-                                        data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Subtask" data-hint-position="top">
+                                        data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Task" data-hint-position="top">
                                             <span class="icon mif-checkmark" v-if="!subtask.done">
                                             </span>
                                             <span class="fg-amber icon mif-blocked" v-else>

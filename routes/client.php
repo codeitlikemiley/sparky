@@ -17,15 +17,16 @@
   // Admin Dashboard Route
   Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'DashboardController@index')->name('client.dashboard');
-      Route::get('/projects/{projectID}', 'Project\ShowProject')->name('client.projects.view');
-      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
-      Route::get('/tasks/{task}', 'Task\ShowTask')->name('client.tasks.view');
-      Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('client.subtasks.index');
+      Route::get('/clients/{projectID}', 'Project\ShowProject')->name('client.projects.view');
+      Route::post('/clients/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
 
-      Route::get('/tasks/{task}/comments', 'Comment\ShowComment')->name('client.comments.show');
-      Route::post('/tasks/{task}/comments/add/{comment?}','Comment\AddComment')->name('client.comments.add');
-      Route::put('/tasks/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('client.comments.edit');
-      Route::delete('/tasks/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('client.comments.delete');
+      Route::get('/jobs/{task}', 'Task\ShowTask')->name('client.tasks.view');
+      Route::get('/jobs/{task}/tasks', 'Subtask\ShowSubtask')->name('client.subtasks.index');
+
+      Route::get('/jobs/{task}/comments', 'Comment\ShowComment')->name('client.comments.show');
+      Route::post('/jobs/{task}/comments/add/{comment?}','Comment\AddComment')->name('client.comments.add');
+      Route::put('/jobs/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('client.comments.edit');
+      Route::delete('/jobs/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('client.comments.delete');
   });
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('client.files.show');
 

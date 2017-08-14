@@ -1,7 +1,7 @@
 import FileUpload from 'vue-upload-component'
 
 Vue.component('projects', {
-    props: ['guard','clients', 'tenant','user', 'project', 'workers', 'campaignlist'],
+    props: ['guard','clientlist', 'tenant','user', 'project', 'workers', 'campaignlist'],
     // extra props we might need to add : files and forms
     data () {
         return {
@@ -58,7 +58,8 @@ Vue.component('projects', {
                 chunk: null,
                 key: null,
                 order: null
-            }
+            },
+            clients:[]
         }
     },
     mounted() {
@@ -88,7 +89,8 @@ Vue.component('projects', {
     methods: {
 
         whenReady() {
-            this.projectForm.project_name = this.project.name
+            this.clients = this.clientlist
+            this.projectForm.client_name = this.project.name
             this.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
         },
         
@@ -107,12 +109,12 @@ Vue.component('projects', {
             this.$modal.hide('add-task')
         },
         viewTask(id) {
-            let location = '/dashboard/tasks/'
+            let location = '/dashboard/jobs/'
             if(this.guard==='employee')
             {
-                location = '/team/dashboard/tasks/'
+                location = '/team/dashboard/jobs/'
             }else if(this.guard==='client'){
-                location = '/client/dashboard/tasks/'
+                location = '/client/dashboard/jobs/'
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}${id}`
             this.$popup({ message: 'Viewing Task', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -121,7 +123,7 @@ Vue.component('projects', {
         createTask() {
             var self = this
 
-            let location = `/dashboard/campaigns/${self.currentCampaignId}/tasks/create`
+            let location = `/dashboard/campaigns/${self.currentCampaignId}/jobs/create`
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
 
             if (this.guard === 'web') {
@@ -147,7 +149,7 @@ Vue.component('projects', {
         updateProject(id) {
             var self = this
             if (this.guard === 'web') {
-            axios.post('/dashboard/projects/' + id + '/edit', self.projectForm)
+            axios.post('/dashboard/clients/' + id + '/edit', self.projectForm)
             .then(function (response) {
                 self.$modal.hide('edit-project');
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -162,7 +164,7 @@ Vue.component('projects', {
         deleteProject() {
             var self = this
             if (this.guard === 'web') {
-                axios.post('/dashboard/projects/' + self.project.id + '/delete')
+                axios.post('/dashboard/clients/' + self.project.id + '/delete')
                     .then(function (response) {
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                         let location = '/dashboard'
@@ -192,7 +194,7 @@ Vue.component('projects', {
             var self = this
             if (this.guard === 'web') {
             
-            axios.post('/dashboard/projects/' + self.project.id + '/campaigns/create', self.campaignForm)
+            axios.post('/dashboard/clients/' + self.project.id + '/campaigns/create', self.campaignForm)
             .then(function (response) {
                 self.$modal.hide('add-campaign');
                 let campaign = response.data.campaign
@@ -339,7 +341,7 @@ Vue.component('projects', {
         
         // Soon To Be Added
         createForm(id) {
-            axios.post('dashboard/projects/'+id+'/forms/create', this.formBuilderForm)
+            axios.post('dashboard/clients/'+id+'/forms/create', this.formBuilderForm)
             .then(function (response) {
                 // we need to pass in the data
                 // We need to add forms as props
@@ -358,7 +360,7 @@ Vue.component('projects', {
         uploadFile(project) {
 
             this.fileForm = document.getElementById('file').files[0]
-            axios.post('dashboard/projects/' + project.id + '/files/upload', this.fileForm)
+            axios.post('dashboard/clients/' + project.id + '/files/upload', this.fileForm)
             .then(function (response) {
                 console.log('push this to files array')
             })

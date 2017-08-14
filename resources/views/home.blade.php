@@ -5,7 +5,7 @@
 @endpush
 @section('content')
 <vue-up></vue-up>
-<dashboard :guard="{{ json_encode($guard) }}" :tenant="tenant" :clients="clients" :user="user" :projects="projects" inline-template>
+<dashboard :guard="{{ json_encode($guard) }}" :tenant="tenant" :clientlist="clients" :user="user" :projects="projects" inline-template>
 <div>
     <div class="section-wrapper page-heading">
 
@@ -15,14 +15,14 @@
 
         <div class="place-right align-right" v-if="guard === 'web'" style="position:relative; top: 10px; right: 10px;">
             <a href="#!">
-                <button @click="show('add-project')" class="button info"><span class="mif-plus"></span> Add New Project</button>
+                <button @click="show('add-project')" class="button info"><span class="mif-plus"></span> Add New Client</button>
             </a>
         </div>
 
     </div>
 
     <div class="section-wrapper bg-grayLighter align-center" style="margin-top:100px;">
-        <h1 v-show="projects.length >0">Projects</h1>
+        <h1 v-show="projects.length >0">Clients</h1>
     </div>
         
     <div v-if="projects.length >0" class="section-wrapper animated fadeInRightBig margin-bottom-40">
@@ -62,7 +62,7 @@
         </div>
     </div>
     <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;" :class="styling">
-        <h1 class="fg-teal">Create Your First Project.</h1>
+        <h1 class="fg-teal">Create Your First Client.</h1>
     </div>
     @include('project::add-project-modal')
         

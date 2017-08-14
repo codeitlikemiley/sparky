@@ -13,7 +13,7 @@ class CreateTask extends BaseController
 
     protected $request;
 
-    protected $message = 'Task Created!';
+    protected $message = 'Job Created!';
 
     protected $code = '200';
 
@@ -33,7 +33,7 @@ class CreateTask extends BaseController
     {
         $validator = $this->sanitize();
         if($validator->fails()){
-        $this->message = 'Failed To Create Task';
+        $this->message = 'Failed To Create Job';
         $this->code = 400;
         return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
@@ -59,14 +59,14 @@ class CreateTask extends BaseController
 
     private function messages(){
         return [
-            'task_name.required' => 'Name Your Task',
-            'task_name.max' => 'Task Name Too Long',
-            'task_description.max' => 'Description Too Long',
-            'task_link.regex' => 'Enter Valid Url',
+            'task_name.required' => 'Name Your Job',
+            'task_name.max' => 'Job Name Too Long',
+            'task_description.max' => 'Job Description Too Long',
+            'task_link.regex' => 'Job Url is Invalid',
             'task_recurring.boolean' => 'Recurring Value Must Be Either True or False',
-            'task_interval.integer' => 'Task Interval Provided is Not Integer',
-            'task_interval.min' => 'Task Interval Lowest Value: 0',
-            'task_interval.max' => 'Task Interval Highest Value: 999'
+            'task_interval.integer' => 'Job Interval Provided is Not Integer',
+            'task_interval.min' => 'Job Interval Lowest Value: 0',
+            'task_interval.max' => 'Job Interval Highest Value: 999'
         ];
     }
 
@@ -93,12 +93,14 @@ class CreateTask extends BaseController
 
     private function addRecurring(){
         if(isset($this->request->task_recurring)){
-            $this->task->recurring = $this->request->task_recurring;
+                if($this->request->task_interval > 0){
+                    $this->task->recurring = $this->request->task_recurring;
+                }
             }
     }
 
     private function addInterval(){
-        if(isset($this->request->task_interval)){
+        if(isset($this->request->task_interval) && $this->request->task_interval > 0){
             $this->task->interval = $this->request->task_interval;
             }
     }
@@ -114,7 +116,7 @@ class CreateTask extends BaseController
     {
         $save = $campaign->tasks()->save($this->task);
         if(!$save){
-        $this->message = 'Task Creation Failed!';
+        $this->message = 'Job Creation Failed!';
         $this->code = 404;
         }
     }

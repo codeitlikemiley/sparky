@@ -9,7 +9,7 @@ class EditProject extends BaseController
 {
     protected $input;
 
-    protected $message = 'Project Edited!';
+    protected $message = 'Client Updated!';
 
     protected $code = '200';
 
@@ -22,7 +22,7 @@ class EditProject extends BaseController
     public function __invoke($project)
     {
         $this->validate($this->input, [
-        'project_name' => 'required|max:30',
+        'client_name' => 'required|max:30',
         ]);
         $this->editProject($project);
         return response()->json(['message' => $this->message, 'project' => $project], $this->code);
@@ -56,7 +56,7 @@ class EditProject extends BaseController
    private function AddName($project)
     {
         
-        $project->name = $this->input->project_name;
+        $project->name = $this->input->client_name;
     }
 
     private function AddClientIfAny($project)
@@ -76,7 +76,7 @@ class EditProject extends BaseController
     {
         $save = $project->save();
         if(!$save){
-        $this->message = 'Editing Project Failed';
+        $this->message = 'Updating Client Failed';
         $this->code = 404;
         }
     }

@@ -23,7 +23,7 @@ class DeleteSubtask extends BaseController
         if($this->allowed($subtask) || $this->createdBy($subtask))
         {
             $this->detachEmployees($subtask);
-            $this->delete($task);
+            $this->delete($subtask);
             return response()->json(['message' => 'Subtask: '.$subtask->name. ' Deleted!'], 200);
         }
         return response()->json(['error' => 'Actions Not Permitted!'], 401);

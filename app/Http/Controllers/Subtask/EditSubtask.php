@@ -10,7 +10,7 @@ class EditSubtask extends BaseController
 
     protected $request;
     
-    protected $message = 'Subtask Edited!';
+    protected $message = 'Task Edited!';
 
     protected $code = '200';
 
@@ -30,7 +30,7 @@ class EditSubtask extends BaseController
     {
         $validator = $this->sanitize();
         if($validator->fails()){
-        $this->message = 'Failed To Create Subtask';
+        $this->message = 'Failed To Edit Task';
         $this->code = 422;
         return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
@@ -66,16 +66,16 @@ class EditSubtask extends BaseController
 
     private function messages(){
         return [
-            'name.required' => 'Define Your Subtask',
-            'name.max' => 'Subtask Name Too Long Max(30)',
+            'name.required' => 'Define Your Task',
+            'name.max' => 'Task Name Too Long Max(30)',
             'points.required' => 'Points is Required',
             'points.min' => 'Minimum Point is 1',
             'done.boolean' => 'Done Should Be A Boolean Value',
             'link.regex' => 'Enter Valid Url',
-            'priority.in' => 'Subtask Value Is Not In Rage 1-5',
+            'priority.in' => 'Task Value Is Not In Rage 1-5',
             'due_date.date' => 'Should Be A Date',
             'due_date.after_or_equal' => 'Set Date Tomorrow Or Later',
-            'employees.array' => 'Subtask Team Should Be An Array'
+            'employees.array' => 'Task Team Should Be An Array'
         ];
     }
 
@@ -99,7 +99,7 @@ class EditSubtask extends BaseController
 
     private function addLink($subtask)
     {
-        if($this->request->input('link')){
+        if(!is_null($this->request->input('link'))){
             $subtask->link = $this->request->input('link');
         }
     }

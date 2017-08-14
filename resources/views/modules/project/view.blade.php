@@ -12,7 +12,7 @@
 
 @section('content')
 <vue-up></vue-up>
-<projects :guard="{{ json_encode($guard) }}" :clients="clients" :tenant="tenant" :user="user" :project="{{ json_encode($project) }}" :campaignlist="{{ json_encode($campaigns) }}" :workers="{{ json_encode($workers) }}" inline-template>
+<projects :guard="{{ json_encode($guard) }}" :clientlist="clients" :tenant="tenant" :user="user" :project="{{ json_encode($project) }}" :campaignlist="{{ json_encode($campaigns) }}" :workers="{{ json_encode($workers) }}" inline-template>
 <div class="section-wrapper animated fadeInRightBig">
     <div class="grid">
         <div class="row cells12">

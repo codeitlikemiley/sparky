@@ -3,7 +3,7 @@
     <div class="panel widget-box">
 
         <div class="heading" style="background-color:#4db6ac;">
-            <div class="title window-header align-center">Add Task <span @click="hideTask()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
+            <div class="title window-header align-center">Add Job <span @click="hideTask()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
         </div>
 
         <div class="content">
@@ -86,7 +86,7 @@
     </div>
     <div class="row" style="position: absolute;width: 100%;bottom:0;">
         <button type="submit" class="button fg-white" style="width:500px; margin-bottom:-1px;background-color:#558b2f;">
-            <strong>Create A New Task</strong>
+            <strong>Create A New Job</strong>
         </button>
     </div>
     </form>

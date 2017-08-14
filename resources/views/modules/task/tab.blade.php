@@ -1,4 +1,4 @@
-<div class="frame bg-white margin-bottom-90" id="tasks_tab">
+<div class="frame bg-white margin-bottom-90" id="tasks_tab" v-if="campaigns.length > 0" style="min-height:450px;">
     <div class="panel widget-box collapsible" data-role="panel">
         <div class="row cells2" v-for="(chunk, keyChunk) in campaignChunks(campaigns)"
             :key="keyChunk">
@@ -21,7 +21,7 @@
                         <div v-if="guard === 'web'" @click="editCampaignModal(campaign)" class="align-center bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
                             <span class="icon  fa fa-pencil-square-o" style="position: relative;top: 50% !important; transform: translateY(-50%) !important;"></span>
                         </div>
-                        <div v-if="guard === 'web'" @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Task" data-hint-position="top">
+                        <div v-if="guard === 'web'" @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Job" data-hint-position="top">
                             <span class="icon mif-plus" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
                         <div v-if="guard === 'web'" @click="deleteCampaign(campaign)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
@@ -38,7 +38,7 @@
                                         <span class="caption" :class="{ 'todo-completed': isTaskDone(task) }">@{{ task.name }}</span>
                                     </label>
                                     <div @click="viewTask(task.id)" class="place-right" style="cursor:pointer;">
-                                        <span data-role="hint" data-hint-mode="2" data-hint="View|Task" data-hint-position="left" class="icon fg-green fa fa-tasks vertical-align-middle" style="position: relative;padding-top:8px;font-size:2.5em;"></span>
+                                        <span data-role="hint" data-hint-mode="2" data-hint="View|Job" data-hint-position="left" class="icon fg-green fa fa-tasks vertical-align-middle" style="position: relative;padding-top:8px;font-size:2.5em;"></span>
                                         <span data-role="hint" data-hint-mode="2" data-hint="Progress|Done Points / Total Points" data-hint-position="left" class="math-box place-left" style="padding:11px;"><span class="strut" style="height: 2.008em; vertical-align: -0.686em;"></span><span class="vstack"><div style="top: 0.686em;color:#80cbc4;">@{{ task.total_points}}</div><div style="top: -0.23em;"><span class="frac-line"></span></div><div style="top: -0.677em;color: #e57373;">@{{ task.done_points }}</div><span class="baseline-fix"></span></span></span>
                                     </div>
                                 </li>
@@ -50,4 +50,13 @@
             </div>
         </div>
     </div>
+</div>
+<div class="frame bg-white" id="tasks_tab" v-else>
+        <div class="row" style="min-height:450px;">
+            <div class="cell align-center">
+                <h4 class="fg-cyan"><strong>You Have No Campaign Yet</strong></h4>
+                <h4 class="fg-cyan"><strong>Create Your First Campaign...</strong></h4>
+            </div>
+        </div>
+        
 </div>

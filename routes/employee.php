@@ -18,17 +18,19 @@
 
   Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'DashboardController@index')->name('employee.dashboard');
-      Route::post('/projects/create', 'Project\CreateProject')->name('employee.projects.create');
-      Route::get('/projects/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
-      Route::post('/projects/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
-      Route::get('/tasks/{task}', 'Task\ShowTask')->name('employee.tasks.view');
-      Route::get('/tasks/{task}/subtasks', 'Subtask\ShowSubtask')->name('employee.subtasks.index');
-      Route::put('/tasks/{task}/subtasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('employee.subtasks.toggle');
+      Route::post('/clients/create', 'Project\CreateProject')->name('employee.projects.create');
+      Route::get('/clients/{projectID}', 'Project\ShowProject')->name('employee.projects.view');
+      Route::post('/clients/{projectID}/progress', 'Project\CampaignsProgress')->name('employee.projects.progress');
+      
+      Route::get('/jobs/{task}', 'Task\ShowTask')->name('employee.tasks.view');
 
-      Route::get('/tasks/{task}/comments', 'Comment\ShowComment')->name('employee.comments.show');
-      Route::post('/tasks/{task}/comments/add/{comment?}','Comment\AddComment')->name('employee.comments.add');
-      Route::put('/tasks/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('employee.comments.edit');
-      Route::delete('/tasks/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('employee.comments.delete');
+      Route::get('/jobs/{task}/tasks', 'Subtask\ShowSubtask')->name('employee.subtasks.index');
+      Route::put('/jobs/{task}/tasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('employee.subtasks.toggle');
+
+      Route::get('/jobs/{task}/comments', 'Comment\ShowComment')->name('employee.comments.show');
+      Route::post('/jobs/{task}/comments/add/{comment?}','Comment\AddComment')->name('employee.comments.add');
+      Route::put('/jobs/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('employee.comments.edit');
+      Route::delete('/jobs/{task}/comments/delete/{comment}', 'Comment\DeleteComment')->name('employee.comments.delete');
   });
 
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('employee.files.show');

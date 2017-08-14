@@ -62,12 +62,6 @@ Vue.component('task', {
                 return web
             }
         },
-        show(name) {
-            this.$modal.show(name)
-        },
-        hide(name) {
-            this.$modal.hide(name)
-        },
         whenReady() {
             let self = this
             self.guardAllowed(self.fetchSubtasks())
@@ -77,9 +71,9 @@ Vue.component('task', {
         },
         fetchSubtasks(){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks`
-            self.endpoints.team = `/team/dashboard/tasks/${self.task.id}/subtasks`
-            self.endpoints.client = `/client/dashboard/tasks/${self.task.id}/subtasks`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks`
+            self.endpoints.team = `/team/dashboard/jobs/${self.task.id}/tasks`
+            self.endpoints.client = `/client/dashboard/jobs/${self.task.id}/tasks`
             axios.get(self.guardedLocation()).then((response) => {
                 self.subtasks = response.data.subtasks
             })
@@ -133,7 +127,7 @@ Vue.component('task', {
         },
         callApiUpdateTask(){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/edit`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/edit`
             axios.put(self.guardedLocation(),self.taskForm).then( (response) => { 
                 self.taskForm.resetStatus()
                 // self.updateLogs(response.data.log)
@@ -158,9 +152,9 @@ Vue.component('task', {
         },
         callApiDeleteTask(){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/delete`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/delete`
             axios.delete(self.guardedLocation()).then((response) => {
-                window.location.href = `/dashboard/projects/${self.project.id}`
+                window.location.href = `/dashboard/clients/${self.project.id}`
             })
         },
         toggleDone(subtask){
@@ -169,8 +163,8 @@ Vue.component('task', {
         },
         callApiToggleSubtask(subtask){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
-            self.endpoints.team = `/team/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/toggle`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/toggle`
+            self.endpoints.team = `/team/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/toggle`
             axios.put(self.guardedLocation()).then((response) => {
                 let index = _.findIndex(self.subtasks, { id: subtask.id })
                 self.$set(self.subtasks, index, response.data.subtask)
@@ -184,7 +178,10 @@ Vue.component('task', {
         },
         callApiDeleteSubtask(subtask){
             var self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/delete`
+            if(!self.subtaskForm.users[0]){
+                delete self.subtaskForm.users
+            }
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/delete`
             axios.delete(self.guardedLocation())
             .then(function (response) {
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -244,7 +241,7 @@ Vue.component('task', {
         },
         callApiAddSubTask(){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/add`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/add`
             axios.post(self.guardedLocation(), self.subtaskForm)
             .then((response) => {
                 self.subtaskForm.resetStatus()
@@ -285,7 +282,10 @@ Vue.component('task', {
         },
         callApiEditSubtask(subtask){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/subtasks/${subtask.id}/edit`
+            if(self.subtaskForm.link == null){
+                delete self.subtaskForm.link
+            }
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/edit`
             axios.put(self.guardedLocation(),self.subtaskForm)
             .then((response) => {
                 self.subtaskForm.resetStatus()
@@ -302,6 +302,22 @@ Vue.component('task', {
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
+        show(name) {
+            this.$modal.show(name);
+        },
+        hide(name) {
+            this.$modal.hide(name);
+        },
+        newUserInput(){
+            this.subtaskForm.users.push({
+                name: '',
+                email: '',
+                password: ''
+            })
+        },
+        removeUserInput(index){
+            this.subtaskForm.users.splice(index,1)
+        }
         
     },
     watch: {

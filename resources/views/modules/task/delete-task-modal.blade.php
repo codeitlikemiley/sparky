@@ -2,7 +2,7 @@
         <div class="panel widget-box">
     
             <div class="heading" style="background-color:#4db6ac;">
-                <div class="title window-header align-center">Confirm Task Deletion </div>
+                <div class="title window-header align-center">Confirm Job Deletion </div>
             </div>
     
             <div class="content">

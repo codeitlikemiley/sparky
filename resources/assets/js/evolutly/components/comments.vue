@@ -131,9 +131,9 @@ export default {
         },
         callApiGetComments(){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/comments`
-            self.endpoints.team = `/dashboard/tasks/${self.task.id}/comments`
-            self.endpoints.client = `/dashboard/tasks/${self.task.id}/comments`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/comments`
+            self.endpoints.team = `/dashboard/jobs/${self.task.id}/comments`
+            self.endpoints.client = `/dashboard/jobs/${self.task.id}/comments`
 
             axios.get(self.guardedLocation())
             .then((response) => {
@@ -150,9 +150,9 @@ export default {
         callApiAddComment(commentID = null){
             let self = this
 
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/comments/add/${commentID ? commentID : ''}`
-            self.endpoints.team =`/team/dashboard/tasks/${self.task.id}/comments/add/${commentID ? commentID : ''}`
-            self.endpoints.client = `/client/dashboard/tasks/${self.task.id}/comments/add/${commentID ? commentID : ''}`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/comments/add/${commentID ? commentID : ''}`
+            self.endpoints.team =`/team/dashboard/jobs/${self.task.id}/comments/add/${commentID ? commentID : ''}`
+            self.endpoints.client = `/client/dashboard/jobs/${self.task.id}/comments/add/${commentID ? commentID : ''}`
 
             axios.post(self.guardedLocation(),self.commentForm)
             .then((response) => {
@@ -190,9 +190,9 @@ export default {
         },
         callApiEditComment(comment){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/comments/edit/${comment.id}`
-            self.endpoints.team =`/team/dashboard/tasks/${self.task.id}/comments/edit/${comment.id}`
-            self.endpoints.client = `/client/dashboard/tasks/${self.task.id}/comments/edit/${comment.id}`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/comments/edit/${comment.id}`
+            self.endpoints.team =`/team/dashboard/jobs/${self.task.id}/comments/edit/${comment.id}`
+            self.endpoints.client = `/client/dashboard/jobs/${self.task.id}/comments/edit/${comment.id}`
 
             axios.post(self.guardedLocation(),self.commentForm)
             .then((response) => {
@@ -212,9 +212,9 @@ export default {
         },
         callApiDeleteComment(comment,commentIndex=null,childIndex=null){
             let self = this
-            self.endpoints.web = `/dashboard/tasks/${self.task.id}/comments/delete/${comment.id}`
-            self.endpoints.team =`/team/dashboard/tasks/${self.task.id}/comments/delete/${comment.id}`
-            self.endpoints.client = `/client/dashboard/tasks/${self.task.id}/comments/delete/${comment.id}`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/comments/delete/${comment.id}`
+            self.endpoints.team =`/team/dashboard/jobs/${self.task.id}/comments/delete/${comment.id}`
+            self.endpoints.client = `/client/dashboard/jobs/${self.task.id}/comments/delete/${comment.id}`
             axios.delete(self.guardedLocation())
             .then((response) => {
 

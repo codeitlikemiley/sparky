@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Subtask;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Subtask;
+use App\Employee;
 
 class CreateSubtask extends BaseController
 {
@@ -40,6 +41,7 @@ class CreateSubtask extends BaseController
             $this->createSubtask();
             $task->subtasks()->save($this->subtask);
             $this->assignEmployeesIfAny($task);
+            $this->addUsers($task);
             $this->subtask->employees;
             return response()->json(['message' => $this->message, 'subtask' => $this->subtask], $this->code);
         }
@@ -60,7 +62,11 @@ class CreateSubtask extends BaseController
         'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'priority' => 'in:1,2,3,4,5',
         'due_date' => 'date|after_or_equal:tomorrow',
-        'employees' => 'array'
+        'employees' => 'array',
+        'users.*.name' => 'sometimes|required|max:60',
+        'users.*.email' => 'sometimes|required|email',
+        'users.*.password' => 'sometimes|required|max:60',
+
         ];
     }
 
@@ -74,7 +80,19 @@ class CreateSubtask extends BaseController
             'priority.in' => 'Subtask Value Is Not In Rage 1-5',
             'due_date.date' => 'Should Be A Date',
             'due_date.after_or_equal' => 'Set Date Tomorrow Or Later',
-            'employees.array' => 'Subtask Team Should Be An Array'
+            'employees.array' => 'Subtask Team Should Be An Array',
+            'users.*.name' => [
+                'required' => 'Member Requires A Name',
+                'max'      => 'Name is Too Long Max(60)'
+            ],
+            'users.*.email' => [
+                'required' => 'Member Email is Required',
+                'email'      => 'Email Provided Is Invalid Format'
+            ],
+            'users.*.password' => [
+                'required' => 'Password is Required',
+                'max'      => 'Password Exceeded 60 Characters'
+            ],
         ];
     }
     private function createSubtask()
@@ -85,6 +103,7 @@ class CreateSubtask extends BaseController
         $this->addPoints();
         $this->addDueDate();
         $this->addName();
+        
     }
 
     private function addName()
@@ -134,6 +153,18 @@ class CreateSubtask extends BaseController
             }
             $this->subtask->employees()->sync($data);
         }
+    }
+
+    private function addUsers($task)
+    {
+        $project = $task->campaign->project;
+        $data = array();
+        foreach ($this->request->users as $user) {
+            $employee = Employee::forceCreate($user);
+            $this->getAuth()->employees()->save($employee);
+            $data[$employee->id] = ['project_id' => $project->id];
+        }
+        $this->subtask->employees()->attach($data);
     }
 
     private function hasAssignedEmployees()

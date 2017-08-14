@@ -1,17 +1,18 @@
 Vue.component('dashboard', {
-    props: ['guard', 'tenant', 'user', 'projects' ,'clients'],
+    props: ['guard', 'tenant', 'user', 'projects' ,'clientlist'],
     data () {
         return {
             campaigns: [],
-            projectForm: new EvolutlyForm({project_name: '', client_id: ''}),
+            projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
             styling: {
                 clearBottom: false,
-            }
+            },
+            clients: []
         }
     },
 
     mounted() {
-        
+        this.clients = this.clientlist
     },
     computed: {
         hasNoProject(){
@@ -22,6 +23,9 @@ Vue.component('dashboard', {
     },
 
     methods: { 
+        resetProjectForm(){
+            this.projectForm = new EvolutlyForm({client_name: '', client_id: '', newclient: false, user_name: '', user_email: '', user_password: ''})
+        },
         projectChunks(projects) {
             return _.chunk(projects, 3)
         },
@@ -36,20 +40,27 @@ Vue.component('dashboard', {
         createProject()
         {
             var  self = this
+            if(self.projectForm.newclient){
+                delete self.projectForm.client_id
+            }else {
+                delete self.projectForm.user_name
+                delete self.projectForm.user_email
+                delete self.projectForm.user_password
+            }
             if(self.guard === 'web')
             {
-                let location = '/dashboard/projects/create'
+                let location = '/dashboard/clients/create'
                 let url = `${window.location.protocol}//${Evolutly.domain}${location}`
                 axios.post(url, self.projectForm)
                 .then(function (response) {
                     self.$modal.hide('add-project');
                     self.projects.push(response.data.project)
-                    self.projectForm.project_name = ''
-                    self.projectForm.client_id = ''
+                    self.clients = response.data.clients
+                    self.resetProjectForm()
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 })
                 .catch(error => {
-                    console.log(error.response);
+                    self.projectForm.errors.set(error.response.data.errors)
                     self.$popup({ message: error.response.data.message })
                 })
             }else{
@@ -59,12 +70,12 @@ Vue.component('dashboard', {
         deleteProject(index,id) {
             var self = this
             if (self.guard === 'web') {
-                axios.post('/dashboard/projects/' + id + '/delete')
+                axios.post('/dashboard/clients/' + id + '/delete')
                     .then(function (response) {
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                         self.projects.splice(index, 1)
-                        self.projectForm.project_name = response.data.project
-                        self.projectForm.project_name = ''
+                        self.projectForm.client_name = response.data.project
+                        self.projectForm.client_name = ''
                     })
                     .catch(error => {
                         self.$popup({ message: _.first(error.response.data.campaign_name) })
@@ -74,22 +85,22 @@ Vue.component('dashboard', {
             }
         },
         viewProject(id) {
-            let location = '/dashboard/projects/'+id
+            let location = '/dashboard/clients/'+id
             if (this.guard === 'employee') {
-                location = '/team/dashboard/projects/'+id
+                location = '/team/dashboard/clients/'+id
             }else if(this.guard === 'client'){
-                location = '/client/dashboard/projects/'+id
+                location = '/client/dashboard/clients/'+id
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             console.log(url)
             window.location.href = url
         },
         viewProgress(id,name) {
-            let location = '/dashboard/projects/' + id + '/progress'
+            let location = '/dashboard/clients/' + id + '/progress'
             if (this.guard === 'employee') {
-                location = '/team/dashboard/projects/'+id + '/progress'
+                location = '/team/dashboard/clients/'+id + '/progress'
             }else if(this.guard === 'client'){
-                location = '/client/dashboard/projects/'+id + '/progress'
+                location = '/client/dashboard/clients/'+id + '/progress'
             }
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             this.campaigns = [];

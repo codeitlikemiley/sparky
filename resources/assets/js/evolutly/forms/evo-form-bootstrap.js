@@ -25,8 +25,12 @@
 
 Evolutly.forms = {
     projectForm: {
-        project_name: '',
-        client_id: ''
+        client_name: '', 
+        client_id: '', 
+        newclient: false, 
+        user_name: '', 
+        user_email: '', 
+        user_password: ''
     },
     campaignForm: {
         campaign_name: '',
@@ -49,7 +53,14 @@ Evolutly.forms = {
         link: '',
         due_date:  moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
         employees: '',
-        done: false
+        done: false,
+        newCollaborator: false,
+        users: [{
+            name: '',
+            email: '',
+            password: '',
+        }]
+
     },
     commentForm: {
         title: '',
@@ -77,6 +88,11 @@ Evolutly.forms = {
         to: '',
         from: '', // Should be Defaulted to The Current Auth User
         message: ''
+    },
+    registerForm:{
+        name: null,
+        email:null,
+        password: null,
     }
 
 
