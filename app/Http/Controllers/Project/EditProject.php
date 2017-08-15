@@ -93,7 +93,7 @@ class EditProject extends BaseController
                 'email' => $this->request->client['email'],
                 'password' => $this->request->client['password'],
             ]);
-            $this->getAuth()->clients()->save($client);
+            $this->getAuth()->managedClients()->save($client);
             $project->client_id = $client->id;
         }else{
             $this->AddClientIfAny($project);
