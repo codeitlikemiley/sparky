@@ -54,14 +54,14 @@ Evolutly.forms = {
         priority: 1,
         link: '',
         due_date:  moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
-        employees: '',
         done: false,
         newCollaborator: false,
         users: [{
             name: '',
             email: '',
             password: '',
-        }]
+        }],
+        assignedEmployees: null
 
     },
     commentForm: {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Subtask;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
+use App\Employee;
 
 class EditSubtask extends BaseController
 {
@@ -37,8 +38,10 @@ class EditSubtask extends BaseController
         if($this->allowed($task) || $this->createdBy($task)){
             $this->EditSubtask($subtask);
             $this->assignEmployeesIfAny($task,$subtask);
+            $this->addUsers($task,$subtask);
             $subtask->employees;
-            return response()->json(['message' => $this->message, 'subtask' => $subtask], $this->code);
+            $employees = $this->getAuth()->employees()->get()->toArray();
+            return response()->json(['message' => $this->message, 'subtask' => $subtask, 'employees' => $employees], $this->code);
         }
         $this->message = 'UnAthorized Request!';
         $this->code = 401;
@@ -60,7 +63,9 @@ class EditSubtask extends BaseController
         'priority' => 'in:1,2,3,4,5',
         'done' => 'boolean',
         'due_date' => 'date|after_or_equal:tomorrow',
-        'employees' => 'array'
+        'users.*.name' => 'sometimes|required|max:60',
+        'users.*.email' => 'sometimes|required|email',
+        'users.*.password' => 'sometimes|required|max:60',
         ];
     }
 
@@ -75,7 +80,12 @@ class EditSubtask extends BaseController
             'priority.in' => 'Task Value Is Not In Rage 1-5',
             'due_date.date' => 'Should Be A Date',
             'due_date.after_or_equal' => 'Set Date Tomorrow Or Later',
-            'employees.array' => 'Task Team Should Be An Array'
+            'users.*.name.required' => 'Member Requires A Name',
+            'users.*.name.max' => 'Name is Too Long Max(60)',
+            'users.*.email.required' => 'Member Email is Required',
+            'users.*.email.email' => 'Email Provided Is Invalid Format',
+            'users.*.password.required' => 'Password is Required',
+            'users.*.password.max' => 'Password Exceeded 60 Characters'
         ];
     }
 
@@ -130,6 +140,28 @@ class EditSubtask extends BaseController
         }
     }
 
+    private function addUsers($task,$subtask)
+    {
+        
+        if($this->request->newCollaborator){
+            $users_input = $this->request->users;
+            for ($i=0; $i < count($users_input); $i++) { 
+                if(!$users_input[$i]['name'] || !$users_input[$i]['email'] || !$users_input[$i]['password']){
+                    unset($users_input[$i]);
+                }
+            }
+            $project = $task->campaign->project;
+            $data = array();
+            foreach ($users_input as $user) {
+                $employee = Employee::forceCreate($user);
+                $this->getAuth()->employees()->save($employee);
+                $data[$employee->id] = ['project_id' => $project->id];
+            }
+            $subtask->employees()->attach($data);
+        }
+        
+    }
+
     private function assignEmployeesIfAny($task,$subtask)
     {
         $project = $task->campaign->project;
@@ -146,7 +178,7 @@ class EditSubtask extends BaseController
 
     private function hasAssignedEmployees()
     {
-        $employees = $this->request->employees;
+        $employees = $this->request->assignedEmployees;
         $employee_ids = array();
         $selected = array();
         if($employees){

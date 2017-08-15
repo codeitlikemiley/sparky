@@ -38,11 +38,14 @@ class UpdateRatings extends BaseController
         if($this->allowed($subtask) || $this->createdBy($subtask))
         {
             $subtask->priority = $this->request->subtask_priority;
+            
             $save = $subtask->save();
+            
             if(!$save){
             $this->message = 'Updating Ratings Failed!';
             $this->code = 400;
             }
+            $subtask->employees;
             return response()->json(['message' => $this->message,'subtask' => $subtask], $this->code);
         }
         

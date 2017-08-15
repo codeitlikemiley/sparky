@@ -21,7 +21,8 @@ Vue.component('task', {
             },
             rating: 1,
             priority: 1,
-            currentSubtask: null
+            currentSubtask: null,
+            options: []
 
 
         }
@@ -65,6 +66,7 @@ Vue.component('task', {
         whenReady() {
             let self = this
             self.guardAllowed(self.fetchSubtasks())
+            this.options = this.employees
             self.setInitialTask()
             self.setInitialTaskPoints()
             self.setInitialLogs()
@@ -241,12 +243,16 @@ Vue.component('task', {
         },
         callApiAddSubTask(){
             let self = this
+            if(self.subtaskForm.newCollaborator == false){
+                delete self.subtaskForm.users
+            }
             self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/add`
             axios.post(self.guardedLocation(), self.subtaskForm)
             .then((response) => {
                 self.subtaskForm.resetStatus()
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.subtasks.push(response.data.subtask)
+                self.options = response.data.employees
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 self.hide('add-subtask-modal')
             })
@@ -266,9 +272,18 @@ Vue.component('task', {
             self.subtaskForm.link = subtask.link
             self.subtaskForm.points = subtask.points 
             self.subtaskForm.priority = subtask.priority
-            self.subtaskForm.employees = subtask.employees
+            self.subtaskForm.done = subtask.done
             self.subtaskForm.due_date = moment(subtask.due_date).format('YYYY-MM-DD')
             self.subtaskForm.done = subtask.done
+            self.subtaskForm.newCollaborator = false
+            self.subtaskForm.assignedEmployees = subtask.employees
+            self.subtaskForm.users = [{
+                name: '',
+                email: '',
+                password: '',
+            }]
+            
+            
         },
         closeEditSubtask(subtask){
             let self = this 
@@ -285,12 +300,16 @@ Vue.component('task', {
             if(self.subtaskForm.link == null){
                 delete self.subtaskForm.link
             }
+            if(self.subtaskForm.newCollaborator == false){
+                delete self.subtaskForm.users
+            }
             self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/edit`
             axios.put(self.guardedLocation(),self.subtaskForm)
             .then((response) => {
                 self.subtaskForm.resetStatus()
                 let index = _.findIndex(self.subtasks, { id: subtask.id })
                 self.$set(self.subtasks, index, response.data.subtask)
+                self.options = response.data.employees
                 self.hide(`edit-subtask-modal-${subtask.id}`)
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })

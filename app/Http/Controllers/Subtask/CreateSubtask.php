@@ -43,7 +43,8 @@ class CreateSubtask extends BaseController
             $this->assignEmployeesIfAny($task);
             $this->addUsers($task);
             $this->subtask->employees;
-            return response()->json(['message' => $this->message, 'subtask' => $this->subtask], $this->code);
+            $employees = $this->getAuth()->employees()->get()->toArray();
+            return response()->json(['message' => $this->message, 'subtask' => $this->subtask,'employees' => $employees], $this->code);
         }
         $this->code = 401;
         $this->message = 'UnAuthorized Request';
@@ -62,7 +63,6 @@ class CreateSubtask extends BaseController
         'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'priority' => 'in:1,2,3,4,5',
         'due_date' => 'date|after_or_equal:tomorrow',
-        'employees' => 'array',
         'users.*.name' => 'sometimes|required|max:60',
         'users.*.email' => 'sometimes|required|email',
         'users.*.password' => 'sometimes|required|max:60',
@@ -72,27 +72,21 @@ class CreateSubtask extends BaseController
 
     private function messages(){
         return [
-            'name.required' => 'Define Your Subtask',
-            'name.max' => 'Subtask Name Too Long Max(30)',
+            'name.required' => 'Define Your Task',
+            'name.max' => 'Task Name Too Long Max(30)',
             'points.required' => 'Points is Required',
             'points.min' => 'Minimum Point is 1',
             'link.regex' => 'Enter Valid Url',
-            'priority.in' => 'Subtask Value Is Not In Rage 1-5',
+            'priority.in' => 'Task Value Is Not In Rage 1-5',
             'due_date.date' => 'Should Be A Date',
             'due_date.after_or_equal' => 'Set Date Tomorrow Or Later',
-            'employees.array' => 'Subtask Team Should Be An Array',
-            'users.*.name' => [
-                'required' => 'Member Requires A Name',
-                'max'      => 'Name is Too Long Max(60)'
-            ],
-            'users.*.email' => [
-                'required' => 'Member Email is Required',
-                'email'      => 'Email Provided Is Invalid Format'
-            ],
-            'users.*.password' => [
-                'required' => 'Password is Required',
-                'max'      => 'Password Exceeded 60 Characters'
-            ],
+            'users.*.name.required' => 'Member Requires A Name',
+            'users.*.name.max' => 'Name is Too Long Max(60)',
+            'users.*.email.required' => 'Member Email is Required',
+            'users.*.email.email' => 'Email Provided Is Invalid Format',
+            'users.*.password.required' => 'Password is Required',
+            'users.*.password.max' => 'Password Exceeded 60 Characters'
+
         ];
     }
     private function createSubtask()
@@ -157,19 +151,29 @@ class CreateSubtask extends BaseController
 
     private function addUsers($task)
     {
-        $project = $task->campaign->project;
-        $data = array();
-        foreach ($this->request->users as $user) {
-            $employee = Employee::forceCreate($user);
-            $this->getAuth()->employees()->save($employee);
-            $data[$employee->id] = ['project_id' => $project->id];
+        
+        if($this->request->newCollaborator){
+            $users_input = $this->request->users;
+            for ($i=0; $i < count($users_input); $i++) { 
+                if(!$users_input[$i]['name'] || !$users_input[$i]['email'] || !$users_input[$i]['password']){
+                    unset($users_input[$i]);
+                }
+            }
+            $project = $task->campaign->project;
+            $data = array();
+            foreach ($users_input as $user) {
+                $employee = Employee::forceCreate($user);
+                $this->getAuth()->employees()->save($employee);
+                $data[$employee->id] = ['project_id' => $project->id];
+            }
+            $this->subtask->employees()->attach($data);
         }
-        $this->subtask->employees()->attach($data);
+        
     }
 
     private function hasAssignedEmployees()
     {
-        $employees = $this->request->employees;
+        $employees = $this->request->assignedEmployees;
         $employee_ids = array();
         $selected = array();
         if($employees){

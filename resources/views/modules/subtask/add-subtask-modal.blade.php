@@ -61,7 +61,7 @@
                                         </div>
                                          <star-rating style="position:absolute;right:0;top:285px;margin-right:-20px;" :padding="40" @rating-selected="setPriority" v-model.number="priority" :star-size="30" :show-rating="false"></star-rating>
                                 </div>
-                                <v-select style="margin-bottom:50px;" max-height="160px" class="full-size" multiple v-if="employees.length > 0" v-model="subtaskForm.employees" label="name" :options="employees"  placeholder="Assigned Existing Team Member"></v-select>
+                                <v-select style="margin-bottom:50px;" max-height="160px" class="full-size" multiple v-if="options.length > 0" v-model="subtaskForm.assignedEmployees" label="name" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
                                 <div  class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <label class="switch pull-left">
@@ -81,27 +81,27 @@
                                         <div class="input-control text full-size">
                                             <span class="prepend-icon mif-user fg-blue"></span>
                                             <input type="text" placeholder="Member Name" v-model="user.name">
-                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users[${userKey}].name`)">
-                                            @{{ subtaskForm.errors.get(`users[${userKey}].name`) }}
-                                        </span>
+                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users.${userKey}.name`)">
+                                            @{{ subtaskForm.errors.get(`users.${userKey}.name`) }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:5px;">
                                         <div class="input-control text full-size">
                                             <span class="prepend-icon mif-mail fg-blue"></span>
                                             <input type="text" placeholder="Member Email" v-model="user.email">
-                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users[${userKey}].email`)">
-                                            @{{ subtaskForm.errors.get(`users[${userKey}].email`) }}
-                                        </span>
+                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users.${userKey}.email`)">
+                                            @{{ subtaskForm.errors.get(`users.${userKey}.email`) }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:5px;">
                                         <div class="input-control text full-size">
                                             <span class="prepend-icon mif-spell-check fg-blue"></span>
                                             <input type="text" placeholder="Member Password" v-model="user.password">
-                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users[${userKey}].password`)">
-                                            @{{ subtaskForm.errors.get(`users[${userKey}].password`) }}
-                                        </span>
+                                            <span class="fg-red" v-show="subtaskForm.errors.has(`users.${userKey}.password`)">
+                                            @{{ subtaskForm.errors.get(`users.${userKey}.password`) }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
