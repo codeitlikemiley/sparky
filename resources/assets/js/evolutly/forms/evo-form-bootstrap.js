@@ -68,7 +68,7 @@ Evolutly.forms = {
         title: '',
         body: ''
     },
-    formBuilderForm: {
+    formBuilderForm: { // Not Yet Used
         title: '',
         body: ''
     },
@@ -79,9 +79,6 @@ Evolutly.forms = {
         size: '',
         type: '',
         webkitRelativePath: ''
-    },
-    assignEmployeeForm: {
-        user_ids: []
     },
     ratingForm: {
         subtask_priority: 1

@@ -45688,7 +45688,6 @@ Vue.component('task', {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
-            assignEmployeeForm: new EvolutlyForm(Evolutly.forms.assignEmployeeForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
             subtasks: [],
             progress: '0%',
@@ -46306,7 +46305,7 @@ Evolutly.forms = (_Evolutly$forms = {
         title: '',
         body: ''
     },
-    formBuilderForm: {
+    formBuilderForm: { // Not Yet Used
         title: '',
         body: ''
     },
@@ -46317,9 +46316,6 @@ Evolutly.forms = (_Evolutly$forms = {
         size: '',
         type: '',
         webkitRelativePath: ''
-    },
-    assignEmployeeForm: {
-        user_ids: []
     },
     ratingForm: {
         subtask_priority: 1
