@@ -44935,8 +44935,19 @@ Vue.component('dashboard', {
                     self.projects.push(response.data.project);
                     self.clients = response.data.clients;
                     self.resetProjectForm();
+                    self.projectForm.client = {
+                        name: '',
+                        email: '',
+                        password: ''
+                    };
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
+                    if (!self.projectForm.client_id) {
+                        self.projectForm.client_id = '';
+                    }
+                    if (!self.projectForm.client) {
+                        self.projectForm.client = '';
+                    }
                     self.projectForm.errors.set(error.response.data.errors);
                     self.$popup({ message: error.response.data.message });
                 });
