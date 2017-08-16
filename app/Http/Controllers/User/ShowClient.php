@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Client;
+use App\Project;
 
 class ShowClient extends BaseController
 {
@@ -25,7 +26,9 @@ class ShowClient extends BaseController
      */
     public function __invoke()
     {
-        $clients = Client::with('projects')->where('tenant_id',auth()->user()->id)->get();
-        return view('tenant::client',['clients' => $clients]);
+        $tenant = $this->getTenant()->id;
+        $projectlist = Project::where('tenant_id',$tenant)->where('client_id', null)->get();
+        $clientlist = Client::with('projects')->where('tenant_id',$tenant)->get();
+        return view('tenant::client',['clientlist' => $clientlist,'projectlist' => $projectlist]);
     }
 }

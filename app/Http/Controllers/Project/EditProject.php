@@ -52,6 +52,7 @@ class EditProject extends BaseController
             'client.name' => 'sometimes|required|max:60',
             'client.email' => 'sometimes|required|email',
             'client.password' => 'sometimes|required|max:60',
+            'website' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         ];
         
     }
@@ -66,7 +67,8 @@ class EditProject extends BaseController
             'client.email.required' => 'Email is Required',
             'client.email.email' => 'Email is Invalid Format',
             'client.password.required' => 'Password Required',
-            'client.password.max' => 'Password Too Long (60) Max'
+            'client.password.max' => 'Password Too Long (60) Max',
+            'website.regex' => 'Enter Valid Url',
         ];
     }
 
@@ -90,6 +92,7 @@ class EditProject extends BaseController
         if($this->request->newclient === true){
             $client = Client::forceCreate([
                 'name' => $this->request->client['name'],
+                'website' => $this->request->website,
                 'email' => $this->request->client['email'],
                 'password' => $this->request->client['password'],
             ]);
@@ -110,6 +113,8 @@ class EditProject extends BaseController
             {
             $project->client_id = $client_id;
             }
+        }else{
+            $project->client_id = null;
         }
     }
 

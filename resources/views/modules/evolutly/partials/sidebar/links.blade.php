@@ -12,7 +12,7 @@
         <li class="{{ (Request::segment(2)=='dashboard'?'active':'') }}">
             <a href="{{ route('employee.dashboard') }}">
                 <span class="mif-chevron-right icon"></span>
-                <span class="title">Project</span>
+                <span class="title">Clients</span>
                 <span class="counter">Manage Projects</span>
 			</a>
         </li>
@@ -124,7 +124,7 @@
         <li class="{{ (Request::segment(1)=='dashboard'?'active':'') }}">
             <a href="/dashboard">
                 <span class="mif-chevron-right icon"></span>
-                <span class="title">Project</span>
+                <span class="title">Clients</span>
                 <span class="counter">Manage Projects</span>
 			</a>
         </li>
@@ -155,21 +155,21 @@
             <span class="title fg-amber">User Management</span>
             <span class="counter">Manage Users</span>
     </a>
-    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['employee','clients'])?'display:block':'') }}">
+    <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['teammates','clients'])?'display:block':'') }}">
         <!-- Employee -->
-        <li class="{{ (Request::segment(2)=='employees'?'active':'') }}">
-            <a href="{{url('/users/employees')}}" class="">
+        <li class="{{ (Request::segment(2)=='teammates'?'active':'') }}">
+            <a href="{{url('/users/teammates')}}" class="">
                     <span class="mif-chevron-right icon"></span>
-                    <span class="title">Team Member</span>
-                    <span class="counter">Manage Member</span>
+                    <span class="title">Teammates</span>
+                    <span class="counter">Manage Teams Account</span>
                 </a>
         </li>
         <!-- Client -->
         <li class="{{ (Request::segment(2)=='clients'?'active':'') }}">
             <a href="{{url('/users/clients')}}" class="">
                     <span class="mif-chevron-right icon"></span>
-                    <span class="title">Client</span>
-                    <span class="counter">Manage Client</span>
+                    <span class="title">Clients</span>
+                    <span class="counter">Manage Clients Account</span>
             </a>
         </li>
     </ul>

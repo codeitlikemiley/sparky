@@ -52,7 +52,7 @@
                                 @{{ registerForm.errors.get('password') }}
                                 </span>
                                 </div>
-                            </div>
+                        </div>
                     </div>
             </div>
     

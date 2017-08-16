@@ -43,7 +43,7 @@ class AddEmployee extends BaseController
         }
         $employee = Employee::forceCreate($this->request->only(['name','email', 'password']));
         $employee->projects;
-        $this->getTenant()->employees()->save($employee); // Morph
+        $this->getAuth()->employees()->save($employee); // Morph
         $this->getTenant()->managedEmployees()->save($employee); // tenant_id
         return response()->json(['message' => $this->message, 'employee' => $employee], $this->code);
         
@@ -58,7 +58,7 @@ class AddEmployee extends BaseController
         return 
         [
         'name' => 'required|max:30',
-        'email' => 'required|email',
+        'email' => 'required|email|unique:employees,email',
         'password' => 'required|min:6|max:60',
         ];
     }
@@ -69,6 +69,7 @@ class AddEmployee extends BaseController
             'name.max' => 'Name is Too Long (60) Max',
             'email.required' => 'Email is Required',
             'email.email' => 'Email Format Is Invalid',
+            'email.unique' => 'Email Is Already taken',
             'password.min' => 'Password Needs to Be At Least (6) Characters',
             'password.max' => 'Password Exceeds 60 Characters',
             'password.required' => 'Password is Required',

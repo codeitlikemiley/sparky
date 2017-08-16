@@ -1,7 +1,9 @@
 import StarRating from 'vue-star-rating'
 import comments from './comments.vue'
+import guards from './../../mixins/guard'
 
 Vue.component('task', {
+    mixins: [guards],
     props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
     data () {
         return {
@@ -13,16 +15,10 @@ Vue.component('task', {
             total: 0,
             done: 0,
             logs: null,
-            endpoints: {
-                web: null,
-                team: null,
-                client: null,
-            },
             rating: 1,
             priority: 1,
             currentSubtask: null,
             options: []
-
 
         }
     },
@@ -33,35 +29,6 @@ Vue.component('task', {
         
     },
     methods: {
-        // Overried pass array of valid guard from backend
-        // By Default Uses This Array
-        // Passed A Callback Function To Execute For Example Api Calls
-        guardAllowed(guards = ['web', 'employee', 'client'],callback){
-            let self = this
-            if(_.includes(guards, self.guard)){
-                callback
-                self.resetEndpoints()
-            }else{
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
-        },
-        resetEndpoints(){
-            this.endpoints = {
-                web: null,
-                team: null,
-                client: null,
-            }
-        },
-        guardedLocation({web,team,client} = this.endpoints){
-            let self = this
-            if(self.guard === 'client'){
-                return client
-            }else if(self.guard === 'employee'){
-                return team
-            }else{
-                return web
-            }
-        },
         whenReady() {
             let self = this
             self.guardAllowed(self.fetchSubtasks())
@@ -190,6 +157,13 @@ Vue.component('task', {
                 self.$delete(self.subtasks, index)
             })
             .catch(error => {
+                if(!self.subtaskForm.users){
+                    self.subtaskForm.users = [{
+                        name: '',
+                        email: '',
+                        password: '',
+                    }]
+                }
                 self.$popup({ message: _.first(error.response.data.message) })
             })
         },
@@ -256,6 +230,13 @@ Vue.component('task', {
                 self.hide('add-subtask-modal')
             })
             .catch((error) => {
+                if(!self.subtaskForm.users){
+                    self.subtaskForm.users = [{
+                        name: '',
+                        email: '',
+                        password: '',
+                    }]
+                }
                 self.subtaskForm.errors.set(error.response.data.errors)
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
@@ -314,6 +295,16 @@ Vue.component('task', {
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
+                if(!self.subtaskForm.link){
+                    self.subtaskForm.link = ''
+                }
+                if(!self.subtaskForm.users){
+                    [{
+                        name: '',
+                        email: '',
+                        password: '',
+                    }]
+                }
                 if(error.response.data.errors){
                 self.subtaskForm.errors.set(error.response.data.errors)
                 }

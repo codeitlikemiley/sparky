@@ -14,8 +14,6 @@ Vue.component('employee-management', {
             current_project_index: null,
             current_subtask: null,
             current_subtask_index: null,
-            rating: 1,
-            priority: 1,
         }
     },
     mounted() {
@@ -65,7 +63,7 @@ Vue.component('employee-management', {
         },
         callAddEmployeeApi(){
             let self = this
-            self.endpoints.web = '/users/employees'
+            self.endpoints.web = '/users/teammates'
             axios.post(self.guardedLocation(), self.registerForm)
              .then((response) => {
                  self.registerForm.resetStatus()
@@ -99,7 +97,7 @@ Vue.component('employee-management', {
                 delete self.registerForm.password
                 delete self.registerForm.password_confirmation
             }
-            self.endpoints.web = `/users/employees/${self.current_employee.id}/edit`
+            self.endpoints.web = `/users/teammates/${self.current_employee.id}/edit`
              axios.put(self.guardedLocation(), self.registerForm)
              .then((response) => {
                 self.registerForm.resetStatus()
@@ -108,6 +106,12 @@ Vue.component('employee-management', {
                  self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
              })
              .catch((error) => {
+                if(!self.registerForm.password){
+                    self.registerForm.password = ''
+                }
+                if(!self.registerForm.password_confirmation){
+                    self.registerForm.password_confirmation = ''
+                }
                  self.registerForm.errors.set(error.response.data.errors)
                  self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
              })
@@ -127,7 +131,7 @@ Vue.component('employee-management', {
         },
         deleteEmployee(){
             let self = this
-            self.endpoints.web = `/users/employees/${self.current_employee.id}/delete`
+            self.endpoints.web = `/users/teammates/${self.current_employee.id}/delete`
             axios.delete(self.guardedLocation())
             .then(function (response) {
                 self.employees.splice(self.current_index,1)
@@ -174,7 +178,7 @@ Vue.component('employee-management', {
         },
         unassigneSubtask(employee,employeeKey,project,projectKey,subtask,subtaskKey){
             let self = this
-            self.endpoints.web = `/users/employees/${employee.id}/clients/${project.id}/subtasks/${subtask.id}/detach`
+            self.endpoints.web = `/users/teammates/${employee.id}/clients/${project.id}/subtasks/${subtask.id}/detach`
             self.current_employee = employee
             self.current_index = employeeKey
             self.current_project = project
@@ -205,7 +209,7 @@ Vue.component('employee-management', {
             self.current_index = employeeKey
             self.current_project = project
             self.current_project_index = projectKey
-            self.endpoints.web = `/users/employees/${employee.id}/clients/${project.id}/detach`
+            self.endpoints.web = `/users/teammates/${employee.id}/clients/${project.id}/detach`
 
             axios.delete(self.guardedLocation())
             .then( (response) => {

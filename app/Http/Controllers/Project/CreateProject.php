@@ -53,6 +53,7 @@ class CreateProject extends BaseController
             'client.name' => 'sometimes|required|max:60',
             'client.email' => 'sometimes|required|email',
             'client.password' => 'sometimes|required|max:60',
+            'website' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         ];
         
     }
@@ -67,7 +68,8 @@ class CreateProject extends BaseController
             'client.email.required' => 'Email is Required',
             'client.email.email' => 'Email is Invalid Format',
             'client.password.required' => 'Password Required',
-            'client.password.max' => 'Password Too Long (60) Max'
+            'client.password.max' => 'Password Too Long (60) Max',
+            'website.regex' => 'Enter Valid Url',
         ];
     }
 
@@ -97,6 +99,7 @@ class CreateProject extends BaseController
     {
         $this->client->name = $this->request->client['name'];
         $this->client->email = $this->request->client['email'];
+        $this->client->website = $this->request->website;
         $this->client->password = $this->request->client['password'];
         $this->client->tenant_id = $this->getAuth()->id;
         $this->client->save();

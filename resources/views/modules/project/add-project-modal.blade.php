@@ -5,7 +5,7 @@
     }
 </style>
 @endpush
-<modal name="add-project" :width="500" :height="450" draggable=".window-header">
+<modal name="add-project" :width="500" :height="500" draggable=".window-header">
     <div class="panel widget-box">
         <div class="heading">
             <div class="title window-header">Create New Client <span @click="hide('add-project')" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
@@ -35,6 +35,15 @@
                                 <input type="text" placeholder="Client Name" v-model="projectForm.client.name">
                                 <span class="fg-red" v-show="projectForm.errors.has('client.name')">
                                 @{{ projectForm.errors.get('client.name') }}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:5px;" v-if="projectForm.newclient">
+                            <div class="input-control text full-size">
+                                <span class="prepend-icon mif-link fg-blue"></span>
+                                <input type="text" placeholder="Client Website" v-model="projectForm.website">
+                                <span class="fg-red" v-show="projectForm.errors.has('website')">
+                                @{{ projectForm.errors.get('website') }}
                             </span>
                             </div>
                         </div>

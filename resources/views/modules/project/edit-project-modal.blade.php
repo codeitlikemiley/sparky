@@ -15,10 +15,15 @@
                     @if($guard === 'web')
                     <div class="input-control text full-size">
                     <form @submit.prevent="updateProject(project.id)" role="form" class="padding10">
-                        {{ csrf_field() }}
-                        <input type="text" placeholder="Describe Your Client?" v-model="projectForm.client_name">
-                        </br>
-                        </br>
+                        <div class="row" style="padding:5px;">
+                            <div class="input-control text full-size">
+                                <span class="prepend-icon mif-folder-special fg-yellow"></span>
+                                <input type="text" placeholder="Describe Your Client?" v-model="projectForm.client_name">
+                                <span class="fg-red" v-show="projectForm.errors.has('client_name')">
+                                @{{ projectForm.errors.get('client_name') }}
+                            </span>
+                            </div>
+                        </div>
                         <div  class="row" style="padding:5px;margin-top:15px;">
                             <div class="input-control text full-size">
                                 <label class="switch">
@@ -35,6 +40,15 @@
                                 <input type="text" placeholder="Client Name" v-model="projectForm.client.name">
                                 <span class="fg-red" v-show="projectForm.errors.has('client.name')">
                                 @{{ projectForm.errors.get('client.name') }}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:5px;" v-if="projectForm.newclient">
+                            <div class="input-control text full-size">
+                                <span class="prepend-icon mif-link fg-blue"></span>
+                                <input type="text" placeholder="Client Website" v-model="projectForm.website">
+                                <span class="fg-red" v-show="projectForm.errors.has('website')">
+                                @{{ projectForm.errors.get('website') }}
                             </span>
                             </div>
                         </div>
@@ -58,7 +72,7 @@
                         </div>
                         <v-select max-height="200px" v-if="clients.length > 0 && projectForm.newclient == false" v-model="projectForm.client_id" label="name" :options="clients"  placeholder="Pick an Existing Client"></v-select>
                         <!-- we need to easily create a client without an email or had a default email -->
-                        <button type="submit" class="button info place-right" style="position:absolute;top:64px;right: 12px; height:36px;">
+                        <button type="submit" class="button info place-right" style="position:absolute;top:24px;right: 17px; height:43px;">
                                 <span class="icon mif-keyboard-return"> Update</span>
                         </button>
                     </form>

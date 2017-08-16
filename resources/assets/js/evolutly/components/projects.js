@@ -95,6 +95,7 @@ Vue.component('projects', {
         },
         resetProjectForm(){
             this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm)
+            
         },
         isTaskDone(task){
             return task.done == 1;
@@ -166,7 +167,18 @@ Vue.component('projects', {
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
-                self.$popup({ message: _.first(error.response.data.project_name) })
+                self.projectForm.errors.set(error.response.data.errors)
+                if(!self.projectForm.client_id){
+                    self.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
+                }
+                if(!self.projectForm.client){
+                    this.projectForm.client = {
+                        name: '', 
+                        email: '', 
+                        password: ''
+                    }
+                }
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
             })
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' })

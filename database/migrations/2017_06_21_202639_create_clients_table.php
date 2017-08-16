@@ -19,6 +19,7 @@ class CreateClientsTable extends Migration
             $table->nullableMorphs('clientable');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('website')->nullable();
             $table->string('password', 60);
             $table->text('photo_url')->nullable();
             $table->rememberToken();

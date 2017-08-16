@@ -49,7 +49,7 @@
                                                         <td>@{{ employee.name }}</td>
                                                         <td class="align-left">@{{ employee.email }}</td>
                                                         <td class="align-left">
-                                                            <ul  class="tag" :class="{alert: !project.client_id, success: project.client_id}" v-for="(project,projectKey,projectIndex) in employee.assignedprojects" :key="projectKey" :index="employeeIndex" style="cursor:pointer;list-style-type: none;">
+                                                            <ul  class="tag" :class="{alert: !project.client_id, success: project.client_id}" v-for="(project,projectKey,projectIndex) in employee.assignedprojects" :key="projectKey" :index="projectIndex" style="cursor:pointer;list-style-type: none;">
                                                                 <li @click="viewAssignedSubtask(project)"><span class="icon mif-tag"></span>  @{{ project.name }}</li>
                                                                 @include('employee::project-subtasks-modal')
                                                             </ul>

@@ -43,13 +43,20 @@ Route::group(['prefix' => '/dashboard'], function () {
   });
 
   Route::group(['prefix' => '/users'], function () {
-      Route::get('/employees', 'User\ShowEmployee')->name('tenant.employees.index');
-      Route::post('/employees', 'User\AddEmployee')->name('tenant.employees.add');
-      Route::put('/employees/{employee}/edit', 'User\EditEmployee')->name('tenant.employees.edit');
-      Route::delete('/employees/{employee}/delete', 'User\DeleteEmployee')->name('tenant.employees.edit');
-      Route::delete('/employees/{employee}/clients/{projectID}/subtasks/{subtask}/detach', 'User\UnassignedSubtask')->name('tenant.employees.unassigned_subtask');
-      Route::delete('/employees/{employee}/clients/{projectID}/detach', 'User\RemoveAllSubtasks')->name('tenant.employees.remove_all_subtasks');
+      Route::get('/teammates', 'User\ShowEmployee')->name('tenant.employees.index');
+      Route::post('/teammates', 'User\AddEmployee')->name('tenant.employees.add');
+      Route::put('/teammates/{employee}/edit', 'User\EditEmployee')->name('tenant.employees.edit');
+      Route::delete('/teammates/{employee}/delete', 'User\DeleteEmployee')->name('tenant.employees.edit');
+      Route::delete('/teammates/{employee}/clients/{projectID}/subtasks/{subtask}/detach', 'User\UnassignedSubtask')->name('tenant.employees.unassigned_subtask');
+      Route::delete('/teammates/{employee}/clients/{projectID}/detach', 'User\RemoveAllSubtasks')->name('tenant.employees.remove_all_subtasks');
+
       Route::get('/clients', 'User\ShowClient')->name('tenant.clients.index');
+      Route::post('/clients', 'User\AddClient')->name('tenant.clients.add');
+      Route::put('/clients/{client}/edit', 'User\EditClient')->name('tenant.clients.edit');
+      Route::delete('/clients/{client}/delete', 'User\DeleteClient')->name('tenant.clients.delete');
+    //   Route::put('/clients/{client}/attach', 'User\AssignProject')->name('tenant.clients.assign_projects');
+    //   Route::delete('/clients/{client}/projects/detach/{projectID}', 'User\UnassignedProject')->name('tenant.clients.detach_projects');
+    //   ROute::put('/clients/{client}/projects/sync', 'User\SyncProjects')->name('tenant.clients.sync_projects');
   });
 Route::get('/files', 'File\Index')->name('tenant.files.index');
 Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('tenant.file.uploader');

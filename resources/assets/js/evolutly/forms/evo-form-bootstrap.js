@@ -27,12 +27,13 @@ Evolutly.forms = {
     projectForm: {
         client_name: '', 
         client_id: '', 
+        website: '',
         newclient: false,
         client: {
             name: '', 
             email: '', 
             password: ''
-        }
+        },
     },
     campaignForm: {
         campaign_name: '',
@@ -94,6 +95,19 @@ Evolutly.forms = {
         password: '',
         hidden: true,
         password_confirmation: '',
+    },
+    registerClientForm:{
+        name: '',
+        website: '',
+        email:'',
+        password: '',
+        hidden: true,
+        password_confirmation: '',
+        new_project: false,
+        projects: [{
+            name: '',
+        }],
+        assignedProjects: null
     }
 
 
