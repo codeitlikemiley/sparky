@@ -6,16 +6,16 @@
                 <div class="tabcontrol" data-role="tabcontrol">
                     <ul class="tabs">
                         <li><a href="#tasks_tab">Jobs</a></li>
-                        <li><a href="#onboarding_tab" v-if="guard ==='web'">Forms</a></li>
+                        <!-- <li><a href="#onboarding_tab" v-if="guard ==='web'">Forms</a></li> -->
                         <li><a href="#uploads_tab">Upload</a></li>
-                        <li><a href="#uploaded_tab">Files</a></li>
+                        <!-- <li><a href="#uploaded_tab">Files</a></li> -->
                         <li><a href="#people_tab">Team</a></li>
                     </ul>
                     <div class="frames bg-white">
                         @include('task::tab')
-                        @include('form::tab')
+                        {{-- @include('form::tab') --}}
                         @include('file::tab')
-                        @include('file::uploaded')
+                        {{-- @include('file::uploaded') --}}
                         @include('employee::tab')
                     </div>
                 </div>
