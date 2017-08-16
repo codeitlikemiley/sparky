@@ -25,7 +25,7 @@ class ShowEmployee extends BaseController
      */
     public function __invoke()
     {
-        $employees = Employee::with('projects')->where('tenant_id',auth()->user()->id)->get();
+        $employees = Employee::with('assignedprojects.subtasks')->where('tenant_id',$this->getTenant()->id)->get();
         return view('tenant::employee',['employees' => $employees]);
     }
 }

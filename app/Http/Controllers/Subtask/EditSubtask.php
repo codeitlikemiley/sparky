@@ -155,6 +155,7 @@ class EditSubtask extends BaseController
             foreach ($users_input as $user) {
                 $employee = Employee::forceCreate($user);
                 $this->getAuth()->employees()->save($employee);
+                $this->getTenant()->managedEmployees()->save($employee);
                 $data[$employee->id] = ['project_id' => $project->id];
             }
             $subtask->employees()->attach($data);

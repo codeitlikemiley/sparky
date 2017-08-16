@@ -33,4 +33,9 @@ class Employee extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function assignedprojects()
+    {
+        return $this->belongsToMany('App\Project', 'employee_subtask', 'employee_id', 'project_id')->distinct();
+    }
 }

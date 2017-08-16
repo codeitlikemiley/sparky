@@ -56,4 +56,9 @@ class Project extends Model
         return array();
     }
 
+    public function subtasks()
+    {
+        return $this->belongsToMany('App\Subtask', 'employee_subtask', 'project_id', 'subtask_id')->distinct();
+    }
+
 }

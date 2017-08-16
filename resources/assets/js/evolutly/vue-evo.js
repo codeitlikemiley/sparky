@@ -20,7 +20,6 @@ if (window.Vue === undefined) {
 // resources/assets/js/evolutly
 
 // This is  a Computed Properties For Evolutly Object
-Vue.mixin(require('initial_state'));
 
 Vue.use(vmodal)
 Vue.use(VueUp)

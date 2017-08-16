@@ -89,9 +89,11 @@ Evolutly.forms = {
         message: ''
     },
     registerForm:{
-        name: null,
-        email:null,
-        password: null,
+        name: '',
+        email:'',
+        password: '',
+        hidden: true,
+        password_confirmation: '',
     }
 
 

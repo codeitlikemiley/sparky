@@ -45,6 +45,10 @@ Route::group(['prefix' => '/dashboard'], function () {
   Route::group(['prefix' => '/users'], function () {
       Route::get('/employees', 'User\ShowEmployee')->name('tenant.employees.index');
       Route::post('/employees', 'User\AddEmployee')->name('tenant.employees.add');
+      Route::put('/employees/{employee}/edit', 'User\EditEmployee')->name('tenant.employees.edit');
+      Route::delete('/employees/{employee}/delete', 'User\DeleteEmployee')->name('tenant.employees.edit');
+      Route::delete('/employees/{employee}/clients/{projectID}/subtasks/{subtask}/detach', 'User\UnassignedSubtask')->name('tenant.employees.unassigned_subtask');
+      Route::delete('/employees/{employee}/clients/{projectID}/detach', 'User\RemoveAllSubtasks')->name('tenant.employees.remove_all_subtasks');
       Route::get('/clients', 'User\ShowClient')->name('tenant.clients.index');
   });
 Route::get('/files', 'File\Index')->name('tenant.files.index');

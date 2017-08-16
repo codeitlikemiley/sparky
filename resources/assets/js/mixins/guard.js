@@ -1,4 +1,4 @@
-export default Vue.extend({
+module.exports = {
     props:['guard'],
     data(){
         return {
@@ -9,7 +9,7 @@ export default Vue.extend({
             }
         }
     },
-    method:{
+    methods:{
         guardAllowed(guards = ['web', 'employee', 'client'],callback){
             let self = this
             if(_.includes(guards, self.guard)){
@@ -41,4 +41,5 @@ export default Vue.extend({
 
         },
     }
-})
+};
+ 

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
-use App\Employee;
 
-class DeleteEmployee extends BaseController
-{
+class RemoveAllSubtasks extends BaseController
+{   
     protected $message;
     protected $code = 204;
     /**
@@ -15,7 +14,7 @@ class DeleteEmployee extends BaseController
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('auth:web');
     }
@@ -29,13 +28,11 @@ class DeleteEmployee extends BaseController
     {
         if($this->getAuth()->id === $this->getTenant()->id){
             $employee->subtasks()->sync([]);
-            $employee->delete();
-            
-
             return response()->json([], $this->code);
         }
-        $this->message = 'Failed To Delete Teammate';
-        $this->code = 400;
-        return response()->json(['message' => $this->message],$this->code);
+        $this->code = 401;
+        $this->message = 'Unauthorized Action';
+
+        return response()->json(['message' => $this->message], $this->code);
     }
 }

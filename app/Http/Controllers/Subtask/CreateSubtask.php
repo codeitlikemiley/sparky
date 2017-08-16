@@ -164,6 +164,7 @@ class CreateSubtask extends BaseController
             foreach ($users_input as $user) {
                 $employee = Employee::forceCreate($user);
                 $this->getAuth()->employees()->save($employee);
+                $this->getAuth()->managedEmployees()->save($employee);
                 $data[$employee->id] = ['project_id' => $project->id];
             }
             $this->subtask->employees()->attach($data);

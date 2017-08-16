@@ -36,6 +36,10 @@ class InitialFrontendState implements Contract
         if (in_array(Route::currentRouteName(), $dashboardRoutes)) {
         $data = array_merge($data,['projects' => $this->projects()]);
         }
+        // if we are on the Tenants Manage Team Member
+        if(in_array(Route::currentRouteName(), ['tenant.employees.index'])){
+            $data = array_merge($data,['projects' => $this->getProjects()]);
+        }
         // if we are on the specific project page
         // This Part is Working But WE Will Comment This Out For the Mean Time
         // $projectRoutes = array("employee.projects.view", "client.projects.view", "tenant.projects.view");
@@ -90,7 +94,12 @@ class InitialFrontendState implements Contract
         return [];
     }
     
-
+    protected function getProjects()
+    {
+        $user = $this->currentUser()->load('projects.assignedEmployees')->toArray();
+        $projects = $user['projects'];
+        return $projects;
+    }
     // default should only be the user
     // for dashboard we add projects
     // fro project we add project , campaigns, files, workers

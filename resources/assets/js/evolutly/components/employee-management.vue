@@ -15,7 +15,7 @@
                     </div>
                     <div class="content">
                         <div class="text">
-                                <button @click="add" class="button small-button primary create-item">Add Employee</button>
+                                <button @click="show('add-employee-modal')" class="button small-button primary create-item">Add Employee</button>
                                 <div class="table-responsive ">
                                     <table class="table border bordered striped ">
                                         <thead class="">
@@ -38,22 +38,24 @@
                                                 </td>
 
                                                 <td class="align-left">
-                                                    <span class="tag success" @click="show('add-employee-modal')">
+                                                    <span class="tag success" @click="viewEmployee(employee.id)">
                                                         <span class="icon mif-eye">
                                                            
                                                         </span>
                                                     </span>
-                                                    <span class="tag info" @click="show('edit-employee-modal')">
+                                                    <span class="tag info" @click="show(`edit-employee-modal-${employee.id}`)">
                                                         <span class="icon mif-pencil">
                                                             
                                                         </span>
                                                     </span>
-                                                    <span class="tag alert" @click="show('delete-employee-modal')"> 
+                                                    <span class="tag alert" @click="show(`delete-employee-modal-${employee.id}`)"> 
                                                         <span class="icon fa fa-trash">
                                                             
                                                         </span>
                                                     </span>
                                                 </td>
+                                                <slot name="edit-employee-modal"></slot>
+                                                <slot name="delete-employee-modal"></slot>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -64,6 +66,7 @@
                 </div>
             </div>
         </div>
+        <slot name="add-employee-modal"></slot>
     </div>
 </div>
 </template>
@@ -91,7 +94,7 @@ export default guard.extend({
        hide(name) {
             this.$modal.hide(name)
        },
-       add(){
+       addEmployee(){
            console.log('add employee')
            let self = this
            self.guardAllowed(['web'],self.callAddEmployeeApi())
@@ -117,7 +120,7 @@ export default guard.extend({
            
        },
       
-       edit(index){
+       editEmployee(index){
             console.log('edit employee')
             self.endpoint.web = '/user/employees'
             axios.post(self.guardedLocation(), self.employeeForm)
@@ -132,12 +135,9 @@ export default guard.extend({
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
        },
-       destroy(index){
+       deleteEmployee(index){
            console.log('delete employee')
        },
-       show(employee){
-           console.log('show employee')
-       }
     }
 })
 </script>
