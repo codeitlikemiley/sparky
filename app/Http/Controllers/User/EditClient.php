@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Client;
 
-class AddClient extends BaseController
+class EditClient extends BaseController
 {
     /**
      * Create a new controller instance.
