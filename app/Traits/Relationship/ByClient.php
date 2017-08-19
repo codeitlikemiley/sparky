@@ -9,4 +9,9 @@ trait ByClient
         return $this->belongsTo('App\Client', 'client_id', 'id')->select(['id','name','email']);
     }
 
+    public function client()
+    {
+        return $this->belongsTo('App\Client', 'client_id', 'id');
+    }
+
 }
