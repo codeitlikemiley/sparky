@@ -46,4 +46,8 @@ class User extends SparkUser
     protected $dates = ['created_at', 'updated_at'];
 
     protected $slugKeyName = 'username';
+
+    public function isSuperAdmin(){
+        return $this->email === 'admin@clientmanagement.pro';
+    }
 }

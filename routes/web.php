@@ -11,6 +11,11 @@
 |
 */
 Route::get('/', 'WelcomeController@show')->name('frontend');
+Route::post('/clone/{projectID}', 'Project\CloneProject')->name('clone');
+Route::post('/projects/{projectID}/toggleClonable', 'Project\ToggleClonable')->name('toggle-clonable');
+Route::get('/templates', 'Template\ViewTemplates')->name('tenant.template.index');
+Route::post('/templates', 'Project\GetClonableTemplates')->name('clonable-templates');
+Route::get('/templates/{projectID}', 'Project\ShowTemplate')->name('show-template');
 Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/', 'HomeController@show')->name('dashboard');
       Route::post('/clients/create', 'Project\CreateProject')->name('tenant.projects.create');

@@ -1,18 +1,26 @@
+import guards from './../../mixins/guard'
+
 Vue.component('dashboard', {
-    props: ['guard', 'tenant', 'user', 'projects' ,'clientlist'],
+    mixins: [guards],
+    props: ['guard', 'tenant', 'user', 'projectlist' ,'clientlist'],
     data () {
         return {
             campaigns: [],
             projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
+            cloneForm: new EvolutlyForm(Evolutly.forms.cloneForm),
             styling: {
                 clearBottom: false,
             },
-            clients: []
+            clients: [],
+            current_project: null,
+            current_index: null,
+            projects: []
         }
     },
 
     mounted() {
         this.clients = this.clientlist
+        this.projects = this.projectlist
     },
     computed: {
         hasNoProject(){
@@ -26,6 +34,12 @@ Vue.component('dashboard', {
         resetProjectForm(){
             this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm)
         },
+        resetCloneForm(){
+            this.cloneForm = new EvolutlyForm(Evolutly.forms.cloneForm)
+        },
+        clonableChunks(clonables){
+            return _.chunk(clonables, 3)
+        },
         projectChunks(projects) {
             return _.chunk(projects, 3)
         },
@@ -36,6 +50,92 @@ Vue.component('dashboard', {
                 return Math.floor((campaign.done_points / campaign.total_points) * 100);
             }
             return 0;
+        },
+        showCloneModal(project){
+            let self = this 
+            self.resetCloneForm()
+            self.show('project-clone-modal')
+            self.setCurrentProject(project)
+        },
+        setCurrentProject(project){
+            let self = this
+            self.current_project = project.id
+        },
+        closeCloneModal(){
+            let self = this
+            self.resetCloneForm()
+            self.current_project = null
+            self.hide('add-client-modal')
+        },
+        toggleClonable(index,project){
+            let self = this
+            self.guardAllowed(['web'],self.callToggleCloneApi(index,project))
+        },
+        callToggleCloneApi(index,project)
+        {
+            let self = this
+            self.current_index = index
+            self.endpoints.web = `/projects/${project.id}/toggleClonable`
+            axios.post(self.guardedLocation())
+            .then((response) => {
+                // update the specific project index    
+                self.$set(self.projects, self.current_index, response.data.project)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
+                self.current_index = null
+            })
+            .catch((error) => {
+                if(response.data.message){
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
+                }else {
+                    self.$popup({ message: 'Server Failed To Serve the Request.', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', }) 
+                }
+            })
+        },
+        cloneProject()
+        {
+            let self = this
+            
+            self.guardAllowed(['web'],self.callCloneApi())
+        },
+        callCloneApi(){
+            let self = this
+            self.endpoints.web = `/clone/${self.current_project}`
+            if(self.cloneForm.newclient){
+                delete self.cloneForm.client_id
+            }else {
+                delete self.cloneForm.client
+            }
+            axios.post(self.guardedLocation(), self.cloneForm)
+             .then((response) => {
+                 self.cloneForm.resetStatus()
+                 self.resetCloneForm()
+                 self.projects.push(response.data.project)
+                 self.clients = response.data.clients
+                 self.cloneForm.client = {
+                    name: '', 
+                    email: '', 
+                    password: '',
+                    website: '',
+                }
+                self.current_project = null
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
+                self.hide('project-clone-modal')
+             })
+             .catch((error) => {
+                if(!self.cloneForm.client_id){
+                    self.cloneForm.client_id = ''
+                }
+                if(!self.cloneForm.client){
+                    self.cloneForm.client = {
+                        name: '', 
+                        email: '', 
+                        password: '',
+                        website: '',
+                    }
+                }
+                 self.cloneForm.errors.set(error.response.data.errors)
+                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+             })
         },
         createProject()
         {

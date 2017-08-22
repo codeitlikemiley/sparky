@@ -30,7 +30,7 @@ mix.styles([
     'resources/assets/metro/css/docs.css',
     'resources/assets/metro/css/docs-rtl.css',
     'node_modules/sweetalert/dist/sweetalert.css'
-], 'public/css/metro.css')
+], 'public/css/metro.css')  
 
 // This Has Jquery Included
 mix.js('resources/assets/js/app.js', 'public/js/app.js')

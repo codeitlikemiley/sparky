@@ -6,3 +6,4 @@ require('components/uploaded-files');
 require('components/task');
 require('components/employee-management');
 require('components/client-management');
+require('components/templates');

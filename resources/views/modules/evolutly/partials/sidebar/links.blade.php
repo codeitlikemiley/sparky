@@ -130,6 +130,24 @@
         </li>
     </ul>
 </li>
+<!-- Templates Menu -->
+<li class="{{ (Request::segment(1)=='templates'?'active-container':'') }}">
+        <a href="#" class="dropdown-toggle">
+                <span class="mif-stack3 icon fg-steel"></span>
+                <span class="title fg-amber">Templates</span>
+                <span class="counter">Manage Templates</span>
+        </a>
+        <!-- Projects Link -->
+        <ul class="d-menu" data-role="dropdown" style="{{ (Request::segment(1)=='templates'?'display:block':'') }}">
+            <li class="{{ (Request::segment(1)=='templates'?'active':'') }}">
+                <a href="/templates">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Clones</span>
+                    <span class="counter">View Clonables</span>
+                </a>
+            </li>
+        </ul>
+    </li>
 <!-- Profile Menu -->
 <li class="">
     <a href="#" class="dropdown-toggle">

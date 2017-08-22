@@ -18,7 +18,8 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'done' => 'boolean'
+        'done' => 'boolean',
+        'public' => 'boolean'
     ];
 
     protected $dates = ['created_at', 'updated_at'];

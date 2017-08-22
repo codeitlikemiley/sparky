@@ -35,6 +35,27 @@ Evolutly.forms = {
             password: ''
         },
     },
+    cloneForm:{
+        client_name: '',
+        client_id: '', 
+        newclient: false,
+        client: {
+            name: '', 
+            email: '', 
+            password: '',
+            website: '',
+        },
+        users: [{
+            name: '',
+            email: '',
+            password: '',
+        }],
+        due_date: moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
+
+    },
+    cloneCampaignForm: {
+        campaigns: []
+    },
     campaignForm: {
         campaign_name: '',
         campaign_order: 0

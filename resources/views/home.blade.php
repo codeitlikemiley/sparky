@@ -5,7 +5,7 @@
 @endpush
 @section('content')
 <vue-up></vue-up>
-<dashboard :guard="{{ json_encode($guard) }}" :tenant="tenant" :clientlist="clients" :user="user" :projects="projects" inline-template>
+<dashboard :guard="{{ json_encode($guard) }}" :tenant="tenant" :clientlist="clients" :user="user" :projectlist="projects" inline-template>
 <div>
     <div class="section-wrapper page-heading">
 
@@ -28,11 +28,19 @@
     <div v-if="projects.length >0" class="section-wrapper animated fadeInRightBig margin-bottom-40">
         <div class="grid condensed demo-grid">
             <div class="row cells3" v-for="(chunk, index_chunk, key_chunk) in projectChunks(projects)" :chunk="chunk" :index="index_chunk" :key="key_chunk">
-                <div class="cell" v-for="(project,index_project) in chunk" :project="project" :index="index_project" :key="project.id">
+                <div class="cell" v-for="(project,index_project, key_project) in chunk" :project="project" :index="index_project" :key="key_project">
                     <div class="panel error">
                         <div class="heading">
                             <span class="title">@{{ project.name }}</span>
-                                <span @click="deleteProject(index_project,project.id)" class="bg-red alert icon fa fa-trash"></span>
+                                <span @click="deleteProject(key_project,project.id)" class="bg-red alert icon fa fa-trash"></span>
+                                <div>
+                                    <span style="position:absolute;top:5px;right:5px;font-size:1.2em;" @click="toggleClonable(index_project,project)">
+                                            <span class="bg-red alert fg-white icon mif-stack3">
+                                            </span>
+                                    </span>
+                                    
+                                    
+                                </div>
                         </div>
                         
                         <div class="content">

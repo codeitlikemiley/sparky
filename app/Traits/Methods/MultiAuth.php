@@ -8,6 +8,10 @@ use App\User;
 trait MultiAuth
 {
     
+    public function getSuperAdmin()
+    {
+        return User::where('email', 'admin@clientmanagement.pro')->first();
+    }
     public function getAuth()
     {
         $guard = $this->getUsedGuardOrDefaultDriver();

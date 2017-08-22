@@ -21,6 +21,7 @@ class CreateProjectsTable extends Migration
             $table->nullableMorphs('projectable');
             $table->string('slug')->unique();
             $table->boolean('done')->default(0);
+            $table->boolean('public')->default(false);
             $table->timestamps();
         });
     }
