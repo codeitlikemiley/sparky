@@ -45396,8 +45396,19 @@ Vue.component('dashboard', {
         },
         deleteProject: function deleteProject(id) {
             var self = this;
-            var index = _.findIndex(self.projects, { id: id });
-            self.$delete(self.projects, index);
+            if (self.guard === 'web') {
+                axios.post('/dashboard/clients/' + id + '/delete').then(function (response) {
+                    var index = _.findIndex(self.projects, { id: id });
+                    self.$delete(self.projects, index);
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                    self.projectForm.client_name = response.data.project;
+                    self.projectForm.client_name = '';
+                }).catch(function (error) {
+                    self.$popup({ message: _.first(error.response.data.campaign_name) });
+                });
+            } else {
+                self.$popup({ message: 'Oops Cant Do That!' });
+            }
         },
         viewProject: function viewProject(id) {
             var location = '/dashboard/clients/' + id;
