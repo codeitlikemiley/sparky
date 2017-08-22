@@ -1,3 +1,10 @@
+@push('critical_css')
+<style>
+.tabcontrol .frames .frame .removeborder {
+    padding: 0 !important;
+}
+</style>
+@endpush
 <div class="frame bg-white margin-bottom-90" id="template_tab" v-if="templates.length > 0" style="min-height:450px;">
     <div class="panel widget-box collapsible" data-role="panel">
         <div class="row cells2" v-for="(chunk, keyChunk, indexChunk) in templateChunks(templates)"
@@ -22,17 +29,38 @@
                         </div>
                     </div>
                     <div class="content">
-                        <div class="text">
                             <ul class="todo-list" v-if="template.campaigns">
                                 <!-- all list of campaign checked -->
                                 <campaignlist :campaignlist="template.campaigns" :template="template.id">
                                 </campaignlist>
                             </ul>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <modal name="show-jobs-modal" width="50%" height="82%" :scrollable="true">
+        <div class="panel widget-box" v-if="current_campaign">
+            <div class="heading align-center">
+                <div class="title">Job List For: @{{ current_campaign.name }}<span @click="closeJobsModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
+            </div>
+            <div class="content">
+                <div class="accordion" data-role="accordion">
+                    <div class="frame active removeborder" v-for="(task, tKey, tIndex) in current_campaign.tasks" :key="tKey" :index="tIndex">
+                        <div class="heading">Task List For : @{{ task.name }}
+                            <span class="icon mif-list" style="font-size:1.5em;position:absolute;top:5px;right:5px;"></span>
+                        </div>
+                        <div class="content">
+                                <ol class="todo-list numeric-list" style="margin-top:-5px;">
+                                <li v-for="(subtask,sKey,sIndex) in task.subtasks" :index="sIndex" :key="sKey">
+                                    <span class="tag success" style="margin-top:-3px;">@{{ subtask.name }}</span>
+                                </li>
+                                </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </modal>  
 </div>
     

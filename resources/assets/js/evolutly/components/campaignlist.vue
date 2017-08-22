@@ -1,6 +1,6 @@
 <template>
 <div style="padding:10px;">
-  <li v-for="(campaign, cKey, cIndex) in campaigns" :key="cKey" :index="cIndex" ref="templates">
+  <li v-for="(campaign, cKey, cIndex) in campaigns" :key="cKey" :index="cIndex">
     <label class="input-control checkbox">
         <input type="checkbox"  :value="campaign.id" v-model="cloneCampaignForm.campaigns">
         <span class="check"></span>
@@ -37,14 +37,7 @@ export default {
     methods:{
         viewCampaignModal(campaign){
             let self = this
-            self.$modal.show('show-jobs-modal')
-            console.log('viewing campaign')
-        },
-        closeCampaignModal(){
-            let self = this
-            console.log('viewing campaign')
-            self.$modal.hide('show-jobs-modal')
-        
+            Bus.$emit('show-jobs-modal',campaign)
         },
         callCloneApi(projectID){
             let self = this
@@ -65,4 +58,5 @@ export default {
 </script>
 
 <style>
+
 </style>

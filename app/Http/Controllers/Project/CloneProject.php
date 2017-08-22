@@ -16,7 +16,7 @@ class CloneProject extends BaseController
 
     public function __construct(Request $request, Client $client)
     {
-        $this->middleware('auth:web');
+        $this->middleware(['auth','free-plan']);
         $this->request = $request;
         $this->client = $client;
     }

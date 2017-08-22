@@ -9,10 +9,15 @@ Vue.component('templates', {
             templates: [],
             current_index: null,
             current_template: null,
+            current_campaign: null,
         }
     },
     mounted() {
-        this.whenReady()
+        let self = this
+        self.whenReady()
+        Bus.$on('show-jobs-modal', (campaign) => {
+            self.showJobs(campaign)
+        })
     },
     computed: {
         //
@@ -21,10 +26,25 @@ Vue.component('templates', {
         campaignlist
     },
     methods: {
+        show(name) {
+            this.$modal.show(name);
+        },
+        hide(name) {
+            this.$modal.hide(name);
+        },
         templateChunks(templates) {
             return _.chunk(templates, 2)
         },
-
+        showJobs(campaign){
+            let self = this
+            self.current_campaign = campaign
+            self.show('show-jobs-modal')
+        },
+        closeJobsModal(){
+            let self = this
+            self.hide('show-jobs-modal')
+            self.current_campaign = null
+        },
         whenReady() {
         this.templates = this.templatelist
         

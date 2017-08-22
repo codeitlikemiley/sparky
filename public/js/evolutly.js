@@ -44643,13 +44643,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         viewCampaignModal: function viewCampaignModal(campaign) {
             var self = this;
-            self.$modal.show('show-jobs-modal');
-            console.log('viewing campaign');
-        },
-        closeCampaignModal: function closeCampaignModal() {
-            var self = this;
-            console.log('viewing campaign');
-            self.$modal.hide('show-jobs-modal');
+            Bus.$emit('show-jobs-modal', campaign);
         },
         callCloneApi: function callCloneApi(projectID) {
             var self = this;
@@ -46563,11 +46557,16 @@ Vue.component('templates', {
         return {
             templates: [],
             current_index: null,
-            current_template: null
+            current_template: null,
+            current_campaign: null
         };
     },
     mounted: function mounted() {
-        this.whenReady();
+        var self = this;
+        self.whenReady();
+        Bus.$on('show-jobs-modal', function (campaign) {
+            self.showJobs(campaign);
+        });
     },
 
     computed: {
@@ -46577,8 +46576,24 @@ Vue.component('templates', {
         campaignlist: __WEBPACK_IMPORTED_MODULE_1__campaignlist_vue___default.a
     },
     methods: {
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
         templateChunks: function templateChunks(templates) {
             return _.chunk(templates, 2);
+        },
+        showJobs: function showJobs(campaign) {
+            var self = this;
+            self.current_campaign = campaign;
+            self.show('show-jobs-modal');
+        },
+        closeJobsModal: function closeJobsModal() {
+            var self = this;
+            self.hide('show-jobs-modal');
+            self.current_campaign = null;
         },
         whenReady: function whenReady() {
             this.templates = this.templatelist;
@@ -47324,7 +47339,7 @@ Vue.filter('currency', function (value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(187)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 329 */
@@ -68602,8 +68617,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, _vm._l((_vm.campaigns), function(campaign, cKey, cIndex) {
     return _c('li', {
       key: cKey,
-      ref: "templates",
-      refInFor: true,
       attrs: {
         "index": cIndex
       }

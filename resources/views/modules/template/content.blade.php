@@ -4,7 +4,7 @@
                 <div class="cell colspan12">
                     <div class="tabcontrol" data-role="tabcontrol">
                         <ul class="tabs">
-                            <li><a href="#template_tab">Templates</a></li>
+                            <li><a href="#template_tab">Pre-Built Templates</a></li>
                             <!-- <li><a href="#onboarding_tab" v-if="guard ==='web'">Forms</a></li> -->
                         </ul>
                         <div class="frames bg-white">
