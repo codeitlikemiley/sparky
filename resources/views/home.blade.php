@@ -32,14 +32,16 @@
                     <div class="panel error">
                         <div class="heading">
                             <span class="title">@{{ project.name }}</span>
-                                <span @click="deleteProject(project.id)" class="bg-red alert icon fa fa-trash"></span>
-                                <div>
-                                    <span style="position:absolute;top:5px;right:5px;font-size:1.2em;" @click="toggleClonable(index_project,project)">
-                                            <span class="bg-red alert fg-white icon mif-stack3">
+                                <span @click="deleteProject(project.id)" class="bg-red alert icon fa fa-trash" style="cursor:pointer;"
+                                data-role="hint" data-hint-mode="2" data-hint="Project|Delete" data-hint-position="top"
+                                ></span>
+                                <div v-if="canCloneProject(project)">
+                                    <span style="position:absolute;top:5px;right:5px;font-size:1.2em;cursor:pointer;" @click="toggleClonable(index_project,project)">
+                                            <span  class="bg-red alert icon" :class="{'mif-stack3': isClonable(project), 'mif-stack2': !isClonable(project), 'fg-teal': isClonable(project), 'fg-white': !isClonable(project) }"
+                                            data-role="hint" data-hint-mode="2" data-hint="Template|Add/Remove" data-hint-position="top"
+                                            >
                                             </span>
                                     </span>
-                                    
-                                    
                                 </div>
                         </div>
                         

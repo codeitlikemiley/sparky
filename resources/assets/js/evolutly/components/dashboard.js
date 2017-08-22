@@ -31,6 +31,25 @@ Vue.component('dashboard', {
     },
 
     methods: { 
+        clonableHint(project){
+            if(project.public === true){
+                return 'Remove From Template'
+            }else{
+                return 'Add To Template'
+            }
+        },
+        isClonable(project){
+            return project.public === true
+        },
+        canCloneProject(project){
+            let self = this
+            if(self.guard === 'web' && project.tenant_id === self.user.id){
+                return true
+            }else if(self.guard === 'employee' && project.projectable_type === 'App\Employee' && project.projectable_id === self.user.id){
+                return true
+            }
+            return false
+        },
         resetProjectForm(){
             this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm)
         },
@@ -232,5 +251,12 @@ Vue.component('dashboard', {
             let url = `${window.location.protocol}//${Evolutly.domain}${location}`
             window.location.href = url
         }
+    },
+    watch: {
+        projects: {
+            handler(newValue){
+            },
+            deep: true
+          }
     },
 });

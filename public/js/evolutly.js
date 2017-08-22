@@ -45261,6 +45261,25 @@ Vue.component('dashboard', {
     },
 
     methods: {
+        clonableHint: function clonableHint(project) {
+            if (project.public === true) {
+                return 'Remove From Template';
+            } else {
+                return 'Add To Template';
+            }
+        },
+        isClonable: function isClonable(project) {
+            return project.public === true;
+        },
+        canCloneProject: function canCloneProject(project) {
+            var self = this;
+            if (self.guard === 'web' && project.tenant_id === self.user.id) {
+                return true;
+            } else if (self.guard === 'employee' && project.projectable_type === 'App\Employee' && project.projectable_id === self.user.id) {
+                return true;
+            }
+            return false;
+        },
         resetProjectForm: function resetProjectForm() {
             this.projectForm = new EvolutlyForm(Evolutly.forms.projectForm);
         },
@@ -45446,6 +45465,13 @@ Vue.component('dashboard', {
             var location = '/templates';
             var url = window.location.protocol + '//' + Evolutly.domain + location;
             window.location.href = url;
+        }
+    },
+    watch: {
+        projects: {
+            handler: function handler(newValue) {},
+
+            deep: true
         }
     }
 });
@@ -46608,13 +46634,33 @@ Vue.component('templates', {
             var self = this;
             Bus.$emit('clone-template', id);
         },
-        deleteTemplate: function deleteTemplate(id) {
+        deleteTemplate: function deleteTemplate(index, template) {
             // Only the Project Creator Can Delete the template
             // guard (employee,projectable_type and id)
             // web ,tenant_id and auth user id
             var self = this;
-            var index = _.findIndex(self.templates, { id: id });
-            self.$delete(self.templates, index);
+            self.toggleClonable(index, template);
+        },
+        toggleClonable: function toggleClonable(index, template) {
+            var self = this;
+            self.guardAllowed(['web'], self.callToggleCloneApi(index, template));
+        },
+        callToggleCloneApi: function callToggleCloneApi(index, template) {
+            var self = this;
+            self.current_index = index;
+            self.endpoints.web = '/projects/' + template.id + '/toggleClonable';
+            axios.post(self.guardedLocation()).then(function (response) {
+                var index = _.findIndex(self.templates, { id: template.id });
+                self.$delete(self.templates, index);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                self.current_index = null;
+            }).catch(function (error) {
+                if (response.data.message) {
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                } else {
+                    self.$popup({ message: 'Server Failed To Serve the Request.', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                }
+            });
         }
     },
     watch: {

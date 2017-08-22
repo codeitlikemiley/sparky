@@ -24,7 +24,7 @@
                             <span class="icon  mif-stack3" style="position: relative;top: 50% !important; transform: translateY(-50%) !important;"></span>
                         </div>  
                         <!-- Only show the delete button to SuperAdmin -->
-                        <div v-if="guard === 'web'" @click="deleteTemplate(template.id)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Template" data-hint-position="top">
+                        <div v-if="guard === 'web'" @click="deleteTemplate(cKey,template)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Template" data-hint-position="top">
                             <span class="icon fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
                     </div>
