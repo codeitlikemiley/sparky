@@ -42,12 +42,12 @@
     <modal name="show-jobs-modal" width="50%" height="82%" :scrollable="true">
         <div class="panel widget-box" v-if="current_campaign">
             <div class="heading align-center">
-                <div class="title">Job List For: @{{ current_campaign.name }}<span @click="closeJobsModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
+                <div class="title">Jobs List For: @{{ current_campaign.name }}<span @click="closeJobsModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;"></span></div>
             </div>
             <div class="content">
                 <div class="accordion" data-role="accordion">
                     <div class="frame active removeborder" v-for="(task, tKey, tIndex) in current_campaign.tasks" :key="tKey" :index="tIndex">
-                        <div class="heading">Task List For : @{{ task.name }}
+                        <div class="heading">Tasks For Job : @{{ task.name }}
                             <span class="icon mif-list" style="font-size:1.5em;position:absolute;top:5px;right:5px;"></span>
                         </div>
                         <div class="content">

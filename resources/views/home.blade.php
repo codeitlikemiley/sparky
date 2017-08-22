@@ -32,7 +32,7 @@
                     <div class="panel error">
                         <div class="heading">
                             <span class="title">@{{ project.name }}</span>
-                                <span @click="deleteProject(key_project,project.id)" class="bg-red alert icon fa fa-trash"></span>
+                                <span @click="deleteProject(project.id)" class="bg-red alert icon fa fa-trash"></span>
                                 <div>
                                     <span style="position:absolute;top:5px;right:5px;font-size:1.2em;" @click="toggleClonable(index_project,project)">
                                             <span class="bg-red alert fg-white icon mif-stack3">
@@ -70,7 +70,7 @@
         </div>
     </div>
     <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;" :class="styling">
-        <h1 class="fg-teal">Create Your First Client.</h1>
+        <h2 class="fg-teal"><span class="tag success" @click="goToTemplates()" style="cursor:pointer;">Choose a Prebuilt Template For Your Client</span> <span class="tag bg-taupe fg-white">OR</span> <span class="tag info" @click="show('add-project')" style="cursor:pointer;">Create From Scratch</span></h2>
     </div>
     @include('project::add-project-modal')
         

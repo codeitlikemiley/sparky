@@ -7,7 +7,7 @@
         <span class="caption">{{ campaign.name }}</span>
     </label>
     <div @click="viewCampaignModal(campaign)" class="place-right" style="cursor:pointer;">
-        <span data-role="hint" data-hint-mode="2" data-hint="View|Campaign" data-hint-position="left" class="icon fg-green fa fa-tasks vertical-align-middle" style="position: relative;padding-top:8px;font-size:2.5em;"></span>
+        <span data-role="hint" data-hint-mode="2" data-hint="View|Jobs List" data-hint-position="left" class="icon fg-green fa fa-tasks vertical-align-middle" style="position: relative;padding-top:8px;font-size:2.5em;"></span>
     </div>
 </li>
 </div>

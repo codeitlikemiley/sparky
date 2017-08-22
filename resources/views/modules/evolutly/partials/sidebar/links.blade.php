@@ -142,8 +142,8 @@
             <li class="{{ (Request::segment(1)=='templates'?'active':'') }}">
                 <a href="/templates">
                     <span class="mif-chevron-right icon"></span>
-                    <span class="title">Clones</span>
-                    <span class="counter">View Clonables</span>
+                    <span class="title">Pre-Built Templates</span>
+                    <span class="counter">Clone Template For Clients</span>
                 </a>
             </li>
         </ul>

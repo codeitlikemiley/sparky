@@ -176,22 +176,11 @@ Vue.component('dashboard', {
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
-        deleteProject(index,id) {
+        deleteProject(id) {
             var self = this
-            if (self.guard === 'web') {
-                axios.post('/dashboard/clients/' + id + '/delete')
-                    .then(function (response) {
-                        self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
-                        self.projects.splice(index, 1)
-                        self.projectForm.client_name = response.data.project
-                        self.projectForm.client_name = ''
-                    })
-                    .catch(error => {
-                        self.$popup({ message: _.first(error.response.data.campaign_name) })
-                    })
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
+            let index = _.findIndex(self.projects, { id: id })
+            self.$delete(self.projects, index)
+            
         },
         viewProject(id) {
             let location = '/dashboard/clients/'+id
@@ -224,6 +213,11 @@ Vue.component('dashboard', {
         },
         hide(name) {
             this.$modal.hide(name);
+        },
+        goToTemplates(){
+            let location = '/templates'
+            let url = `${window.location.protocol}//${Evolutly.domain}${location}`
+            window.location.href = url
         }
     },
 });
