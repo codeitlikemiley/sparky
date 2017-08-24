@@ -59,7 +59,7 @@ class EditTask extends BaseController
         'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'task_description' => 'max:200',
         'task_recurring' => 'boolean',
-        'task_interval' => 'integer|min:0|max:999'
+        // 'task_interval' => 'integer|min:0|max:999'
         ];
     }
     private function messages(){
@@ -69,9 +69,9 @@ class EditTask extends BaseController
             'task_description.max' => 'Description Too Long',
             'task_link.regex' => 'Enter Valid Url',
             'task_recurring.boolean' => 'Recurring Value Must Be Either True or False',
-            'task_interval.integer' => 'Task Interval Provided is Not Integer',
-            'task_interval.min' => 'Task Interval Lowest Value: 0',
-            'task_interval.max' => 'Task Interval Highest Value: 999'
+            // 'task_interval.integer' => 'Task Interval Provided is Not Integer',
+            // 'task_interval.min' => 'Task Interval Lowest Value: 0',
+            // 'task_interval.max' => 'Task Interval Highest Value: 999'
         ];
     }
     private function allowed($task)
