@@ -97,7 +97,7 @@ class ComposerServiceProvider extends ServiceProvider
 
     private function composeLogin()
     {
-        view()->composer(['spark::auth.login', 'employee::login', 'client::login', 'employee::forgotpassword', 'client::forgotpassword'], function($view)
+        view()->composer(['spark::auth.login', 'employee::login', 'client::login', 'employee::forgotpassword', 'client::forgotpassword', 'spark::auth.passwords.email'], function($view)
         {
         $dir = scandir(base_path('public/images/lock/landscape'));
         foreach ($dir as $key => $value) {

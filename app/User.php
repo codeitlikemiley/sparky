@@ -4,6 +4,7 @@ namespace App;
 
 use Laravel\Spark\User as SparkUser;
 use App\Traits\ModelBuilder\UserBuilder;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends SparkUser
 {
@@ -49,5 +50,10 @@ class User extends SparkUser
 
     public function isSuperAdmin(){
         return $this->email === 'admin@clientmanagement.pro';
+    }
+
+    public function sendPasswordResetNotification($token, $email = null)
+    {
+        $this->notify(new ResetPasswordNotification($token, $email ? $email : $this->email));
     }
 }

@@ -82,6 +82,10 @@
             <p>Don't have any account?</p>
             <a href='{{url('/register')}}' class="fg-white" type="fg-white "><span class="fa fa-sign-in"></span> <u>Register here</u></a>
         </div>
+        <div>
+            <p>Forgot Password?</p>
+            <a href='{{url('/password/reset')}}' class="fg-white" type="fg-white "><span class="icon mif-lock"></span> <u>Reset Password</u></a>
+        </div>
     </form>
 </div>
 

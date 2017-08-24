@@ -10,19 +10,19 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('/notify', function(){
- $tenant = App\User::first();
- $employee = App\Employee::first();
- $client = App\Client::first();
- $project = App\Project::first();
- $subtask = App\Subtask::first();
+// Route::get('/notify', function(){
+//  $tenant = App\User::first();
+//  $employee = App\Employee::first();
+//  $client = App\Client::first();
+//  $project = App\Project::first();
+//  $subtask = App\Subtask::first();
 
 //  \Notification::send($tenant, new App\Notifications\RegistrationWelcomeEmail($tenant));
 // \Notification::send($client, new App\Notifications\ClientAssignedEmail($project,$tenant,$client));
 // \Notification::send($client,new App\Notifications\ClientRegistrationEmail($tenant,$client));
 // \Notification::send($tenant, new App\Notifications\EmployeeRegistrationEmail($tenant,$employee));
-\Notification::send($tenant, new App\Notifications\SubtaskAssignedEmail($subtask,$tenant,$employee));
-});
+// \Notification::send($tenant, new App\Notifications\SubtaskAssignedEmail($subtask,$tenant,$employee));
+// });
 Route::get('/', 'WelcomeController@show')->name('frontend');
 Route::post('/clone/{projectID}', 'Project\CloneProject')->name('clone');
 Route::post('/projects/{projectID}/toggleClonable', 'Project\ToggleClonable')->name('toggle-clonable');
