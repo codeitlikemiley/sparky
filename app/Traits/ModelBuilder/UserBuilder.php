@@ -17,11 +17,12 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use App\Traits\Sluggable\UserSluggable;
 use App\Traits\Relationship\HasComments;
 use App\Traits\Relationship\HasActivities;
+use Illuminate\Notifications\Notifiable;
 
 trait UserBuilder {
     use HasClients, HasEmployees, HasProjects,
         CanManageClients, CanManageEmployees, CanManageProjects,
         UsersMutator, UsersMethod,
         Sluggable, SluggableScopeHelpers, UserSluggable,
-        HasComments, HasActivities, CanManageFiles ,HasFiles;
+        HasComments, HasActivities, CanManageFiles ,HasFiles,Notifiable;
 }

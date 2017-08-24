@@ -13,10 +13,11 @@ use App\Traits\MorphTo\Employable;
 use App\Traits\Relationship\HasActivities;
 use App\Traits\Relationship\EmployeeHasSubtasks;
 use App\Traits\Relationship\CanManageProjects;
+use Illuminate\Notifications\Notifiable;
 
 trait EmployeeBuilder {
     use ByTenant, HasProjects, AssignedSubtasks,
         UsersMutator, UsersMethod,
         HasComments, Employable, HasActivities,
-        EmployeeHasSubtasks, CanManageProjects,CanManageFiles;
+        EmployeeHasSubtasks, CanManageProjects,CanManageFiles, Notifiable;
 }

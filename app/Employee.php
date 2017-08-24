@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Employee\Notifications\ResetPasswordNotification;
 use App\Traits\ModelBuilder\EmployeeBuilder;
@@ -10,7 +9,7 @@ use Laravel\Spark\HasApiTokens;
 
 class Employee extends Authenticatable
 {
-    use EmployeeBuilder, Notifiable, HasApiTokens;
+    use EmployeeBuilder,HasApiTokens;
     
     protected $table ='employees';
 
