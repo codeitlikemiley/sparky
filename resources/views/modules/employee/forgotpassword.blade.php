@@ -50,7 +50,7 @@
 </style>
 @endpush @section('content')
 <div class="login-form padding20 fg-white ">
-    <form class="form-horizontal" role="form" method="POST" action="{{ route('employee.login.submit') }}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ route('employee.password.email') }}">
         {{ csrf_field() }}
         <h4 class="align-center">Employee Forgot Password Page</h4>
 

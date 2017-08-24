@@ -37,7 +37,7 @@
 
 <!-- Body Contents -->
 
-<body style="background: #f0f0f2 url(./images/lock/landscape/86a053d7e8fd3c8efeb13ddf1057cc3a31cad70b6724793854ddbc9b8bea0c6a.jpg)
+<body style="background: #f0f0f2 url(/images/lock/landscape/86a053d7e8fd3c8efeb13ddf1057cc3a31cad70b6724793854ddbc9b8bea0c6a.jpg)
 center center no-repeat;">
     <div id="spark-app" v-cloak>
         @if (Auth::check()) 

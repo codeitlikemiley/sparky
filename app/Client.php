@@ -28,9 +28,9 @@ class Client extends Authenticatable
 
     protected $dates = ['created_at', 'updated_at'];
 
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token, $email = null)
     {
-        $this->notify(new ResetPasswordNotification($token));
+        $this->notify(new ResetPasswordNotification($token, $email ? $email : $this->email));
     }
 
     public function projects()

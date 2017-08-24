@@ -42,4 +42,9 @@ class ForgotPasswordController extends BaseController
 
         return view('employee::forgotpassword');
     }
+
+    protected function sendResetLinkResponse($response)
+    {
+        return redirect()->route('frontend');
+    }
 }

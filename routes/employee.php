@@ -12,7 +12,7 @@
   // Password reset Routes
   Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('employee.password.email');
   Route::get('/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('employee.password.request');
-  Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+  Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('employee.password.new_password');
   Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('employee.password.reset');
   // Admin Dashboard Route
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use Password;
 use Auth;
+use Illuminate\Support\Str;
 
 class ResetPasswordController extends BaseController
 {

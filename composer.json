@@ -17,6 +17,7 @@
         "laravel/spark": "~4.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
+        "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
         "spatie/laravel-activitylog": "dev-multiauth",
         "spatie/laravel-medialibrary": "5.0.0"
