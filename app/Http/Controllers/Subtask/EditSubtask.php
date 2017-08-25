@@ -39,6 +39,7 @@ class EditSubtask extends BaseController
             $this->EditSubtask($subtask);
             $this->assignEmployeesIfAny($task,$subtask);
             $this->addUsers($task,$subtask);
+            $subtask->save();
             $subtask->employees;
             $employees = $this->getAuth()->employees()->get()->toArray();
             return response()->json(['message' => $this->message, 'subtask' => $subtask, 'employees' => $employees], $this->code);
