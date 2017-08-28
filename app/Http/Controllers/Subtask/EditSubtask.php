@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Subtask;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
-use App\Notifications\EmployeeRegistrationEmail;
 use App\Notifications\SubtaskAssignedEmail;
 
 class EditSubtask extends BaseController
@@ -39,9 +38,10 @@ class EditSubtask extends BaseController
         }
         if($this->allowed($task) || $this->createdBy($task)){
             $this->EditSubtask($subtask);
+            $subtask->save();
             $this->assignEmployeesIfAny($task,$subtask);
             $this->addUsers($task,$subtask);
-            $subtask->save();
+            $subtask = $subtask->fresh();
             $subtask->employees;
             $employees = $this->getAuth()->employees()->get()->toArray();
             return response()->json(['message' => $this->message, 'subtask' => $subtask, 'employees' => $employees], $this->code);
@@ -162,14 +162,17 @@ class EditSubtask extends BaseController
             }
             $subtask->employees()->attach($data);
         }
+        $subtask->save();
         $employees = $users_input;
-        foreach($employees as $employee){
-            $employee = Employee::where('email', $employee['email'])->first();
-            if($employee){
-            $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
-            $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+        if($employees){
+            foreach($employees as $employee){
+                $employee = Employee::where('email', $employee['email'])->first();
+                if($employee){
+                $employee->notify(new SubtaskAssignedEmail($subtask,$this->getTenant(),$employee));
+                }
             }
         }
+        
         
     }
 
@@ -184,11 +187,17 @@ class EditSubtask extends BaseController
             $data[$id] =['project_id' => $project->id];
             }
             $subtask->employees()->sync($data);
+        }else{
+            $subtask->employees()->sync([]);
         }
+        $subtask->save();
         $employees = $subtask->employees;
-        foreach($employees as $employee){
-            $employee->notify(new SubtaskAssignedEmail($subtask,$this->getTenant(),$employee));
+        if(count($employees)){
+            foreach($employees as $employee){
+                $employee->notify(new SubtaskAssignedEmail($subtask,$this->getTenant(),$employee));
+            }
         }
+       
     }
 
     private function hasAssignedEmployees()

@@ -10,7 +10,7 @@ use Laravel\Spark\Events\Auth\UserRegistered;
 use Laravel\Spark\Contracts\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Laravel\Spark\Contracts\Interactions\Auth\Register;
-use Illuminate\Foundation\Auth\RegistersUsers;
+// use Illuminate\Foundation\Auth\RegistersUsers;
 use Laravel\Spark\Http\Controllers\Auth\RegisterController as Controller;
 use App\Notifications\RegistrationWelcomeEmail;
 
@@ -27,7 +27,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    // use RegistersUsers;
 
     /**
      * Where to redirect users after registration.

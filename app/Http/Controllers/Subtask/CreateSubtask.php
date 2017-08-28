@@ -150,8 +150,10 @@ class CreateSubtask extends BaseController
             $this->subtask->employees()->sync($data);
         }
         $employees = $this->subtask->employees;
-        foreach($employees as $employee){
-            $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+        if($employees){
+            foreach($employees as $employee){
+                $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+            }
         }
     }
 
@@ -175,15 +177,15 @@ class CreateSubtask extends BaseController
             $this->subtask->employees()->attach($data);
         }
         $employees = $users_input;
-        foreach($employees as $employee){
-            $employee = Employee::where('email', $employee['email'])->first();
-            if($employee){
-            $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
-            $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+        if($employees){
+            foreach($employees as $employee){
+                $employee = Employee::where('email', $employee['email'])->first();
+                if($employee){
+                $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
+                $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+                }
             }
         }
-        
-        
     }
 
     private function hasAssignedEmployees()
