@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Subtask;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
+use App\Notifications\EmployeeRegistrationEmail;
+use App\Notifications\SubtaskAssignedEmail;
 
 class EditSubtask extends BaseController
 {
@@ -143,9 +145,8 @@ class EditSubtask extends BaseController
 
     private function addUsers($task,$subtask)
     {
-        
+        $users_input = $this->request->users;
         if($this->request->newCollaborator){
-            $users_input = $this->request->users;
             for ($i=0; $i < count($users_input); $i++) { 
                 if(!$users_input[$i]['name'] || !$users_input[$i]['email'] || !$users_input[$i]['password']){
                     unset($users_input[$i]);
@@ -161,6 +162,14 @@ class EditSubtask extends BaseController
             }
             $subtask->employees()->attach($data);
         }
+        $employees = $users_input;
+        foreach($employees as $employee){
+            $employee = Employee::where('email', $employee['email'])->first();
+            if($employee){
+            $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
+            $employee->notify(new SubtaskAssignedEmail($this->subtask,$this->getTenant(),$employee));
+            }
+        }
         
     }
 
@@ -175,6 +184,10 @@ class EditSubtask extends BaseController
             $data[$id] =['project_id' => $project->id];
             }
             $subtask->employees()->sync($data);
+        }
+        $employees = $subtask->employees;
+        foreach($employees as $employee){
+            $employee->notify(new SubtaskAssignedEmail($subtask,$this->getTenant(),$employee));
         }
     }
 

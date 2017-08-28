@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Project;
 use App\Client;
+use App\Notifications\ClientAssignedEmail;
 
 class CreateProject extends BaseController
 {
@@ -83,9 +84,9 @@ class CreateProject extends BaseController
         }else{
             $this->addClientIfAny();
         }
-        
         $this->manageProjectsByTenant();
         $this->saveByTenant();
+        $this->client->notify(new ClientAssignedEmail($this->project,$this->getTenant(),$this->client));
         
     }
 

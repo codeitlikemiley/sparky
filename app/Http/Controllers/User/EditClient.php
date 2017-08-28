@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller as BaseController;
 use App\Client;
 use App\Project;
+use App\Notifications\ClientAssignedEmail;
 
 class EditClient extends BaseController
 {
@@ -138,6 +139,7 @@ class EditClient extends BaseController
                 $this->getAuth()->projects()->save($project);
                 // manageProjects ByTenant
                 $this->getTenant()->manageProjects()->save($project);
+                $client->notify(new ClientAssignedEmail($project,$client,$this->getTenant()));
             }
         }
             
@@ -186,6 +188,7 @@ class EditClient extends BaseController
             $project = Project::find($id);
             // attach the projects
             $client->projects()->save($project);
+            $client->notify(new ClientAssignedEmail($project,$client,$this->getTenant()));
             }
         }
         // detach projects that are not selected

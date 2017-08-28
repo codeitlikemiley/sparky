@@ -28,8 +28,8 @@ class ClientAssignedEmail extends Notification implements ShouldQueue
     public function __construct($project,$client,$tenant)
     {
         $this->project = $project;
-        $this->tenant = $tenant;
         $this->client = $client;
+        $this->tenant = $tenant;
     }
 
     /**
@@ -54,7 +54,7 @@ class ClientAssignedEmail extends Notification implements ShouldQueue
         return (new MailMessage)
                 ->subject('View The Progress Of Your Project: '. $this->project->name)
                 ->greeting('Hi! '. $this->client->name . '.')
-                ->line('A New Project has Been Assigned To You By: '.$this->tenant->name)
+                ->line('A New Project has Been Assigned To You By: '. $this->tenant->name)
                 ->line('Click The Button Below To View The Progress Of This Project.')
                 ->action($this->project->name, url('/client/dashboard/clients/'.$this->project->id))
                 ->line('We Dont Send Any Password in Email')

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
+use App\Notifications\EmployeeRegistrationEmail;
 
 class AddEmployee extends BaseController
 {
@@ -45,6 +46,7 @@ class AddEmployee extends BaseController
         $employee->projects;
         $this->getAuth()->employees()->save($employee); // Morph
         $this->getTenant()->managedEmployees()->save($employee); // tenant_id
+        $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
         return response()->json(['message' => $this->message, 'employee' => $employee], $this->code);
         
     }

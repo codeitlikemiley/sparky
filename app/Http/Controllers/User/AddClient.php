@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Client;
 use App\Project;
+use App\Notifications\ClientAssignedEmail;
+use App\Notifications\ClientRegistrationEmail;
 
 class AddClient extends BaseController
 {
@@ -44,6 +46,7 @@ class AddClient extends BaseController
         }
         
         $client = Client::forceCreate($this->request->only(['name','email', 'password','website']));
+        $client->notify(new ClientRegistrationEmail($this->getTenant(),$client));
         // Assign All Projects to Client If Any
         $this->assignedProjectsIfAny($client);
         // Create Project 
@@ -114,6 +117,7 @@ class AddClient extends BaseController
                 $this->getAuth()->projects()->save($project);
                 // manageProjects ByTenant
                 $this->getTenant()->manageProjects()->save($project);
+                $client->notify(new ClientAssignedEmail($project,$client,$this->getTenant()));
             }
         }
             
@@ -160,6 +164,7 @@ class AddClient extends BaseController
             foreach($project_list as $id){
             $project = Project::find($id);
             $client->projects()->save($project);
+            $client->notify(new ClientAssignedEmail($project,$client,$this->getTenant()));
             }
         }
 

@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+use Laravel\Spark\Spark;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Spark\Events\Auth\UserRegistered;
+use Laravel\Spark\Contracts\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Foundation\Auth\RedirectsUsers;
+use Laravel\Spark\Contracts\Interactions\Auth\Register;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Laravel\Spark\Http\Controllers\Auth\RegisterController as Controller;
+use App\Notifications\RegistrationWelcomeEmail;
 
 class RegisterController extends Controller
 {
@@ -30,42 +37,53 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * Create a new authentication controller instance.
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('guest');
+
+        $this->redirectTo = Spark::afterLoginRedirect();
+    }
+    /**
+     * Show the application registration form.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function showRegistrationForm(Request $request)
+    {
+        if (Spark::promotion() && ! $request->has('coupon')) {
+            // If the application is running a site-wide promotion, we will redirect the user
+            // to a register URL that contains the promotional coupon ID, which will force
+            // all new registrations to use this coupon when creating the subscriptions.
+            return redirect($request->fullUrlWithQuery([
+                'coupon' => Spark::promotion()
+            ]));
+        }
+
+        return view('spark::auth.register');
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Handle a registration request for the application.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param  RegisterRequest  $request
+     * @return Response
      */
-    protected function validator(array $data)
+    public function register(RegisterRequest $request)
     {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    }
+        Auth::login($user = Spark::interact(
+            Register::class, [$request]
+        ));
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        event(new UserRegistered($user));
+        $user->notify(new RegistrationWelcomeEmail($user));
+
+        return response()->json([
+            'redirect' => '/dashboard'
         ]);
     }
 }
