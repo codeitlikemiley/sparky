@@ -11,8 +11,6 @@
 |
 */
 
-Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('/register','Auth\RegisterController@register')->name('register.post');
 Route::get('/', 'WelcomeController@show')->name('frontend');
 Route::post('/clone/{projectID}', 'Project\CloneProject')->name('clone');
 Route::post('/projects/{projectID}/toggleClonable', 'Project\ToggleClonable')->name('toggle-clonable');

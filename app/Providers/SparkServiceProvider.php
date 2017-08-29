@@ -5,6 +5,7 @@ namespace App\Providers;
 use Laravel\Spark\Spark;
 use Laravel\Spark\Providers\AppServiceProvider as ServiceProvider;
 use App\EligibilityChecker;
+use Carbon\Carbon;
 
 class SparkServiceProvider extends ServiceProvider
 {
@@ -64,5 +65,20 @@ class SparkServiceProvider extends ServiceProvider
             ]);
         Spark::collectBillingAddress();
         // Spark::checkPlanEligibilityUsing('EligibilityChecker@handle');
+        Spark::createUsersWith(function ($request) {
+            $user = Spark::user();
+        
+            $data = $request->all();
+        
+            $user->forceFill([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'last_read_announcements_at' => Carbon::now(),
+                'trial_ends_at' => Carbon::now()->addDays(Spark::trialDays()),
+            ])->save();
+        
+            return $user;
+        });
     }
 }
