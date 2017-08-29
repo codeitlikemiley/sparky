@@ -77,7 +77,7 @@ class CreateProject extends BaseController
     private function createProject()
     {
         $this->addName();
-        if($this->request->newclient === true){
+        if($this->request->newclient != 'false'){
             $this->createNewClient();
             $this->project->client_id = $this->client->id;
             $this->getAuth()->clients()->save($this->client);
