@@ -18,47 +18,21 @@
             @include('task::breadcrumbs')
             <!-- Div text -->
             <div class="text">
-                <!-- Header -->
-                @include('task::data')
-                <br>
-                <br>
-                <br>
-                <hr>
-                <!-- Header -->
                 
-                <!-- Grid -->
-                <div class="grid">
-                    <!-- Task Points -->
-                    
-                    <div class="row padding10">
-                        @include('task::points')
-                    </div>
-                    
-                    <div class="row">
-                        <!-- Task Status -->
-                        @include('task::progress')
-                        
-                    </div>
-                   
-                    <!-- Subtask table -->
-                    
-                    <div class="row">
-                        @include('subtask::table')
-                    </div>
-                    <!-- Activity and Comment Section -->
-                    <div class="row margin-bottom-90">
-                        <!-- Activity -->
-                        <div class="row" v-if="guard != 'client'">
-                            @include('activity::logs')
+                <div class="row cells12">
+                        <div class="tabcontrol" data-role="tabcontrol">
+                            <ul class="tabs">
+                                <li><a href="#job_tab">Job</a></li>
+                                <li><a href="#tasks_tab">Tasks</a></li>
+                                <li><a href="#calendar">Calendar</a></li>
+                            </ul>
+                            <div class="grid frames bg-white">
+                                @include('task::data')
+                                @include('subtask::tab')
+                                @include('subtask::calendar')
+                            </div>
                         </div>
-                        <!-- Comments -->
-                        <div class="row">
-                            <comments :guard="guard" :employees="employees" :tenant="tenant" :user="user" :task="task" :client="client">
-                            </comments>
-                        </div>
-                    </div>
                 </div>
-                <!-- Grid -->
             </div>
             <!-- Div text -->
         </div>

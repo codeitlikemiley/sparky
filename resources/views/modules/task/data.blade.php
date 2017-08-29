@@ -1,3 +1,4 @@
+<div class="frame bg-white" id="job_tab">
 <div class="example" data-text="Link">
     <blockquote class="place-right">
         <p v-text="taskForm.task_description" v-if="taskForm.task_description"></p>
@@ -19,3 +20,4 @@
     <!-- Open Modal To Edit Task -->
     <button class="button info"><span class="mif-pencil"></span> Edit Job</button>
 </a>
+</div>

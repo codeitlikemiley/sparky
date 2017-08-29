@@ -49,3 +49,5 @@ require('vue_evo_filters');
 // relative path: 
 // resources/assets/js/evolutly
 require('forms/evo-form-bootstrap');
+
+Vue.use(require('vue-full-calendar'))

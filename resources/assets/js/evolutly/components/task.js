@@ -1,6 +1,7 @@
 import StarRating from 'vue-star-rating'
 import comments from './comments.vue'
 import guards from './../../mixins/guard'
+import taskCalendar from './task-calendar.vue'
 
 Vue.component('task', {
     mixins: [guards],
@@ -344,7 +345,8 @@ Vue.component('task', {
     },
     components: {
         StarRating,
-        comments
+        comments,
+        taskCalendar
     }
 
 })
