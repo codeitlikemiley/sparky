@@ -35,7 +35,7 @@ class CreateProject extends BaseController
             $this->code = 400;
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
-        dd($this->client);
+
         $this->createProject();
         $clients = $this->getAuth()->clients;
         return response()->json(['message' => $this->message, 'project' => $this->project, 'clients' => $clients], $this->code);
@@ -86,7 +86,10 @@ class CreateProject extends BaseController
         }
         $this->manageProjectsByTenant();
         $this->saveByTenant();
-        
+        $client = Client::find($this->project->client_id);
+        if($client){
+            $client->notify(new ClientAssignedEmail($this->project,$this->getTenant(),$this->client));
+        }
         
     }
 
