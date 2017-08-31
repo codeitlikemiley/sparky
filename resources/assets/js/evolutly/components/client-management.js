@@ -55,13 +55,39 @@ Vue.component('client-management', {
         resetRegisterForm(){
             let self = this
             self.registerForm = new EvolutlyForm(Evolutly.forms.registerClientForm)
+            self.registerForm.links = {
+                facebook: '',
+                linkedin: '',
+                twitter: '',
+                instagram: '',
+                youtube: '',
+                googleplus: '',
+                website: ''
+            }
         },
         fillRegisterForm(client){
             let self = this
             self.registerForm.name = client.name
+            self.registerForm.first_name = client.first_name
+            self.registerForm.last_name = client.last_name
+            self.registerForm.phone = client.phone
+            self.registerForm.address = client.address
+            self.registerForm.address_line_2 = client.address_line_2
+            self.registerForm.city = client.city
+            self.registerForm.zip = client.zip
+            self.registerForm.country = client.country
             self.registerForm.email = client.email
             self.registerForm.password = client.password
-            self.registerForm.website = client.website
+            self.registerForm.website = client.website ? client.website : ''
+            self.registerForm.links = client.links ? client.links : {
+                facebook: '',
+                linkedin: '',
+                twitter: '',
+                instagram: '',
+                youtube: '',
+                googleplus: '',
+                website: ''
+            }
             self.registerForm.assignedProjects = client.projects
             this.options = _.union(this.projects, this.registerForm.assignedProjects) 
         },
