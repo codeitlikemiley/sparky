@@ -90,7 +90,7 @@
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
                             <span class="prepend-icon mif-compass2 fg-amber"></span>
-                            <input type="text" placeholder="Zip Code/ State Code" v-model="registerForm.zip">
+                            <input type="text" placeholder="Province/State" v-model="registerForm.zip">
                             <span class="fg-red" v-show="registerForm.errors.has('zip')">
                         @{{ registerForm.errors.get('zip') }}
                         </span>
@@ -180,7 +180,7 @@
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
                             <span class="prepend-icon mif-mail fg-yellow"></span>
-                            <input type="text" placeholder="Client Email" v-model="registerForm.email">
+                            <input type="text" placeholder="Email" v-model="registerForm.email">
                             <span class="fg-red" v-show="registerForm.errors.has('email')">
                         @{{ registerForm.errors.get('email') }}
                         </span>
@@ -191,7 +191,7 @@
                         <div class="input-control text full-size">
                             <span v-if="registerForm.hidden" class="prepend-icon mif-spell-check fg-darkCyan" @click="registerForm.hidden = false"></span>
                             <span v-else class="prepend-icon mif-eye fg-darkCyan" @click="registerForm.hidden = true"></span>
-                            <input v-if="registerForm.hidden" type="password" placeholder="Client Password" v-model="registerForm.password">
+                            <input v-if="registerForm.hidden" type="password" placeholder="Password" v-model="registerForm.password">
                             <input v-else type="text" placeholder="Password Visible" v-model="registerForm.password">
                             <span class="fg-red" v-show="registerForm.errors.has('password')">
                             @{{ registerForm.errors.get('password') }}

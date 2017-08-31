@@ -32,7 +32,7 @@
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-user fg-blue"></span>
-                                <input type="text" placeholder="Client Name" v-model="projectForm.client.name">
+                                <input type="text" placeholder="Company Name" v-model="projectForm.client.name">
                                 <span class="fg-red" v-show="projectForm.errors.has('client.name')">
                                 @{{ projectForm.errors.get('client.name') }}
                             </span>
@@ -41,7 +41,7 @@
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-link fg-blue"></span>
-                                <input type="text" placeholder="Client Website" v-model="projectForm.website">
+                                <input type="text" placeholder="Website" v-model="projectForm.website">
                                 <span class="fg-red" v-show="projectForm.errors.has('website')">
                                 @{{ projectForm.errors.get('website') }}
                             </span>
@@ -50,7 +50,7 @@
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-mail fg-blue"></span>
-                                <input type="text" placeholder="Client Email" v-model="projectForm.client.email">
+                                <input type="text" placeholder="Email" v-model="projectForm.client.email">
                                 <span class="fg-red" v-show="projectForm.errors.has('client.email')">
                                 @{{ projectForm.errors.get('client.email') }}
                             </span>
@@ -59,7 +59,7 @@
                         <div class="row" style="padding:5px;" v-if="projectForm.newclient">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-spell-check fg-blue"></span>
-                                <input type="text" placeholder="Client Password" v-model="projectForm.client.password">
+                                <input type="text" placeholder="Password" v-model="projectForm.client.password">
                                 <span class="fg-red" v-show="projectForm.errors.has('client.password')">
                                 @{{ projectForm.errors.get('client.password') }}
                             </span>

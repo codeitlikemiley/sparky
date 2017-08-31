@@ -11,7 +11,7 @@
     <div class="panel widget-box">
 
         <div class="heading" style="background-color:#4db6ac;">
-            <div class="title align-center">Edit New Client<span @click="closeEditModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;cursor:pointer;"></span></div>
+            <div class="title align-center">Edit Client<span @click="closeEditModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;cursor:pointer;"></span></div>
         </div>
 
         <div class="content">
@@ -20,20 +20,159 @@
 
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
-                            <span class="prepend-icon mif-user fg-lime"></span>
-                            <input type="text" placeholder="Client Name" v-model="registerForm.name">
+                            <span class="prepend-icon fa fa-briefcase fg-teal"></span>
+                            <input type="text" placeholder="Company" v-model="registerForm.name">
                             <span class="fg-red" v-show="registerForm.errors.has('name')">
-                            @{{ registerForm.errors.get('name') }}
+                        @{{ registerForm.errors.get('name') }}
+                        </span>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-user fg-olive"></span>
+                            <input type="text" placeholder="First Name" v-model="registerForm.first_name">
+                            <span class="fg-red" v-show="registerForm.errors.has('first_name')">
+                        @{{ registerForm.errors.get('first_name') }}
                         </span>
                         </div>
                     </div>
 
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
-                            <span class="prepend-icon mif-link fg-blue"></span>
-                            <input type="text" placeholder="Client Website" v-model="registerForm.website">
+                            <span class="prepend-icon mif-users fg-steel"></span>
+                            <input type="text" placeholder="Last Name" v-model="registerForm.last_name">
+                            <span class="fg-red" v-show="registerForm.errors.has('last_name')">
+                        @{{ registerForm.errors.get('last_name') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon fa fa-phone fg-grayDarker"></span>
+                            <input type="text" placeholder="Contact No." v-model="registerForm.phone">
+                            <span class="fg-red" v-show="registerForm.errors.has('phone')">
+                        @{{ registerForm.errors.get('phone') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-map fg-teal"></span>
+                            <input type="text" placeholder="Address 1" v-model="registerForm.address">
+                            <span class="fg-red" v-show="registerForm.errors.has('address')">
+                        @{{ registerForm.errors.get('address') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-map2 fg-teal"></span>
+                            <input type="text" placeholder="Address 2" v-model="registerForm.address_line_2">
+                            <span class="fg-red" v-show="registerForm.errors.has('address_line_2')">
+                        @{{ registerForm.errors.get('address_line_2') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-location-city fg-darkTeal"></span>
+                            <input type="text" placeholder="City" v-model="registerForm.city">
+                            <span class="fg-red" v-show="registerForm.errors.has('city')">
+                        @{{ registerForm.errors.get('city') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-compass2 fg-amber"></span>
+                            <input type="text" placeholder="Province/State" v-model="registerForm.zip">
+                            <span class="fg-red" v-show="registerForm.errors.has('zip')">
+                        @{{ registerForm.errors.get('zip') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-flag fg-lime"></span>
+                            <input type="text" placeholder="Country" v-model="registerForm.country">
+                            <span class="fg-red" v-show="registerForm.errors.has('country')">
+                        @{{ registerForm.errors.get('country') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-facebook fg-cobalt"></span>
+                            <input type="text" placeholder="Facebook" v-model="registerForm.links.facebook">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.facebook')">
+                        @{{ registerForm.errors.get('links.facebook') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-twitter fg-cyan"></span>
+                            <input type="text" placeholder="Twitter" v-model="registerForm.links.twitter">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.twitter')">
+                        @{{ registerForm.errors.get('links.twitter') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-linkedin fg-darkCyan"></span>
+                            <input type="text" placeholder="LinkedIn" v-model="registerForm.links.linkedin">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.linkedin')">
+                        @{{ registerForm.errors.get('links.linkedin') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-google-plus fg-lightRed"></span>
+                            <input type="text" placeholder="Google+" v-model="registerForm.links.googleplus">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.googleplus')">
+                        @{{ registerForm.errors.get('links.googleplus') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-youtube fg-red"></span>
+                            <input type="text" placeholder="Youtube" v-model="registerForm.links.youtube">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.youtube')">
+                        @{{ registerForm.errors.get('links.youtube') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-instagram fg-taupe"></span>
+                            <input type="text" placeholder="Instagram" v-model="registerForm.links.instagram">
+                            <span class="fg-red" v-show="registerForm.errors.has('links.instagram')">
+                        @{{ registerForm.errors.get('links.instagram') }}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding:5px;">
+                        <div class="input-control text full-size">
+                            <span class="prepend-icon mif-earth fg-darkBlue"></span>
+                            <input type="text" placeholder="Website" v-model="registerForm.website">
                             <span class="fg-red" v-show="registerForm.errors.has('website')">
-                            @{{ registerForm.errors.get('website') }}
+                        @{{ registerForm.errors.get('website') }}
                         </span>
                         </div>
                     </div>
