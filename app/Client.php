@@ -18,7 +18,17 @@ class Client extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'photo_url'
+        'photo_url',
+        'first_name',
+        'last_name',
+        'address',
+        'address_line_2',
+        'city',
+        'zip',
+        'country',
+        'country_code',
+        'links',
+        'notes',
     ];
 
     protected $hidden = [
@@ -27,6 +37,10 @@ class Client extends Authenticatable
     ];
 
     protected $dates = ['created_at', 'updated_at'];
+
+    protected $casts = [
+        'links' => 'array',
+    ];
 
     public function sendPasswordResetNotification($token, $email = null)
     {

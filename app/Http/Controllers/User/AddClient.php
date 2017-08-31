@@ -45,7 +45,23 @@ class AddClient extends BaseController
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
         
-        $client = Client::forceCreate($this->request->only(['name','email', 'password','website']));
+        $client = Client::forceCreate($this->request->only([
+            'name',
+            'email', 
+            'password',
+            'website',
+            'first_name',
+            'last_name',
+            'phone',
+            'address',
+            'address_line_2',
+            'city',
+            'zip',
+            'country',
+            'notes',
+            ]));
+        
+        $this->addlinks($client);
         $client->notify(new ClientRegistrationEmail($this->getTenant(),$client));
         // Assign All Projects to Client If Any
         $this->assignedProjectsIfAny($client);
@@ -70,19 +86,40 @@ class AddClient extends BaseController
     private function rules(){
         return 
         [
-        'name' => 'required|max:30',
+        'name' => 'required|max:60',
+        'first_name' => 'required|max:60',
+        'last_name' => 'required|max:60',
+        'phone' => 'max:60',
+        'address' => 'max:225',
+        'address_line_2' => 'max:225',
+        'city' => 'max:60',
+        'zip' => 'max:60',
+        'country' => 'max:60',
+        'notes' => 'max:255',
         'email' => 'required|email|unique:clients,email',
         'password' => 'required|min:6|max:60',
         'new_project' => 'boolean',
         'projects.*.name' => 'sometimes|required|max:60',
         'website' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'links.*' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         ];
     }
 
     private function messages(){
         return [
-            'name.required' => 'Name Field is Required',
-            'name.max' => 'Name is Too Long (60) Max',
+            'name.required' => 'Company Name Field is Required',
+            'name.max' => 'Company Name is Too Long (60) Max',
+            'first_name.required' => 'First Name Field is Required',
+            'first_name.max' => 'First Name is Too Long (60) Max',
+            'last_name.required' => 'Last Name Field is Required',
+            'last_name.max' => 'Last Name is Too Long (60) Max',
+            'phone.size' => 'Phone Number Size Exceed (60) Max',
+            'address.max' => 'Address Line 1 Exceeds (255) Max',
+            'address_line_2.max' => 'Address Line 2 Exceeds (255) Max',
+            'city.max' => 'City Exceeds (60) Max',
+            'zip.max' => 'Province/State Exceeds (60) Max',
+            'country.max' => 'Country Exceeds (60) Max',
+            'notes.max' => 'Notes Exceeds (255) Max',
             'email.required' => 'Email is Required',
             'email.email' => 'Email Format Is Invalid',
             'email.unique' => 'Email Is Already taken',
@@ -92,6 +129,7 @@ class AddClient extends BaseController
             'projects.*.name.required' => 'Project Description is Required',
             'projects.*.name.max' => 'Project Description is Too Long Max(60)',
             'website.regex' => 'Enter Valid Url',
+            'links.*.regex' => 'Enter Valid Url',
         ];
     }
 
@@ -122,6 +160,18 @@ class AddClient extends BaseController
         }
             
         }
+    }
+
+    private function addlinks($client)
+    {
+        $links = $client->links;
+        if($count = count($this->request->links)){
+            foreach ($this->request->links as $key => $value) {
+                $links[$key] = $value;
+            }
+        }
+        $client->links = $links;
+        $client->save();
     }
 
     private function limitProjectCount(){
