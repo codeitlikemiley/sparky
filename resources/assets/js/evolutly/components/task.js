@@ -2,10 +2,11 @@ import StarRating from 'vue-star-rating'
 import comments from './comments.vue'
 import guards from './../../mixins/guard'
 import taskCalendar from './task-calendar.vue'
+import FileUpload from 'vue-upload-component'
 
 Vue.component('task', {
     mixins: [guards],
-    props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities'],
+    props: ['guard','employees', 'tenant','user', 'task', 'project', 'client', 'campaign', 'activities', 'workers'],
     data () {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
@@ -346,7 +347,8 @@ Vue.component('task', {
     components: {
         StarRating,
         comments,
-        taskCalendar
+        taskCalendar,
+        FileUpload
     }
 
 })

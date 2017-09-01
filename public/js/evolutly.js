@@ -46516,6 +46516,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__mixins_guard__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue__ = __webpack_require__(361);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__task_calendar_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component__ = __webpack_require__(373);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_upload_component__);
+
 
 
 
@@ -46523,7 +46526,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 Vue.component('task', {
     mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins_guard___default.a],
-    props: ['guard', 'employees', 'tenant', 'user', 'task', 'project', 'client', 'campaign', 'activities'],
+    props: ['guard', 'employees', 'tenant', 'user', 'task', 'project', 'client', 'campaign', 'activities', 'workers'],
     data: function data() {
         return {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
@@ -46851,7 +46854,8 @@ Vue.component('task', {
     components: {
         StarRating: __WEBPACK_IMPORTED_MODULE_0_vue_star_rating___default.a,
         comments: __WEBPACK_IMPORTED_MODULE_1__comments_vue___default.a,
-        taskCalendar: __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue___default.a
+        taskCalendar: __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue___default.a,
+        FileUpload: __WEBPACK_IMPORTED_MODULE_4_vue_upload_component___default.a
     }
 
 });

@@ -20,8 +20,10 @@
 <div class="frame bg-white" id="people_tab" v-else>
     <div class="row" style="min-height:450px;">
         <div class="cell align-center">
-            <h4 class="fg-lightRed">Opps! No Team Member Assigned Yet To This Client...</h4>
-            <h4 class="fg-cyan"><strong>Create A Task First Under Jobs And Assign A Team Member to It.</strong></h4>
+            <h4 class="fg-lightRed">No Team Member Yet is Assigned To Any Of The Task For this Job!</h4>
+            <h4 class="tag bg-blue fg-white" style="cursor:pointer; font-size:20px;"><strong @click="addSubtaskModal()">Create a New Task and Assign A Team Member To That Task</strong></h4>
+            <h4 class="tag bg-taupe fg-white" style="font-size:20px;">OR</strong></h4>
+            <h4 class="tag bg-green fg-white" style="cursor:pointer; font-size:20px;"><strong @click="addSubtaskModal()">Assign A Default Team Member to Manage this Job</strong></h4>
         </div>
     </div>
     

@@ -8,7 +8,7 @@
 @section('content')
 <!-- Section Wrapper -->
 <vue-up></vue-up>
-<task :guard="{{json_encode($guard)}}" :activities="{{json_encode($activities)}}" :campaign="{{ json_encode($campaign) }}" :client="{{json_encode($client)}}" :employees="employees" :tenant="tenant" :user="user" :task="{{json_encode($task)}}" :project="{{json_encode($project)}}" inline-template>
+<task :guard="{{json_encode($guard)}}" :activities="{{json_encode($activities)}}" :campaign="{{ json_encode($campaign) }}" :client="{{json_encode($client)}}" :employees="employees" :tenant="tenant" :user="user" :task="{{json_encode($task)}}" :project="{{json_encode($project)}}" :workers="{{json_encode($workers)}}" inline-template>
 <div class="section-wrapper animated fadeInRightBig">
     <br>
     <!-- Panel box -->
