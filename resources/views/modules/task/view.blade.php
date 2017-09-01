@@ -24,11 +24,13 @@
                             <ul class="tabs">
                                 <li><a href="#job_tab">Job</a></li>
                                 <li><a href="#tasks_tab">Tasks</a></li>
+                                <li><a href="#people_tab">Team</a></li>
                                 <li><a href="#calendar">Calendar</a></li>
                             </ul>
                             <div class="grid frames bg-white">
                                 @include('task::data')
                                 @include('subtask::tab')
+                                @include('employee::tab')
                                 @include('subtask::calendar')
                             </div>
                         </div>

@@ -9,7 +9,7 @@
 
                     <div class="input-control text full-size">
                         <input type="text" placeholder="Add Campaign" v-model="campaignForm.campaign_name">
-                        <input type="number" placeholder="Campaign Order" v-model="campaignForm.campaign_order">
+                        <input v-show="false" type="number" placeholder="Campaign Order" v-model="campaignForm.campaign_order">
                         <button type="submit" class="button info" :disabled="campaignForm.busy">
                             <span class="icon mif-keyboard-return"></span>
                     </button>
