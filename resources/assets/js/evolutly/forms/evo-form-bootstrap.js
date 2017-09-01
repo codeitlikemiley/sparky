@@ -30,7 +30,7 @@ Evolutly.forms = {
         website: '',
         newclient: false,
         client: {
-            name: '', 
+            name: '',
             email: '', 
             password: ''
         },

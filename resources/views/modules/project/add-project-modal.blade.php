@@ -16,7 +16,7 @@
                     <div class="input-control text full-size">
                     <form @submit.prevent="createProject()" role="form" class="padding10">
                         {{ csrf_field() }}
-                        <input type="text" placeholder="Describe Your Client?" v-model="projectForm.client_name">
+                        <input type="text" placeholder="Name Your Client Project" v-model="projectForm.client_name">
                         </br>
                         </br>
                         <div  class="row" style="padding:5px;margin-top:15px;">
