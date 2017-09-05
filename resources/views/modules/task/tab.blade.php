@@ -30,7 +30,7 @@
                     </div>
                     <div class="content">
                         <div class="text">
-                            <ul class="todo-list" v-if="campaign.tasks">
+                            <ul class="todo-list" v-if="campaign.tasks.length >0">
                                 <li v-for="(task, tKey, tIndex) in campaign.tasks" :key="tKey" :index="tIndex" style="padding:10px;">
                                     <label class="input-control checkbox" onclick="return false;" style="cursor:default;">
                                         <input type="checkbox" class="todo-cb" v-model="task.done">
@@ -43,6 +43,12 @@
                                     </div>
                                 </li>
                             </ul>
+                            <div class="todo-list" v-else style="min-height:200px;padding-top:35px;" class="v-align-middle">
+                                <div v-if="guard === 'web'" class="fg-cyan align-center">
+                                <h4 class="fg-cyan"><strong>No Jobs Yet For This Campaign</strong></h4>
+                                    <button @click="showTask(campaign.id)" class="button info"><span class="mif-plus"></span> Create Your First Job...</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
             </draggable>
@@ -55,7 +61,9 @@
         <div class="row" style="min-height:450px;">
             <div class="cell align-center">
                 <h4 class="fg-cyan"><strong>You Have No Campaign Yet</strong></h4>
-                <h4 class="fg-cyan"><strong>Create Your First Campaign...</strong></h4>
+                <a href="#!" v-if="guard === 'web'" class="fg-cyan">
+                    <button @click="showCampaignModal()" class="button info"><span class="mif-plus"></span> Create Your First Campaign...</button>
+                </a>
             </div>
         </div>
         
