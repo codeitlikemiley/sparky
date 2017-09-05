@@ -49985,6 +49985,7 @@ Vue.component('task', {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
+            employeeSubtaskForm: new EvolutlyForm(Evolutly.forms.employeeSubtaskForm),
             subtasks: [],
             progress: '0%',
             total: 0,
@@ -49993,7 +49994,9 @@ Vue.component('task', {
             rating: 1,
             priority: 1,
             currentSubtask: null,
-            options: []
+            options: [],
+            teammember: [],
+            membertasks: []
 
         };
     },
@@ -50001,10 +50004,15 @@ Vue.component('task', {
         this.whenReady();
     },
 
-    computed: {},
+    computed: {
+        employeeChunks: function employeeChunks() {
+            return _.chunk(this.teammember, 4);
+        }
+    },
     methods: {
         whenReady: function whenReady() {
             var self = this;
+            self.teammember = this.workers;
             self.guardAllowed(self.fetchSubtasks());
             this.options = this.employees;
             self.setInitialTask();
@@ -50196,6 +50204,7 @@ Vue.component('task', {
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
                 self.subtasks.push(response.data.subtask);
                 self.options = response.data.employees;
+                self.teammember = response.data.workers;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 self.hide('add-subtask-modal');
             }).catch(function (error) {
@@ -50250,12 +50259,16 @@ Vue.component('task', {
                 delete self.subtaskForm.users;
             }
             self.endpoints.web = '/dashboard/jobs/' + self.task.id + '/tasks/' + subtask.id + '/edit';
+            // add self.self.employeeSubtaskForm.subtasks = self.membertasks
             axios.put(self.guardedLocation(), self.subtaskForm).then(function (response) {
                 self.subtaskForm.resetStatus();
                 var index = _.findIndex(self.subtasks, { id: subtask.id });
                 self.$set(self.subtasks, index, response.data.subtask);
                 self.options = response.data.employees;
                 self.hide('edit-subtask-modal-' + subtask.id);
+                self.teammember = response.data.workers;
+                var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
+                self.$delete(self.membertasks, memberIndex);
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
@@ -50290,6 +50303,47 @@ Vue.component('task', {
         },
         removeUserInput: function removeUserInput(index) {
             this.subtaskForm.users.splice(index, 1);
+        },
+        deleteAllSubtasks: function deleteAllSubtasks(employee) {
+            var self = this;
+            self.endpoints.web = '/jobs/' + self.task.id + '/employee/' + employee.id + '/unassignsubtask/all';
+            self.employeeSubtaskForm.subtasks = self.membertasks;
+            axios.post(self.guardedLocation(), self.employeeSubtaskForm).then(function (response) {
+                self.subtasks = response.data.subtasks;
+                self.closeEmployeeTasks(employee);
+                var memberIndex = _.findIndex(self.teammember, { id: employee.id });
+                self.$delete(self.teammember, memberIndex);
+                console.log(self.teammember);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            });
+        },
+        unassigneSubtask: function unassigneSubtask(employee, subtask) {
+            var self = this;
+            self.endpoints.web = '/jobs/' + self.task.id + '/employee/' + employee.id + '/unassignsubtask/' + subtask.id;
+            axios.get(self.guardedLocation()).then(function (response) {
+                var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
+                self.$delete(self.membertasks, memberIndex);
+                var index = _.findIndex(self.subtasks, { id: subtask.id });
+                self.$set(self.subtasks, index, response.data.subtask);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            });
+        },
+        viewEmployeeSubtasks: function viewEmployeeSubtasks(worker) {
+            var self = this;
+            self.fillWorkerTasks(worker);
+        },
+        fillWorkerTasks: function fillWorkerTasks(worker) {
+            var self = this;
+            self.endpoints.web = '/jobs/' + self.task.id + '/employee/' + worker.id + '/subtasks';
+            axios.get(self.guardedLocation()).then(function (response) {
+                self.membertasks = response.data.subtasks;
+                self.show('view-all-subtasks-modal-' + worker.id);
+            });
+        },
+        closeEmployeeTasks: function closeEmployeeTasks(worker) {
+            var self = this;
+            self.hide('view-all-subtasks-modal-' + worker.id);
+            self.membertasks = [];
         }
     },
     watch: {
@@ -50655,6 +50709,9 @@ Evolutly.forms = (_Evolutly$forms = {
             email: '',
             password: ''
         }
+    },
+    employeeSubtaskForm: {
+        subtasks: []
     },
     cloneForm: {
         client_name: '',

@@ -35,7 +35,9 @@
                                     <label class="input-control checkbox" onclick="return false;" style="cursor:default;">
                                         <input type="checkbox" class="todo-cb" v-model="task.done">
                                         <span class="check"></span>
-                                        <span class="caption" :class="{ 'todo-completed': isTaskDone(task) }">@{{ task.name }}</span>
+                                        <span class="caption"
+                                        data-role="hint" data-hint-mode="2" data-hint="Add|Tasks" data-hint-position="top"
+                                        @click="viewTask(task.id)" style="cursor:pointer;" :class="{ 'todo-completed': isTaskDone(task) }">@{{ task.name }}</span>
                                     </label>
                                     <div @click="viewTask(task.id)" class="place-right" style="cursor:pointer;">
                                         <span data-role="hint" data-hint-mode="2" data-hint="View|Job" data-hint-position="left" class="icon fg-green fa fa-tasks vertical-align-middle" style="position: relative;padding-top:8px;font-size:2.5em;"></span>

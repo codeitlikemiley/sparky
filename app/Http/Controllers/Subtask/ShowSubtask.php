@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Subtask;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Subtask;
+use App\Employee;
 
 class ShowSubtask extends BaseController
 {
@@ -23,7 +24,8 @@ class ShowSubtask extends BaseController
         if($this->allowed($task) || $this->createdBy($task))
         {
             $subtasks = Subtask::with('employees')->where('task_id',$task->id)->get();
-            return response()->json(['subtasks' => $subtasks], 200);
+            $workers = $this->getWorkers($task);
+            return response()->json(['subtasks' => $subtasks, 'workers' => $workers], 200);
         }
         return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
@@ -45,6 +47,19 @@ class ShowSubtask extends BaseController
             return true;
         }
         return false;
+    }
+
+    private function getWorkers($task){
+        $workers = $task->campaign()->first()->project()->first()->assignedEmployees()->get();
+        $teammates = [];
+
+        if(count($workers)){
+            for ($i=0; $i < count($workers); $i++) { 
+                $e = Employee::with('assignedprojects.subtasks')->where('id',$workers[$i]['id'])->first();
+                array_push($teammates, $e);
+            }
+        }
+        return $teammates;
     }
     
 }

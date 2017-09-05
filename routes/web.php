@@ -41,7 +41,6 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::put('/jobs/{task}/tasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
       Route::delete('/jobs/{task}/tasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
       Route::put('/jobs/{task}/tasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
-
       Route::get('/jobs/{task}/comments', 'Comment\ShowComment')->name('tenant.comments.show');
       Route::post('/jobs/{task}/comments/add/{comment?}','Comment\AddComment')->name('tenant.comments.add');
       Route::put('/jobs/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('tenant.comments.edit');
@@ -66,4 +65,6 @@ Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload'
 Route::put('/files/edit/{fileID}', 'File\EditFile')->name('tenant.file.edit');
 Route::put('/files/delete/{fileID}', 'File\DeleteFile')->name('tenant.file.delete');
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('tenant.files.show');
-
+Route::get('/jobs/{task}/employee/{employee}/subtasks', 'Subtask\EmployeeTask')->name('task_employee_subtasks');
+Route::get('/jobs/{task}/employee/{employee}/unassignsubtask/{subtask}', 'Subtask\EmployeeUnassignSubtask')->name('task_employee_unassign_subtasks');
+Route::post('/jobs/{task}/employee/{employee}/unassignsubtask/all', 'Subtask\EmployeeUnassignAllSubtask')->name('task_employee_unassign_subtasks_all');

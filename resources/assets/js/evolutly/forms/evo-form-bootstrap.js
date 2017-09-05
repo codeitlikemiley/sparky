@@ -35,6 +35,9 @@ Evolutly.forms = {
             password: ''
         },
     },
+    employeeSubtaskForm: {
+        subtasks: []
+    },
     cloneForm:{
         client_name: '',
         client_id: '', 

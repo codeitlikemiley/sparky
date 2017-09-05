@@ -12,6 +12,7 @@ Vue.component('task', {
             taskForm: new EvolutlyForm(Evolutly.forms.taskForm),
             subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
+            employeeSubtaskForm: new EvolutlyForm(Evolutly.forms.employeeSubtaskForm),
             subtasks: [],
             progress: '0%',
             total: 0,
@@ -20,7 +21,9 @@ Vue.component('task', {
             rating: 1,
             priority: 1,
             currentSubtask: null,
-            options: []
+            options: [],
+            teammember: [],
+            membertasks:[]
 
         }
     },
@@ -28,11 +31,14 @@ Vue.component('task', {
         this.whenReady()
     },
     computed: {
-        
+        employeeChunks() {
+            return _.chunk(this.teammember, 4)
+        },
     },
     methods: {
         whenReady() {
             let self = this
+            self.teammember = this.workers
             self.guardAllowed(self.fetchSubtasks())
             this.options = this.employees
             self.setInitialTask()
@@ -228,6 +234,7 @@ Vue.component('task', {
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.subtasks.push(response.data.subtask)
                 self.options = response.data.employees
+                self.teammember = response.data.workers
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 self.hide('add-subtask-modal')
             })
@@ -286,6 +293,7 @@ Vue.component('task', {
                 delete self.subtaskForm.users
             }
             self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${subtask.id}/edit`
+            // add self.self.employeeSubtaskForm.subtasks = self.membertasks
             axios.put(self.guardedLocation(),self.subtaskForm)
             .then((response) => {
                 self.subtaskForm.resetStatus()
@@ -293,6 +301,9 @@ Vue.component('task', {
                 self.$set(self.subtasks, index, response.data.subtask)
                 self.options = response.data.employees
                 self.hide(`edit-subtask-modal-${subtask.id}`)
+                self.teammember = response.data.workers
+                let memberIndex = _.findIndex(self.membertasks, { id: subtask.id })
+                self.$delete(self.membertasks, memberIndex)
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
@@ -328,6 +339,48 @@ Vue.component('task', {
         },
         removeUserInput(index){
             this.subtaskForm.users.splice(index,1)
+        },
+        deleteAllSubtasks(employee){
+            let self = this 
+            self.endpoints.web = `/jobs/${self.task.id}/employee/${employee.id}/unassignsubtask/all`
+            self.employeeSubtaskForm.subtasks = self.membertasks
+            axios.post(self.guardedLocation(),self.employeeSubtaskForm).then((response) => {
+                self.subtasks = response.data.subtasks
+                self.closeEmployeeTasks(employee)
+                let memberIndex = _.findIndex(self.teammember, { id: employee.id })
+                self.$delete(self.teammember, memberIndex)
+                console.log(self.teammember)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
+        },
+        unassigneSubtask(employee,subtask){
+            let self = this 
+            self.endpoints.web = `/jobs/${self.task.id}/employee/${employee.id}/unassignsubtask/${subtask.id}`
+            axios.get(self.guardedLocation()).then((response) => {
+                let memberIndex = _.findIndex(self.membertasks, { id: subtask.id })
+                self.$delete(self.membertasks, memberIndex)
+                let index = _.findIndex(self.subtasks, { id: subtask.id })
+                self.$set(self.subtasks, index, response.data.subtask)
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
+        },
+        viewEmployeeSubtasks(worker){
+            let self = this
+            self.fillWorkerTasks(worker)
+        },
+        fillWorkerTasks(worker){
+            let self = this
+            self.endpoints.web = `/jobs/${self.task.id}/employee/${worker.id}/subtasks`
+            axios.get(self.guardedLocation()).then((response) => {
+                self.membertasks = response.data.subtasks
+                self.show(`view-all-subtasks-modal-${worker.id}`)
+                
+            })
+        },
+        closeEmployeeTasks(worker){
+            let self = this 
+            self.hide(`view-all-subtasks-modal-${worker.id}`)
+            self.membertasks = []
         }
         
     },

@@ -45,12 +45,26 @@ class CreateSubtask extends BaseController
             $this->assignEmployeesIfAny($task);
             $this->addUsers($task);
             $this->subtask->employees;
+            $workers = $this->getWorkers($task);
             $employees = $this->getAuth()->employees()->get()->toArray();
-            return response()->json(['message' => $this->message, 'subtask' => $this->subtask,'employees' => $employees], $this->code);
+            return response()->json(['message' => $this->message, 'subtask' => $this->subtask,'employees' => $employees,'workers' => $workers], $this->code);
         }
         $this->code = 401;
         $this->message = 'UnAuthorized Request';
         return response()->json(['message' => $this->message], $this->code);
+    }
+
+    private function getWorkers($task){
+        $workers = $task->campaign()->first()->project()->first()->assignedEmployees()->get();
+        $teammates = [];
+
+        if(count($workers)){
+            for ($i=0; $i < count($workers); $i++) { 
+                $e = Employee::with('assignedprojects.subtasks')->where('id',$workers[$i]['id'])->first();
+                array_push($teammates, $e);
+            }
+        }
+        return $teammates;
     }
     private function sanitize()
     {
