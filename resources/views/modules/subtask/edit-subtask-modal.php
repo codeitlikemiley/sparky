@@ -64,6 +64,17 @@
                                     </div>
                                 </div>
                                 <v-select  style="margin-bottom:50px;margin-top:-50px;" multiple max-height="160px" class="full-size" v-model="subtaskForm.assignedEmployees" label="name" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
+                                <div  class="row" style="padding:5px;">
+                                    <div class="input-control text full-size">
+                                        <label class="switch pull-left">
+                                            <input type="checkbox" v-model="subtaskForm.sendEmail">
+                                            <span class="check"></span>
+                                            <span class="caption" v-if="!subtaskForm.sendEmail">Notify Team Members?</span>
+                                            <span class="caption" v-else>Send Email</span>
+                                        </label>
+                                        <span class="tag warning" v-if="subtaskForm.sendEmail">Sending Email Takes Time</span>
+                                    </div>
+                                </div>
                                 <div  class="row" style="padding:5px;margin-top:-30px;">
                                     <div class="input-control text full-size">
                                         <label class="switch pull-left">
@@ -112,8 +123,9 @@
                     </div>
                 </div>
                 <div class="row" style="position: absolute;width: 100%;bottom:0;">
-                    <button type="submit" class="button fg-white" style="width:500px; margin-bottom:-1px;background-color:#558b2f;">
-                        <strong>Update Task</strong>
+                    <button type="submit" class="button fg-white" :class="{'bg-teal': !subtaskForm.busy,'bg-red': subtaskForm.busy}" style="width:500px; margin-bottom:-1px;" :disabled="subtaskForm.busy">
+                        <strong v-if="!subtaskForm.busy">Update Task</strong>
+                        <strong v-else>Please Wait...</strong>
                     </button>
                 </div>
         </form>

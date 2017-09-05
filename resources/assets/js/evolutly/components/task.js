@@ -224,6 +224,7 @@ Vue.component('task', {
         },
         callApiAddSubTask(){
             let self = this
+            self.subtaskForm.busy = true
             if(self.subtaskForm.newCollaborator == false){
                 delete self.subtaskForm.users
             }
@@ -286,6 +287,7 @@ Vue.component('task', {
         },
         callApiEditSubtask(subtask){
             let self = this
+            self.subtaskForm.busy = true
             if(self.subtaskForm.link == null){
                 delete self.subtaskForm.link
             }

@@ -65,6 +65,17 @@
                                 <div  class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <label class="switch pull-left">
+                                            <input type="checkbox" v-model="subtaskForm.sendEmail">
+                                            <span class="check"></span>
+                                            <span class="caption" v-if="!subtaskForm.sendEmail">Notify Team Members?</span>
+                                            <span class="caption" v-else>Send Email</span>
+                                        </label>
+                                        <span class="tag warning" v-if="subtaskForm.sendEmail">Sending Email Takes Time</span>
+                                    </div>
+                                </div>
+                                <div  class="row" style="padding:5px;">
+                                    <div class="input-control text full-size">
+                                        <label class="switch pull-left">
                                             <input type="checkbox" v-model="subtaskForm.newCollaborator">
                                             <span class="check"></span>
                                             <span class="caption" v-if="!subtaskForm.newCollaborator">Assign New Teammate?</span>
@@ -73,7 +84,6 @@
                                         <span v-if="subtaskForm.newCollaborator" @click="newUserInput()" class="pull-right" style="margin-top:-17px;cursor:pointer;padding-right:5px;"><span class="icon mif-user-plus fg-green"></span></span>
                                     </div>
                                 </div>
-
                                 <!-- New Collaborator -->
                                 <div v-if="subtaskForm.newCollaborator" v-for="(user,userKey, userIndex) in subtaskForm.users" :key="userKey" :index="userIndex" style="margin-bottom:20px;">
                                     <div class="full-size">Teammate @{{ userKey + 1 }}<span @click="removeUserInput(userKey)" class="icon mif-user-minus fg-red pull-right" style="padding-right:10px;cursor:pointer;"></span></div>
@@ -110,8 +120,9 @@
                     </div>
                 </div>
                 <div class="row" style="position: absolute;width: 100%;bottom:0;">
-                    <button type="submit" class="button fg-white" style="width:500px; margin-bottom:-1px;background-color:#558b2f;">
-                        <strong>Create A New Task</strong>
+                    <button type="submit" class="button fg-white" :class="{'bg-teal': !subtaskForm.busy,'bg-red': subtaskForm.busy}" style="width:500px; margin-bottom:-1px;" :disabled="subtaskForm.busy">
+                        <strong v-if="!subtaskForm.busy">Update Task</strong>
+                        <strong v-else>Please Wait...</strong>
                     </button>
                 </div>
                 </form>     

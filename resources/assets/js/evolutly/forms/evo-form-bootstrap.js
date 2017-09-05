@@ -86,6 +86,7 @@ Evolutly.forms = {
             email: '',
             password: '',
         }],
+        sendEmail: false,
         assignedEmployees: null
 
     },

@@ -178,7 +178,7 @@ class EditSubtask extends BaseController
         }
         $subtask->save();
         $employees = $users_input;
-        if($employees){
+        if($employees && $this->request->sendEmail === true){
             foreach($employees as $employee){
                 $employee = Employee::where('email', $employee['email'])->first();
                 if($employee){
@@ -206,7 +206,7 @@ class EditSubtask extends BaseController
         }
         $subtask->save();
         $employees = $subtask->employees;
-        if(count($employees)){
+        if(count($employees) && $this->request->sendEmail === true){
             foreach($employees as $employee){
                 $employee->notify(new SubtaskAssignedEmail($subtask,$this->getTenant(),$employee));
             }

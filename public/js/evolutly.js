@@ -50195,6 +50195,7 @@ Vue.component('task', {
         },
         callApiAddSubTask: function callApiAddSubTask() {
             var self = this;
+            self.subtaskForm.busy = true;
             if (self.subtaskForm.newCollaborator == false) {
                 delete self.subtaskForm.users;
             }
@@ -50252,6 +50253,7 @@ Vue.component('task', {
         },
         callApiEditSubtask: function callApiEditSubtask(subtask) {
             var self = this;
+            self.subtaskForm.busy = true;
             if (self.subtaskForm.link == null) {
                 delete self.subtaskForm.link;
             }
@@ -50761,6 +50763,7 @@ Evolutly.forms = (_Evolutly$forms = {
             email: '',
             password: ''
         }],
+        sendEmail: false,
         assignedEmployees: null
 
     },
