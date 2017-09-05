@@ -36,23 +36,4 @@ class EmployeeUnassignSubtask extends BaseController
         return response()->json(['message' => $this->message], $this->code);
     }
 
-    private function allowed($task)
-    {
-        
-        if($task->campaign->project->byTenant()->id != $this->getTenant()->id)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private function createdBy($task)
-    {
-        if($this->getTenant()->projects()->find($task->campaign->project->id))
-        {
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -49220,6 +49220,8 @@ Vue.component('dashboard', {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 Vue.component('employee-management', {
@@ -49235,7 +49237,8 @@ Vue.component('employee-management', {
             current_project: null,
             current_project_index: null,
             current_subtask: null,
-            current_subtask_index: null
+            current_subtask_index: null,
+            membertasks: []
         };
     },
     mounted: function mounted() {
@@ -49243,7 +49246,7 @@ Vue.component('employee-management', {
         this.projects = this.clients;
     },
 
-    methods: {
+    methods: _defineProperty({
         show: function show(name) {
             this.$modal.show(name);
         },
@@ -49360,14 +49363,6 @@ Vue.component('employee-management', {
                 }
             });
         },
-        viewAssignedSubtask: function viewAssignedSubtask(project) {
-            var self = this;
-            self.guardAllowed(['web'], self.show('project-subtasks-modal-' + project.id));
-        },
-        closeAssignedSubtaskModal: function closeAssignedSubtaskModal(project) {
-            var self = this;
-            self.guardAllowed(['web'], self.hide('project-subtasks-modal-' + project.id));
-        },
         overDueDate: function overDueDate(subtask) {
             if (subtask.done == false && subtask.due_date < moment(new Date()).format('YYYY-MM-DD')) {
                 return true;
@@ -49433,13 +49428,38 @@ Vue.component('employee-management', {
                 }
             });
         },
-        viewTask: function viewTask(subtask) {
-            window.open('/dashboard/jobs/' + subtask.task_id);
+        viewJob: function viewJob(id) {
+            window.open('/dashboard/jobs/' + id);
         },
-        viewProject: function viewProject(id) {
-            window.open('/dashboard/clients/' + id);
+        viewAssignedSubtask: function viewAssignedSubtask(employee, task) {
+            var self = this;
+            self.guardAllowed(['web'], self.fillWorkerTasks(employee, task));
+        },
+        closeAssignedSubtaskModal: function closeAssignedSubtaskModal(task) {
+            var self = this;
+            self.guardAllowed(['web'], self.hide('task-subtasks-modal-' + task.id));
+            self.membertasks = [];
+        },
+        fillWorkerTasks: function fillWorkerTasks(employee, task) {
+            var self = this;
+            self.endpoints.web = '/jobs/' + task.id + '/employee/' + employee.id + '/subtasks';
+            axios.get(self.guardedLocation()).then(function (response) {
+                self.membertasks = response.data.subtasks;
+                self.show('task-subtasks-modal-' + task.id);
+            });
         }
-    }
+    }, 'removeSubtask', function removeSubtask(task, employee, subtask) {
+        var self = this;
+        self.endpoints.web = '/jobs/' + task.id + '/employee/' + employee.id + '/unassignsubtask/' + subtask.id;
+        axios.get(self.guardedLocation()).then(function (response) {
+            var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
+            self.$delete(self.membertasks, memberIndex);
+            if (self.membertasks.length < 1) {
+                self.closeAssignedSubtaskModal(task);
+            }
+            self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+        });
+    })
 });
 
 /***/ }),
@@ -50328,6 +50348,11 @@ Vue.component('task', {
                 var index = _.findIndex(self.subtasks, { id: subtask.id });
                 self.$set(self.subtasks, index, response.data.subtask);
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                if (self.membertasks.length < 1) {
+                    self.closeEmployeeTasks(employee);
+                    var teamindex = _.findIndex(self.teammember, { id: employee.id });
+                    self.$delete(self.teammember, teamindex);
+                }
             });
         },
         viewEmployeeSubtasks: function viewEmployeeSubtasks(worker) {

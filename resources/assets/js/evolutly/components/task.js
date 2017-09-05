@@ -364,6 +364,11 @@ Vue.component('task', {
                 let index = _.findIndex(self.subtasks, { id: subtask.id })
                 self.$set(self.subtasks, index, response.data.subtask)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                if(self.membertasks.length < 1){
+                    self.closeEmployeeTasks(employee)
+                    let teamindex = _.findIndex(self.teammember, { id: employee.id })
+                    self.$delete(self.teammember, teamindex)
+                }
             })
         },
         viewEmployeeSubtasks(worker){

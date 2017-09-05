@@ -14,6 +14,7 @@ Vue.component('employee-management', {
             current_project_index: null,
             current_subtask: null,
             current_subtask_index: null,
+            membertasks:[]
         }
     },
     mounted() {
@@ -147,15 +148,7 @@ Vue.component('employee-management', {
                 }
             })
         },
-        viewAssignedSubtask(project){
-            let self = this
-            self.guardAllowed(['web'],self.show(`project-subtasks-modal-${project.id}`))
-
-        },
-        closeAssignedSubtaskModal(project){
-            let self = this
-            self.guardAllowed(['web'],self.hide(`project-subtasks-modal-${project.id}`))
-        },
+        
         overDueDate(subtask){
             if(subtask.done == false && subtask.due_date < moment(new Date).format('YYYY-MM-DD')){
                 return true
@@ -226,11 +219,37 @@ Vue.component('employee-management', {
                 }
             })
         },
-        viewTask(subtask){
-            window.open(`/dashboard/jobs/${subtask.task_id}`)
+        viewJob(id) {
+            window.open(`/dashboard/jobs/${id}`)
         },
-        viewProject(id) {
-            window.open(`/dashboard/clients/${id}`)
+        viewAssignedSubtask(employee,task){
+            let self = this
+            self.guardAllowed(['web'],self.fillWorkerTasks(employee,task))
+        },
+        closeAssignedSubtaskModal(task){
+            let self = this
+            self.guardAllowed(['web'],self.hide(`task-subtasks-modal-${task.id}`))
+            self.membertasks = []
+        },
+        fillWorkerTasks(employee,task){
+            let self = this
+            self.endpoints.web = `/jobs/${task.id}/employee/${employee.id}/subtasks`
+            axios.get(self.guardedLocation()).then((response) => {
+                self.membertasks = response.data.subtasks
+                self.show(`task-subtasks-modal-${task.id}`)
+            })
+        },
+        removeSubtask(task,employee,subtask){
+            let self = this 
+            self.endpoints.web = `/jobs/${task.id}/employee/${employee.id}/unassignsubtask/${subtask.id}`
+            axios.get(self.guardedLocation()).then((response) => {
+                let memberIndex = _.findIndex(self.membertasks, { id: subtask.id })
+                self.$delete(self.membertasks, memberIndex)
+                if(self.membertasks.length < 1){
+                    self.closeAssignedSubtaskModal(task)
+                }
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+            })
         },
      }
 });

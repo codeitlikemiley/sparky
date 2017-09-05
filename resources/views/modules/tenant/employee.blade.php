@@ -40,7 +40,7 @@
                                                     <tr>
                                                         <th class="name-wrap">Name</th>
                                                         <th class="align-left">Email</th>
-                                                        <th>Client Assignments</th>
+                                                        <th>Job Assignments</th>
                                                         <th class="option-wrap">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -49,8 +49,8 @@
                                                         <td>@{{ employee.name }}</td>
                                                         <td class="align-left">@{{ employee.email }}</td>
                                                         <td class="align-left">
-                                                            <ul  class="tag" :class="{alert: !project.client_id, success: project.client_id}" v-for="(project,projectKey,projectIndex) in employee.assignedprojects" :key="projectKey" :index="projectIndex" style="cursor:pointer;list-style-type: none;">
-                                                                <li @click="viewAssignedSubtask(project)"><span class="icon mif-tag"></span>  @{{ project.name }}</li>
+                                                            <ul  class="tag info"  v-for="(task,taskKey,taskIndex) in employee.tasks" :key="taskKey" :index="taskIndex" style="cursor:pointer;list-style-type: none;">
+                                                                <li @click="viewAssignedSubtask(employee,task)"><span class="icon mif-tag"></span>  @{{ task.name }}</li>
                                                                 @include('employee::project-subtasks-modal')
                                                             </ul>
                                                         </td>
