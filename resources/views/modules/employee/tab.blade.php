@@ -1,4 +1,4 @@
-<div class="frame bg-white" id="people_tab" v-if="workers.length > 0">
+<div class="frame bg-white" id="people_tab" v-if="teammember.length > 0">
     <div class="row cells4" v-for="(chunk, index) in employeeChunks" :key="chunk.id" :index="index" :chunk="chunk">
         <div class="cell" v-for="(employee, index) in chunk" :key="employee.id" :index="index" :employee="employee">
             <a  @click="viewEmployeeSubtasks(employee)" style="cursor:pointer;">
@@ -72,8 +72,6 @@
         <div class="cell align-center">
             <h4 class="fg-lightRed">No Team Member Yet is Assigned To Any Of The Task For this Job!</h4>
             <h4 class="tag bg-blue fg-white" style="cursor:pointer; font-size:20px;"><strong @click="addSubtaskModal()">Create a New Task and Assign A Team Member To That Task</strong></h4>
-            <h4 class="tag bg-taupe fg-white" style="font-size:20px;">OR</strong></h4>
-            <h4 class="tag bg-green fg-white" style="cursor:pointer; font-size:20px;"><strong @click="addSubtaskModal()">Assign A Default Team Member to Manage this Job</strong></h4>
         </div>
     </div>
     
