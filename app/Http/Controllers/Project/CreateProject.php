@@ -86,7 +86,7 @@ class CreateProject extends BaseController
         }
         $this->manageProjectsByTenant();
         $this->saveByTenant();
-        $client = Client::find($this->project->client_id);
+        $client = Client::find($this->project->client_id['id']);
         if($client){
             $client->notify(new ClientAssignedEmail($this->project,$this->getTenant(),$this->client));
         }
