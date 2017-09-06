@@ -29,7 +29,7 @@
                         </span>
                         </div>
                     </div>
-
+                    
                     <div class="row" style="padding:5px;">
                         <div class="input-control text full-size">
                             <span v-if="registerForm.hidden" class="prepend-icon mif-spell-check fg-darkCyan" @click="registerForm.hidden = false"></span>
@@ -40,6 +40,17 @@
                         @{{ registerForm.errors.get('password') }}
                         </span>
                         </div>
+                    </div>
+                    <div  class="row" style="padding:5px;">
+                            <div class="input-control text full-size">
+                                <label class="switch pull-left">
+                                    <input type="checkbox" v-model="registerForm.sendEmail">
+                                    <span class="check"></span>
+                                    <span class="caption" v-if="!registerForm.sendEmail"><span class="tag info">Do You Want To Send Welcome Email?</span></span>
+                                    <span class="caption" v-else><span class="tag success">Send Welcome Email</span></span>
+                                </label>
+                                
+                            </div>
                     </div>
                 </div>
         </div>

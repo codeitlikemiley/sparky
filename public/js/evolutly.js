@@ -50784,7 +50784,8 @@ Evolutly.forms = (_Evolutly$forms = {
     email: '',
     password: '',
     hidden: true,
-    password_confirmation: ''
+    password_confirmation: '',
+    sendEmail: false
 }), _defineProperty(_Evolutly$forms, 'registerClientForm', {
     name: '',
     website: '',

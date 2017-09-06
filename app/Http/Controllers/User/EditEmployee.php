@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
+use App\Task;
 
 
 class EditEmployee extends BaseController
@@ -43,11 +44,32 @@ class EditEmployee extends BaseController
             $this->updateEmployee($employee);
             $this->updatePasswordIfPresent($employee);
             $this->message = 'Teammate Updated!';
-            return response()->json(['message' => $this->message, 'employee' => $employee], $this->code);
+            $worker = $this->getWorker($employee);
+            return response()->json(['message' => $this->message, 'employee' => $worker], $this->code);
         }
         $this->code = 401;
         $this->message = 'UnAuthorized Action!';
         return response()->json(['message' => $this->message], $this->code);
+    }
+
+    private function getWorker($employee){
+            $worker = $employee;
+            $tasks = [];
+            $count = 0;
+            $subtasks = $employee->subtasks;
+            if($subtasks ){
+                foreach($subtasks as $subtask){
+                    $tasks[$subtask->task_id] = $subtask->task_id;
+                }
+                $tasks = array_flatten($tasks);
+                $tasks = Task::findMany($tasks)->toArray();
+                $worker['tasks'] =  $tasks;
+                $count++;
+            }else{
+                $worker['tasks'] = [];
+            }
+            
+            return $worker;
     }
 
     private function sanitize($employee)

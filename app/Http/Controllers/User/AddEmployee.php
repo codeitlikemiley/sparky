@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
 use App\Notifications\EmployeeRegistrationEmail;
+use App\Task;
 
 class AddEmployee extends BaseController
 {
@@ -43,13 +44,36 @@ class AddEmployee extends BaseController
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
         $employee = Employee::forceCreate($this->request->only(['name','email', 'password']));
-        $employee->projects;
         $this->getAuth()->employees()->save($employee); // Morph
         $this->getTenant()->managedEmployees()->save($employee); // tenant_id
+        $worker = $this->getWorker($employee);
+        // send mail if true then send email
+        if($this->request->sendEmail === true){
         $employee->notify(new EmployeeRegistrationEmail($this->getTenant(),$employee));
-        return response()->json(['message' => $this->message, 'employee' => $employee], $this->code);
+        }
+        return response()->json(['message' => $this->message, 'employee' => $worker], $this->code);
         
     }
+
+    private function getWorker($employee){
+        $worker = $employee;
+        $tasks = [];
+        $count = 0;
+        $subtasks = $employee->subtasks;
+        if($subtasks){
+            foreach($subtasks as $subtask){
+                $tasks[$subtask->task_id] = $subtask->task_id;
+            }
+            $tasks = array_flatten($tasks);
+            $tasks = Task::findMany($tasks)->toArray();
+            $worker['tasks'] =  $tasks;
+            $count++;
+        }else{
+            $worker['tasks'] = [];
+        }
+        
+        return $worker;
+}
 
     private function sanitize()
     {

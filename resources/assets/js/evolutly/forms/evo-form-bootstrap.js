@@ -120,6 +120,7 @@ Evolutly.forms = {
         password: '',
         hidden: true,
         password_confirmation: '',
+        sendEmail: false
     },
     registerClientForm:{
         name: '',
