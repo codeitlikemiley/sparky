@@ -50451,6 +50451,9 @@ Vue.component('templates', {
                     self.$popup({ message: 'Server Failed To Serve the Request.', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
                 }
             });
+        },
+        goToDashboard: function goToDashboard() {
+            window.location.href = '/dashboard';
         }
     },
     watch: {

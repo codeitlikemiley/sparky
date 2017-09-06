@@ -85,6 +85,9 @@ Vue.component('templates', {
                 }
             })
         },
+        goToDashboard(){
+            window.location.href = `/dashboard`
+        }
         
     },
     watch: {
