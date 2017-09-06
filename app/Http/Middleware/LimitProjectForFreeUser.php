@@ -16,10 +16,13 @@ class LimitProjectForFreeUser
      */
     public function handle($request, Closure $next)
     {
-        if($this->limitedProject()){
+        if($this->getAuth()->isSuperAdmin()){
+            return $next($request);
+        }elseif($this->limitedProject()){
             return response()->json(['message' => 'Upgrade To VIP Plan'], 402);
+        }else{
+            return $next($request);
         }
-        return $next($request);
     }
 
 
