@@ -20,7 +20,7 @@
                 <div class="tabcontrol2 page-tab" data-role="tabcontrol" style="min-height:700px;padding-bottom:100px;">
                         <ul class="tabs">
                             <li>
-                                <a href="#tenant_list">Teammates</a>
+                                <a href="#tenant_list">Tenants</a>
                             </li>
                         </ul>
                         <div class="frames bg-white">
