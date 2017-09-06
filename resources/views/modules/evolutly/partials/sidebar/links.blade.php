@@ -175,6 +175,16 @@
     </a>
     <ul class="d-menu" data-role="dropdown" style="{{ (in_array(Request::segment(2),['teammates','clients'])?'display:block':'') }}">
         <!-- Employee -->
+        @if(Auth::user()->isSuperAdmin())
+        <li class="{{ (Request::segment(1)=='users'?'active':'') }}">
+                <a href="{{url('/users')}}" class="">
+                        <span class="mif-chevron-right icon"></span>
+                        <span class="title">Tenants</span>
+                        <span class="counter">Manage Tenants Account</span>
+                    </a>
+        </li>
+        @endif
+        <!-- Employee -->
         <li class="{{ (Request::segment(2)=='teammates'?'active':'') }}">
             <a href="{{url('/users/teammates')}}" class="">
                     <span class="mif-chevron-right icon"></span>
