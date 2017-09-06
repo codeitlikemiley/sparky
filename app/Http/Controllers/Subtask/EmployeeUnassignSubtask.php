@@ -22,8 +22,6 @@ class EmployeeUnassignSubtask extends BaseController
      */
     public function __invoke($task,$employee,$subtask)
     {
-        
-
         if($this->getAuth()->id === $this->getTenant()->id){
             $project = $task->campaign->project;
             $employee->subtasks()->detach($subtask->id, ['project_id' => $project->id]);
@@ -35,5 +33,4 @@ class EmployeeUnassignSubtask extends BaseController
 
         return response()->json(['message' => $this->message], $this->code);
     }
-
 }

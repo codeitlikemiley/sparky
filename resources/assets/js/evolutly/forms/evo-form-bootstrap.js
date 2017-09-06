@@ -151,6 +151,9 @@ Evolutly.forms = {
             name: '',
         }],
         assignedProjects: null
+    },
+    jobDeleteForm:{
+        subtasks:[]
     }
 
 

@@ -49220,8 +49220,6 @@ Vue.component('dashboard', {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 Vue.component('employee-management', {
@@ -49231,8 +49229,10 @@ Vue.component('employee-management', {
         return {
             employees: [],
             registerForm: new EvolutlyForm(Evolutly.forms.registerForm),
+            jobDeleteForm: new EvolutlyForm(Evolutly.forms.jobDeleteForm),
             projects: [],
             current_employee: null,
+            current_task: null,
             current_index: null,
             current_project: null,
             current_project_index: null,
@@ -49246,7 +49246,7 @@ Vue.component('employee-management', {
         this.projects = this.clients;
     },
 
-    methods: _defineProperty({
+    methods: {
         show: function show(name) {
             this.$modal.show(name);
         },
@@ -49368,77 +49368,25 @@ Vue.component('employee-management', {
                 return true;
             }
         },
-        removeSubtask: function removeSubtask() {
-            var self = this;
-            self.employees[self.current_index].assignedprojects[self.current_project_index].subtasks.splice(self.current_subtask_index, 1);
-        },
-        removeEmployeeProjectAssignment: function removeEmployeeProjectAssignment() {
-            var self = this;
-            if (self.employees[self.current_index].assignedprojects[self.current_project_index].subtasks.length == 0) {
-                self.deleteAllProjects();
-                self.guardAllowed(['web'], self.hide('project-subtasks-modal-' + self.current_project.id));
-            }
-        },
         deleteAllProjects: function deleteAllProjects() {
             var self = this;
             self.employees[self.current_index].assignedprojects.splice(self.current_project_index, 1);
-        },
-        unassigneSubtask: function unassigneSubtask(employee, employeeKey, project, projectKey, subtask, subtaskKey) {
-            var self = this;
-            self.endpoints.web = '/users/teammates/' + employee.id + '/clients/' + project.id + '/subtasks/' + subtask.id + '/detach';
-            self.current_employee = employee;
-            self.current_index = employeeKey;
-            self.current_project = project;
-            self.current_project_index = projectKey;
-            self.current_subtask = subtask;
-            self.current_subtask_index = subtaskKey;
-
-            axios.delete(self.guardedLocation()).then(function (response) {
-                self.resetEndpoints();
-                self.removeSubtask();
-                self.removeEmployeeProjectAssignment();
-                self.resetCurrentEmployee();
-                self.$popup({ message: 'Task Has Been Unassigned', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
-            }).catch(function (error) {
-                if (error.response.data.message) {
-                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
-                } else {
-                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
-                }
-            });
-        },
-        deleteAllTasks: function deleteAllTasks(employee, employeeKey, project, projectKey) {
-            var self = this;
-            self.current_employee = employee;
-            self.current_index = employeeKey;
-            self.current_project = project;
-            self.current_project_index = projectKey;
-            self.endpoints.web = '/users/teammates/' + employee.id + '/clients/' + project.id + '/detach';
-
-            axios.delete(self.guardedLocation()).then(function (response) {
-                self.resetEndpoints();
-                self.deleteAllProjects();
-                self.resetCurrentEmployee();
-                self.$popup({ message: 'All Tasks Related To This Client Deleted', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
-            }).catch(function (error) {
-                if (error.response.data.message) {
-                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
-                } else {
-                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
-                }
-            });
         },
         viewJob: function viewJob(id) {
             window.open('/dashboard/jobs/' + id);
         },
         viewAssignedSubtask: function viewAssignedSubtask(employee, task) {
             var self = this;
-            self.guardAllowed(['web'], self.fillWorkerTasks(employee, task));
+            self.current_employee = employee;
+            self.current_task = task;
+            self.guardAllowed(['web'], self.fillWorkerTasks(self.current_employee, self.current_task));
         },
         closeAssignedSubtaskModal: function closeAssignedSubtaskModal(task) {
             var self = this;
             self.guardAllowed(['web'], self.hide('task-subtasks-modal-' + task.id));
             self.membertasks = [];
+            self.current_employee = null;
+            self.current_task = null;
         },
         fillWorkerTasks: function fillWorkerTasks(employee, task) {
             var self = this;
@@ -49447,19 +49395,35 @@ Vue.component('employee-management', {
                 self.membertasks = response.data.subtasks;
                 self.show('task-subtasks-modal-' + task.id);
             });
+        },
+        removeSubtask: function removeSubtask(task, employee, subtask) {
+            var self = this;
+            self.endpoints.web = '/jobs/' + task.id + '/employee/' + employee.id + '/unassignsubtask/' + subtask.id;
+            axios.get(self.guardedLocation()).then(function (response) {
+                var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
+                self.$delete(self.membertasks, memberIndex);
+                if (self.membertasks.length < 1) {
+                    var employeeIndex = _.findIndex(self.employees, { id: employee.id });
+                    var JobIndex = _.findIndex(self.employees[employeeIndex].tasks, { id: task.id });
+                    self.$delete(self.employees[employeeIndex].tasks, JobIndex);
+                    self.closeAssignedSubtaskModal(task);
+                }
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            });
+        },
+        deleteJob: function deleteJob() {
+            var self = this;
+            self.endpoints.web = '/jobs/' + self.current_task.id + '/employee/' + self.current_employee.id + '/unassignsubtask/all';
+            self.jobDeleteForm.subtasks = self.membertasks;
+            axios.post(self.guardedLocation(), self.jobDeleteForm).then(function (response) {
+                var employeeIndex = _.findIndex(self.employees, { id: self.current_employee.id });
+                var JobIndex = _.findIndex(self.employees[employeeIndex].tasks, { id: self.current_task.id });
+                self.$delete(self.employees[employeeIndex].tasks, JobIndex);
+                self.closeAssignedSubtaskModal(self.current_task);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            });
         }
-    }, 'removeSubtask', function removeSubtask(task, employee, subtask) {
-        var self = this;
-        self.endpoints.web = '/jobs/' + task.id + '/employee/' + employee.id + '/unassignsubtask/' + subtask.id;
-        axios.get(self.guardedLocation()).then(function (response) {
-            var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
-            self.$delete(self.membertasks, memberIndex);
-            if (self.membertasks.length < 1) {
-                self.closeAssignedSubtaskModal(task);
-            }
-            self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
-        });
-    })
+    }
 });
 
 /***/ }),
@@ -50851,6 +50815,8 @@ Evolutly.forms = (_Evolutly$forms = {
         name: ''
     }],
     assignedProjects: null
+}), _defineProperty(_Evolutly$forms, 'jobDeleteForm', {
+    subtasks: []
 }), _Evolutly$forms);
 
 /**

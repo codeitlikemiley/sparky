@@ -51,7 +51,6 @@
                                                         <td class="align-left">
                                                             <ul  class="tag info"  v-for="(task,taskKey,taskIndex) in employee.tasks" :key="taskKey" :index="taskIndex" style="cursor:pointer;list-style-type: none;">
                                                                 <li @click="viewAssignedSubtask(employee,task)"><span class="icon mif-tag"></span>  @{{ task.name }}</li>
-                                                                @include('employee::project-subtasks-modal')
                                                             </ul>
                                                         </td>
         
@@ -79,6 +78,7 @@
                 </div>
             </div>
     </div>
+    @include('employee::project-subtasks-modal')
     @include('employee::add-employee-modal')
     @include('employee::edit-employee-modal')
     @include('employee::delete-employee-modal')
