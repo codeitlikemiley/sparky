@@ -7,3 +7,4 @@ require('components/task');
 require('components/employee-management');
 require('components/client-management');
 require('components/templates');
+require('components/manage-tenants');

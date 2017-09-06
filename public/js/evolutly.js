@@ -49439,6 +49439,7 @@ __webpack_require__(215);
 __webpack_require__(211);
 __webpack_require__(209);
 __webpack_require__(216);
+__webpack_require__(378);
 
 /***/ }),
 /* 213 */
@@ -91908,6 +91909,156 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 module.exports = __webpack_require__(200);
 
+
+/***/ }),
+/* 378 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
+
+
+Vue.component('manage-tenants', {
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_guard___default.a],
+    props: ['users'],
+    data: function data() {
+        return {
+            tenants: [],
+            registerForm: new EvolutlyForm(Evolutly.forms.registerForm),
+            current_user: null,
+            current_index: null
+        };
+    },
+    mounted: function mounted() {
+        this.tenants = this.users;
+    },
+
+    methods: {
+        onTrial: function onTrial(tenant) {
+            return tenant.trial_ends_at != undefined && tenant.trial_ends_at > moment(new Date()).format('YYYY-MM-DD');
+        },
+        isExpired: function isExpired(tenant) {
+            return tenant.subscriptions.ends_at < moment(new Date()).format('YYYY-MM-DD') && tenant.subscriptions.length > 0;
+        },
+        isFreeLimeTimeUser: function isFreeLimeTimeUser(tenant) {
+            return tenant.lifetime === true;
+        },
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
+        addTenantModal: function addTenantModal() {
+            var self = this;
+            self.resetRegisterForm();
+            self.show('add-tenant-modal');
+        },
+        addTenant: function addTenant() {
+            var self = this;
+            self.guardAllowed(['web'], self.callAddUserApi());
+        },
+        closeAddTenantModal: function closeAddTenantModal() {
+            var self = this;
+            self.resetRegisterForm();
+            self.hide('add-tenant-modal');
+        },
+        resetCurrentUser: function resetCurrentUser() {
+            var self = this;
+            self.current_user = null;
+            self.current_index = null;
+        },
+        resetRegisterForm: function resetRegisterForm() {
+            var self = this;
+            self.registerForm = new EvolutlyForm(Evolutly.forms.registerForm);
+        },
+        fillRegisterForm: function fillRegisterForm(tenant) {
+            var self = this;
+            self.registerForm.name = tenant.name;
+            self.registerForm.email = tenant.email;
+            self.registerForm.password = tenant.password;
+        },
+        callAddUserApi: function callAddUserApi() {
+            var self = this;
+            self.endpoints.web = '/users/teammates';
+            axios.post(self.guardedLocation(), self.registerForm).then(function (response) {
+                self.registerForm.resetStatus();
+                self.resetRegisterForm();
+                self.tenants.push(response.data.user);
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                self.closeAddTenantModal();
+            }).catch(function (error) {
+                self.registerForm.errors.set(error.response.data.errors);
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+            });
+        },
+        showEditModal: function showEditModal(tenant, tenantKey) {
+            var self = this;
+            self.guardAllowed(['web'], self.fillRegisterForm(tenant));
+            self.guardAllowed(['web'], self.show('edit-tenant-modal'));
+            self.current_index = tenantKey;
+            self.current_user = tenant;
+        },
+        closeEditModal: function closeEditModal() {
+            var self = this;
+            self.guardAllowed(self.resetRegisterForm());
+            self.guardAllowed(['web'], self.hide('edit-tenant-modal'));
+            self.resetCurrentEmployee();
+        },
+        editEmployee: function editEmployee() {
+            var self = this;
+            if (!self.registerForm.password) {
+                delete self.registerForm.password;
+                delete self.registerForm.password_confirmation;
+            }
+            self.endpoints.web = '/users/' + self.current_employee.id + '/edit';
+            axios.put(self.guardedLocation(), self.registerForm).then(function (response) {
+                self.registerForm.resetStatus();
+                self.$set(self.users, self.current_index, response.data.employee);
+                self.closeEditModal();
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+            }).catch(function (error) {
+                if (!self.registerForm.password) {
+                    self.registerForm.password = '';
+                }
+                if (!self.registerForm.password_confirmation) {
+                    self.registerForm.password_confirmation = '';
+                }
+                self.registerForm.errors.set(error.response.data.errors);
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+            });
+        },
+        showDeleteModal: function showDeleteModal(tenant, tenantKey) {
+            var self = this;
+            self.current_employee = tenant;
+            self.current_index = tenantKey;
+            self.guardAllowed(['web'], self.show('delete-tenant-modal'));
+        },
+        closeDeleteModal: function closeDeleteModal() {
+            var self = this;
+            self.resetCurrentEmployee();
+            self.guardAllowed(['web'], self.hide('delete-tenant-modal'));
+        },
+        deleteTenant: function deleteTenant() {
+            var self = this;
+            self.endpoints.web = '/users/' + self.current_employee.id + '/delete';
+            axios.delete(self.guardedLocation()).then(function (response) {
+                self.tenants.splice(self.current_index, 1);
+                self.resetCurrentEmployee();
+                self.$popup({ message: 'Tenant Has Been Deleted.', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                self.hide('delete-tenant-modal');
+            }).catch(function (error) {
+                if (error.response.data.message) {
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                } else {
+                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                }
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

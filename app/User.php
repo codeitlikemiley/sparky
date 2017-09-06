@@ -44,6 +44,8 @@ class User extends SparkUser
         'uses_two_factor_auth' => 'boolean',
     ];
 
+    protected $appends = ['current_plan', 'lifetime'];
+
     protected $dates = ['created_at', 'updated_at'];
 
     protected $slugKeyName = 'username';
@@ -55,5 +57,15 @@ class User extends SparkUser
     public function sendPasswordResetNotification($token, $email = null)
     {
         $this->notify(new ResetPasswordNotification($token, $email ? $email : $this->email));
+    }
+
+    public function getcurrentPlanAttribute()
+    {
+        return $this->sparkPlan()->name;
+    }
+
+    public function getlifetimeAttribute()
+    {
+        return $this->trial_ends_at === null;
     }
 }
