@@ -17,7 +17,7 @@
 <vue-up></vue-up>
 <employee-management :guard="{{ json_encode($guard) }}" :teams="{{ json_encode($employees) }}" :clients="projects" :user="user" inline-template>
 <div>
-    <div class="tabcontrol2 page-tab" data-role="tabcontrol" style="min-height:700px;">
+    <div class="tabcontrol2 page-tab" data-role="tabcontrol" style="min-height:700px;padding-bottom:100px;">
             <ul class="tabs">
                 <li>
                     <a href="#employee_list">Teammates</a>
