@@ -62,7 +62,7 @@ Vue.component('manage-tenants', {
         },
         callAddUserApi(){
             let self = this
-            self.endpoints.web = '/users/teammates'
+            self.endpoints.web = '/users/add'
             axios.post(self.guardedLocation(), self.registerForm)
              .then((response) => {
                  self.registerForm.resetStatus()
@@ -145,6 +145,10 @@ Vue.component('manage-tenants', {
                     self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
                 }
             })
+        },
+        impersonateTenant(id){
+            let url = `/spark/kiosk/users/impersonate/${id}`
+            window.location.href = url
         }
      }
 });

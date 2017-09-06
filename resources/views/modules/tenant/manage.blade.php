@@ -79,17 +79,11 @@
                                                                     </td>
                     
                                                                     <td class="align-left">
-                                                                        <span class="tag info" @click="showEditModal(tenant,tenantKey)" style="cursor:pointer;">
-                                                                            <span class="icon mif-pencil">
-                                                                            </span>
-                                                                        </span>
-                                                                        <span class="tag alert" @click="showDeleteModal(tenant,tenantKey)" style="cursor:pointer;"> 
-                                                                            <span class="icon fa fa-trash">
-                                                                                
+                                                                        <span class="tag info" @click="impersonateTenant(tenant.id)" style="cursor:pointer;">
+                                                                            <span class="icon mif-eye">
                                                                             </span>
                                                                         </span>
                                                                     </td>
-                                                                    
                                                                     
                                                                 </tr>
                                                             </tbody>
@@ -102,7 +96,7 @@
                             </div>
                         </div>
                 </div>
-                {{-- @include('employee::add-tenant-modal') --}}
+                @include('tenant::add-tenant-modal')
                 {{-- @include('employee::edit-tenant-modal') --}}
                 {{-- @include('employee::delete-tenant-modal') --}}
             </div>

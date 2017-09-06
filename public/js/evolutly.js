@@ -50786,7 +50786,8 @@ Evolutly.forms = (_Evolutly$forms = {
     password: '',
     hidden: true,
     password_confirmation: '',
-    sendEmail: false
+    sendEmail: false,
+    lifetime: true
 }), _defineProperty(_Evolutly$forms, 'registerClientForm', {
     name: '',
     website: '',
@@ -91982,7 +91983,7 @@ Vue.component('manage-tenants', {
         },
         callAddUserApi: function callAddUserApi() {
             var self = this;
-            self.endpoints.web = '/users/teammates';
+            self.endpoints.web = '/users/add';
             axios.post(self.guardedLocation(), self.registerForm).then(function (response) {
                 self.registerForm.resetStatus();
                 self.resetRegisterForm();
@@ -92056,6 +92057,10 @@ Vue.component('manage-tenants', {
                     self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
                 }
             });
+        },
+        impersonateTenant: function impersonateTenant(id) {
+            var url = '/spark/kiosk/users/impersonate/' + id;
+            window.location.href = url;
         }
     }
 });
