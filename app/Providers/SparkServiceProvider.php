@@ -56,12 +56,12 @@ class SparkServiceProvider extends ServiceProvider
         Spark::afterLoginRedirectTo('/dashboard');
         Spark::freePlan()
         ->features([
-            '3 Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks'
+            '3 Client Only'
         ]);
         Spark::plan('VIP', 'spark_test_2')
             ->price(30)
             ->features([
-                'Unlimited Projects', 'Unlimited Campaigns', 'Unlimited Task', 'Unlimited Subtasks', 'Unlimited Employees', 'Unlimited Clients'
+                'Unlimited Clients', 'Unlimited Campaigns', 'Unlimited Jobs', 'Unlimited Tasks', 'Unlimited File Storage'
             ]);
         Spark::collectBillingAddress();
         // Spark::checkPlanEligibilityUsing('EligibilityChecker@handle');
