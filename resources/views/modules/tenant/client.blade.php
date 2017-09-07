@@ -72,7 +72,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;" :class="styling">
+                                        <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;">
                                                 <h2 class="fg-teal"><span class="tag success" @click="showAddClientModal()" style="cursor:pointer;">Add Your First Client</span></h2>
                                         </div>
                                 </div>

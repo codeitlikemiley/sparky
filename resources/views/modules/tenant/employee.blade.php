@@ -72,7 +72,7 @@
                                             </table>
                                             
                                         </div>
-                                        <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;" :class="styling">
+                                        <div v-else class="align-center v-align-middle" style="min-height: 500px; padding-top:100px;">
                                                 <h2 class="fg-teal"><span class="tag success" @click="showAddEmployeeModal()" style="cursor:pointer;">Add Your First Team Member</span></h2>
                                         </div>
                                 </div>
