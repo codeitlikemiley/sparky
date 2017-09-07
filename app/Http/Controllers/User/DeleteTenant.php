@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use Laravel\Spark\Notification;
 use DB;
+use Spatie\Activitylog\Models\Activity;
 
 class DeleteTenant extends BaseController
 {
@@ -43,7 +44,8 @@ class DeleteTenant extends BaseController
             $this->deleteNotifications($tenant);
             $this->deleteAnnouncements($tenant);
             $this->deleteFiles($tenant);
-            // $this->deleteComments($tenant); // client // employee
+            $this->deleteComments($tenant);
+            $this->deleteActivityLogs($tenant);
             $tenant->delete();
             return response()->json(['message' => $this->message, 'user' => $tenant], $this->code);
         }
@@ -82,6 +84,10 @@ class DeleteTenant extends BaseController
     private function deleteEmployees($tenant){
         if($tenant->employees){
             $tenant->employees()->each(function ($employee) {
+                $this->deleteFiles($employee);
+                $this->deleteComments($employee);
+                $this->deleteActivityLogs($employee);
+                // $this->deleteFiles($employee); // Only if we allow Employee to Upload Files
                 $employee->delete();
              });
         }
@@ -90,6 +96,9 @@ class DeleteTenant extends BaseController
     private function deleteClients($tenant){
         if($tenant->clients){
             $tenant->clients()->each(function ($client) {
+                $this->deleteFiles($client);
+                $this->deleteComments($client);
+                $this->deleteActivityLogs($client);
                 $client->delete();
              });    
         }
@@ -110,6 +119,18 @@ class DeleteTenant extends BaseController
                 $file->delete();
              });
         }
+    }
+
+    private function deleteComments($user){
+        if($user->comments){
+            foreach($user->comments as $comment){
+                $comment->delete();
+            }
+        }
+    }
+
+    private function deleteActivityLogs($user){
+        Activity::where('causer_id',$user->id)->where('causer_type',get_class($user))->delete();
     }
 
 }
