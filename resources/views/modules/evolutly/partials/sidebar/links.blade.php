@@ -203,16 +203,16 @@
     </ul>
 </li>
 {{-- @include('evolutly::partials.sidebar.file_menu') --}}
-@include('evolutly::partials.sidebar.company_menu')
+{{-- @include('evolutly::partials.sidebar.company_menu') -- }}
 @endif
 <!-- Support Menu -->
-<li>
+<!-- <li>
     <a href="#support" class="">
         <span class="mif-help icon fg-darkOrange"></span>
         <span class="title fg-amber">Help</span>
         <span class="counter">Ask Support</span>
 	</a>
-</li>
+</li> -->
 <!-- Toggle Sidebar menu -->
 <li>
     <a class="sidebar-sizer">
