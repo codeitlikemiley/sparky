@@ -203,7 +203,7 @@
     </ul>
 </li>
 {{-- @include('evolutly::partials.sidebar.file_menu') --}}
-{{-- @include('evolutly::partials.sidebar.company_menu') -- }}
+{{-- @include('evolutly::partials.sidebar.company_menu') --}}
 @endif
 <!-- Support Menu -->
 <!-- <li>
