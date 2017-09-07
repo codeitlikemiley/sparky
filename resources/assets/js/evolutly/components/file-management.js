@@ -1,4 +1,7 @@
+import guards from './../../mixins/guard'
+
 Vue.component('file-management', {
+    mixins: [guards],
     props: ['files', 'tenant', 'guard'],
     data () {
         return {
@@ -47,6 +50,15 @@ Vue.component('file-management', {
         },
         deleteFile(file){
             console.log('file deleted', file)
+            let self = this
+            self.guardAllowed(['web'],self.callApiDeleteFile(file))
+        },
+        callApiDeleteFile(file){
+            let self = this
+            self.endpoints.web = `/files/delete/${file.id}`
+            axios.delete(self.guardedLocation()).then((response) => {
+                console.log(response)
+            })
         }
     }
 });

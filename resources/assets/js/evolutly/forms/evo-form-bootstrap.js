@@ -156,6 +156,9 @@ Evolutly.forms = {
     },
     jobDeleteForm:{
         subtasks:[]
+    },
+    fileEditForm:{
+        name: null,
     }
 
 

@@ -49446,9 +49446,16 @@ __webpack_require__(214);
 
 /***/ }),
 /* 213 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
+
 
 Vue.component('file-management', {
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_guard___default.a],
     props: ['files', 'tenant', 'guard'],
     data: function data() {
         return {
@@ -49494,6 +49501,15 @@ Vue.component('file-management', {
         },
         deleteFile: function deleteFile(file) {
             console.log('file deleted', file);
+            var self = this;
+            self.guardAllowed(['web'], self.callApiDeleteFile(file));
+        },
+        callApiDeleteFile: function callApiDeleteFile(file) {
+            var self = this;
+            self.endpoints.web = '/files/delete/' + file.id;
+            axios.delete(self.guardedLocation()).then(function (response) {
+                console.log(response);
+            });
         }
     }
 });
@@ -50627,13 +50643,22 @@ Vue.component('templates', {
 
 /***/ }),
 /* 218 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
+
 
 Vue.component('uploaded-files', {
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_guard___default.a],
     props: ['tenant', 'guard'],
     data: function data() {
         return {
-            files: []
+            files: [],
+            current_file: null,
+            fileEditForm: new EvolutlyForm(Evolutly.forms.fileEditForm)
         };
     },
     mounted: function mounted() {
@@ -50643,11 +50668,18 @@ Vue.component('uploaded-files', {
 
     computed: {},
     methods: {
+        show: function show(name) {
+            this.$modal.show(name);
+        },
+        hide: function hide(name) {
+            this.$modal.hide(name);
+        },
         fileChunks: function fileChunks(files) {
             return _.chunk(files, 3);
         },
         getSourceFile: function getSourceFile(file) {
-            return window.location.protocol + '//' + window.location.hostname + '/' + file.path + file.filename + '.' + file.extension;
+
+            return window.location.protocol + '//' + Evolutly.domain + '/' + file.path + file.filename + '.' + file.extension;
         },
         getImageByExtension: function getImageByExtension(file) {
             var images = ['png', 'jpeg', 'gif', 'bmp', 'tiff', 'exif'];
@@ -50657,7 +50689,7 @@ Vue.component('uploaded-files', {
             var ppt = ['ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm'];
             var psd = ['psd'];
             if (_.includes(images, file.extension)) {
-                return '' + file.path + file.filename + '.' + file.extension;
+                return '/' + file.path + file.filename + '.' + file.extension;
             } else if (_.includes(pdf, file.extension)) {
                 return 'https://visual-integrity.com/wp-content/uploads/2016/02/pdf-page.png';
             } else if (_.includes(docs, file.extension)) {
@@ -50670,12 +50702,6 @@ Vue.component('uploaded-files', {
                 return 'https://blogsimages.adobe.com/conversations/files/2012/03/Photoshop-CS6-Icon.jpg';
             }
             return 'http://4vector.com/i/free-vector-text-file-icon_101919_Text_File_Icon.png';
-        },
-        editFile: function editFile(file) {
-            console.log('file edited', file);
-        },
-        deleteFile: function deleteFile(file) {
-            console.log('file deleted', file);
         },
         fetchUploadedFiles: function fetchUploadedFiles() {
             var pathArray = window.location.pathname.split('/');
@@ -50698,7 +50724,47 @@ Vue.component('uploaded-files', {
                 });
             }
         },
-        pushNewUpload: function pushNewUpload() {}
+        deleteFile: function deleteFile(file) {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiDeleteFile(file));
+        },
+        callApiDeleteFile: function callApiDeleteFile(file) {
+            var self = this;
+            self.endpoints.web = '/files/delete/' + file.id;
+            axios.delete(self.guardedLocation()).then(function (response) {
+                var index = _.findIndex(self.files, { id: file.id });
+                self.$delete(self.files, index);
+                console.log(response);
+            });
+        },
+        showEditFileModal: function showEditFileModal(file) {
+            var self = this;
+            self.current_file = file;
+            self.fileEditForm.name = file.name;
+            self.show('edit-file-modal');
+        },
+        closeEditFileModal: function closeEditFileModal() {
+            var self = this;
+            self.hide('edit-file-modal');
+            self.current_file = null;
+            self.fileEditForm = new EvolutlyForm(Evolutly.forms.fileEditForm);
+        },
+        editFile: function editFile() {
+            var self = this;
+            self.fileEditForm.busy = true;
+            self.endpoints.web = '/files/edit/' + self.current_file.id;
+            axios.put(self.guardedLocation(), self.fileEditForm).then(function (response) {
+                var index = _.findIndex(self.files, { id: self.current_file.id });
+                self.files[index].name = self.fileEditForm.name;
+                self.fileEditForm.busy = false;
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                self.closeEditFileModal();
+            }).catch(function (error) {
+                self.fileEditForm.errors.set(error.response.data.errors);
+                self.fileEditForm.busy = false;
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        }
     }
 });
 
@@ -50982,6 +51048,8 @@ Evolutly.forms = (_Evolutly$forms = {
     assignedProjects: null
 }), _defineProperty(_Evolutly$forms, 'jobDeleteForm', {
     subtasks: []
+}), _defineProperty(_Evolutly$forms, 'fileEditForm', {
+    name: null
 }), _Evolutly$forms);
 
 /**

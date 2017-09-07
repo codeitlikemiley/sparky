@@ -13,6 +13,7 @@ use App\Campaign;
 use App\Task;
 use App\Subtask;
 use BrianFaust\Commentable\Comment;
+use App\File;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -77,6 +78,9 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::model('subtask', Subtask::class);
         Route::pattern('subtask', '[0-9]+');
+
+        Route::model('fileID', File::class);
+        Route::pattern('fileID', '[0-9]+');
 
         Route::pattern('id', '[0-9]+');
         Route::model('comment', Comment::class);

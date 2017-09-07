@@ -67,7 +67,7 @@ Route::group(['prefix' => '/dashboard'], function () {
 Route::get('/files', 'File\Index')->name('tenant.files.index');
 Route::post('/files/upload/{projectID}', 'File\UploadController@multiple_upload')->name('tenant.file.uploader');
 Route::put('/files/edit/{fileID}', 'File\EditFile')->name('tenant.file.edit');
-Route::put('/files/delete/{fileID}', 'File\DeleteFile')->name('tenant.file.delete');
+Route::delete('/files/delete/{fileID}', 'File\DeleteFile')->name('tenant.file.delete');
 Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('tenant.files.show');
 Route::get('/jobs/{task}/employee/{employee}/subtasks', 'Subtask\EmployeeTask')->name('task_employee_subtasks');
 Route::get('/jobs/{task}/employee/{employee}/unassignsubtask/{subtask}', 'Subtask\EmployeeUnassignSubtask')->name('task_employee_unassign_subtasks');
