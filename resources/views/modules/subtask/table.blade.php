@@ -12,7 +12,7 @@
                 </div>
                 <div class="text">
 
-                    <div class="table-responsive ">
+                    <div class="table-responsive" v-if="subtasks.length > 0">
 
                         <table class="table border bordered striped ">
                             <thead class="">
@@ -84,7 +84,9 @@
                         </table>
 
                     </div>
-
+                    <div v-else class="align-center v-align-middle">
+                            <h2 class="fg-teal"><span class="tag info">NO TASKS TO SHOW YET CREATE ONE NOW...</span></h2>
+                    </div>
 
 
                 </div>
