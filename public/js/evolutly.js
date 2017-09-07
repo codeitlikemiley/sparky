@@ -48755,7 +48755,7 @@ Vue.component('client-management', {
     props: ['user', 'clientlist', 'projectlist'],
     data: function data() {
         return {
-            clients: null,
+            clients: [],
             registerForm: new EvolutlyForm(Evolutly.forms.registerClientForm),
             current_client: null,
             current_index: null,
