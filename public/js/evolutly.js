@@ -49780,7 +49780,7 @@ Vue.component('projects', {
         },
         createTask: function createTask() {
             var self = this;
-
+            self.taskForm.busy = true;
             var location = '/dashboard/campaigns/' + self.currentCampaignId + '/jobs/create';
             var url = window.location.protocol + '//' + Evolutly.domain + location;
 
@@ -49792,13 +49792,15 @@ Vue.component('projects', {
                     // bug here
                     self.taskForm.resetStatus();
                     self.taskForm = new EvolutlyForm(Evolutly.forms.taskForm);
-
+                    self.taskForm.busy = false;
                     self.$popup({ message: response.data.message });
                 }).catch(function (error) {
                     self.taskForm.errors.set(error.response.data.errors);
+                    self.taskForm.busy = false;
                     self.$popup({ message: error.response.data.message });
                 });
             } else {
+                self.taskForm.busy = false;
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
@@ -49806,6 +49808,7 @@ Vue.component('projects', {
             var _this = this;
 
             var self = this;
+            self.projectForm.busy = true;
             if (self.projectForm.newclient) {
                 delete self.projectForm.client_id;
             } else {
@@ -49818,6 +49821,7 @@ Vue.component('projects', {
                     self.resetProjectForm();
                     self.projectForm.client_id = response.data.client;
                     self.projectForm.client_name = response.data.project.name;
+                    self.projectForm.busy = false;
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
                     self.projectForm.errors.set(error.response.data.errors);
@@ -49831,24 +49835,37 @@ Vue.component('projects', {
                             password: ''
                         };
                     }
+                    self.projectForm.busy = false;
                     self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
                 });
             } else {
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
+        showDeleteProjectModal: function showDeleteProjectModal() {
+            var self = this;
+            self.show('delete-project-modal');
+        },
+        closeDeleteProjectModal: function closeDeleteProjectModal() {
+            var self = this;
+            self.hide('delete-project-modal');
+        },
         deleteProject: function deleteProject() {
             var self = this;
+            self.projectForm.busy = true;
             if (this.guard === 'web') {
                 axios.post('/dashboard/clients/' + self.project.id + '/delete').then(function (response) {
+                    self.projectForm.busy = false;
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                     var location = '/dashboard';
                     var url = window.location.protocol + '//' + Evolutly.domain + location;
                     window.location.replace(url);
                 }).catch(function (error) {
+                    self.projectForm.busy = false;
                     self.$popup({ message: _.first(error.response.data.campaign_name) });
                 });
             } else {
+                self.projectForm.busy = false;
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
@@ -49865,6 +49882,7 @@ Vue.component('projects', {
         },
         createCampaign: function createCampaign() {
             var self = this;
+            self.campaignForm.busy = true;
             if (this.guard === 'web') {
 
                 axios.post('/dashboard/clients/' + self.project.id + '/campaigns/create', self.campaignForm).then(function (response) {
@@ -49875,11 +49893,14 @@ Vue.component('projects', {
                     // add a re-order function to reorder the campaigns
                     self.campaignForm.resetStatus();
                     self.resetCampaignForm();
+                    self.campaignForm.busy = false;
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
+                    self.campaignForm.busy = false;
                     self.$popup({ message: _.first(error.response.data.message) });
                 });
             } else {
+                self.campaignForm.busy = false;
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },
@@ -49978,24 +49999,32 @@ Vue.component('projects', {
                 return false;
             }
         },
-
-        // works like charm
+        showDeleteCampaignModal: function showDeleteCampaignModal(id) {
+            var self = this;
+            self.show('delete-campaign-modal-' + id);
+        },
         deleteCampaign: function deleteCampaign(campaign) {
             var self = this;
+            self.campaignForm.busy = true;
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/delete').then(function (response) {
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                     var index = _.findIndex(self.campaigns, { id: campaign.id });
-                    console.log(index);
                     self.$delete(self.campaigns, index);
                     // hack to rerender the dom
                     self.campaignForm.campaign_name = response.data.campaign.name;
                     self.campaignForm.campaign_name = '';
                     self.campaignForm.campaign_order = 0;
+                    self.campaignForm.busy = false;
+                    self.hide('delete-campaign-modal-' + campaign.id);
                 }).catch(function (error) {
-                    self.$popup({ message: _.first(error.response.data.message) });
+                    self.campaignForm.busy = false;
+                    self.hide('delete-campaign-modal-' + campaign.id);
+                    self.$popup({ message: 'Failed To Delete Campaign' });
                 });
             } else {
+                self.campaignForm.busy = false;
+                self.hide('delete-campaign-modal-' + campaign.id);
                 self.$popup({ message: 'Oops Cant Do That!' });
             }
         },

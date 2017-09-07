@@ -10,8 +10,9 @@
                     <div class="input-control text full-size">
                         <input type="text" placeholder="Add Campaign" v-model="campaignForm.campaign_name">
                         <input v-show="false" type="number" placeholder="Campaign Order" v-model="campaignForm.campaign_order">
-                        <button type="submit" class="button info" :disabled="campaignForm.busy">
-                            <span class="icon mif-keyboard-return"></span>
+                        <button type="submit" class="button fg-white" :class="{'bg-teal': !campaignForm.busy,'bg-red': campaignForm.busy}" :disabled="campaignForm.busy">
+                            <span class="icon mif-keyboard-return" v-if="!campaignForm.busy"></span>
+                            <span class="icon mif-spinner mif-ani-spin" v-else></span>
                     </button>
                     </div>
                     <span class="help-block" v-show="campaignForm.errors.has('campaign_name')">

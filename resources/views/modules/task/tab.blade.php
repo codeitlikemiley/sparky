@@ -24,7 +24,7 @@
                         <div v-if="guard === 'web'" @click="showTask(campaign.id)" class="align-center bg-amber place-left" style="cursor:pointer;position:absolute;top:0;margin-left:53px; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Add|Job" data-hint-position="top">
                             <span class="icon mif-plus" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
-                        <div v-if="guard === 'web'" @click="deleteCampaign(campaign)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
+                        <div v-if="guard === 'web'" @click="showDeleteCampaignModal(campaign.id)" class="align-center bg-red place-right" style="cursor:pointer;position:absolute;top:0;right:0; width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Delete|Campaign" data-hint-position="top">
                             <span class="icon fa fa-trash" style="position: relative; top: 50%; transform: translateY(-50%);"></span>
                         </div>
                     </div>
@@ -55,6 +55,7 @@
                     </div>
             </draggable>
             @include('campaign::edit-campaign-modal')
+            @include('campaign::delete-campaign-modal')
             </div>
         </div>
     </div>

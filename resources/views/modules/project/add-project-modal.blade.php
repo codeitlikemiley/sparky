@@ -67,9 +67,9 @@
                         </div>
                         <v-select max-height="200px" v-if="clients.length > 0 && projectForm.newclient == false" v-model="projectForm.client_id" label="name" :options="clients"  placeholder="Pick an Existing Client"></v-select>
                         <!-- we need to easily create a client without an email or had a default email -->
-                        <button type="submit" class="button place-right fg-white" :class="{'bg-teal': !projectForm.busy,'bg-red': projectForm.busy}" style="position:absolute;top:64px;right: 12px; height:36px;" :disabled="subtaskForm.busy">
+                        <button type="submit" class="button place-right fg-white" :class="{'bg-teal': !projectForm.busy,'bg-red': projectForm.busy}" style="position:absolute;top:64px;right: 12px; height:36px;" :disabled="projectForm.busy">
                                 <span class="icon mif-keyboard-return" v-if="!projectForm.busy"> Submit</span>
-                                <span class="icon mif-keyboard-return" v-else> Please Wait..</span>
+                                <span class="icon mif-spinner mif-ani-spin" v-else></span>
                         </button>
                     </form>
                     </div>

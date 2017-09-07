@@ -6,6 +6,6 @@
         <button @click="show('edit-project')" class="button info"><span class="mif-pencil"></span> Edit Client Project</button>
     </a>
     <a href="#!" v-if="guard === 'web'">
-        <button @click="deleteProject()" class="button alert"><span class="icon fa fa-trash"></span> Delete Client Project</button>
+        <button @click="showDeleteProjectModal()" class="button alert"><span class="icon fa fa-trash"></span> Delete Client Project</button>
     </a>
 </div>

@@ -26,7 +26,9 @@
     </div>
 <!-- ADD ALL MODALS HERE THAT IS NOT SPECIFIC FOR PROJECT OR CAMPAIGN -->
 @include('project::edit-project-modal')
+@include('project::delete-project-modal')
 @include('campaign::add-campaign-modal')
+
 <!-- Modal Specific For Creating Task -->
 @include('task::add-task-modal')
 </div>
