@@ -117,24 +117,24 @@ Vue.component('manage-tenants', {
         },
         showDeleteModal(tenant,tenantKey){
             let self = this
-            self.current_employee = tenant
+            self.current_user = tenant
             self.current_index = tenantKey
             self.guardAllowed(['web'],self.show('delete-tenant-modal'))
             
         },
         closeDeleteModal(){
             let self = this
-            self.resetCurrentEmployee()
+            self.resetCurrentUser()
             self.guardAllowed(['web'],self.hide('delete-tenant-modal'))
             
         },
         deleteTenant(){
             let self = this
-            self.endpoints.web = `/users/${self.current_employee.id}/delete`
+            self.endpoints.web = `/users/delete/${self.current_user.id}`
             axios.delete(self.guardedLocation())
             .then(function (response) {
                 self.tenants.splice(self.current_index,1)
-                self.resetCurrentEmployee()
+                self.resetCurrentUser()
                 self.$popup({ message: `Tenant Has Been Deleted.`, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
                 self.hide('delete-tenant-modal')
             })

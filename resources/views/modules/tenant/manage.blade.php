@@ -83,6 +83,10 @@
                                                                             <span class="icon mif-eye">
                                                                             </span>
                                                                         </span>
+                                                                        <span class="tag bg-red fg-white" @click="showDeleteModal(tenant,tenantKey)" style="cursor:pointer;">
+                                                                            <span class="icon fa fa-trash"></span>
+                                                                            </span>
+                                                                        </span>
                                                                     </td>
                                                                     
                                                                 </tr>
@@ -98,7 +102,7 @@
                 </div>
                 @include('tenant::add-tenant-modal')
                 {{-- @include('employee::edit-tenant-modal') --}}
-                {{-- @include('employee::delete-tenant-modal') --}}
+                @include('tenant::delete-tenant-modal')
             </div>
 </manage-tenants>
 
