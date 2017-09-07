@@ -122,7 +122,7 @@
                 <div class="row" style="position: absolute;width: 100%;bottom:0;">
                     <button type="submit" class="button fg-white" :class="{'bg-teal': !subtaskForm.busy,'bg-red': subtaskForm.busy}" style="width:500px; margin-bottom:-1px;" :disabled="subtaskForm.busy">
                         <strong v-if="!subtaskForm.busy">Update Task</strong>
-                        <strong v-else>Please Wait...</strong>
+                        <strong class="icon mif-spinner mif-ani-spin" v-else></strong>
                     </button>
                 </div>
                 </form>     

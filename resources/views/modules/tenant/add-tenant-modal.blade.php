@@ -3,7 +3,7 @@
         <div class="panel widget-box">
     
             <div class="heading" style="background-color:#4db6ac;">
-                <div class="title window-header align-center">Create New Tenant<span @click="closeAddEmployeeModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;cursor:pointer;"></span></div>
+                <div class="title window-header align-center">Create New Tenant<span @click="closeAddTenantModal()" class="icon fa  fa-remove fg-red" style="font-size: 3.3em; position:absolute; top:0px; right:0px; margin-top:-13px;cursor:pointer;"></span></div>
             </div>
     
             <div class="content">
@@ -67,8 +67,9 @@
     
         </div>
         <div class="row" style="position: absolute;width: 100%;bottom:0;">
-            <button type="submit" class="button fg-white" style="width:500px; margin-bottom:-1px;background-color:#558b2f;">
-                <strong>Create New Tenant</strong>
+            <button type="submit" class="button fg-white" :class="{'bg-teal': !registerForm.busy,'bg-red': registerForm.busy}" style="width:500px; margin-bottom:-1px;" :disabled="registerForm.busy">
+                <strong v-if="!registerForm.busy">Create New Tenant</strong>
+                <strong class="icon mif-spinner mif-ani-spin" v-else></strong>
             </button>
         </div>
         </form>

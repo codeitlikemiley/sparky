@@ -103,15 +103,18 @@ Vue.component('task', {
         },
         callApiUpdateTask(){
             let self = this
+            self.taskForm.busy = true
             self.endpoints.web = `/dashboard/jobs/${self.task.id}/edit`
             axios.put(self.guardedLocation(),self.taskForm).then( (response) => { 
                 self.taskForm.resetStatus()
                 // self.updateLogs(response.data.log)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                self.taskForm.busy = false
                 self.$modal.hide('edit-task-modal')
                 
             }).catch(error => {
                 self.taskForm.errors.set(error.response.data.errors)
+                self.taskForm.busy = false
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
@@ -236,6 +239,7 @@ Vue.component('task', {
                 self.subtasks.push(response.data.subtask)
                 self.options = response.data.employees
                 self.teammember = response.data.workers
+                self.subtaskForm.busy = false
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 self.hide('add-subtask-modal')
             })
@@ -247,6 +251,7 @@ Vue.component('task', {
                         password: '',
                     }]
                 }
+                self.subtaskForm.busy = false
                 self.subtaskForm.errors.set(error.response.data.errors)
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
@@ -307,6 +312,7 @@ Vue.component('task', {
                 let memberIndex = _.findIndex(self.membertasks, { id: subtask.id })
                 self.$delete(self.membertasks, memberIndex)
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
+                self.subtaskForm.busy = false
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
@@ -323,6 +329,7 @@ Vue.component('task', {
                 if(error.response.data.errors){
                 self.subtaskForm.errors.set(error.response.data.errors)
                 }
+                self.subtaskForm.busy = false
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
@@ -351,7 +358,6 @@ Vue.component('task', {
                 self.closeEmployeeTasks(employee)
                 let memberIndex = _.findIndex(self.teammember, { id: employee.id })
                 self.$delete(self.teammember, memberIndex)
-                console.log(self.teammember)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
         },

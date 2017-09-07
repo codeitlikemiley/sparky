@@ -49570,51 +49570,18 @@ Vue.component('manage-tenants', {
         },
         callAddUserApi: function callAddUserApi() {
             var self = this;
+            self.registerForm.busy = true;
             self.endpoints.web = '/users/add';
             axios.post(self.guardedLocation(), self.registerForm).then(function (response) {
                 self.registerForm.resetStatus();
                 self.resetRegisterForm();
                 self.tenants.push(response.data.user);
+                self.registerForm.busy = false;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
                 self.closeAddTenantModal();
             }).catch(function (error) {
                 self.registerForm.errors.set(error.response.data.errors);
-                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
-            });
-        },
-        showEditModal: function showEditModal(tenant, tenantKey) {
-            var self = this;
-            self.guardAllowed(['web'], self.fillRegisterForm(tenant));
-            self.guardAllowed(['web'], self.show('edit-tenant-modal'));
-            self.current_index = tenantKey;
-            self.current_user = tenant;
-        },
-        closeEditModal: function closeEditModal() {
-            var self = this;
-            self.guardAllowed(self.resetRegisterForm());
-            self.guardAllowed(['web'], self.hide('edit-tenant-modal'));
-            self.resetCurrentEmployee();
-        },
-        editEmployee: function editEmployee() {
-            var self = this;
-            if (!self.registerForm.password) {
-                delete self.registerForm.password;
-                delete self.registerForm.password_confirmation;
-            }
-            self.endpoints.web = '/users/' + self.current_employee.id + '/edit';
-            axios.put(self.guardedLocation(), self.registerForm).then(function (response) {
-                self.registerForm.resetStatus();
-                self.$set(self.users, self.current_index, response.data.employee);
-                self.closeEditModal();
-                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
-            }).catch(function (error) {
-                if (!self.registerForm.password) {
-                    self.registerForm.password = '';
-                }
-                if (!self.registerForm.password_confirmation) {
-                    self.registerForm.password_confirmation = '';
-                }
-                self.registerForm.errors.set(error.response.data.errors);
+                self.registerForm.busy = false;
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
             });
         },
@@ -50250,14 +50217,17 @@ Vue.component('task', {
         },
         callApiUpdateTask: function callApiUpdateTask() {
             var self = this;
+            self.taskForm.busy = true;
             self.endpoints.web = '/dashboard/jobs/' + self.task.id + '/edit';
             axios.put(self.guardedLocation(), self.taskForm).then(function (response) {
                 self.taskForm.resetStatus();
                 // self.updateLogs(response.data.log)
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                self.taskForm.busy = false;
                 self.$modal.hide('edit-task-modal');
             }).catch(function (error) {
                 self.taskForm.errors.set(error.response.data.errors);
+                self.taskForm.busy = false;
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },
@@ -50377,6 +50347,7 @@ Vue.component('task', {
                 self.subtasks.push(response.data.subtask);
                 self.options = response.data.employees;
                 self.teammember = response.data.workers;
+                self.subtaskForm.busy = false;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 self.hide('add-subtask-modal');
             }).catch(function (error) {
@@ -50387,6 +50358,7 @@ Vue.component('task', {
                         password: ''
                     }];
                 }
+                self.subtaskForm.busy = false;
                 self.subtaskForm.errors.set(error.response.data.errors);
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
@@ -50443,6 +50415,7 @@ Vue.component('task', {
                 var memberIndex = _.findIndex(self.membertasks, { id: subtask.id });
                 self.$delete(self.membertasks, memberIndex);
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
+                self.subtaskForm.busy = false;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
                 if (!self.subtaskForm.link) {
@@ -50458,6 +50431,7 @@ Vue.component('task', {
                 if (error.response.data.errors) {
                     self.subtaskForm.errors.set(error.response.data.errors);
                 }
+                self.subtaskForm.busy = false;
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },
@@ -50486,7 +50460,6 @@ Vue.component('task', {
                 self.closeEmployeeTasks(employee);
                 var memberIndex = _.findIndex(self.teammember, { id: employee.id });
                 self.$delete(self.teammember, memberIndex);
-                console.log(self.teammember);
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             });
         },

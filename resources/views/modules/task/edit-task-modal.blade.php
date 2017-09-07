@@ -85,8 +85,9 @@
     
         </div>
         <div class="row" style="position: absolute;width: 100%;bottom:0;">
-            <button type="submit" class="button fg-white" style="width:500px; margin-bottom:-1px;background-color:#558b2f;">
-                <strong>Submit</strong>
+            <button type="submit" class="button fg-white" :class="{'bg-teal': !taskForm.busy,'bg-red': taskForm.busy}" style="width:500px; margin-bottom:-1px;" :disabled="taskForm.busy">
+                <strong v-if="!taskForm.busy">Update Job</strong>
+                <strong class="icon mif-spinner mif-ani-spin" v-else></strong>
             </button>
         </div>
         </form>

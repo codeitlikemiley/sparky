@@ -33,7 +33,10 @@ class DeleteTenant extends BaseController
     public function __invoke($tenant)
     {
         if($this->getAuth()->id === $this->getTenant()->id){
-            $tenant->projects()->delete();
+            
+            if($tenant->projects){
+                $tenant->projects()->delete();
+            }
             // add db constraint on delete Cascade to automatically delete
             $tenant->delete();
             return response()->json(['message' => $this->message, 'user' => $tenant], $this->code);

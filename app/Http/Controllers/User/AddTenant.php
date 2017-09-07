@@ -40,7 +40,12 @@ class AddTenant extends BaseController
         $validator = $this->sanitize();
 
         if($validator->fails()){
-            $this->message = 'Failed To Create Lifetime Tenant Account';
+            if($this->request->lifetime){
+                $this->message = 'Failed To Create Lifetime Tenant Account';
+            
+            }else {
+                $this->message = 'Failed to Create Trial Account';
+            }
             $this->code = 422;
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }

@@ -43,7 +43,6 @@ Vue.component('manage-tenants', {
             let self = this
             self.resetRegisterForm()
             self.hide('add-tenant-modal')
-        
         },
         resetCurrentUser(){
             let self = this
@@ -62,58 +61,23 @@ Vue.component('manage-tenants', {
         },
         callAddUserApi(){
             let self = this
+            self.registerForm.busy = true
             self.endpoints.web = '/users/add'
             axios.post(self.guardedLocation(), self.registerForm)
              .then((response) => {
                  self.registerForm.resetStatus()
                  self.resetRegisterForm()
                  self.tenants.push(response.data.user)
+                 self.registerForm.busy = false
                  self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
                  self.closeAddTenantModal()
              })
              .catch((error) => {
                  self.registerForm.errors.set(error.response.data.errors)
+                 self.registerForm.busy = false
                  self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
              })
             
-        },
-        showEditModal(tenant,tenantKey){
-            let self = this
-            self.guardAllowed(['web'],self.fillRegisterForm(tenant))
-            self.guardAllowed(['web'],self.show('edit-tenant-modal'))
-            self.current_index = tenantKey
-            self.current_user = tenant
-        },
-        closeEditModal(){
-            let self = this
-            self.guardAllowed(self.resetRegisterForm())
-            self.guardAllowed(['web'],self.hide('edit-tenant-modal'))
-            self.resetCurrentEmployee()
-        },
-        editEmployee(){
-            let self = this
-            if(!self.registerForm.password){
-                delete self.registerForm.password
-                delete self.registerForm.password_confirmation
-            }
-            self.endpoints.web = `/users/${self.current_employee.id}/edit`
-             axios.put(self.guardedLocation(), self.registerForm)
-             .then((response) => {
-                self.registerForm.resetStatus()
-                 self.$set(self.users, self.current_index, response.data.employee)
-                 self.closeEditModal()
-                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
-             })
-             .catch((error) => {
-                if(!self.registerForm.password){
-                    self.registerForm.password = ''
-                }
-                if(!self.registerForm.password_confirmation){
-                    self.registerForm.password_confirmation = ''
-                }
-                 self.registerForm.errors.set(error.response.data.errors)
-                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
-             })
         },
         showDeleteModal(tenant,tenantKey){
             let self = this
