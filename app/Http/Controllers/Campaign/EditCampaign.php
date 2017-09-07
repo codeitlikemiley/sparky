@@ -28,16 +28,40 @@ class EditCampaign extends BaseController
      */
     public function __invoke($campaign)
     {
-         $this->validate($this->request, [
-        'campaign_name' => 'required|max:30',
-        'campaign_order' => 'int|min:0'
-        ]);
+        $validator = $this->sanitize();
+        if($validator->fails())
+        {
+            $this->code = 422;
+            $this->message = 'Failed To Edit '. $campaign->name;
+            return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
+        }
         $this->editCampaign($campaign);
         $campaign = Campaign::with('tasks')->where('id',$campaign->id)->first();
         
         return response()->json(['message' => $this->message, 'campaign' => $campaign], $this->code);
         
         
+    }
+
+    private function sanitize()
+    {
+       return $validator = \Validator::make($this->request->all(), $this->rules(), $this->messages());
+    }
+
+    private function rules(){
+        return 
+        [
+        'campaign_name' => 'required|max:30',
+        'campaign_order' => 'int|min:0'
+        ];
+    }
+    private function messages(){
+        return [
+            'campaign_name.required' => 'Type A Name For this Campaign',
+            'campaign_name.max' => 'Campaign Name Too Long',
+            'campaign_order.int' => 'Campaign Order Must Be Integer',
+            'campaign_order.min' => 'Campaign Order Must Not Be Lesser Than Zero',
+        ];
     }
 
     private function allows($campaign)

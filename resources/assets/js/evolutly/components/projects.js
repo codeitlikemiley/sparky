@@ -269,6 +269,7 @@ Vue.component('projects', {
         //works like charm
         updateCampaign(campaign) {
             var self = this
+            self.campaignForm.busy = true
             if (this.guard === 'web') {
                 axios.post('/dashboard/campaigns/' + campaign.id + '/edit', self.campaignForm)
                     .then(function (response) {
@@ -279,12 +280,16 @@ Vue.component('projects', {
                         self.$set(self.campaigns, index, response.data.campaign)
                         self.campaignForm.resetStatus()
                         self.resetCampaignForm()
+                        self.campaignForm.busy = false
                         self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                     })
                     .catch(error => {
-                        self.$popup({ message: _.first(error.response.data.message) })
+                        self.campaignForm.busy = false
+                        self.campaignForm.errors.set(error.response.data.errors)
+                        self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
                     })
             } else {
+                self.campaignForm.busy = false
                 self.$popup({ message: 'Oops Cant Do That!' })
             }
         },
