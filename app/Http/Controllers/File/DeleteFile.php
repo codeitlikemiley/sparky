@@ -12,8 +12,13 @@ class DeleteFile extends Controller
         $this->middleware('auth:web');
     }
     
-    public function __invoke()
+    public function __invoke($file)
     {
-        return 'file deleted';
+        if($this->getAuth()->id === $this->getTenant()->id){
+            $file->delete();
+            return response()->json(['file' => $file],200);
+
+        }
+        return response()->json([],401);
     }
 }
