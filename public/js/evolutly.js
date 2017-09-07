@@ -49116,6 +49116,7 @@ Vue.component('dashboard', {
         },
         createProject: function createProject() {
             var self = this;
+            self.projectForm.busy = true;
             if (self.projectForm.newclient) {
                 delete self.projectForm.client_id;
             } else {
@@ -49134,6 +49135,7 @@ Vue.component('dashboard', {
                         email: '',
                         password: ''
                     };
+                    self.projectForm.busy = false;
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 }).catch(function (error) {
                     if (!self.projectForm.client_id) {
@@ -49143,6 +49145,7 @@ Vue.component('dashboard', {
                         self.projectForm.client = '';
                     }
                     self.projectForm.errors.set(error.response.data.errors);
+                    self.projectForm.busy = false;
                     self.$popup({ message: error.response.data.message });
                 });
             } else {
