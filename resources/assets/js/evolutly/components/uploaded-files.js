@@ -77,9 +77,19 @@ Vue.component('uploaded-files', {
             }
              
         },
-        deleteFile(file){
+        showDeleteFileModal(file){
             let self = this
-            self.guardAllowed(['web'],self.callApiDeleteFile(file))
+            self.current_file = file
+            self.show(`delete-file-modal`)
+        },
+        closeDeleteFileModal(){
+            let self = this
+            self.hide(`delete-file-modal`)
+            self.current_file = null
+        },
+        deleteFile(){
+            let self = this
+            self.guardAllowed(['web'],self.callApiDeleteFile(self.current_file))
         },
         callApiDeleteFile(file){
             let self = this

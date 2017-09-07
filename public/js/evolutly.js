@@ -50724,9 +50724,19 @@ Vue.component('uploaded-files', {
                 });
             }
         },
-        deleteFile: function deleteFile(file) {
+        showDeleteFileModal: function showDeleteFileModal(file) {
             var self = this;
-            self.guardAllowed(['web'], self.callApiDeleteFile(file));
+            self.current_file = file;
+            self.show('delete-file-modal');
+        },
+        closeDeleteFileModal: function closeDeleteFileModal() {
+            var self = this;
+            self.hide('delete-file-modal');
+            self.current_file = null;
+        },
+        deleteFile: function deleteFile() {
+            var self = this;
+            self.guardAllowed(['web'], self.callApiDeleteFile(self.current_file));
         },
         callApiDeleteFile: function callApiDeleteFile(file) {
             var self = this;
