@@ -71,14 +71,15 @@
                                             </span>
                                     </div>
                             </div>
-                        <div class="row" style="padding:5px;">
+                        <!-- remove for the mean time -->
+                        <!-- <div class="row" style="padding:5px;">
                             <div class="input-control text full-size">
                                 <textarea placeholder="Add Description" v-model="taskForm.task_description"></textarea>
                                 <span class="fg-red" v-show="taskForm.errors.has('task_description')">
                             @{{ taskForm.errors.get('task_description') }}
                             </span>
                             </div>
-                        </div>
+                        </div> -->
     
                     </div>
             </div>

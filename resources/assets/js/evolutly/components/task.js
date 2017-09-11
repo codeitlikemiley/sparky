@@ -3,6 +3,7 @@ import comments from './comments.vue'
 import guards from './../../mixins/guard'
 import taskCalendar from './task-calendar.vue'
 import FileUpload from 'vue-upload-component'
+import TextEditor from '../components/text-editor.vue'
 
 Vue.component('task', {
     mixins: [guards],
@@ -23,19 +24,36 @@ Vue.component('task', {
             currentSubtask: null,
             options: [],
             teammember: [],
-            membertasks:[]
+            membertasks:[],
+            showEditor: false
 
         }
     },
     mounted() {
-        this.whenReady()
+        let self = this
+        Bus.$on('toggleEditor', () => {
+            self.toggleEditor()
+        })
+        Bus.$on('updateDescription', (content) => {
+            self.taskForm.task_description = content
+        })
     },
     computed: {
         employeeChunks() {
             return _.chunk(this.teammember, 4)
         },
     },
+    created () {
+        this.whenReady()
+    },
     methods: {
+        toggleEditor(){
+            this.showEditor = !this.showEditor
+        },
+        editDescription(){
+            let self = this
+            Bus.$emit('editDescription',self.task.id)
+        },
         whenReady() {
             let self = this
             self.teammember = this.workers
@@ -414,7 +432,8 @@ Vue.component('task', {
         StarRating,
         comments,
         taskCalendar,
-        FileUpload
+        FileUpload,
+        TextEditor
     }
 
 })

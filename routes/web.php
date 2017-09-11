@@ -33,6 +33,7 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::get('/jobs/{task}', 'Task\ShowTask')->name('tenant.tasks.view');
       Route::post('/campaigns/{campaign}/jobs/create', 'Task\CreateTask')->name('tenant.tasks.create');
       Route::put('/jobs/{task}/edit', 'Task\EditTask')->name('tenant.tasks.edit');
+      Route::put('/jobs/{task}/edit/description', 'Task\EditDescription')->name('tenant.tasks.edit.description');
       Route::delete('/jobs/{task}/delete', 'Task\DeleteTask')->name('tenant.tasks.delete');
 
       Route::get('/jobs/{task}/tasks', 'Subtask\ShowSubtask')->name('tenant.subtasks.index');

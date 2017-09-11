@@ -3,6 +3,7 @@
 @push('critical_css')
 @include('css::footer')
 @include('css::progressbar')
+<link href="https://unpkg.com/trumbowyg@2.7.0/dist/ui/trumbowyg.min.css" rel="stylesheet">
 @endpush 
 
 @section('content')
@@ -25,13 +26,13 @@
                                 <li><a href="#job_tab">Job</a></li>
                                 <li><a href="#tasks_tab">Tasks</a></li>
                                 <li><a href="#people_tab">Team</a></li>
-                                <li><a href="#calendar">Calendar</a></li>
+                                <!-- <li><a href="#calendar">Calendar</a></li> -->
                             </ul>
                             <div class="grid frames bg-white">
                                 @include('task::data')
                                 @include('subtask::tab')
                                 @include('employee::tab')
-                                @include('subtask::calendar')
+                                {{-- @include('subtask::calendar') --}}
                             </div>
                         </div>
                 </div>
