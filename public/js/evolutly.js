@@ -50654,11 +50654,12 @@ Vue.component('task', {
     },
     mounted: function mounted() {
         var self = this;
-        Bus.$on('toggleEditor', function () {
-            self.toggleEditor();
+        Bus.$on('closeEditor', function () {
+            self.closeEditor();
         });
         Bus.$on('updateDescription', function (content) {
             self.taskForm.task_description = content;
+            self.taskForm.busy = false;
         });
     },
 
@@ -50672,11 +50673,15 @@ Vue.component('task', {
     },
 
     methods: {
-        toggleEditor: function toggleEditor() {
-            this.showEditor = !this.showEditor;
+        openEditor: function openEditor() {
+            this.showEditor = true;
+        },
+        closeEditor: function closeEditor() {
+            this.showEditor = false;
         },
         editDescription: function editDescription() {
             var self = this;
+            self.taskForm.busy = true;
             Bus.$emit('editDescription', self.task.id);
         },
         whenReady: function whenReady() {
@@ -51576,6 +51581,8 @@ Evolutly.forms = (_Evolutly$forms = {
     subtasks: []
 }), _defineProperty(_Evolutly$forms, 'fileEditForm', {
     name: null
+}), _defineProperty(_Evolutly$forms, 'editForm', {
+    task_description: null
 }), _Evolutly$forms);
 
 /**
@@ -105504,7 +105511,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             content: '',
-            taskForm: new EvolutlyForm(Evolutly.forms.taskForm)
+            editForm: new EvolutlyForm(Evolutly.forms.editForm)
         };
     },
     mounted: function mounted() {
@@ -105518,15 +105525,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         callApiUpdateTask: function callApiUpdateTask(id) {
             var self = this;
-            self.taskForm.task_description = self.content;
-            self.taskForm.busy = true;
+            self.editForm.task_description = self.content;
+            self.editForm.busy = true;
             self.endpoints.web = '/dashboard/jobs/' + id + '/edit/description';
-            axios.put(self.guardedLocation(), self.taskForm).then(function (response) {
+            axios.put(self.guardedLocation(), self.editForm).then(function (response) {
                 Bus.$emit('updateDescription', self.content);
-                Bus.$emit('toggleEditor');
+                Bus.$emit('closeEditor');
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
-                self.taskForm.busy = false;
+                self.editForm.busy = false;
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         }

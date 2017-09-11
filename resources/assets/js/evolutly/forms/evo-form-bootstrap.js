@@ -159,6 +159,9 @@ Evolutly.forms = {
     },
     fileEditForm:{
         name: null,
+    },
+    editForm: {
+        task_description: null
     }
 
 

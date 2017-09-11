@@ -20,19 +20,19 @@
     <a v-if="guard ==='web'" @click="deleteTaskModal()" class="margin10">
         <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Job</button>
     </a>
-    <a v-if="guard ==='web'" @click="toggleEditor()" class="margin10">
-        <button v-if="!showEditor" class="button bg-darkTeal fg-white"><span class="icon fa fa-sticky-note "></span> Job Page Editor</button>
+    <a v-if="guard ==='web' && !showEditor" @click="openEditor()" class="margin10">
+        <button class="button bg-darkTeal fg-white" :disabled="taskForm.busy"><span class="icon fa fa-sticky-note "></span> Job Page Editor</button>
     </a>
-    <a v-if="guard ==='web'"  @click="editDescription()" class="margin10">
-        <button v-if="showEditor" class="button bg-teal fg-white"><span class="icon fa fa-sticky-note "></span> Update Job Page</button>
+    <a v-if="guard ==='web' && showEditor"  @click="editDescription()" class="margin10">
+        <button class="button bg-teal fg-white" :disabled="taskForm.busy"><span class="icon fa fa-sticky-note "></span> Update Job Page</button>
     </a>
 </div>
 
 <div v-if="!showEditor" class="example" v-html="taskForm.task_description" v-if="taskForm.task_description"></div>
 
 
-<div style="min-height:500px;padding-bottom:100px;">
-    <text-editor v-if="showEditor" :description="taskForm.task_description"></text-editor>
+<div v-if="showEditor" style="min-height:500px;padding-bottom:100px;">
+    <text-editor :description="taskForm.task_description"></text-editor>
 </div>
 
 </div>

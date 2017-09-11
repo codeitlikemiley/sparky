@@ -14,7 +14,7 @@ props:['description'],
 data () {
     return {
     content: '',
-    taskForm: new EvolutlyForm(Evolutly.forms.taskForm)
+    editForm: new EvolutlyForm(Evolutly.forms.editForm)
     }
 },
 mounted () {
@@ -27,15 +27,15 @@ mounted () {
 methods: {
     callApiUpdateTask(id){
             let self = this
-            self.taskForm.task_description = self.content
-            self.taskForm.busy = true
+            self.editForm.task_description = self.content
+            self.editForm.busy = true
             self.endpoints.web = `/dashboard/jobs/${id}/edit/description`
-            axios.put(self.guardedLocation(),self.taskForm).then( (response) => { 
+            axios.put(self.guardedLocation(),self.editForm).then( (response) => { 
                 Bus.$emit('updateDescription', self.content)
-                Bus.$emit('toggleEditor')
+                Bus.$emit('closeEditor')
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             }).catch(error => {
-                self.taskForm.busy = false
+                self.editForm.busy = false
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },

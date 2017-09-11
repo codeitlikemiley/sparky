@@ -31,11 +31,12 @@ Vue.component('task', {
     },
     mounted() {
         let self = this
-        Bus.$on('toggleEditor', () => {
-            self.toggleEditor()
+        Bus.$on('closeEditor', () => {
+            self.closeEditor()
         })
         Bus.$on('updateDescription', (content) => {
             self.taskForm.task_description = content
+            self.taskForm.busy = false
         })
     },
     computed: {
@@ -47,11 +48,15 @@ Vue.component('task', {
         this.whenReady()
     },
     methods: {
-        toggleEditor(){
-            this.showEditor = !this.showEditor
+        openEditor(){
+            this.showEditor = true
+        },
+        closeEditor(){
+            this.showEditor = false
         },
         editDescription(){
             let self = this
+            self.taskForm.busy = true
             Bus.$emit('editDescription',self.task.id)
         },
         whenReady() {
