@@ -63,4 +63,8 @@
         </div>
     </modal>  
 </div>
+<div class="frame bg-white margin-bottom-90" id="template_tab" v-else style="min-height:450px;">
+    <h2 class="fg-teal align-center"><span class="tag bg-red fg-white">No Available Templates.</span></h2>
+    <h2 class="fg-teal align-center" style="padding-bottom:250px;"><span class="tag success" @click="goToDashboard()" style="cursor:pointer;">Create Project First Then Clone It.</span></h2>    
+</div>
     

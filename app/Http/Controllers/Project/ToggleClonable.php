@@ -20,7 +20,7 @@ class ToggleClonable extends BaseController
 
     public function __invoke($project)
     {
-        if($this->getAuth()->can('toggle-clonable',$project))
+        if($this->getAuth()->can('toggle-clonable',$project) || $this->getAuth()->isSuperAdmin())
         {
             $project->public = !$project->public;
             $project->save();

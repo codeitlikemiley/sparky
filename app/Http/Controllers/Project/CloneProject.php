@@ -30,7 +30,7 @@ class CloneProject extends BaseController
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
         
-        if($this->getAuth()->can('clone-project',$project)){
+        if($this->getAuth()->can('clone-project',$project) || $this->getAuth()->isSuperAdmin()){
             $newProject = $this->clone($project);
             $newProject->load('campaigns.tasks.subtasks');
             return response()->json(['message' => $this->message, 'project' => $newProject],$this->code);

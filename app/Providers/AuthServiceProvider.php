@@ -26,14 +26,14 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('toggle-clonable', function ($user,$project) {
-            if($user->isSuperAdmin()){
+            if(get_class($user) === 'App\User'){
                 return true;
             }
             return $project->tenant_id === $user->id;
         });
 
         Gate::define('clone-project', function ($user,$project) {
-            if($user->isSuperAdmin()){
+            if(get_class($user) === 'App\User'){
                 return true;
             }
             return $project->tenant_id === $user->id;
@@ -41,7 +41,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('manage-projects', function ($user,$tenant) {
-            if($user->isSuperAdmin()){
+            if(get_class($user) === 'App\User'){
                 return true;
             }
             return $tenant->id === $user->id;

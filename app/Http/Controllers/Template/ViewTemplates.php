@@ -25,10 +25,11 @@ class ViewTemplates extends BaseController
      */
     public function __invoke()
     {
-        if($this->getAuth()->can('manage-projects',$this->getTenant()))
+        if($this->getAuth()->can('manage-projects',$this->getTenant() || $this->getAuth()->isSuperAdmin()))
         {
+            $mytemplatelist = Project::with('campaigns.tasks.subtasks')->where('tenant_id',$this->getAuth()->id)->where('public', true)->get();
             $templates = Project::with('campaigns.tasks.subtasks')->where('tenant_id',$this->getSuperAdmin()->id)->where('public', true)->get();
-            return view('template::index',['templates' => $templates]);
+            return view('template::index',['templates' => $templates,'mytemplatelist' => $mytemplatelist]);
         }else{
         abort(403,'Forbidden To View Templates');
         

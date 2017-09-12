@@ -21,7 +21,7 @@ class ShowTemplate extends BaseController
     public function __invoke($project)
     {
         $tenant = $this->getTenant();
-        if($this->getAuth()->can('manage-projects',$tenant))
+        if($this->getAuth()->can('manage-projects',$tenant) || $this->getAuth()->isSuperAdmin())
         {
             $campaigns = Campaign::where('project_id', $project->id)->with('tasks')->orderBy('order', 'asc')->get();
             $workers = $project->assignedEmployees;

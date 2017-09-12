@@ -19,7 +19,7 @@ class GetClonableTemplates extends BaseController
     // Only Load The SuperAdmin Project That is Set to Public
     public function __invoke()
     {
-        if($this->getAuth()->can('manage-projects',$this->getTenant()))
+        if($this->getAuth()->can('manage-projects',$this->getTenant()) || $this->getAuth()->isSuperAdmin())
         {
             $templates = Project::where('tenant_id',$this->getSuperAdmin()->id)->where('public', true)->get();
             $this->message = ($templates->count() > 0) ? 'Templates Loaded.' : 'No Templates Available Yet.';
