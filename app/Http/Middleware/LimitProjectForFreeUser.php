@@ -19,7 +19,7 @@ class LimitProjectForFreeUser
         if($this->getAuth()->isSuperAdmin()){
             return $next($request);
         }elseif($this->getAuth()->lifetime){
-            return response()->json(['message' => 'Upgrade To VIP Plan'], 402);
+            return $next($request);
         }elseif($this->limitedProject()){
             return response()->json(['message' => 'Upgrade To VIP Plan'], 402);
         }else{
