@@ -21,20 +21,26 @@
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-file-text fg-lime"></span>
-                                        <input type="text" placeholder="Add Name" v-model="subtaskForm.name">
+                                        <input type="text" placeholder="Add Task" v-model="subtaskForm.name">
                                         <span class="fg-red" v-show="subtaskForm.errors.has('name')">
                                         @{{ subtaskForm.errors.get('name') }}
                                     </span>
                                     </div>
                                 </div>
+                                <div style="padding-left: 5px;padding-right: 5px; height:150px;">
+                                    <h4 class="align-center fg-grayLight">Describe Task</h4>
+                                    <trumbowyg v-model="subtaskForm.description"></trumbowyg>
+                                </div>
                                 
+                                <hr style="margin-top:270px;color:white;background-color:white;">
+                                <h4 class="align-center fg-grayLight">Task Points Difficulty</h4>
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-trophy fg-yellow"></span>
                                         <input type="number" placeholder="Add Points" v-model="subtaskForm.points">
                                         <span class="fg-red" v-show="subtaskForm.errors.has('points')">
                                         @{{ subtaskForm.errors.get('points') }}
-                                    </span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="row" style="padding:5px;">
@@ -46,6 +52,7 @@
                                     </span>
                                     </div>
                                 </div>
+                                
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-calendar fg-amber"></span>
@@ -57,9 +64,9 @@
                                 </div>
                                 <div class="row" style="padding:5px;margin-bottom:15px;">
                                         <div class="pull-left">
-                                            <h4>Set Priorities :</h4>
+                                            <h4 class="fg-grayLight">Task Urgency :</h4>
                                         </div>
-                                         <star-rating style="position:absolute;right:0;top:285px;margin-right:-20px;" :padding="40" @rating-selected="setPriority" v-model.number="priority" :star-size="30" :show-rating="false"></star-rating>
+                                         <star-rating style="padding-left:50px;"  @rating-selected="setPriority" v-model.number="priority" :star-size="30" :show-rating="false"></star-rating>
                                 </div>
                                 <v-select style="margin-bottom:50px;" max-height="160px" class="full-size" multiple v-if="options.length > 0" v-model="subtaskForm.assignedEmployees" label="name" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
                                 <div  class="row" style="padding:5px;">
@@ -67,8 +74,8 @@
                                         <label class="switch pull-left">
                                             <input type="checkbox" v-model="subtaskForm.sendEmail">
                                             <span class="check"></span>
-                                            <span class="caption" v-if="!subtaskForm.sendEmail">Notify Team Members?</span>
-                                            <span class="caption" v-else>Send Email</span>
+                                            <span class="caption fg-grayLight" v-if="!subtaskForm.sendEmail">Notify Team Members?</span>
+                                            <span class="caption fg-grayLight" v-else>Send Email</span>
                                         </label>
                                         <span class="tag warning" v-if="subtaskForm.sendEmail">Sending Email Takes Time</span>
                                     </div>

@@ -55,7 +55,7 @@ class EditTask extends BaseController
     private function rules(){
         return 
         [
-        'task_name' => 'required|max:30',
+        'task_name' => 'required', //|max:30
         'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'task_description' => 'max:200',
         'task_recurring' => 'boolean',
@@ -65,7 +65,7 @@ class EditTask extends BaseController
     private function messages(){
         return [
             'task_name.required' => 'Name Your Task',
-            'task_name.max' => 'Task Name Too Long',
+            // 'task_name.max' => 'Task Name Too Long',
             'task_description.max' => 'Description Too Long',
             'task_link.regex' => 'Enter Valid Url',
             'task_recurring.boolean' => 'Recurring Value Must Be Either True or False',

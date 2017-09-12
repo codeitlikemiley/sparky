@@ -50684,6 +50684,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_upload_component__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__ = __webpack_require__(369);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__);
+
 
 
 
@@ -50927,11 +50930,11 @@ Vue.component('task', {
         addSubtaskModal: function addSubtaskModal() {
             var self = this;
             self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
-            self.guardAllowed(['web'], self.show('add-subtask-modal'));
+            self.guardAllowed(['web'], self.show('add-subtask-modal')); // todo
         },
         addSubtask: function addSubtask() {
             var self = this;
-            self.guardAllowed(['web'], self.callApiAddSubTask());
+            self.guardAllowed(['web'], self.callApiAddSubTask()); // todo
         },
         callApiAddSubTask: function callApiAddSubTask() {
             var self = this;
@@ -50970,6 +50973,7 @@ Vue.component('task', {
         assignSubtaskToForm: function assignSubtaskToForm(subtask) {
             var self = this;
             self.subtaskForm.name = subtask.name;
+            self.subtaskForm.description = subtask.description;
             self.subtaskForm.link = subtask.link;
             self.subtaskForm.points = subtask.points;
             self.subtaskForm.priority = subtask.priority;
@@ -51113,7 +51117,8 @@ Vue.component('task', {
         comments: __WEBPACK_IMPORTED_MODULE_1__comments_vue___default.a,
         taskCalendar: __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue___default.a,
         FileUpload: __WEBPACK_IMPORTED_MODULE_4_vue_upload_component___default.a,
-        TextEditor: __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue___default.a
+        TextEditor: __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue___default.a,
+        trumbowyg: __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg___default.a
     }
 
 });
@@ -51626,6 +51631,7 @@ Evolutly.forms = (_Evolutly$forms = {
     },
     subtaskForm: {
         name: '',
+        description: '',
         points: 1,
         priority: 1,
         link: '',
@@ -51637,6 +51643,7 @@ Evolutly.forms = (_Evolutly$forms = {
             email: '',
             password: ''
         }],
+        showEditor: false,
         sendEmail: false,
         assignedEmployees: null
 
@@ -51708,6 +51715,8 @@ Evolutly.forms = (_Evolutly$forms = {
     name: null
 }), _defineProperty(_Evolutly$forms, 'editForm', {
     task_description: null
+}), _defineProperty(_Evolutly$forms, 'editSubForm', {
+    description: null
 }), _Evolutly$forms);
 
 /**

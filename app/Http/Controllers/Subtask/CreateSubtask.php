@@ -74,8 +74,9 @@ class CreateSubtask extends BaseController
     private function rules(){
         return 
         [
-        'name' => 'required|max:30',
+        'name' => 'required', //|max:30
         'points' => 'required|min:1',
+        'description' => 'max:65535',
         'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'priority' => 'in:1,2,3,4,5',
         'due_date' => 'date|after_or_equal:tomorrow',
@@ -89,7 +90,8 @@ class CreateSubtask extends BaseController
     private function messages(){
         return [
             'name.required' => 'Define Your Task',
-            'name.max' => 'Task Name Too Long Max(30)',
+            // 'name.max' => 'Task Name Too Long Max(30)',
+            'description' => 'Task Description Reach Character Limit',
             'points.required' => 'Points is Required',
             'points.min' => 'Minimum Point is 1',
             'link.regex' => 'Enter Valid Url',
@@ -109,11 +111,19 @@ class CreateSubtask extends BaseController
     {
         
         $this->addLink();
+        $this->addDescription();
         $this->addPriority();
         $this->addPoints();
         $this->addDueDate();
         $this->addName();
         
+    }
+
+    private function addDescription()
+    {
+        if(isset($this->request->description)){
+            $this->subtask->description = clean($this->request->description);
+        }
     }
 
     private function addName()

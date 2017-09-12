@@ -4,6 +4,7 @@ import guards from './../../mixins/guard'
 import taskCalendar from './task-calendar.vue'
 import FileUpload from 'vue-upload-component'
 import TextEditor from '../components/text-editor.vue'
+import trumbowyg from 'vue-trumbowyg'
 
 Vue.component('task', {
     mixins: [guards],
@@ -242,11 +243,11 @@ Vue.component('task', {
         addSubtaskModal(){
             let self = this
             self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
-            self.guardAllowed(['web'],self.show('add-subtask-modal'))
+            self.guardAllowed(['web'],self.show('add-subtask-modal')) // todo
         },
         addSubtask(){
             let self = this
-            self.guardAllowed(['web'],self.callApiAddSubTask())
+            self.guardAllowed(['web'],self.callApiAddSubTask()) // todo
         },
         callApiAddSubTask(){
             let self = this
@@ -287,6 +288,7 @@ Vue.component('task', {
         assignSubtaskToForm(subtask){
             let self = this
             self.subtaskForm.name = subtask.name
+            self.subtaskForm.description = subtask.description
             self.subtaskForm.link = subtask.link
             self.subtaskForm.points = subtask.points 
             self.subtaskForm.priority = subtask.priority
@@ -438,7 +440,8 @@ Vue.component('task', {
         comments,
         taskCalendar,
         FileUpload,
-        TextEditor
+        TextEditor,
+        trumbowyg
     }
 
 })

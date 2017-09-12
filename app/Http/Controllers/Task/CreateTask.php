@@ -49,9 +49,9 @@ class CreateTask extends BaseController
     private function rules(){
         return 
         [
-        'task_name' => 'required|max:30',
+        'task_name' => 'required', // |max:30
         'task_link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
-        'task_description' => 'max:200',
+        'task_description' => 'max:65535',
         'task_recurring' => 'boolean',
         'task_interval' => 'integer|min:0|max:999'
         ];
@@ -60,8 +60,8 @@ class CreateTask extends BaseController
     private function messages(){
         return [
             'task_name.required' => 'Name Your Job',
-            'task_name.max' => 'Job Name Too Long',
-            'task_description.max' => 'Job Description Too Long',
+            // 'task_name.max' => 'Job Name Too Long',
+            'task_description.max' => 'Job Description Reach Character Limit',
             'task_link.regex' => 'Job Url is Invalid',
             'task_recurring.boolean' => 'Recurring Value Must Be Either True or False',
             'task_interval.integer' => 'Job Interval Provided is Not Integer',
@@ -108,7 +108,7 @@ class CreateTask extends BaseController
     private function addDescription()
     {
         if(isset($this->request->task_description)){
-        $this->task->description = $this->request->task_description;
+        $this->task->description = clean($this->request->task_description);
         }
     }
 

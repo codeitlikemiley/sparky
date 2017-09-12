@@ -19,14 +19,19 @@
                                     </span>
                                     </div>
                                 </div>
-                                
-                                <div class="row">
+                                <div style="padding-left: 5px;padding-right: 5px; height:150px;">
+                                    <h4 class="align-center fg-grayLight">Describe Task</h4>
+                                    <trumbowyg v-model="subtaskForm.description"></trumbowyg>
+                                </div>
+                                <hr style="margin-top:270px;color:white;background-color:white;">
+                                <h4 class="align-center fg-grayLight">Task Points Difficulty</h4>
+                                <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-trophy fg-yellow"></span>
                                         <input type="number" placeholder="Add Points" v-model="subtaskForm.points">
                                         <span class="fg-red" v-show="subtaskForm.errors.has('points')">
-                                        {{ subtaskForm.errors.get('points') }}
-                                    </span>
+                                        @{{ subtaskForm.errors.get('points') }}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -47,11 +52,11 @@
                                     </span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                        <div class="pull-left">
-                                            <h4>Set Priorities :</h4>
-                                        </div>
-                                         <star-rating style="position:absolute;right:0;top:285px;margin-right:-20px;" :padding="40"  v-model.number="subtaskForm.priority" :star-size="30" :show-rating="false"></star-rating>
+                                <div class="row" style="padding:5px;margin-bottom:15px;">
+                                <div class="pull-left">
+                                    <h4 class="fg-grayLight">Task Urgency :</h4>
+                                </div>
+                                 <star-rating style="padding-left:50px;"  @rating-selected="setPriority" v-model.number="priority" :star-size="30" :show-rating="false"></star-rating>
                                 </div>
                                 <div  class="row" style="padding:5px;">
                                     <div class="input-control text full-size">

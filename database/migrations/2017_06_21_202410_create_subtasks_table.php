@@ -21,6 +21,7 @@ class CreateSubtasksTable extends Migration
             $table->string('points')->default(1);
             $table->smallInteger('priority')->default(1);
             $table->string('link')->nullable();
+            $table->text('files')->nullable();
             $table->boolean('done')->default('0');
             $table->timestamp('due_date')->nullable();
             $table->timestamps();

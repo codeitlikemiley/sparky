@@ -74,7 +74,8 @@ class EditSubtask extends BaseController
     private function rules(){
         return 
         [
-        'name' => 'required|max:30',
+        'name' => 'required', // |max:30
+        'task_description' => 'max:65535',
         'points' => 'required|min:1',
         'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'priority' => 'in:1,2,3,4,5',
@@ -89,7 +90,8 @@ class EditSubtask extends BaseController
     private function messages(){
         return [
             'name.required' => 'Define Your Task',
-            'name.max' => 'Task Name Too Long Max(30)',
+            // 'name.max' => 'Task Name Too Long Max(30)',
+            'task_description.max' => 'Job Description Reach Character Limit',
             'points.required' => 'Points is Required',
             'points.min' => 'Minimum Point is 1',
             'done.boolean' => 'Done Should Be A Boolean Value',
@@ -110,6 +112,7 @@ class EditSubtask extends BaseController
     {
         
         $this->addLink($subtask);
+        $this->addDescription($subtask);
         $this->addPriority($subtask);
         $this->addDone($subtask);
         $this->addPoints($subtask);
@@ -121,6 +124,13 @@ class EditSubtask extends BaseController
     {
         if(isset($this->request->name)){
             $subtask->name = $this->request->name;
+        }
+    }
+
+    private function addDescription($subtask)
+    {
+        if(isset($this->request->description)){
+            $subtask->description = clean($this->request->description);
         }
     }
 

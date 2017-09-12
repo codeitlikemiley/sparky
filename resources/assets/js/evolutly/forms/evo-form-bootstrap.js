@@ -75,6 +75,7 @@ Evolutly.forms = {
     },
     subtaskForm:{
         name: '',
+        description: '',
         points: 1,
         priority: 1,
         link: '',
@@ -86,6 +87,7 @@ Evolutly.forms = {
             email: '',
             password: '',
         }],
+        showEditor: false,
         sendEmail: false,
         assignedEmployees: null
 
@@ -162,6 +164,9 @@ Evolutly.forms = {
     },
     editForm: {
         task_description: null
+    },
+    editSubForm: {
+        description: null
     }
 
 
