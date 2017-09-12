@@ -17,8 +17,9 @@ class CreateSubtasksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('task_id')->nullable();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->string('points')->default(1);
-            $table->enum('priority', ['1', '2','3','4','5'])->default(1);
+            $table->smallInteger('priority')->default(1);
             $table->string('link')->nullable();
             $table->boolean('done')->default('0');
             $table->timestamp('due_date')->nullable();

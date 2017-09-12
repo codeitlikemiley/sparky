@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('campaign_id')->nullable();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('link')->nullable();
             $table->boolean('done')->default(0);
             $table->boolean('recurring')->default(0);
