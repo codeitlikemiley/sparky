@@ -20,9 +20,6 @@ data () {
     trumbowyg: null,
     modal: null,
     configs: {
-          basic: {
-            autogrow: false
-          },
           advanced: {
             autogrow: true,
             removeformatPasted: true,

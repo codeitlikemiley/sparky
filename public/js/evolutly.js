@@ -49243,9 +49243,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             trumbowyg: null,
             modal: null,
             configs: {
-                basic: {
-                    autogrow: false
-                },
                 advanced: {
                     autogrow: true,
                     removeformatPasted: true,
