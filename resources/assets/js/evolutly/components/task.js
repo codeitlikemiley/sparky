@@ -5,6 +5,9 @@ import taskCalendar from './task-calendar.vue'
 import FileUpload from 'vue-upload-component'
 import TextEditor from '../components/text-editor.vue'
 import trumbowyg from 'vue-trumbowyg'
+import 'trumbowyg/dist/plugins/colors/trumbowyg.colors'
+import '../../plugins/trumbowyg.upload'
+import 'trumbowyg/dist/plugins/colors/ui/trumbowyg.colors.css'
 
 Vue.component('task', {
     mixins: [guards],
@@ -26,7 +29,39 @@ Vue.component('task', {
             options: [],
             teammember: [],
             membertasks:[],
-            showEditor: false
+            showEditor: false,
+            editForm: new EvolutlyForm(Evolutly.forms.editForm),
+            trumbowyg: null,
+            modal: null,
+            configs: {
+                advanced: {
+                  autogrow: true,
+                  removeformatPasted: true,
+                  // Adding color plugin button
+                  // Limit toolbar buttons
+                  btns: [
+                      ['viewHTML'],
+                      ['formatting'],
+                      'btnGrp-semantic',
+                      ['superscript', 'subscript'],
+                      ['link'],
+                      ['btnGrp-image'],
+                      'btnGrp-justify',
+                      'btnGrp-lists',
+                      ['horizontalRule'],
+                      ['foreColor'], ['backColor'],
+                      ['removeformat'],
+                      ['fullscreen'],
+                  ],
+                  btnsDef: {
+                  // Create a new dropdown
+                  'btnGrp-image': {
+                  dropdown: ['insertImage','upload'],
+                  ico: 'insertImage'
+                  }   
+                  },
+                },
+              }
 
         }
     },
@@ -39,6 +74,12 @@ Vue.component('task', {
             self.taskForm.task_description = content
             self.taskForm.busy = false
         })
+
+        Bus.$on('upload-file',({data, trumbowyg, $modal, values} = payload) => {
+            self.trumbowyg = trumbowyg
+            self.modal = $modal
+            self.uploadImage(data)
+        })
     },
     computed: {
         employeeChunks() {
@@ -49,6 +90,21 @@ Vue.component('task', {
         this.whenReady()
     },
     methods: {
+        uploadImage(formData){
+            let self = this
+            let current_url = $(location).attr('href').split("/").splice(0, 6).join("/");
+            let segments = current_url.split( '/' );
+            let jobId = segments[5];
+            self.endpoints.web = `/files/upload/jobs/${jobId}`
+            axios.post(self.guardedLocation(),formData).then((response) => {
+            self.trumbowyg.execCmd('insertImage', response.data.url);
+            $('img[src="' + response.data.url + '"]:not([alt])', trumbowyg.$box).attr('alt', response.data.description);
+            self.trumbowyg.closeModal();
+            self.trumbowyg.$c.trigger('tbwuploadsuccess', [self.trumbowyg, formData, response.data.url]);
+            }).catch((error) => {
+            self.$popup({ message: 'Failed To Upload Image', backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
+            })
+        },
         openEditor(){
             this.showEditor = true
         },

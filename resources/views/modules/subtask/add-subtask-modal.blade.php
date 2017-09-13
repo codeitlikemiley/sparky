@@ -29,7 +29,7 @@
                                 </div>
                                 <div style="padding-left: 5px;padding-right: 5px; height:150px;">
                                     <h4 class="align-center fg-grayLight">Describe Task</h4>
-                                    <trumbowyg v-model="subtaskForm.description"></trumbowyg>
+                                    <trumbowyg :config="configs.advanced" v-model="subtaskForm.description"></trumbowyg>
                                 </div>
                                 
                                 <hr style="margin-top:270px;color:white;background-color:white;">

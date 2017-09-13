@@ -50810,6 +50810,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__);
+
+
+
 
 
 
@@ -50838,7 +50847,26 @@ Vue.component('task', {
             options: [],
             teammember: [],
             membertasks: [],
-            showEditor: false
+            showEditor: false,
+            editForm: new EvolutlyForm(Evolutly.forms.editForm),
+            trumbowyg: null,
+            modal: null,
+            configs: {
+                advanced: {
+                    autogrow: true,
+                    removeformatPasted: true,
+                    // Adding color plugin button
+                    // Limit toolbar buttons
+                    btns: [['viewHTML'], ['formatting'], 'btnGrp-semantic', ['superscript', 'subscript'], ['link'], ['btnGrp-image'], 'btnGrp-justify', 'btnGrp-lists', ['horizontalRule'], ['foreColor'], ['backColor'], ['removeformat'], ['fullscreen']],
+                    btnsDef: {
+                        // Create a new dropdown
+                        'btnGrp-image': {
+                            dropdown: ['insertImage', 'upload'],
+                            ico: 'insertImage'
+                        }
+                    }
+                }
+            }
 
         };
     },
@@ -50850,6 +50878,18 @@ Vue.component('task', {
         Bus.$on('updateDescription', function (content) {
             self.taskForm.task_description = content;
             self.taskForm.busy = false;
+        });
+
+        Bus.$on('upload-file', function () {
+            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : payload,
+                data = _ref.data,
+                trumbowyg = _ref.trumbowyg,
+                $modal = _ref.$modal,
+                values = _ref.values;
+
+            self.trumbowyg = trumbowyg;
+            self.modal = $modal;
+            self.uploadImage(data);
         });
     },
 
@@ -50863,6 +50903,21 @@ Vue.component('task', {
     },
 
     methods: {
+        uploadImage: function uploadImage(formData) {
+            var self = this;
+            var current_url = $(location).attr('href').split("/").splice(0, 6).join("/");
+            var segments = current_url.split('/');
+            var jobId = segments[5];
+            self.endpoints.web = '/files/upload/jobs/' + jobId;
+            axios.post(self.guardedLocation(), formData).then(function (response) {
+                self.trumbowyg.execCmd('insertImage', response.data.url);
+                $('img[src="' + response.data.url + '"]:not([alt])', __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg___default.a.$box).attr('alt', response.data.description);
+                self.trumbowyg.closeModal();
+                self.trumbowyg.$c.trigger('tbwuploadsuccess', [self.trumbowyg, formData, response.data.url]);
+            }).catch(function (error) {
+                self.$popup({ message: 'Failed To Upload Image', backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+            });
+        },
         openEditor: function openEditor() {
             this.showEditor = true;
         },
