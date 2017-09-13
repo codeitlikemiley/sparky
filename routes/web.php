@@ -73,3 +73,4 @@ Route::get('/files/show/{projectID}', 'File\ShowProjectFiles')->name('tenant.fil
 Route::get('/jobs/{task}/employee/{employee}/subtasks', 'Subtask\EmployeeTask')->name('task_employee_subtasks');
 Route::get('/jobs/{task}/employee/{employee}/unassignsubtask/{subtask}', 'Subtask\EmployeeUnassignSubtask')->name('task_employee_unassign_subtasks');
 Route::post('/jobs/{task}/employee/{employee}/unassignsubtask/all', 'Subtask\EmployeeUnassignAllSubtask')->name('task_employee_unassign_subtasks_all');
+Route::post('/files/upload/jobs/{task}', 'File\TaskImageUploader@upload')->name('tenant.file.task');

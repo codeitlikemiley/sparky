@@ -12,7 +12,6 @@ Vue.component('uploaded-files', {
     },
 
     mounted() {
-        console.log('uploaded files component loaded!')
         this.fetchUploadedFiles()
     },
     computed: {
@@ -29,8 +28,7 @@ Vue.component('uploaded-files', {
             return _.chunk(files, 3)
         },
         getSourceFile(file) {
-            
-            return `${window.location.protocol}//${Evolutly.domain}/${file.path}${file.filename}.${file.extension}`
+            return `${window.location.protocol}//${Evolutly.domain}/${file.path}/${file.filename}.${file.extension}`
         },
         getImageByExtension(file) {
             let images = ['png','jpeg','gif','bmp', 'tiff','exif']
@@ -40,7 +38,7 @@ Vue.component('uploaded-files', {
             let ppt = ['ppt','pot','pps','ppa','pptx','potx','ppsx','ppam','pptm','potm','ppsm']
             let psd = ['psd']
             if(_.includes(images,file.extension)){
-                return `/${file.path}${file.filename}.${file.extension}`
+                return `/${file.path}/${file.filename}.${file.extension}`
             }else if(_.includes(pdf,file.extension)){
                 return 'https://visual-integrity.com/wp-content/uploads/2016/02/pdf-page.png'
             }else if(_.includes(docs,file.extension)){
@@ -97,7 +95,10 @@ Vue.component('uploaded-files', {
             axios.delete(self.guardedLocation()).then((response) => {
                 let index = _.findIndex(self.files, { id: file.id })
                 self.$delete(self.files, index)
-                console.log(response)
+                self.closeDeleteFileModal()
+            }).catch(error => {
+                self.closeDeleteFileModal()
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
         showEditFileModal(file){
