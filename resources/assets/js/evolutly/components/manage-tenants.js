@@ -15,6 +15,18 @@ Vue.component('manage-tenants', {
         this.tenants = this.users
     },
     methods:{
+        downgradeSubscription(tenant,tenantKey){
+            let self = this
+            self.current_user = tenant
+            self.current_index = tenantKey
+            self.callDowngradeApi()
+        },
+        upgradeSubscription(tenant,tenantKey){
+            let self = this
+            self.current_user = tenant
+            self.current_index = tenantKey
+            self.callUpgradeApi()
+        },
         onTrial(tenant){
             return tenant.trial_ends_at != undefined && tenant.trial_ends_at > moment(new Date).format('YYYY-MM-DD')
         },
@@ -101,6 +113,41 @@ Vue.component('manage-tenants', {
                 self.resetCurrentUser()
                 self.$popup({ message: `Tenant Has Been Deleted.`, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
                 self.hide('delete-tenant-modal')
+            })
+            .catch(error => {
+                if(error.response.data.message){
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+                }else {
+                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+                }
+            })
+        },
+        callDowngradeApi(){
+            let self = this
+            self.endpoints.web = `/users/downgrade/${self.current_user.id}`
+            axios.put(self.guardedLocation())
+            .then(function (response) {
+                self.$set(self.tenants, self.current_index, response.data.user)
+                self.resetCurrentUser()
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
+                self.hide('delete-tenant-modal')
+            })
+            .catch(error => {
+                if(error.response.data.message){
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+                }else {
+                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+                }
+            })
+        },
+        callUpgradeApi(){
+            let self = this
+            self.endpoints.web = `/users/upgrade/${self.current_user.id}`
+            axios.put(self.guardedLocation())
+            .then(function (response) {
+                self.$set(self.tenants, self.current_index, response.data.user)
+                self.resetCurrentUser()
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff', })
             })
             .catch(error => {
                 if(error.response.data.message){

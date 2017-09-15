@@ -63,6 +63,8 @@ Route::group(['prefix' => '/dashboard'], function () {
       
       Route::get('/', 'User\ShowTenant')->name('tenant.manage.index');
       Route::post('/add', 'User\AddTenant')->name('tenant.manage.add');
+      Route::put('/downgrade/{user}', 'User\DowngradeTenant')->name('tenant.manage.downgrade');
+      Route::put('/upgrade/{user}', 'User\UpgradeTenant')->name('tenant.manage.upgrade');
       Route::delete('/delete/{user}', 'User\DeleteTenant')->name('tenant.manage.delete');
     });
 Route::get('/files', 'File\Index')->name('tenant.files.index');

@@ -50693,6 +50693,18 @@ Vue.component('manage-tenants', {
     },
 
     methods: {
+        downgradeSubscription: function downgradeSubscription(tenant, tenantKey) {
+            var self = this;
+            self.current_user = tenant;
+            self.current_index = tenantKey;
+            self.callDowngradeApi();
+        },
+        upgradeSubscription: function upgradeSubscription(tenant, tenantKey) {
+            var self = this;
+            self.current_user = tenant;
+            self.current_index = tenantKey;
+            self.callUpgradeApi();
+        },
         onTrial: function onTrial(tenant) {
             return tenant.trial_ends_at != undefined && tenant.trial_ends_at > moment(new Date()).format('YYYY-MM-DD');
         },
@@ -50773,6 +50785,37 @@ Vue.component('manage-tenants', {
                 self.resetCurrentUser();
                 self.$popup({ message: 'Tenant Has Been Deleted.', backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
                 self.hide('delete-tenant-modal');
+            }).catch(function (error) {
+                if (error.response.data.message) {
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                } else {
+                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                }
+            });
+        },
+        callDowngradeApi: function callDowngradeApi() {
+            var self = this;
+            self.endpoints.web = '/users/downgrade/' + self.current_user.id;
+            axios.put(self.guardedLocation()).then(function (response) {
+                self.$set(self.tenants, self.current_index, response.data.user);
+                self.resetCurrentUser();
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
+                self.hide('delete-tenant-modal');
+            }).catch(function (error) {
+                if (error.response.data.message) {
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                } else {
+                    self.$popup({ message: 'Failed To Update Data in the Server', backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+                }
+            });
+        },
+        callUpgradeApi: function callUpgradeApi() {
+            var self = this;
+            self.endpoints.web = '/users/upgrade/' + self.current_user.id;
+            axios.put(self.guardedLocation()).then(function (response) {
+                self.$set(self.tenants, self.current_index, response.data.user);
+                self.resetCurrentUser();
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffffff' });
             }).catch(function (error) {
                 if (error.response.data.message) {
                     self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });

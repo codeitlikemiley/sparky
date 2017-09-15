@@ -79,11 +79,26 @@
                                                                     </td>
                     
                                                                     <td class="align-left">
-                                                                        <span class="tag info" @click="impersonateTenant(tenant.id)" style="cursor:pointer;">
+                                                                        <span class="tag info" @click="impersonateTenant(tenant.id)" style="cursor:pointer;"
+                                                                        data-role="hint" data-hint="Impersonate|Tenant" data-hint-position="left"
+                                                                        >
                                                                             <span class="icon mif-eye">
                                                                             </span>
                                                                         </span>
-                                                                        <span class="tag bg-red fg-white" @click="showDeleteModal(tenant,tenantKey)" style="cursor:pointer;">
+                                                                        <span v-if="isFreeLimeTimeUser(tenant)" class="tag bg-orange fg-white" @click="downgradeSubscription(tenant,tenantKey)" style="cursor:pointer;"
+                                                                        data-role="hint" data-hint="Downgrade|Free Subscription" data-hint-position="left"
+                                                                        >
+                                                                            <span class="icon mif-vertical-align-bottom"></span>
+                                                                        </span>
+                                                                        <span v-if="!isFreeLimeTimeUser(tenant)" class="tag bg-yellow fg-white" @click="upgradeSubscription(tenant,tenantKey)" style="cursor:pointer;"
+                                                                        data-role="hint" data-hint="Upgrade|Lifetime Subscription" data-hint-position="left"
+                                                                        >
+                                                                            <span class="icon mif-vertical-align-top"></span>
+                                                                        </span>
+                                                                        </span>
+                                                                        <span class="tag bg-red fg-white" @click="showDeleteModal(tenant,tenantKey)" style="cursor:pointer;"
+                                                                        data-role="hint" data-hint="Delete|Tenant" data-hint-position="left"
+                                                                        >
                                                                             <span class="icon fa fa-trash"></span>
                                                                             </span>
                                                                         </span>
