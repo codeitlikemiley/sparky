@@ -35,6 +35,11 @@ class UpgradeTenant extends BaseController
      */
     public function __invoke($user)
     {
+        if($user->isSuperAdmin()){
+            $this->message = 'You Cant Upgrade Super Admin';
+            $this->code = 400;
+            return response()->json(['message' => $this->message], $this->code);
+        }
         if($this->getAuth()->isSuperAdmin()){
             $user->trial_ends_at = null;
             $user->save();
