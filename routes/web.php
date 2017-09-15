@@ -37,11 +37,13 @@ Route::group(['prefix' => '/dashboard'], function () {
       Route::delete('/jobs/{task}/delete', 'Task\DeleteTask')->name('tenant.tasks.delete');
 
       Route::get('/jobs/{task}/tasks', 'Subtask\ShowSubtask')->name('tenant.subtasks.index');
+      Route::get('/tasks/{subtask}', 'Subtask\ViewSubtask')->name('tenants.subtask.show');
       Route::post('/jobs/{task}/tasks/add','Subtask\CreateSubtask')->name('tenant.subtasks.create');
       Route::put('/ratings/{subtask}','Subtask\UpdateRatings')->name('tenant.subtasks.ratings');
       Route::put('/jobs/{task}/tasks/{subtask}/toggle', 'Subtask\ToggleSubtask')->name('tenant.subtasks.toggle');
       Route::delete('/jobs/{task}/tasks/{subtask}/delete', 'Subtask\DeleteSubtask')->name('tenant.subtasks.delete');
       Route::put('/jobs/{task}/tasks/{subtask}/edit', 'Subtask\EditSubtask')->name('tenant.subtasks.edit');
+      Route::put('/tasks/{subtask}/update', 'Subtask\UpdateSubtask')->name('tenant.subtasks.update');
       Route::get('/jobs/{task}/comments', 'Comment\ShowComment')->name('tenant.comments.show');
       Route::post('/jobs/{task}/comments/add/{comment?}','Comment\AddComment')->name('tenant.comments.add');
       Route::put('/jobs/{task}/comments/edit/{comment}', 'Comment\EditComment')->name('tenant.comments.edit');

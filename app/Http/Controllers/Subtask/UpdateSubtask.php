@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use App\Employee;
 use App\Notifications\SubtaskAssignedEmail;
 
-class EditSubtask extends BaseController
+class UpdateSubtask extends BaseController
 {
 
     protected $request;
@@ -28,7 +28,7 @@ class EditSubtask extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke($task,$subtask)
+    public function __invoke($subtask)
     {
         $validator = $this->sanitize();
         if($validator->fails()){
@@ -36,14 +36,14 @@ class EditSubtask extends BaseController
         $this->code = 422;
         return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
-        if($this->allowed($task) || $this->createdBy($task)){
+        if($this->getAuth()->id === $this->getTenant()->id){
             $this->editSubtask($subtask);
             $subtask->save();
-            $this->assignEmployeesIfAny($task,$subtask);
-            $this->addUsers($task,$subtask);
+            $this->assignEmployeesIfAny($subtask);
+            $this->addUsers($subtask);
             $subtask = $subtask->fresh();
             $subtask->employees;
-            $workers = $this->getWorkers($task);
+            $workers = $this->getWorkers($subtask);
             $employees = $this->getAuth()->employees()->get()->toArray();
             return response()->json(['message' => $this->message, 'subtask' => $subtask, 'employees' => $employees,'workers' => $workers], $this->code);
         }
@@ -52,8 +52,8 @@ class EditSubtask extends BaseController
         return response()->json(['message' => $this->message], $this->code);
     }
 
-    private function getWorkers($task){
-        $workers = $task->campaign()->first()->project()->first()->assignedEmployees()->get();
+    private function getWorkers($subtask){
+        $workers = $subtask->task()->first()->campaign()->first()->project()->first()->assignedEmployees()->get();
         $teammates = [];
 
         if(count($workers)){
@@ -167,7 +167,7 @@ class EditSubtask extends BaseController
         }
     }
 
-    private function addUsers($task,$subtask)
+    private function addUsers($subtask)
     {
         $users_input = $this->request->users;
         if($this->request->newCollaborator){
@@ -176,7 +176,7 @@ class EditSubtask extends BaseController
                     unset($users_input[$i]);
                 }
             }
-            $project = $task->campaign->project;
+            $project = $subtask->task->campaign->project;
             $data = array();
             foreach ($users_input as $user) {
                 $employee = Employee::forceCreate($user);
@@ -197,12 +197,11 @@ class EditSubtask extends BaseController
             }
         }
         
-        
     }
 
-    private function assignEmployeesIfAny($task,$subtask)
+    private function assignEmployeesIfAny($subtask)
     {
-        $project = $task->campaign->project;
+        $project = $subtask->task->campaign->project;
         $employee_lists = $this->hasAssignedEmployees();
         if(count($employee_lists))
         {   
@@ -239,26 +238,5 @@ class EditSubtask extends BaseController
         }
         return $selected;
     }
-
-    private function allowed($task)
-    {
-        
-        if($task->campaign->project->byTenant()->id != $this->getTenant()->id)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private function createdBy($task)
-    {
-        if($this->getTenant()->projects()->find($task->campaign->project->id))
-        {
-            return true;
-        }
-        return false;
-    }
-
-
     
 }

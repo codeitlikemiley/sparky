@@ -101,7 +101,7 @@ Evolutly.forms = {
         }],
         showEditor: false,
         sendEmail: false,
-        assignedEmployees: null
+        assignedEmployees: []
 
     },
     commentForm: {

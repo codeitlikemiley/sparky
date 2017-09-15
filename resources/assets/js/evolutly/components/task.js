@@ -134,6 +134,12 @@ Vue.component('task', {
                 self.subtasks = response.data.subtasks
             })
         },
+        viewSubtask(subtask){
+            this.endpoints.web = `/dashboard/tasks/${subtask.id}`
+            this.endpoints.teammate = `/team/dashboard/tasks/${subtask.id}`
+            this.endpoints.client = `/client/dashboard/tasks/${subtask.id}`
+            window.location.href = this.guardedLocation()
+        },
         setInitialTask(){
             let self = this
             self.taskForm.task_name = self.task.name

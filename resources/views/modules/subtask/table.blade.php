@@ -59,6 +59,10 @@
                                         </span>
                                     </td>
                                     <td v-if="guard != 'client'" class="align-center" style="font-size: 1.25rem">
+                                        <span v-if="guard === 'web'" class="fg-yellow icon fa fa-eye" @click="viewSubtask(subtask)" style="cursor:pointer;"
+                                        data-role="hint" data-hint-mode="2" data-hint="View|Task" data-hint-position="top"
+                                        >
+                                        </span>
                                         <span v-if="guard === 'web'" class="fg-lightBlue icon mif-pencil" @click="editSubtaskModal(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" data-hint="Edit|Task" data-hint-position="top"
                                         >

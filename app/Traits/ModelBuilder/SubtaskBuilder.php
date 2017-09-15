@@ -3,8 +3,8 @@
 namespace App\Traits\ModelBuilder;
 
 use App\Traits\Relationship\SubtaskHasEmployees;
-
+use App\Traits\Relationship\SubtaskIsOwnByProject;
 
 trait SubtaskBuilder {
-    use SubtaskHasEmployees;
+    use SubtaskHasEmployees , SubtaskIsOwnByProject;
 }
