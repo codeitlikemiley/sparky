@@ -31,7 +31,7 @@
                 <div class="cell" v-for="(project,index_project, key_project) in chunk" :project="project" :index="index_project" :key="key_project">
                     <div class="panel error">
                         <div class="heading">
-                            <span class="title">@{{ project.name }}</span>
+                            <span class="title" @click="showEditProjectModal(project)">@{{ project.name }}</span>
                                 <span @click="deleteProject(project.id)" class="bg-red alert icon fa fa-trash" style="cursor:pointer;"
                                 data-role="hint" data-hint-mode="2" data-hint="Project|Delete" data-hint-position="top"
                                 ></span>
@@ -75,6 +75,7 @@
         <h2 class="fg-teal"><span class="tag success" @click="goToTemplates()" style="cursor:pointer;">Choose a Prebuilt Template For Your Client</span> <span class="tag bg-taupe fg-white">OR</span> <span class="tag info" @click="show('add-project')" style="cursor:pointer;">Create From Scratch</span></h2>
     </div>
     @include('project::add-project-modal')
+    @include('project::editProjectForm')
         
 </div>
 </dashboard>

@@ -7,6 +7,7 @@ Vue.component('dashboard', {
         return {
             campaigns: [],
             projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
+            editProjectForm: new EvolutlyForm(Evolutly.forms.editProjectForm),
             cloneForm: new EvolutlyForm(Evolutly.forms.cloneForm),
             styling: {
                 clearBottom: false,
@@ -31,6 +32,51 @@ Vue.component('dashboard', {
     },
 
     methods: { 
+        updateProjectName(){
+            let self = this 
+            self.projectForm.busy = true
+            let projectID = self.editProjectForm.id
+            self.endpoints.web = `/dashboard/clients/${projectID}/edit`
+            delete self.editProjectForm.id
+                axios.post(self.guardedLocation(), self.editProjectForm)
+                .then(function (response) {
+                    self.closeEditProjectModal()
+                    let index = _.findIndex(self.projects, { id: projectID })
+                    // add a re-order function to reorder the campaigns
+                    self.$set(self.projects, index, response.data.project)
+                    self.projectForm.busy = false
+                    self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
+                })
+                .catch(error => {
+                    self.projectForm.errors.set(error.response.data.errors)
+                    if(!self.projectForm.client_id){
+                        self.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
+                    }
+                    if(!self.projectForm.client){
+                        this.projectForm.client = {
+                            name: '', 
+                            email: '', 
+                            password: ''
+                        }
+                    }
+                    self.projectForm.busy = false
+                    self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
+                })
+                
+        },
+        closeEditProjectModal(){
+            this.editProjectForm = new EvolutlyForm(Evolutly.forms.editProjectForm)
+            this.hide('edit-project')
+        },
+        fillUpEditProjectModal(project){
+            let self = this 
+            self.editProjectForm.client_name =  project.name
+            self.editProjectForm.id  = project.id
+        },
+        showEditProjectModal(project){
+            this.fillUpEditProjectModal(project)
+            this.show('edit-project')
+        },
         clonableHint(project){
             if(project.public === true){
                 return 'Remove From Template'

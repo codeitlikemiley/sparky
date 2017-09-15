@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 391);
+/******/ 	return __webpack_require__(__webpack_require__.s = 396);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4543,7 +4543,7 @@ return hooks;
 "use strict";
 
 
-var bind = __webpack_require__(14);
+var bind = __webpack_require__(15);
 
 /*global toString:true*/
 
@@ -4849,7 +4849,7 @@ module.exports = {
 "use strict";
 
 
-var asap = __webpack_require__(9);
+var asap = __webpack_require__(10);
 
 function noop() {}
 
@@ -5169,10 +5169,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   }
   return adapter;
 }
@@ -5333,6 +5333,62 @@ module.exports = function(module) {
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5563,7 +5619,7 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5574,7 +5630,7 @@ var settle = __webpack_require__(147);
 var buildURL = __webpack_require__(150);
 var parseHeaders = __webpack_require__(156);
 var isURLSameOrigin = __webpack_require__(154);
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(149);
 
 module.exports = function xhrAdapter(config) {
@@ -5747,7 +5803,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5773,7 +5829,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5785,7 +5841,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5809,7 +5865,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5827,63 +5883,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
+/* 16 */,
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17957,7 +17957,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
- * Vue.js v2.4.2
+ * Vue.js v2.4.3
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -18126,12 +18126,9 @@ var capitalize = cached(function (str) {
 /**
  * Hyphenate a camelCase string.
  */
-var hyphenateRE = /([^-])([A-Z])/g;
+var hyphenateRE = /\B([A-Z])/g;
 var hyphenate = cached(function (str) {
-  return str
-    .replace(hyphenateRE, '$1-$2')
-    .replace(hyphenateRE, '$1-$2')
-    .toLowerCase()
+  return str.replace(hyphenateRE, '-$1').toLowerCase()
 });
 
 /**
@@ -18550,7 +18547,7 @@ var isAndroid = UA && UA.indexOf('android') > 0;
 var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
 var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 
-// Firefix has a "watch" function on Object.prototype...
+// Firefox has a "watch" function on Object.prototype...
 var nativeWatch = ({}).watch;
 
 var supportsPassive = false;
@@ -18632,13 +18629,13 @@ var nextTick = (function () {
       // "force" the microtask queue to be flushed by adding an empty timer.
       if (isIOS) { setTimeout(noop); }
     };
-  } else if (typeof MutationObserver !== 'undefined' && (
+  } else if (!isIE && typeof MutationObserver !== 'undefined' && (
     isNative(MutationObserver) ||
     // PhantomJS and iOS 7.x
     MutationObserver.toString() === '[object MutationObserverConstructor]'
   )) {
     // use MutationObserver where native Promise is not available,
-    // e.g. PhantomJS IE11, iOS7, Android 4.4
+    // e.g. PhantomJS, iOS7, Android 4.4
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(String(counter));
@@ -18938,9 +18935,9 @@ function defineReactive$$1 (
         dep.depend();
         if (childOb) {
           childOb.dep.depend();
-        }
-        if (Array.isArray(value)) {
-          dependArray(value);
+          if (Array.isArray(value)) {
+            dependArray(value);
+          }
         }
       }
       return value
@@ -19117,7 +19114,7 @@ function mergeDataOrFn (
         : childVal;
       var defaultData = typeof parentVal === 'function'
         ? parentVal.call(vm)
-        : undefined;
+        : parentVal;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
       } else {
@@ -19520,7 +19517,12 @@ function assertType (value, type) {
   var valid;
   var expectedType = getType(type);
   if (simpleCheckRE.test(expectedType)) {
-    valid = typeof value === expectedType.toLowerCase();
+    var t = typeof value;
+    valid = t === expectedType.toLowerCase();
+    // for primitive wrapper objects
+    if (!valid && t === 'object') {
+      valid = value instanceof type;
+    }
   } else if (expectedType === 'Object') {
     valid = isPlainObject(value);
   } else if (expectedType === 'Array') {
@@ -19718,7 +19720,7 @@ function createTextVNode (val) {
 // used for static nodes and slot nodes because they may be reused across
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
-function cloneVNode (vnode) {
+function cloneVNode (vnode, deep) {
   var cloned = new VNode(
     vnode.tag,
     vnode.data,
@@ -19734,14 +19736,17 @@ function cloneVNode (vnode) {
   cloned.key = vnode.key;
   cloned.isComment = vnode.isComment;
   cloned.isCloned = true;
+  if (deep && vnode.children) {
+    cloned.children = cloneVNodes(vnode.children);
+  }
   return cloned
 }
 
-function cloneVNodes (vnodes) {
+function cloneVNodes (vnodes, deep) {
   var len = vnodes.length;
   var res = new Array(len);
   for (var i = 0; i < len; i++) {
-    res[i] = cloneVNode(vnodes[i]);
+    res[i] = cloneVNode(vnodes[i], deep);
   }
   return res
 }
@@ -19755,8 +19760,10 @@ var normalizeEvent = cached(function (name) {
   name = once$$1 ? name.slice(1) : name;
   var capture = name.charAt(0) === '!';
   name = capture ? name.slice(1) : name;
+  var plain = !(passive || once$$1 || capture);
   return {
     name: name,
+    plain: plain,
     once: once$$1,
     capture: capture,
     passive: passive
@@ -19782,6 +19789,11 @@ function createFnInvoker (fns) {
   return invoker
 }
 
+// #6552
+function prioritizePlainEvents (a, b) {
+  return a.plain ? -1 : b.plain ? 1 : 0
+}
+
 function updateListeners (
   on,
   oldOn,
@@ -19790,10 +19802,13 @@ function updateListeners (
   vm
 ) {
   var name, cur, old, event;
+  var toAdd = [];
+  var hasModifier = false;
   for (name in on) {
     cur = on[name];
     old = oldOn[name];
     event = normalizeEvent(name);
+    if (!event.plain) { hasModifier = true; }
     if (isUndef(cur)) {
       "development" !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
@@ -19803,10 +19818,18 @@ function updateListeners (
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur);
       }
-      add(event.name, cur, event.once, event.capture, event.passive);
+      event.handler = cur;
+      toAdd.push(event);
     } else if (cur !== old) {
       old.fns = cur;
       on[name] = old;
+    }
+  }
+  if (toAdd.length) {
+    if (hasModifier) { toAdd.sort(prioritizePlainEvents); }
+    for (var i = 0; i < toAdd.length; i++) {
+      var event$1 = toAdd[i];
+      add(event$1.name, event$1.handler, event$1.once, event$1.capture, event$1.passive);
     }
   }
   for (name in oldOn) {
@@ -20121,11 +20144,17 @@ function resolveAsyncComponent (
 
 /*  */
 
+function isAsyncPlaceholder (node) {
+  return node.isComment && node.asyncFactory
+}
+
+/*  */
+
 function getFirstComponentChild (children) {
   if (Array.isArray(children)) {
     for (var i = 0; i < children.length; i++) {
       var c = children[i];
-      if (isDef(c) && isDef(c.componentOptions)) {
+      if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
         return c
       }
     }
@@ -20212,8 +20241,8 @@ function eventsMixin (Vue) {
     }
     // array of events
     if (Array.isArray(event)) {
-      for (var i$1 = 0, l = event.length; i$1 < l; i$1++) {
-        this$1.$off(event[i$1], fn);
+      for (var i = 0, l = event.length; i < l; i++) {
+        this$1.$off(event[i], fn);
       }
       return vm
     }
@@ -20226,14 +20255,16 @@ function eventsMixin (Vue) {
       vm._events[event] = null;
       return vm
     }
-    // specific handler
-    var cb;
-    var i = cbs.length;
-    while (i--) {
-      cb = cbs[i];
-      if (cb === fn || cb.fn === fn) {
-        cbs.splice(i, 1);
-        break
+    if (fn) {
+      // specific handler
+      var cb;
+      var i$1 = cbs.length;
+      while (i$1--) {
+        cb = cbs[i$1];
+        if (cb === fn || cb.fn === fn) {
+          cbs.splice(i$1, 1);
+          break
+        }
       }
     }
     return vm
@@ -20285,10 +20316,15 @@ function resolveSlots (
   var defaultSlot = [];
   for (var i = 0, l = children.length; i < l; i++) {
     var child = children[i];
+    var data = child.data;
+    // remove slot attribute if the node is resolved as a Vue slot node
+    if (data && data.attrs && data.attrs.slot) {
+      delete data.attrs.slot;
+    }
     // named slots should only be respected if the vnode was rendered in the
     // same context.
     if ((child.context === context || child.functionalContext === context) &&
-      child.data && child.data.slot != null
+      data && data.slot != null
     ) {
       var name = child.data.slot;
       var slot = (slots[name] || (slots[name] = []));
@@ -20541,11 +20577,11 @@ function updateChildComponent (
   }
   vm.$options._renderChildren = renderChildren;
 
-  // update $attrs and $listensers hash
+  // update $attrs and $listeners hash
   // these are also reactive so they may trigger child update if the child
   // used them during render
-  vm.$attrs = parentVnode.data && parentVnode.data.attrs;
-  vm.$listeners = listeners;
+  vm.$attrs = (parentVnode.data && parentVnode.data.attrs) || emptyObject;
+  vm.$listeners = listeners || emptyObject;
 
   // update props
   if (propsData && vm.$options.props) {
@@ -21128,7 +21164,7 @@ function initData (vm) {
     {
       if (methods && hasOwn(methods, key)) {
         warn(
-          ("method \"" + key + "\" has already been defined as a data property."),
+          ("Method \"" + key + "\" has already been defined as a data property."),
           vm
         );
       }
@@ -21161,6 +21197,8 @@ var computedWatcherOptions = { lazy: true };
 function initComputed (vm, computed) {
   "development" !== 'production' && checkOptionType(vm, 'computed');
   var watchers = vm._computedWatchers = Object.create(null);
+  // computed properties are just getters during SSR
+  var isSSR = isServerRendering();
 
   for (var key in computed) {
     var userDef = computed[key];
@@ -21171,8 +21209,16 @@ function initComputed (vm, computed) {
         vm
       );
     }
-    // create internal watcher for the computed property.
-    watchers[key] = new Watcher(vm, getter || noop, noop, computedWatcherOptions);
+
+    if (!isSSR) {
+      // create internal watcher for the computed property.
+      watchers[key] = new Watcher(
+        vm,
+        getter || noop,
+        noop,
+        computedWatcherOptions
+      );
+    }
 
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
@@ -21189,13 +21235,20 @@ function initComputed (vm, computed) {
   }
 }
 
-function defineComputed (target, key, userDef) {
+function defineComputed (
+  target,
+  key,
+  userDef
+) {
+  var shouldCache = !isServerRendering();
   if (typeof userDef === 'function') {
-    sharedPropertyDefinition.get = createComputedGetter(key);
+    sharedPropertyDefinition.get = shouldCache
+      ? createComputedGetter(key)
+      : userDef;
     sharedPropertyDefinition.set = noop;
   } else {
     sharedPropertyDefinition.get = userDef.get
-      ? userDef.cache !== false
+      ? shouldCache && userDef.cache !== false
         ? createComputedGetter(key)
         : userDef.get
       : noop;
@@ -21234,22 +21287,28 @@ function initMethods (vm, methods) {
   "development" !== 'production' && checkOptionType(vm, 'methods');
   var props = vm.$options.props;
   for (var key in methods) {
-    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
     {
       if (methods[key] == null) {
         warn(
-          "method \"" + key + "\" has an undefined value in the component definition. " +
+          "Method \"" + key + "\" has an undefined value in the component definition. " +
           "Did you reference the function correctly?",
           vm
         );
       }
       if (props && hasOwn(props, key)) {
         warn(
-          ("method \"" + key + "\" has already been defined as a prop."),
+          ("Method \"" + key + "\" has already been defined as a prop."),
           vm
         );
       }
+      if ((key in vm) && isReserved(key)) {
+        warn(
+          "Method \"" + key + "\" conflicts with an existing Vue instance method. " +
+          "Avoid defining component methods that start with _ or $."
+        );
+      }
     }
+    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
   }
 }
 
@@ -21367,7 +21426,10 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject)
+        ? Reflect.ownKeys(inject).filter(function (key) {
+          /* istanbul ignore next */
+          return Object.getOwnPropertyDescriptor(inject, key).enumerable
+        })
         : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
@@ -21402,7 +21464,7 @@ function createFunctionalComponent (
   var propOptions = Ctor.options.props;
   if (isDef(propOptions)) {
     for (var key in propOptions) {
-      props[key] = validateProp(key, propOptions, propsData || {});
+      props[key] = validateProp(key, propOptions, propsData || emptyObject);
     }
   } else {
     if (isDef(data.attrs)) { mergeProps(props, data.attrs); }
@@ -21417,7 +21479,7 @@ function createFunctionalComponent (
     props: props,
     children: children,
     parent: context,
-    listeners: data.on || {},
+    listeners: data.on || emptyObject,
     injections: resolveInject(Ctor.options.inject, context),
     slots: function () { return resolveSlots(children, context); }
   });
@@ -21741,7 +21803,7 @@ function _createElement (
   var vnode, ns;
   if (typeof tag === 'string') {
     var Ctor;
-    ns = config.getTagNamespace(tag);
+    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag);
     if (config.isReservedTag(tag)) {
       // platform built-in elements
       vnode = new VNode(
@@ -22037,12 +22099,13 @@ function initRender (vm) {
   // $attrs & $listeners are exposed for easier HOC creation.
   // they need to be reactive so that HOCs using them are always updated
   var parentData = parentVnode && parentVnode.data;
+
   /* istanbul ignore else */
   {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs, function () {
+    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
       !isUpdatingChildComponent && warn("$attrs is readonly.", vm);
     }, true);
-    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners, function () {
+    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners || emptyObject, function () {
       !isUpdatingChildComponent && warn("$listeners is readonly.", vm);
     }, true);
   }
@@ -22061,9 +22124,13 @@ function renderMixin (Vue) {
     var _parentVnode = ref._parentVnode;
 
     if (vm._isMounted) {
-      // clone slot nodes on re-renders
+      // if the parent didn't update, the slot nodes will be the ones from
+      // last render. They need to be cloned to ensure "freshness" for this render.
       for (var key in vm.$slots) {
-        vm.$slots[key] = cloneVNodes(vm.$slots[key]);
+        var slot = vm.$slots[key];
+        if (slot._rendered) {
+          vm.$slots[key] = cloneVNodes(slot, true /* deep */);
+        }
       }
     }
 
@@ -22604,7 +22671,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.4.2';
+Vue$3.version = '2.4.3';
 
 /*  */
 
@@ -22613,7 +22680,7 @@ Vue$3.version = '2.4.2';
 var isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
-var acceptValue = makeMap('input,textarea,option,select');
+var acceptValue = makeMap('input,textarea,option,select,progress');
 var mustUseProp = function (tag, type, attr) {
   return (
     (attr === 'value' && acceptValue(tag)) && type !== 'button' ||
@@ -22802,6 +22869,8 @@ function isUnknownElement (tag) {
   }
 }
 
+var isTextInputType = makeMap('text,number,password,search,email,tel,url');
+
 /*  */
 
 /**
@@ -22948,8 +23017,6 @@ function registerRef (vnode, isRemoval) {
  *
  * modified by Evan You (@yyx990803)
  *
-
-/*
  * Not type-checking this because this file is perf-critical and the cost
  * of making flow understand it is not worth it.
  */
@@ -22975,14 +23042,12 @@ function sameVnode (a, b) {
   )
 }
 
-// Some browsers do not support dynamically changing type for <input>
-// so they need to be treated as different nodes
 function sameInputType (a, b) {
   if (a.tag !== 'input') { return true }
   var i;
   var typeA = isDef(i = a.data) && isDef(i = i.attrs) && i.type;
   var typeB = isDef(i = b.data) && isDef(i = i.attrs) && i.type;
-  return typeA === typeB
+  return typeA === typeB || isTextInputType(typeA) && isTextInputType(typeB)
 }
 
 function createKeyToOldIdx (children, beginIdx, endIdx) {
@@ -23314,10 +23379,11 @@ function createPatchFunction (backend) {
         newStartVnode = newCh[++newStartIdx];
       } else {
         if (isUndef(oldKeyToIdx)) { oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx); }
-        idxInOld = isDef(newStartVnode.key) ? oldKeyToIdx[newStartVnode.key] : null;
+        idxInOld = isDef(newStartVnode.key)
+          ? oldKeyToIdx[newStartVnode.key]
+          : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx);
         if (isUndef(idxInOld)) { // New element
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
-          newStartVnode = newCh[++newStartIdx];
         } else {
           elmToMove = oldCh[idxInOld];
           /* istanbul ignore if */
@@ -23331,13 +23397,12 @@ function createPatchFunction (backend) {
             patchVnode(elmToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
             canMove && nodeOps.insertBefore(parentElm, elmToMove.elm, oldStartVnode.elm);
-            newStartVnode = newCh[++newStartIdx];
           } else {
             // same key but different element. treat as new element
             createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
-            newStartVnode = newCh[++newStartIdx];
           }
         }
+        newStartVnode = newCh[++newStartIdx];
       }
     }
     if (oldStartIdx > oldEndIdx) {
@@ -23345,6 +23410,13 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+    }
+  }
+
+  function findIdxInOld (node, oldCh, start, end) {
+    for (var i = start; i < end; i++) {
+      var c = oldCh[i];
+      if (isDef(c) && sameVnode(node, c)) { return i }
     }
   }
 
@@ -23455,27 +23527,46 @@ function createPatchFunction (backend) {
         if (!elm.hasChildNodes()) {
           createChildren(vnode, children, insertedVnodeQueue);
         } else {
-          var childrenMatch = true;
-          var childNode = elm.firstChild;
-          for (var i$1 = 0; i$1 < children.length; i$1++) {
-            if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
-              childrenMatch = false;
-              break
+          // v-html and domProps: innerHTML
+          if (isDef(i = data) && isDef(i = i.domProps) && isDef(i = i.innerHTML)) {
+            if (i !== elm.innerHTML) {
+              /* istanbul ignore if */
+              if ("development" !== 'production' &&
+                typeof console !== 'undefined' &&
+                !bailed
+              ) {
+                bailed = true;
+                console.warn('Parent: ', elm);
+                console.warn('server innerHTML: ', i);
+                console.warn('client innerHTML: ', elm.innerHTML);
+              }
+              return false
             }
-            childNode = childNode.nextSibling;
-          }
-          // if childNode is not null, it means the actual childNodes list is
-          // longer than the virtual children list.
-          if (!childrenMatch || childNode) {
-            if ("development" !== 'production' &&
-              typeof console !== 'undefined' &&
-              !bailed
-            ) {
-              bailed = true;
-              console.warn('Parent: ', elm);
-              console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
+          } else {
+            // iterate and compare children lists
+            var childrenMatch = true;
+            var childNode = elm.firstChild;
+            for (var i$1 = 0; i$1 < children.length; i$1++) {
+              if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
+                childrenMatch = false;
+                break
+              }
+              childNode = childNode.nextSibling;
             }
-            return false
+            // if childNode is not null, it means the actual childNodes list is
+            // longer than the virtual children list.
+            if (!childrenMatch || childNode) {
+              /* istanbul ignore if */
+              if ("development" !== 'production' &&
+                typeof console !== 'undefined' &&
+                !bailed
+              ) {
+                bailed = true;
+                console.warn('Parent: ', elm);
+                console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
+              }
+              return false
+            }
           }
         }
       }
@@ -23566,14 +23657,28 @@ function createPatchFunction (backend) {
           // component root element replaced.
           // update parent placeholder node element, recursively
           var ancestor = vnode.parent;
+          var patchable = isPatchable(vnode);
           while (ancestor) {
-            ancestor.elm = vnode.elm;
-            ancestor = ancestor.parent;
-          }
-          if (isPatchable(vnode)) {
-            for (var i = 0; i < cbs.create.length; ++i) {
-              cbs.create[i](emptyNode, vnode.parent);
+            for (var i = 0; i < cbs.destroy.length; ++i) {
+              cbs.destroy[i](ancestor);
             }
+            ancestor.elm = vnode.elm;
+            if (patchable) {
+              for (var i$1 = 0; i$1 < cbs.create.length; ++i$1) {
+                cbs.create[i$1](emptyNode, ancestor);
+              }
+              // #6513
+              // invoke insert hooks that may have been merged by create hooks.
+              // e.g. for directives that uses the "inserted" hook.
+              var insert = ancestor.data.hook.insert;
+              if (insert.merged) {
+                // start at index 1 to avoid re-invoking component mounted hook
+                for (var i$2 = 1; i$2 < insert.fns.length; i$2++) {
+                  insert.fns[i$2]();
+                }
+              }
+            }
+            ancestor = ancestor.parent;
           }
         }
 
@@ -23757,7 +23862,12 @@ function setAttr (el, key, value) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
     } else {
-      el.setAttribute(key, key);
+      // technically allowfullscreen is a boolean attribute for <iframe>,
+      // but Flash expects a value of "true" when used on <embed> tag
+      value = key === 'allowfullscreen' && el.tagName === 'EMBED'
+        ? 'true'
+        : key;
+      el.setAttribute(key, value);
     }
   } else if (isEnumeratedAttr(key)) {
     el.setAttribute(key, isFalsyAttrValue(value) || value === 'false' ? 'false' : 'true');
@@ -24264,7 +24374,7 @@ function genCheckboxModel (
     'if(Array.isArray($$a)){' +
       "var $$v=" + (number ? '_n(' + valueBinding + ')' : valueBinding) + "," +
           '$$i=_i($$a,$$v);' +
-      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat($$v))}" +
+      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat([$$v]))}" +
       "else{$$i>-1&&(" + value + "=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}" +
     "}else{" + (genAssignmentCode(value, '$$c')) + "}",
     null, true
@@ -24633,7 +24743,7 @@ function updateStyle (oldVnode, vnode) {
   var style = normalizeStyleBinding(vnode.data.style) || {};
 
   // store normalized style under a different key for next diff
-  // make sure to clone it if it's reactive, since the user likley wants
+  // make sure to clone it if it's reactive, since the user likely wants
   // to mutate it.
   vnode.data.normalizedStyle = isDef(style.__ob__)
     ? extend({}, style)
@@ -25238,8 +25348,6 @@ var patch = createPatchFunction({ nodeOps: nodeOps, modules: modules });
  * properties to Elements.
  */
 
-var isTextInputType = makeMap('text,number,password,search,email,tel,url');
-
 /* istanbul ignore if */
 if (isIE9) {
   // http://www.matts411.com/post/internet-explorer-9-oninput/
@@ -25254,14 +25362,7 @@ if (isIE9) {
 var model$1 = {
   inserted: function inserted (el, binding, vnode) {
     if (vnode.tag === 'select') {
-      var cb = function () {
-        setSelected(el, binding, vnode.context);
-      };
-      cb();
-      /* istanbul ignore if */
-      if (isIE || isEdge) {
-        setTimeout(cb, 0);
-      }
+      setSelected(el, binding, vnode.context);
       el._vOptions = [].map.call(el.options, getValue);
     } else if (vnode.tag === 'textarea' || isTextInputType(el.type)) {
       el._vModifiers = binding.modifiers;
@@ -25292,13 +25393,30 @@ var model$1 = {
       var prevOptions = el._vOptions;
       var curOptions = el._vOptions = [].map.call(el.options, getValue);
       if (curOptions.some(function (o, i) { return !looseEqual(o, prevOptions[i]); })) {
-        trigger(el, 'change');
+        // trigger change event if
+        // no matching option found for at least one value
+        var needReset = el.multiple
+          ? binding.value.some(function (v) { return hasNoMatchingOption(v, curOptions); })
+          : binding.value !== binding.oldValue && hasNoMatchingOption(binding.value, curOptions);
+        if (needReset) {
+          trigger(el, 'change');
+        }
       }
     }
   }
 };
 
 function setSelected (el, binding, vm) {
+  actuallySetSelected(el, binding, vm);
+  /* istanbul ignore if */
+  if (isIE || isEdge) {
+    setTimeout(function () {
+      actuallySetSelected(el, binding, vm);
+    }, 0);
+  }
+}
+
+function actuallySetSelected (el, binding, vm) {
   var value = binding.value;
   var isMultiple = el.multiple;
   if (isMultiple && !Array.isArray(value)) {
@@ -25329,6 +25447,10 @@ function setSelected (el, binding, vm) {
   if (!isMultiple) {
     el.selectedIndex = -1;
   }
+}
+
+function hasNoMatchingOption (value, options) {
+  return options.every(function (o) { return !looseEqual(o, value); })
 }
 
 function getValue (option) {
@@ -25491,10 +25613,6 @@ function hasParentTransition (vnode) {
 
 function isSameChild (child, oldChild) {
   return oldChild.key === child.key && oldChild.tag === child.tag
-}
-
-function isAsyncPlaceholder (node) {
-  return node.isComment && node.asyncFactory
 }
 
 var Transition = {
@@ -26064,29 +26182,14 @@ var he = {
  */
 
 // Regular Expressions for parsing tags and attributes
-var singleAttrIdentifier = /([^\s"'<>/=]+)/;
-var singleAttrAssign = /(?:=)/;
-var singleAttrValues = [
-  // attr value double quotes
-  /"([^"]*)"+/.source,
-  // attr value, single quotes
-  /'([^']*)'+/.source,
-  // attr value, no quotes
-  /([^\s"'=<>`]+)/.source
-];
-var attribute = new RegExp(
-  '^\\s*' + singleAttrIdentifier.source +
-  '(?:\\s*(' + singleAttrAssign.source + ')' +
-  '\\s*(?:' + singleAttrValues.join('|') + '))?'
-);
-
+var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
 // but for Vue templates we can enforce a simple charset
 var ncname = '[a-zA-Z_][\\w\\-\\.]*';
-var qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')';
-var startTagOpen = new RegExp('^<' + qnameCapture);
+var qnameCapture = "((?:" + ncname + "\\:)?" + ncname + ")";
+var startTagOpen = new RegExp(("^<" + qnameCapture));
 var startTagClose = /^\s*(\/?)>/;
-var endTag = new RegExp('^<\\/' + qnameCapture + '[^>]*>');
+var endTag = new RegExp(("^<\\/" + qnameCapture + "[^>]*>"));
 var doctype = /^<!DOCTYPE [^>]+>/i;
 var comment = /^<!--/;
 var conditionalComment = /^<!\[/;
@@ -26786,6 +26889,8 @@ function processSlot (el) {
     var slotTarget = getBindingAttr(el, 'slot');
     if (slotTarget) {
       el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
+      // preserve slot as an attribute for native shadow DOM compat
+      addAttr(el, 'slot', slotTarget);
     }
     if (el.tag === 'template') {
       el.slotScope = getAndRemoveAttr(el, 'scope');
@@ -27322,7 +27427,7 @@ function genOnce (el, state) {
       );
       return genElement(el, state)
     }
-    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + (key ? ("," + key) : "") + ")")
+    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + "," + key + ")")
   } else {
     return genStatic(el, state)
   }
@@ -28044,7 +28149,7 @@ return Vue$3;
 "use strict";
 
 
-var implementation = __webpack_require__(352);
+var implementation = __webpack_require__(356);
 
 module.exports = Function.prototype.bind || implementation;
 
@@ -37890,7 +37995,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(387)
+var listToStyles = __webpack_require__(392)
 
 /*
 type StyleObject = {
@@ -38099,7 +38204,7 @@ function applyToTag (styleElement, obj) {
 
 
 // rawAsap provides everything we need except exception management.
-var rawAsap = __webpack_require__(9);
+var rawAsap = __webpack_require__(10);
 // RawTasks are recycled to reduce GC churn.
 var freeTasks = [];
 // We queue errors to ensure they are thrown in right order (FIFO).
@@ -38178,7 +38283,7 @@ module.exports = __webpack_require__(141);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(14);
+var bind = __webpack_require__(15);
 var Axios = __webpack_require__(143);
 var defaults = __webpack_require__(5);
 
@@ -38213,9 +38318,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(11);
+axios.Cancel = __webpack_require__(12);
 axios.CancelToken = __webpack_require__(142);
-axios.isCancel = __webpack_require__(12);
+axios.isCancel = __webpack_require__(13);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -38236,7 +38341,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(11);
+var Cancel = __webpack_require__(12);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -38453,7 +38558,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(148);
-var isCancel = __webpack_require__(12);
+var isCancel = __webpack_require__(13);
 var defaults = __webpack_require__(5);
 
 /**
@@ -38563,7 +38668,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -44829,16 +44934,138 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 188 */,
+/* 188 */
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function ($) {
+    'use strict';
+
+    var defaultOptions = {
+        fileFieldName: 'image', // input field name
+        data: [] // Additional data for ajax [{name: 'key', value: 'value'}]
+    };
+
+    addXhrProgressEvent();
+
+    $.extend(true, $.trumbowyg, {
+        langs: {
+            // jshint camelcase:false
+            en: {
+                upload: 'Upload',
+                file: 'File',
+                uploadError: 'Error'
+            }
+        },
+        // jshint camelcase:true
+
+        plugins: {
+            upload: {
+                init: function init(trumbowyg) {
+                    trumbowyg.o.plugins.upload = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.upload || {});
+                    var btnDef = {
+                        fn: function fn() {
+                            trumbowyg.saveRange();
+
+                            var file,
+                                prefix = trumbowyg.o.prefix;
+
+                            var $modal = trumbowyg.openModalInsert(
+                            // Title
+                            trumbowyg.lang.upload,
+
+                            // Fields
+                            {
+                                file: {
+                                    type: 'file',
+                                    required: true,
+                                    attributes: {
+                                        accept: 'image/*'
+                                    }
+                                },
+                                alt: {
+                                    label: 'description',
+                                    value: trumbowyg.getRangeText()
+                                }
+                            },
+
+                            // Callback
+                            function (values) {
+                                var data = new FormData();
+                                data.append(trumbowyg.o.plugins.upload.fileFieldName, file);
+
+                                trumbowyg.o.plugins.upload.data.map(function (cur) {
+                                    data.append(cur.name, cur.value);
+                                });
+
+                                $.map(values, function (curr, key) {
+                                    if (key !== 'file') {
+                                        data.append(key, curr);
+                                    }
+                                });
+
+                                if ($('.' + prefix + 'progress', $modal).length === 0) {
+                                    $('.' + prefix + 'modal-title', $modal).after($('<div/>', {
+                                        'class': prefix + 'progress'
+                                    }).append($('<div/>', {
+                                        'class': prefix + 'progress-bar'
+                                    })));
+                                }
+                                Bus.$emit('upload-file', { data: data, trumbowyg: trumbowyg, $modal: $modal, values: values });
+                            });
+
+                            $('input[type=file]').on('change', function (e) {
+                                try {
+                                    // If multiple files allowed, we just get the first.
+                                    file = e.target.files[0];
+                                } catch (err) {
+                                    // In IE8, multiple files not allowed
+                                    file = e.target.value;
+                                }
+                            });
+                        }
+                    };
+
+                    trumbowyg.addBtnDef('upload', btnDef);
+                }
+            }
+        }
+    });
+
+    function addXhrProgressEvent() {
+        if (!$.trumbowyg && !$.trumbowyg.addedXhrProgressEvent) {
+            // Avoid adding progress event multiple times
+            var originalXhr = $.ajaxSettings.xhr;
+            $.ajaxSetup({
+                xhr: function xhr() {
+                    var req = originalXhr(),
+                        that = this;
+                    if (req && _typeof(req.upload) === 'object' && that.progressUpload !== undefined) {
+                        req.upload.addEventListener('progress', function (e) {
+                            that.progressUpload(e);
+                        }, false);
+                    }
+
+                    return req;
+                }
+            });
+            $.trumbowyg.addedXhrProgressEvent = true;
+        }
+    }
+})(jQuery);
+
+/***/ }),
 /* 189 */,
-/* 190 */
+/* 190 */,
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var keys = __webpack_require__(358);
-var foreach = __webpack_require__(349);
+var keys = __webpack_require__(362);
+var foreach = __webpack_require__(353);
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol() === 'symbol';
 
 var toStr = Object.prototype.toString;
@@ -44894,7 +45121,7 @@ module.exports = defineProperties;
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports) {
 
 var has = Object.prototype.hasOwnProperty;
@@ -44912,7 +45139,7 @@ module.exports = function assign(target, source) {
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports) {
 
 var $isNaN = Number.isNaN || function (a) { return a !== a; };
@@ -44921,7 +45148,7 @@ module.exports = Number.isFinite || function (x) { return typeof x === 'number' 
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports) {
 
 module.exports = Number.isNaN || function isNaN(a) {
@@ -44930,7 +45157,7 @@ module.exports = Number.isNaN || function isNaN(a) {
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports) {
 
 module.exports = function mod(number, modulo) {
@@ -44940,7 +45167,7 @@ module.exports = function mod(number, modulo) {
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports) {
 
 module.exports = function sign(number) {
@@ -44949,7 +45176,7 @@ module.exports = function sign(number) {
 
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports) {
 
 module.exports = function isPrimitive(value) {
@@ -44958,7 +45185,7 @@ module.exports = function isPrimitive(value) {
 
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44968,7 +45195,7 @@ var requirePromise = __webpack_require__(179);
 
 requirePromise();
 
-var ES = __webpack_require__(344);
+var ES = __webpack_require__(348);
 var bind = __webpack_require__(136);
 
 var getPromise = function getPromise(C, handler) {
@@ -45013,7 +45240,7 @@ module.exports = promiseFinally;
 
 
 /***/ }),
-/* 198 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45021,7 +45248,7 @@ module.exports = promiseFinally;
 
 var requirePromise = __webpack_require__(179);
 
-var implementation = __webpack_require__(197);
+var implementation = __webpack_require__(198);
 
 module.exports = function getPolyfill() {
 	requirePromise();
@@ -45030,13 +45257,217 @@ module.exports = function getPolyfill() {
 
 
 /***/ }),
-/* 199 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(e,t){ true?module.exports=t(__webpack_require__(137),__webpack_require__(363),__webpack_require__(348)):"function"==typeof define&&define.amd?define("VueTrumbowyg",["jquery","trumbowyg","trumbowyg/dist/ui/icons.svg"],t):"object"==typeof exports?exports.VueTrumbowyg=t(require("jquery"),require("trumbowyg"),require("trumbowyg/dist/ui/icons.svg")):e.VueTrumbowyg=t(e.jquery,e.trumbowyg,e["trumbowyg/dist/ui/icons.svg"])}(this,function(e,t,n){return function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};return t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(1),o={install:function(e,t){var n="trumbowyg";"string"==typeof t&&(n=t),e.component(n,r.a)}};r.a.install=o.install,t.default=r.a},function(e,t,n){"use strict";var r=n(3),o=n(7),i=n(2),u=i(r.a,o.a,null,null,null);t.a=u.exports},function(e,t){e.exports=function(e,t,n,r,o){var i,u=e=e||{},s=typeof e.default;"object"!==s&&"function"!==s||(i=e,u=e.default);var a="function"==typeof u?u.options:u;t&&(a.render=t.render,a.staticRenderFns=t.staticRenderFns),r&&(a._scopeId=r);var l;if(o?(l=function(e){e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,e||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),n&&n.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(o)},a._ssrRegister=l):n&&(l=n),l){var c=a.functional,f=c?a.render:a.beforeCreate;c?a.render=function(e,t){return l.call(t),f(e,t)}:a.beforeCreate=f?[].concat(f,l):[l]}return{esModule:i,exports:u,options:a}}},function(e,t,n){"use strict";var r=n(5),o=(n.n(r),n(6)),i=n.n(o),u=window.jQuery||n(4);t.a={props:{value:{default:null,required:!0,validate:function(e){return null===e||"string"==typeof e||e instanceof String}},config:{type:Object,default:function(){return{}}},placeholder:{type:String,default:""},inputClass:{type:[String,Object],default:""},name:{type:String,default:"editor"},required:{type:Boolean,default:!1},disabled:{type:Boolean,default:!1},id:{type:String},svgPath:{type:[String,Boolean],default:i.a}},data:function(){return{el:null}},mounted:function(){this.el||(this.el=u(this.$el),this.el.trumbowyg(Object.assign({svgPath:this.svgPath},this.config)),this.el.trumbowyg("html",this.value),this.el.on("tbwchange",this.onChange),this.el.on("tbwblur",this.onBlur))},beforeDestroy:function(){this.el&&(this.el.trumbowyg("destroy"),this.el=null)},watch:{value:function(e){this.el&&this.el.trumbowyg("html",e)}},methods:{onChange:function(e){this.$emit("change",e.target.value)},onBlur:function(e){this.$emit("input",e.target.value)}}}},function(t,n){t.exports=e},function(e,n){e.exports=t},function(e,t){e.exports=n},function(e,t,n){"use strict";var r=function(){var e=this,t=e.$createElement;return(e._self._c||t)("textarea",{staticClass:"form-control input",class:e.inputClass,attrs:{name:e.name,id:e.id,required:e.required,placeholder:e.placeholder,disabled:e.disabled}})},o=[],i={render:r,staticRenderFns:o};t.a=i}])});
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(340);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(367)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../css-loader/index.js!./trumbowyg.colors.css", function() {
+			var newContent = require("!!../../../../../css-loader/index.js!./trumbowyg.colors.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
-/* 200 */
+/* 201 */
+/***/ (function(module, exports) {
+
+/* ===========================================================
+ * trumbowyg.colors.js v1.2
+ * Colors picker plugin for Trumbowyg
+ * http://alex-d.github.com/Trumbowyg
+ * ===========================================================
+ * Author : Alexandre Demode (Alex-D)
+ *          Twitter : @AlexandreDemode
+ *          Website : alex-d.fr
+ */
+
+(function ($) {
+    'use strict';
+
+    $.extend(true, $.trumbowyg, {
+        langs: {
+            // jshint camelcase:false
+            cs: {
+                foreColor: 'Barva textu',
+                backColor: 'Barva pozadí'
+            },
+            en: {
+                foreColor: 'Text color',
+                backColor: 'Background color'
+            },
+            fr: {
+                foreColor: 'Couleur du texte',
+                backColor: 'Couleur de fond'
+            },
+            sk: {
+                foreColor: 'Farba textu',
+                backColor: 'Farba pozadia'
+            },
+            zh_cn: {
+                foreColor: '文字颜色',
+                backColor: '背景颜色'
+            },
+            ja: {
+                foreColor: '文字色',
+                backColor: '背景色'
+            }
+        }
+    });
+    // jshint camelcase:true
+
+
+    function hex(x) {
+        return ('0' + parseInt(x).toString(16)).slice(-2);
+    }
+
+    function colorToHex(rgb) {
+        if (rgb.search('rgb') === -1) {
+            return rgb.replace('#', '');
+        } else if (rgb === 'rgba(0, 0, 0, 0)') {
+            return 'transparent';
+        } else {
+            rgb = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/);
+            return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+        }
+    }
+
+    function colorTagHandler(element, trumbowyg) {
+        var tags = [];
+
+        if(!element.style){
+            return tags;
+        }
+
+        // background color
+        if (element.style.backgroundColor !== '') {
+            var backColor = colorToHex(element.style.backgroundColor);
+            if (trumbowyg.o.plugins.colors.colorList.indexOf(backColor) >= 0) {
+                tags.push('backColor' + backColor);
+            } else {
+                tags.push('backColorFree');
+            }
+        }
+
+        // text color
+        var foreColor;
+        if (element.style.color !== '') {
+            foreColor = colorToHex(element.style.color);
+        } else if (element.hasAttribute('color')) {
+            foreColor = colorToHex(element.getAttribute('color'));
+        }
+        if (foreColor) {
+            if (trumbowyg.o.plugins.colors.colorList.indexOf(foreColor) >= 0) {
+                tags.push('foreColor' + foreColor);
+            } else {
+                tags.push('foreColorFree');
+            }
+        }
+
+        return tags;
+    }
+
+    var defaultOptions = {
+        colorList: ['ffffff', '000000', 'eeece1', '1f497d', '4f81bd', 'c0504d', '9bbb59', '8064a2', '4bacc6', 'f79646', 'ffff00', 'f2f2f2', '7f7f7f', 'ddd9c3', 'c6d9f0', 'dbe5f1', 'f2dcdb', 'ebf1dd', 'e5e0ec', 'dbeef3', 'fdeada', 'fff2ca', 'd8d8d8', '595959', 'c4bd97', '8db3e2', 'b8cce4', 'e5b9b7', 'd7e3bc', 'ccc1d9', 'b7dde8', 'fbd5b5', 'ffe694', 'bfbfbf', '3f3f3f', '938953', '548dd4', '95b3d7', 'd99694', 'c3d69b', 'b2a2c7', 'b7dde8', 'fac08f', 'f2c314', 'a5a5a5', '262626', '494429', '17365d', '366092', '953734', '76923c', '5f497a', '92cddc', 'e36c09', 'c09100', '7f7f7f', '0c0c0c', '1d1b10', '0f243e', '244061', '632423', '4f6128', '3f3151', '31859b', '974806', '7f6000']
+    };
+
+    // Add all colors in two dropdowns
+    $.extend(true, $.trumbowyg, {
+        plugins: {
+            color: {
+                init: function (trumbowyg) {
+                    trumbowyg.o.plugins.colors = trumbowyg.o.plugins.colors || defaultOptions;
+                    var foreColorBtnDef = {
+                            dropdown: buildDropdown('foreColor', trumbowyg)
+                        },
+                        backColorBtnDef = {
+                            dropdown: buildDropdown('backColor', trumbowyg)
+                        };
+
+                    trumbowyg.addBtnDef('foreColor', foreColorBtnDef);
+                    trumbowyg.addBtnDef('backColor', backColorBtnDef);
+                },
+                tagHandler: colorTagHandler
+            }
+        }
+    });
+
+    function buildDropdown(fn, trumbowyg) {
+        var dropdown = [];
+
+        $.each(trumbowyg.o.plugins.colors.colorList, function (i, color) {
+            var btn = fn + color,
+                btnDef = {
+                    fn: fn,
+                    forceCss: true,
+                    param: '#' + color,
+                    style: 'background-color: #' + color + ';'
+                };
+            trumbowyg.addBtnDef(btn, btnDef);
+            dropdown.push(btn);
+        });
+
+        var removeColorButtonName = fn + 'Remove',
+            removeColorBtnDef = {
+                fn: 'removeFormat',
+                param: fn,
+                style: 'background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQIW2NkQAAfEJMRmwBYhoGBYQtMBYoAADziAp0jtJTgAAAAAElFTkSuQmCC);'
+            };
+        trumbowyg.addBtnDef(removeColorButtonName, removeColorBtnDef);
+        dropdown.push(removeColorButtonName);
+
+        // add free color btn
+        var freeColorButtonName = fn + 'Free',
+            freeColorBtnDef = {
+                fn: function () {
+                    trumbowyg.openModalInsert(trumbowyg.lang[fn],
+                        {
+                            color: {
+                                label: fn,
+                                value: '#FFFFFF'
+                            }
+                        },
+                        // callback
+                        function (values) {
+                            trumbowyg.execCmd(fn, values.color);
+                            return true;
+                        }
+                    );
+                },
+                text: '#',
+                // style adjust for displaying the text
+                style: 'text-indent: 0;line-height: 20px;padding: 0 5px;'
+            };
+        trumbowyg.addBtnDef(freeColorButtonName, freeColorBtnDef);
+        dropdown.push(freeColorButtonName);
+
+        return dropdown;
+    }
+})(jQuery);
+
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t(__webpack_require__(137),__webpack_require__(368),__webpack_require__(352)):"function"==typeof define&&define.amd?define("VueTrumbowyg",["jquery","trumbowyg","trumbowyg/dist/ui/icons.svg"],t):"object"==typeof exports?exports.VueTrumbowyg=t(require("jquery"),require("trumbowyg"),require("trumbowyg/dist/ui/icons.svg")):e.VueTrumbowyg=t(e.jquery,e.trumbowyg,e["trumbowyg/dist/ui/icons.svg"])}(this,function(e,t,n){return function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};return t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(1),o={install:function(e,t){var n="trumbowyg";"string"==typeof t&&(n=t),e.component(n,r.a)}};r.a.install=o.install,t.default=r.a},function(e,t,n){"use strict";var r=n(3),o=n(7),i=n(2),u=i(r.a,o.a,null,null,null);t.a=u.exports},function(e,t){e.exports=function(e,t,n,r,o){var i,u=e=e||{},s=typeof e.default;"object"!==s&&"function"!==s||(i=e,u=e.default);var a="function"==typeof u?u.options:u;t&&(a.render=t.render,a.staticRenderFns=t.staticRenderFns),r&&(a._scopeId=r);var l;if(o?(l=function(e){e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,e||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),n&&n.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(o)},a._ssrRegister=l):n&&(l=n),l){var c=a.functional,f=c?a.render:a.beforeCreate;c?a.render=function(e,t){return l.call(t),f(e,t)}:a.beforeCreate=f?[].concat(f,l):[l]}return{esModule:i,exports:u,options:a}}},function(e,t,n){"use strict";var r=n(5),o=(n.n(r),n(6)),i=n.n(o),u=window.jQuery||n(4);t.a={props:{value:{default:null,required:!0,validate:function(e){return null===e||"string"==typeof e||e instanceof String}},config:{type:Object,default:function(){return{}}},placeholder:{type:String,default:""},inputClass:{type:[String,Object],default:""},name:{type:String,default:"editor"},required:{type:Boolean,default:!1},disabled:{type:Boolean,default:!1},id:{type:String},svgPath:{type:[String,Boolean],default:i.a}},data:function(){return{el:null}},mounted:function(){this.el||(this.el=u(this.$el),this.el.trumbowyg(Object.assign({svgPath:this.svgPath},this.config)),this.el.trumbowyg("html",this.value),this.el.on("tbwchange",this.onChange),this.el.on("tbwblur",this.onBlur))},beforeDestroy:function(){this.el&&(this.el.trumbowyg("destroy"),this.el=null)},watch:{value:function(e){this.el&&this.el.trumbowyg("html",e)}},methods:{onChange:function(e){this.$emit("change",e.target.value)},onBlur:function(e){this.$emit("input",e.target.value)}}}},function(t,n){t.exports=e},function(e,n){e.exports=t},function(e,t){e.exports=n},function(e,t,n){"use strict";var r=function(){var e=this,t=e.$createElement;return(e._self._c||t)("textarea",{staticClass:"form-control input",class:e.inputClass,attrs:{name:e.name,id:e.id,required:e.required,placeholder:e.placeholder,disabled:e.disabled}})},o=[],i={render:r,staticRenderFns:o};t.a=i}])});
+
+/***/ }),
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -48523,33 +48954,33 @@ return /******/ (function(modules) { // webpackBootstrap
 //# sourceMappingURL=vue-upload-component.js.map
 
 /***/ }),
-/* 201 */,
-/* 202 */
+/* 204 */,
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Interceptors , Depedencies ,
 // Same Level file
-__webpack_require__(212);
+__webpack_require__(215);
 
 // All Our Global Components
 // Located at resources/assets/js/evolutly
-__webpack_require__(216);
+__webpack_require__(219);
 
 window.Vue = new Vue({
     // Located at resources/assets/js/evolutly
     // mixins are all module.exports
-    mixins: [__webpack_require__(223)]
+    mixins: [__webpack_require__(226)]
 });
 
 /***/ }),
-/* 203 */
+/* 206 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsdeep__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsdeep__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsdeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_defaultsdeep__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_fullcalendar__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_fullcalendar__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_fullcalendar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_fullcalendar__);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -48771,7 +49202,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 });
 
 /***/ }),
-/* 204 */
+/* 207 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48835,7 +49266,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 205 */
+/* 208 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49085,7 +49516,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 206 */
+/* 209 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49149,7 +49580,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 207 */
+/* 210 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49176,7 +49607,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 208 */
+/* 211 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49206,20 +49637,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 209 */
+/* 212 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_trumbowyg__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_trumbowyg__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_trumbowyg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_trumbowyg__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_guard__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__mixins_guard__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_trumbowyg_dist_plugins_colors_trumbowyg_colors__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_trumbowyg_dist_plugins_colors_trumbowyg_colors__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_trumbowyg_dist_plugins_colors_trumbowyg_colors___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_trumbowyg_dist_plugins_colors_trumbowyg_colors__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__plugins_trumbowyg_upload__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__plugins_trumbowyg_upload__ = __webpack_require__(188);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__plugins_trumbowyg_upload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__plugins_trumbowyg_upload__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__);
 //
 //
@@ -49320,9 +49751,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 210 */,
-/* 211 */,
-/* 212 */
+/* 213 */,
+/* 214 */,
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49331,7 +49762,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 window.URI = __webpack_require__(187);
 window.axios = __webpack_require__(140);
-window._ = __webpack_require__(357);
+window._ = __webpack_require__(361);
 window.moment = __webpack_require__(0);
 window.Promise = __webpack_require__(180);
 window.Cookies = __webpack_require__(176);
@@ -49368,7 +49799,7 @@ if (window.$ === undefined || window.jQuery === undefined) {
 // Remove Since We Have it On Metro Ui JS
 __webpack_require__(161);
 // add finally in axios
-__webpack_require__(360);
+__webpack_require__(364);
 /**
  * Load Vue if this application is using Vue as its framework.
  * Load Vue & Vue-Resource.
@@ -49376,7 +49807,7 @@ __webpack_require__(360);
 if ($('#evolutly-app').length > 0) {
     // relative path: 
     // resources/assets/js/evolutly
-    __webpack_require__(228);
+    __webpack_require__(231);
 }
 
 /**
@@ -49414,7 +49845,7 @@ window.axios.interceptors.response.use(function (response) {
 });
 
 /***/ }),
-/* 213 */
+/* 216 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49630,7 +50061,7 @@ Vue.component('client-management', {
 });
 
 /***/ }),
-/* 214 */
+/* 217 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49646,6 +50077,7 @@ Vue.component('dashboard', {
         return {
             campaigns: [],
             projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
+            editProjectForm: new EvolutlyForm(Evolutly.forms.editProjectForm),
             cloneForm: new EvolutlyForm(Evolutly.forms.cloneForm),
             styling: {
                 clearBottom: false
@@ -49670,6 +50102,50 @@ Vue.component('dashboard', {
     },
 
     methods: {
+        updateProjectName: function updateProjectName() {
+            var _this = this;
+
+            var self = this;
+            self.projectForm.busy = true;
+            var projectID = self.editProjectForm.id;
+            self.endpoints.web = '/dashboard/clients/' + projectID + '/edit';
+            delete self.editProjectForm.id;
+            axios.post(self.guardedLocation(), self.editProjectForm).then(function (response) {
+                self.closeEditProjectModal();
+                var index = _.findIndex(self.projects, { id: projectID });
+                // add a re-order function to reorder the campaigns
+                self.$set(self.projects, index, response.data.project);
+                self.projectForm.busy = false;
+                self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+            }).catch(function (error) {
+                self.projectForm.errors.set(error.response.data.errors);
+                if (!self.projectForm.client_id) {
+                    self.projectForm.client_id = _.find(_this.clients, { id: _this.project.client_id });
+                }
+                if (!self.projectForm.client) {
+                    _this.projectForm.client = {
+                        name: '',
+                        email: '',
+                        password: ''
+                    };
+                }
+                self.projectForm.busy = false;
+                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
+            });
+        },
+        closeEditProjectModal: function closeEditProjectModal() {
+            this.editProjectForm = new EvolutlyForm(Evolutly.forms.editProjectForm);
+            this.hide('edit-project');
+        },
+        fillUpEditProjectModal: function fillUpEditProjectModal(project) {
+            var self = this;
+            self.editProjectForm.client_name = project.name;
+            self.editProjectForm.id = project.id;
+        },
+        showEditProjectModal: function showEditProjectModal(project) {
+            this.fillUpEditProjectModal(project);
+            this.show('edit-project');
+        },
         clonableHint: function clonableHint(project) {
             if (project.public === true) {
                 return 'Remove From Template';
@@ -49889,7 +50365,7 @@ Vue.component('dashboard', {
 });
 
 /***/ }),
-/* 215 */
+/* 218 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50103,22 +50579,22 @@ Vue.component('employee-management', {
 });
 
 /***/ }),
-/* 216 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Located at resources/assets/js/evolutly
-__webpack_require__(214);
-__webpack_require__(219);
 __webpack_require__(217);
 __webpack_require__(222);
 __webpack_require__(220);
-__webpack_require__(215);
-__webpack_require__(213);
-__webpack_require__(221);
+__webpack_require__(225);
+__webpack_require__(223);
 __webpack_require__(218);
+__webpack_require__(216);
+__webpack_require__(224);
+__webpack_require__(221);
 
 /***/ }),
-/* 217 */
+/* 220 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50188,7 +50664,7 @@ Vue.component('file-management', {
 });
 
 /***/ }),
-/* 218 */
+/* 221 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50309,12 +50785,12 @@ Vue.component('manage-tenants', {
 });
 
 /***/ }),
-/* 219 */
+/* 222 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_upload_component__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_upload_component__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_upload_component__);
 
 
@@ -50788,30 +51264,30 @@ Vue.component('projects', {
 });
 
 /***/ }),
-/* 220 */
+/* 223 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_star_rating__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_star_rating__ = __webpack_require__(387);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_star_rating___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_star_rating__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__comments_vue__ = __webpack_require__(369);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__comments_vue__ = __webpack_require__(374);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__comments_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__comments_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_guard__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__mixins_guard__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue__ = __webpack_require__(372);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue__ = __webpack_require__(377);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__task_calendar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__task_calendar_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_upload_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_upload_component__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__ = __webpack_require__(373);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__ = __webpack_require__(378);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_text_editor_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vue_trumbowyg__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_trumbowyg_dist_plugins_colors_trumbowyg_colors__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload__ = __webpack_require__(188);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__plugins_trumbowyg_upload__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_trumbowyg_dist_plugins_colors_ui_trumbowyg_colors_css__);
 
 
@@ -51300,16 +51776,16 @@ Vue.component('task', {
 });
 
 /***/ }),
-/* 221 */
+/* 224 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__campaignlist_vue__ = __webpack_require__(368);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__campaignlist_vue__ = __webpack_require__(373);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__campaignlist_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__campaignlist_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mycampaignlist_vue__ = __webpack_require__(370);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mycampaignlist_vue__ = __webpack_require__(375);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mycampaignlist_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__mycampaignlist_vue__);
 
 
@@ -51469,7 +51945,7 @@ Vue.component('templates', {
 });
 
 /***/ }),
-/* 222 */
+/* 225 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51607,7 +52083,7 @@ Vue.component('uploaded-files', {
 });
 
 /***/ }),
-/* 223 */
+/* 226 */
 /***/ (function(module, exports) {
 
 /**
@@ -51652,7 +52128,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 224 */
+/* 227 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -51724,7 +52200,7 @@ window.EvolutlyFormErrors = function () {
 };
 
 /***/ }),
-/* 225 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _Evolutly$forms;
@@ -51757,6 +52233,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  */
 
 Evolutly.forms = (_Evolutly$forms = {
+    editProjectForm: {
+        id: '',
+        client_name: ''
+    },
     projectForm: {
         client_name: '',
         client_id: '',
@@ -51901,24 +52381,24 @@ Evolutly.forms = (_Evolutly$forms = {
  */
 // relative path set on our webpack.mix.js 
 // resources/assets/js/evolutly
-__webpack_require__(226);
+__webpack_require__(229);
 
 /**
  * Define the Evolutly form Error collection class.
  */
 // relative path set on our webpack.mix.js
 // resources/assets/js/evolutly
-__webpack_require__(224);
+__webpack_require__(227);
 
 /**
  * Add additional HTTP / form helpers to the Evolutly object.
  */
 // relative path set on our webpack.mix.js
 // resources/assets/js/evolutly
-$.extend(Evolutly, __webpack_require__(227));
+$.extend(Evolutly, __webpack_require__(230));
 
 /***/ }),
-/* 226 */
+/* 229 */
 /***/ (function(module, exports) {
 
 /**
@@ -51973,7 +52453,7 @@ window.EvolutlyForm = function (data) {
 };
 
 /***/ }),
-/* 227 */
+/* 230 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -52032,20 +52512,20 @@ module.exports = {
 };
 
 /***/ }),
-/* 228 */
+/* 231 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vueup__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vueup__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vueup___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vueup__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_js_modal__ = __webpack_require__(366);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_js_modal__ = __webpack_require__(371);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_js_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_js_modal__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_select__ = __webpack_require__(381);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_select__ = __webpack_require__(386);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_select__);
 
 
-var draggable = __webpack_require__(388);
+var draggable = __webpack_require__(393);
 
 /*
  * Load Vue & Vue-Resource.
@@ -52069,7 +52549,7 @@ if (window.Vue === undefined) {
 Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_js_modal___default.a);
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vueup___default.a);
 
-var progressBar = __webpack_require__(371);
+var progressBar = __webpack_require__(376);
 
 Vue.component('progress-bar', {
   mixins: [progressBar]
@@ -52083,19 +52563,19 @@ Vue.component('draggable', draggable);
  */
 // relative path: 
 // resources/assets/js/evolutly
-__webpack_require__(229);
+__webpack_require__(232);
 
 /**
  * Load the Evolutly form utilities.
  */
 // relative path: 
 // resources/assets/js/evolutly
-__webpack_require__(225);
+__webpack_require__(228);
 
-Vue.use(__webpack_require__(365));
+Vue.use(__webpack_require__(370));
 
 /***/ }),
-/* 229 */
+/* 232 */
 /***/ (function(module, exports) {
 
 /**
@@ -52173,9 +52653,6 @@ Vue.filter('currency', function (value) {
 });
 
 /***/ }),
-/* 230 */,
-/* 231 */,
-/* 232 */,
 /* 233 */,
 /* 234 */,
 /* 235 */,
@@ -52279,43 +52756,53 @@ Vue.filter('currency', function (value) {
 /* 333 */,
 /* 334 */,
 /* 335 */,
-/* 336 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(16)();
-exports.push([module.i, "/*!\n * FullCalendar v3.5.1 Stylesheet\n * Docs & License: https://fullcalendar.io/\n * (c) 2017 Adam Shaw\n */\n\n\n.fc {\n\tdirection: ltr;\n\ttext-align: left;\n}\n\n.fc-rtl {\n\ttext-align: right;\n}\n\nbody .fc { /* extra precedence to overcome jqui */\n\tfont-size: 1em;\n}\n\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n\n.fc-highlight { /* when user is selecting cells */\n\tbackground: #bce8f1;\n\topacity: .3;\n}\n\n.fc-bgevent { /* default look for background events */\n\tbackground: rgb(143, 223, 130);\n\topacity: .3;\n}\n\n.fc-nonbusiness { /* default look for non-business-hours areas */\n\t/* will inherit .fc-bgevent's styles */\n\tbackground: #d7d7d7;\n}\n\n\n/* Buttons (styled <button> tags, normalized to work cross-browser)\n--------------------------------------------------------------------------------------------------*/\n\n.fc button {\n\t/* force height to include the border and padding */\n\t-moz-box-sizing: border-box;\n\t-webkit-box-sizing: border-box;\n\tbox-sizing: border-box;\n\n\t/* dimensions */\n\tmargin: 0;\n\theight: 2.1em;\n\tpadding: 0 .6em;\n\n\t/* text & cursor */\n\tfont-size: 1em; /* normalize */\n\twhite-space: nowrap;\n\tcursor: pointer;\n}\n\n/* Firefox has an annoying inner border */\n.fc button::-moz-focus-inner { margin: 0; padding: 0; }\n\t\n.fc-state-default { /* non-theme */\n\tborder: 1px solid;\n}\n\n.fc-state-default.fc-corner-left { /* non-theme */\n\tborder-top-left-radius: 4px;\n\tborder-bottom-left-radius: 4px;\n}\n\n.fc-state-default.fc-corner-right { /* non-theme */\n\tborder-top-right-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n}\n\n/* icons in buttons */\n\n.fc button .fc-icon { /* non-theme */\n\tposition: relative;\n\ttop: -0.05em; /* seems to be a good adjustment across browsers */\n\tmargin: 0 .2em;\n\tvertical-align: middle;\n}\n\t\n/*\n  button states\n  borrowed from twitter bootstrap (http://twitter.github.com/bootstrap/)\n*/\n\n.fc-state-default {\n\tbackground-color: #f5f5f5;\n\tbackground-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));\n\tbackground-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: -o-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: linear-gradient(to bottom, #ffffff, #e6e6e6);\n\tbackground-repeat: repeat-x;\n\tborder-color: #e6e6e6 #e6e6e6 #bfbfbf;\n\tborder-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n\tcolor: #333;\n\ttext-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);\n\tbox-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n}\n\n.fc-state-hover,\n.fc-state-down,\n.fc-state-active,\n.fc-state-disabled {\n\tcolor: #333333;\n\tbackground-color: #e6e6e6;\n}\n\n.fc-state-hover {\n\tcolor: #333333;\n\ttext-decoration: none;\n\tbackground-position: 0 -15px;\n\t-webkit-transition: background-position 0.1s linear;\n\t   -moz-transition: background-position 0.1s linear;\n\t     -o-transition: background-position 0.1s linear;\n\t        transition: background-position 0.1s linear;\n}\n\n.fc-state-down,\n.fc-state-active {\n\tbackground-color: #cccccc;\n\tbackground-image: none;\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);\n}\n\n.fc-state-disabled {\n\tcursor: default;\n\tbackground-image: none;\n\topacity: 0.65;\n\tbox-shadow: none;\n}\n\n\n/* Buttons Groups\n--------------------------------------------------------------------------------------------------*/\n\n.fc-button-group {\n\tdisplay: inline-block;\n}\n\n/*\nevery button that is not first in a button group should scootch over one pixel and cover the\nprevious button's border...\n*/\n\n.fc .fc-button-group > * { /* extra precedence b/c buttons have margin set to zero */\n\tfloat: left;\n\tmargin: 0 0 0 -1px;\n}\n\n.fc .fc-button-group > :first-child { /* same */\n\tmargin-left: 0;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-popover {\n\tposition: absolute;\n\tbox-shadow: 0 2px 6px rgba(0,0,0,.15);\n}\n\n.fc-popover .fc-header { /* TODO: be more consistent with fc-head/fc-body */\n\tpadding: 2px 4px;\n}\n\n.fc-popover .fc-header .fc-title {\n\tmargin: 0 2px;\n}\n\n.fc-popover .fc-header .fc-close {\n\tcursor: pointer;\n}\n\n.fc-ltr .fc-popover .fc-header .fc-title,\n.fc-rtl .fc-popover .fc-header .fc-close {\n\tfloat: left;\n}\n\n.fc-rtl .fc-popover .fc-header .fc-title,\n.fc-ltr .fc-popover .fc-header .fc-close {\n\tfloat: right;\n}\n\n\n/* Misc Reusable Components\n--------------------------------------------------------------------------------------------------*/\n\n.fc-divider {\n\tborder-style: solid;\n\tborder-width: 1px;\n}\n\nhr.fc-divider {\n\theight: 0;\n\tmargin: 0;\n\tpadding: 0 0 2px; /* height is unreliable across browsers, so use padding */\n\tborder-width: 1px 0;\n}\n\n.fc-clear {\n\tclear: both;\n}\n\n.fc-bg,\n.fc-bgevent-skeleton,\n.fc-highlight-skeleton,\n.fc-helper-skeleton {\n\t/* these element should always cling to top-left/right corners */\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n.fc-bg {\n\tbottom: 0; /* strech bg to bottom edge */\n}\n\n.fc-bg table {\n\theight: 100%; /* strech bg to bottom edge */\n}\n\n\n/* Tables\n--------------------------------------------------------------------------------------------------*/\n\n.fc table {\n\twidth: 100%;\n\tbox-sizing: border-box; /* fix scrollbar issue in firefox */\n\ttable-layout: fixed;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n\tfont-size: 1em; /* normalize cross-browser */\n}\n\n.fc th {\n\ttext-align: center;\n}\n\n.fc th,\n.fc td {\n\tborder-style: solid;\n\tborder-width: 1px;\n\tpadding: 0;\n\tvertical-align: top;\n}\n\n.fc td.fc-today {\n\tborder-style: double; /* overcome neighboring borders */\n}\n\n\n/* Internal Nav Links\n--------------------------------------------------------------------------------------------------*/\n\na[data-goto] {\n\tcursor: pointer;\n}\n\na[data-goto]:hover {\n\ttext-decoration: underline;\n}\n\n\n/* Fake Table Rows\n--------------------------------------------------------------------------------------------------*/\n\n.fc .fc-row { /* extra precedence to overcome themes w/ .ui-widget-content forcing a 1px border */\n\t/* no visible border by default. but make available if need be (scrollbar width compensation) */\n\tborder-style: solid;\n\tborder-width: 0;\n}\n\n.fc-row table {\n\t/* don't put left/right border on anything within a fake row.\n\t   the outer tbody will worry about this */\n\tborder-left: 0 hidden transparent;\n\tborder-right: 0 hidden transparent;\n\n\t/* no bottom borders on rows */\n\tborder-bottom: 0 hidden transparent; \n}\n\n.fc-row:first-child table {\n\tborder-top: 0 hidden transparent; /* no top border on first row */\n}\n\n\n/* Day Row (used within the header and the DayGrid)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-row {\n\tposition: relative;\n}\n\n.fc-row .fc-bg {\n\tz-index: 1;\n}\n\n/* highlighting cells & background event skeleton */\n\n.fc-row .fc-bgevent-skeleton,\n.fc-row .fc-highlight-skeleton {\n\tbottom: 0; /* stretch skeleton to bottom of row */\n}\n\n.fc-row .fc-bgevent-skeleton table,\n.fc-row .fc-highlight-skeleton table {\n\theight: 100%; /* stretch skeleton to bottom of row */\n}\n\n.fc-row .fc-highlight-skeleton td,\n.fc-row .fc-bgevent-skeleton td {\n\tborder-color: transparent;\n}\n\n.fc-row .fc-bgevent-skeleton {\n\tz-index: 2;\n\n}\n\n.fc-row .fc-highlight-skeleton {\n\tz-index: 3;\n}\n\n/*\nrow content (which contains day/week numbers and events) as well as \"helper\" (which contains\ntemporary rendered events).\n*/\n\n.fc-row .fc-content-skeleton {\n\tposition: relative;\n\tz-index: 4;\n\tpadding-bottom: 2px; /* matches the space above the events */\n}\n\n.fc-row .fc-helper-skeleton {\n\tz-index: 5;\n}\n\n.fc .fc-row .fc-content-skeleton table,\n.fc .fc-row .fc-content-skeleton td,\n.fc .fc-row .fc-helper-skeleton td {\n\t/* see-through to the background below */\n\t/* extra precedence to prevent theme-provided backgrounds */\n\tbackground: none; /* in case <td>s are globally styled */\n\tborder-color: transparent;\n}\n\n.fc-row .fc-content-skeleton td,\n.fc-row .fc-helper-skeleton td {\n\t/* don't put a border between events and/or the day number */\n\tborder-bottom: 0;\n}\n\n.fc-row .fc-content-skeleton tbody td, /* cells with events inside (so NOT the day number cell) */\n.fc-row .fc-helper-skeleton tbody td {\n\t/* don't put a border between event cells */\n\tborder-top: 0;\n}\n\n\n/* Scrolling Container\n--------------------------------------------------------------------------------------------------*/\n\n.fc-scroller {\n\t-webkit-overflow-scrolling: touch;\n}\n\n/* TODO: move to agenda/basic */\n.fc-scroller > .fc-day-grid,\n.fc-scroller > .fc-time-grid {\n\tposition: relative; /* re-scope all positions */\n\twidth: 100%; /* hack to force re-sizing this inner element when scrollbars appear/disappear */\n}\n\n\n/* Global Event Styles\n--------------------------------------------------------------------------------------------------*/\n\n.fc-event {\n\tposition: relative; /* for resize handle and other inner positioning */\n\tdisplay: block; /* make the <a> tag block */\n\tfont-size: .85em;\n\tline-height: 1.3;\n\tborder-radius: 3px;\n\tborder: 1px solid #3a87ad; /* default BORDER color */\n}\n\n.fc-event,\n.fc-event-dot {\n\tbackground-color: #3a87ad; /* default BACKGROUND color */\n}\n\n.fc-event,\n.fc-event:hover {\n\tcolor: #fff; /* default TEXT color */\n\ttext-decoration: none; /* if <a> has an href */\n}\n\n.fc-event[href],\n.fc-event.fc-draggable {\n\tcursor: pointer; /* give events with links and draggable events a hand mouse pointer */\n}\n\n.fc-not-allowed, /* causes a \"warning\" cursor. applied on body */\n.fc-not-allowed .fc-event { /* to override an event's custom cursor */\n\tcursor: not-allowed;\n}\n\n.fc-event .fc-bg { /* the generic .fc-bg already does position */\n\tz-index: 1;\n\tbackground: #fff;\n\topacity: .25;\n}\n\n.fc-event .fc-content {\n\tposition: relative;\n\tz-index: 2;\n}\n\n/* resizer (cursor AND touch devices) */\n\n.fc-event .fc-resizer {\n\tposition: absolute;\n\tz-index: 4;\n}\n\n/* resizer (touch devices) */\n\n.fc-event .fc-resizer {\n\tdisplay: none;\n}\n\n.fc-event.fc-allow-mouse-resize .fc-resizer,\n.fc-event.fc-selected .fc-resizer {\n\t/* only show when hovering or selected (with touch) */\n\tdisplay: block;\n}\n\n/* hit area */\n\n.fc-event.fc-selected .fc-resizer:before {\n\t/* 40x40 touch area */\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 9999; /* user of this util can scope within a lower z-index */\n\ttop: 50%;\n\tleft: 50%;\n\twidth: 40px;\n\theight: 40px;\n\tmargin-left: -20px;\n\tmargin-top: -20px;\n}\n\n\n/* Event Selection (only for touch devices)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-event.fc-selected {\n\tz-index: 9999 !important; /* overcomes inline z-index */\n\tbox-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\n}\n\n.fc-event.fc-selected.fc-dragging {\n\tbox-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);\n}\n\n\n/* Horizontal Events\n--------------------------------------------------------------------------------------------------*/\n\n/* bigger touch area when selected */\n.fc-h-event.fc-selected:before {\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 3; /* below resizers */\n\ttop: -10px;\n\tbottom: -10px;\n\tleft: 0;\n\tright: 0;\n}\n\n/* events that are continuing to/from another week. kill rounded corners and butt up against edge */\n\n.fc-ltr .fc-h-event.fc-not-start,\n.fc-rtl .fc-h-event.fc-not-end {\n\tmargin-left: 0;\n\tborder-left-width: 0;\n\tpadding-left: 1px; /* replace the border with padding */\n\tborder-top-left-radius: 0;\n\tborder-bottom-left-radius: 0;\n}\n\n.fc-ltr .fc-h-event.fc-not-end,\n.fc-rtl .fc-h-event.fc-not-start {\n\tmargin-right: 0;\n\tborder-right-width: 0;\n\tpadding-right: 1px; /* replace the border with padding */\n\tborder-top-right-radius: 0;\n\tborder-bottom-right-radius: 0;\n}\n\n/* resizer (cursor AND touch devices) */\n\n/* left resizer  */\n.fc-ltr .fc-h-event .fc-start-resizer,\n.fc-rtl .fc-h-event .fc-end-resizer {\n\tcursor: w-resize;\n\tleft: -1px; /* overcome border */\n}\n\n/* right resizer */\n.fc-ltr .fc-h-event .fc-end-resizer,\n.fc-rtl .fc-h-event .fc-start-resizer {\n\tcursor: e-resize;\n\tright: -1px; /* overcome border */\n}\n\n/* resizer (mouse devices) */\n\n.fc-h-event.fc-allow-mouse-resize .fc-resizer {\n\twidth: 7px;\n\ttop: -1px; /* overcome top border */\n\tbottom: -1px; /* overcome bottom border */\n}\n\n/* resizer (touch devices) */\n\n.fc-h-event.fc-selected .fc-resizer {\n\t/* 8x8 little dot */\n\tborder-radius: 4px;\n\tborder-width: 1px;\n\twidth: 6px;\n\theight: 6px;\n\tborder-style: solid;\n\tborder-color: inherit;\n\tbackground: #fff;\n\t/* vertically center */\n\ttop: 50%;\n\tmargin-top: -4px;\n}\n\n/* left resizer  */\n.fc-ltr .fc-h-event.fc-selected .fc-start-resizer,\n.fc-rtl .fc-h-event.fc-selected .fc-end-resizer {\n\tmargin-left: -4px; /* centers the 8x8 dot on the left edge */\n}\n\n/* right resizer */\n.fc-ltr .fc-h-event.fc-selected .fc-end-resizer,\n.fc-rtl .fc-h-event.fc-selected .fc-start-resizer {\n\tmargin-right: -4px; /* centers the 8x8 dot on the right edge */\n}\n\n\n/* DayGrid events\n----------------------------------------------------------------------------------------------------\nWe use the full \"fc-day-grid-event\" class instead of using descendants because the event won't\nbe a descendant of the grid when it is being dragged.\n*/\n\n.fc-day-grid-event {\n\tmargin: 1px 2px 0; /* spacing between events and edges */\n\tpadding: 0 1px;\n}\n\ntr:first-child > td > .fc-day-grid-event {\n\tmargin-top: 2px; /* a little bit more space before the first event */\n}\n\n.fc-day-grid-event.fc-selected:after {\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 1; /* same z-index as fc-bg, behind text */\n\t/* overcome the borders */\n\ttop: -1px;\n\tright: -1px;\n\tbottom: -1px;\n\tleft: -1px;\n\t/* darkening effect */\n\tbackground: #000;\n\topacity: .25;\n}\n\n.fc-day-grid-event .fc-content { /* force events to be one-line tall */\n\twhite-space: nowrap;\n\toverflow: hidden;\n}\n\n.fc-day-grid-event .fc-time {\n\tfont-weight: bold;\n}\n\n/* resizer (cursor devices) */\n\n/* left resizer  */\n.fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer,\n.fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer {\n\tmargin-left: -2px; /* to the day cell's edge */\n}\n\n/* right resizer */\n.fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer,\n.fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer {\n\tmargin-right: -2px; /* to the day cell's edge */\n}\n\n\n/* Event Limiting\n--------------------------------------------------------------------------------------------------*/\n\n/* \"more\" link that represents hidden events */\n\na.fc-more {\n\tmargin: 1px 3px;\n\tfont-size: .85em;\n\tcursor: pointer;\n\ttext-decoration: none;\n}\n\na.fc-more:hover {\n\ttext-decoration: underline;\n}\n\n.fc-limited { /* rows and cells that are hidden because of a \"more\" link */\n\tdisplay: none;\n}\n\n/* popover that appears when \"more\" link is clicked */\n\n.fc-day-grid .fc-row {\n\tz-index: 1; /* make the \"more\" popover one higher than this */\n}\n\n.fc-more-popover {\n\tz-index: 2;\n\twidth: 220px;\n}\n\n.fc-more-popover .fc-event-container {\n\tpadding: 10px;\n}\n\n\n/* Now Indicator\n--------------------------------------------------------------------------------------------------*/\n\n.fc-now-indicator {\n\tposition: absolute;\n\tborder: 0 solid red;\n}\n\n\n/* Utilities\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unselectable {\n\t-webkit-user-select: none;\n\t -khtml-user-select: none;\n\t   -moz-user-select: none;\n\t    -ms-user-select: none;\n\t        user-select: none;\n\t-webkit-touch-callout: none;\n\t-webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\n\n\n\n/*\nTODO: more distinction between this file and common.css\n*/\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed th,\n.fc-unthemed td,\n.fc-unthemed thead,\n.fc-unthemed tbody,\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-row,\n.fc-unthemed .fc-content, /* for gutter border */\n.fc-unthemed .fc-popover,\n.fc-unthemed .fc-list-view,\n.fc-unthemed .fc-list-heading td {\n\tborder-color: #ddd;\n}\n\n.fc-unthemed .fc-popover {\n\tbackground-color: #fff;\n}\n\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-popover .fc-header,\n.fc-unthemed .fc-list-heading td {\n\tbackground: #eee;\n}\n\n.fc-unthemed .fc-popover .fc-header .fc-close {\n\tcolor: #666;\n}\n\n.fc-unthemed td.fc-today {\n\tbackground: #fcf8e3;\n}\n\n.fc-unthemed .fc-disabled-day {\n\tbackground: #d7d7d7;\n\topacity: .3;\n}\n\n\n/* Icons (inline elements with styled text that mock arrow icons)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-icon {\n\tdisplay: inline-block;\n\theight: 1em;\n\tline-height: 1em;\n\tfont-size: 1em;\n\ttext-align: center;\n\toverflow: hidden;\n\tfont-family: \"Courier New\", Courier, monospace;\n\n\t/* don't allow browser text-selection */\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-khtml-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n/*\nAcceptable font-family overrides for individual icons:\n\t\"Arial\", sans-serif\n\t\"Times New Roman\", serif\n\nNOTE: use percentage font sizes or else old IE chokes\n*/\n\n.fc-icon:after {\n\tposition: relative;\n}\n\n.fc-icon-left-single-arrow:after {\n\tcontent: \"\\02039\";\n\tfont-weight: bold;\n\tfont-size: 200%;\n\ttop: -7%;\n}\n\n.fc-icon-right-single-arrow:after {\n\tcontent: \"\\0203A\";\n\tfont-weight: bold;\n\tfont-size: 200%;\n\ttop: -7%;\n}\n\n.fc-icon-left-double-arrow:after {\n\tcontent: \"\\000AB\";\n\tfont-size: 160%;\n\ttop: -7%;\n}\n\n.fc-icon-right-double-arrow:after {\n\tcontent: \"\\000BB\";\n\tfont-size: 160%;\n\ttop: -7%;\n}\n\n.fc-icon-left-triangle:after {\n\tcontent: \"\\25C4\";\n\tfont-size: 125%;\n\ttop: 3%;\n}\n\n.fc-icon-right-triangle:after {\n\tcontent: \"\\25BA\";\n\tfont-size: 125%;\n\ttop: 3%;\n}\n\n.fc-icon-down-triangle:after {\n\tcontent: \"\\25BC\";\n\tfont-size: 125%;\n\ttop: 2%;\n}\n\n.fc-icon-x:after {\n\tcontent: \"\\000D7\";\n\tfont-size: 200%;\n\ttop: 6%;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed .fc-popover {\n\tborder-width: 1px;\n\tborder-style: solid;\n}\n\n.fc-unthemed .fc-popover .fc-header .fc-close {\n\tfont-size: .9em;\n\tmargin-top: 2px;\n}\n\n\n/* List View\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed .fc-list-item:hover td {\n\tbackground-color: #f5f5f5;\n}\n\n\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget .fc-disabled-day {\n\tbackground-image: none;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-popover > .ui-widget-header + .ui-widget-content {\n\tborder-top: 0; /* where they meet, let the header have the border */\n}\n\n\n/* Global Event Styles\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget .fc-event {\n\t/* overpower jqui's styles on <a> tags. TODO: more DRY */\n\tcolor: #fff; /* default TEXT color */\n\ttext-decoration: none; /* if <a> has an href */\n\n\t/* undo ui-widget-header bold */\n\tfont-weight: normal;\n}\n\n\n/* TimeGrid axis running down the side (for both the all-day area and the slot area)\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget td.fc-axis {\n\tfont-weight: normal; /* overcome bold */\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-slats .ui-widget-content { \n\tbackground: none; /* see through to fc-bg */\n}\n\n\n\n.fc.fc-bootstrap3 a {\n\ttext-decoration: none;\n}\n\n.fc.fc-bootstrap3 a[data-goto]:hover {\n\ttext-decoration: underline;\n}\n\n.fc-bootstrap3 hr.fc-divider {\n\tborder-color: inherit;\n}\n\n.fc-bootstrap3 .fc-today.alert {\n\tborder-radius: 0;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-bootstrap3 .fc-popover .panel-body {\n\tpadding: 0; /* undo built-in padding */\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-bootstrap3 .fc-time-grid .fc-slats table {\n\t/* some themes have background color. see through to slats */\n\tbackground: none;\n}\n\n\n\n/* Toolbar\n--------------------------------------------------------------------------------------------------*/\n\n.fc-toolbar {\n\ttext-align: center;\n}\n\n.fc-toolbar.fc-header-toolbar {\n\tmargin-bottom: 1em;\n}\n\n.fc-toolbar.fc-footer-toolbar {\n\tmargin-top: 1em;\n}\n\n.fc-toolbar .fc-left {\n\tfloat: left;\n}\n\n.fc-toolbar .fc-right {\n\tfloat: right;\n}\n\n.fc-toolbar .fc-center {\n\tdisplay: inline-block;\n}\n\n/* the things within each left/right/center section */\n.fc .fc-toolbar > * > * { /* extra precedence to override button border margins */\n\tfloat: left;\n\tmargin-left: .75em;\n}\n\n/* the first thing within each left/center/right section */\n.fc .fc-toolbar > * > :first-child { /* extra precedence to override button border margins */\n\tmargin-left: 0;\n}\n\t\n/* title text */\n\n.fc-toolbar h2 {\n\tmargin: 0;\n}\n\n/* button layering (for border precedence) */\n\n.fc-toolbar button {\n\tposition: relative;\n}\n\n.fc-toolbar .fc-state-hover,\n.fc-toolbar .ui-state-hover {\n\tz-index: 2;\n}\n\t\n.fc-toolbar .fc-state-down {\n\tz-index: 3;\n}\n\n.fc-toolbar .fc-state-active,\n.fc-toolbar .ui-state-active {\n\tz-index: 4;\n}\n\n.fc-toolbar button:focus {\n\tz-index: 5;\n}\n\n\n/* View Structure\n--------------------------------------------------------------------------------------------------*/\n\n/* undo twitter bootstrap's box-sizing rules. normalizes positioning techniques */\n/* don't do this for the toolbar because we'll want bootstrap to style those buttons as some pt */\n.fc-view-container *,\n.fc-view-container *:before,\n.fc-view-container *:after {\n\t-webkit-box-sizing: content-box;\n\t   -moz-box-sizing: content-box;\n\t        box-sizing: content-box;\n}\n\n.fc-view, /* scope positioning and z-index's for everything within the view */\n.fc-view > table { /* so dragged elements can be above the view's main element */\n\tposition: relative;\n\tz-index: 1;\n}\n\n\n\n/* BasicView\n--------------------------------------------------------------------------------------------------*/\n\n/* day row structure */\n\n.fc-basicWeek-view .fc-content-skeleton,\n.fc-basicDay-view .fc-content-skeleton {\n\t/* there may be week numbers in these views, so no padding-top */\n\tpadding-bottom: 1em; /* ensure a space at bottom of cell for user selecting/clicking */\n}\n\n.fc-basic-view .fc-body .fc-row {\n\tmin-height: 4em; /* ensure that all rows are at least this tall */\n}\n\n/* a \"rigid\" row will take up a constant amount of height because content-skeleton is absolute */\n\n.fc-row.fc-rigid {\n\toverflow: hidden;\n}\n\n.fc-row.fc-rigid .fc-content-skeleton {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n/* week and day number styling */\n\n.fc-day-top.fc-other-month {\n\topacity: 0.3;\n}\n\n.fc-basic-view .fc-week-number,\n.fc-basic-view .fc-day-number {\n\tpadding: 2px;\n}\n\n.fc-basic-view th.fc-week-number,\n.fc-basic-view th.fc-day-number {\n\tpadding: 0 2px; /* column headers can't have as much v space */\n}\n\n.fc-ltr .fc-basic-view .fc-day-top .fc-day-number { float: right; }\n.fc-rtl .fc-basic-view .fc-day-top .fc-day-number { float: left; }\n\n.fc-ltr .fc-basic-view .fc-day-top .fc-week-number { float: left; border-radius: 0 0 3px 0; }\n.fc-rtl .fc-basic-view .fc-day-top .fc-week-number { float: right; border-radius: 0 0 0 3px; }\n\n.fc-basic-view .fc-day-top .fc-week-number {\n\tmin-width: 1.5em;\n\ttext-align: center;\n\tbackground-color: #f2f2f2;\n\tcolor: #808080;\n}\n\n/* when week/day number have own column */\n\n.fc-basic-view td.fc-week-number {\n\ttext-align: center;\n}\n\n.fc-basic-view td.fc-week-number > * {\n\t/* work around the way we do column resizing and ensure a minimum width */\n\tdisplay: inline-block;\n\tmin-width: 1.25em;\n}\n\n\n/* AgendaView all-day area\n--------------------------------------------------------------------------------------------------*/\n\n.fc-agenda-view .fc-day-grid {\n\tposition: relative;\n\tz-index: 2; /* so the \"more..\" popover will be over the time grid */\n}\n\n.fc-agenda-view .fc-day-grid .fc-row {\n\tmin-height: 3em; /* all-day section will never get shorter than this */\n}\n\n.fc-agenda-view .fc-day-grid .fc-row .fc-content-skeleton {\n\tpadding-bottom: 1em; /* give space underneath events for clicking/selecting days */\n}\n\n\n/* TimeGrid axis running down the side (for both the all-day area and the slot area)\n--------------------------------------------------------------------------------------------------*/\n\n.fc .fc-axis { /* .fc to overcome default cell styles */\n\tvertical-align: middle;\n\tpadding: 0 4px;\n\twhite-space: nowrap;\n}\n\n.fc-ltr .fc-axis {\n\ttext-align: right;\n}\n\n.fc-rtl .fc-axis {\n\ttext-align: left;\n}\n\n\n/* TimeGrid Structure\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid-container, /* so scroll container's z-index is below all-day */\n.fc-time-grid { /* so slats/bg/content/etc positions get scoped within here */\n\tposition: relative;\n\tz-index: 1;\n}\n\n.fc-time-grid {\n\tmin-height: 100%; /* so if height setting is 'auto', .fc-bg stretches to fill height */\n}\n\n.fc-time-grid table { /* don't put outer borders on slats/bg/content/etc */\n\tborder: 0 hidden transparent;\n}\n\n.fc-time-grid > .fc-bg {\n\tz-index: 1;\n}\n\n.fc-time-grid .fc-slats,\n.fc-time-grid > hr { /* the <hr> AgendaView injects when grid is shorter than scroller */\n\tposition: relative;\n\tz-index: 2;\n}\n\n.fc-time-grid .fc-content-col {\n\tposition: relative; /* because now-indicator lives directly inside */\n}\n\n.fc-time-grid .fc-content-skeleton {\n\tposition: absolute;\n\tz-index: 3;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n/* divs within a cell within the fc-content-skeleton */\n\n.fc-time-grid .fc-business-container {\n\tposition: relative;\n\tz-index: 1;\n}\n\n.fc-time-grid .fc-bgevent-container {\n\tposition: relative;\n\tz-index: 2;\n}\n\n.fc-time-grid .fc-highlight-container {\n\tposition: relative;\n\tz-index: 3;\n}\n\n.fc-time-grid .fc-event-container {\n\tposition: relative;\n\tz-index: 4;\n}\n\n.fc-time-grid .fc-now-indicator-line {\n\tz-index: 5;\n}\n\n.fc-time-grid .fc-helper-container { /* also is fc-event-container */\n\tposition: relative;\n\tz-index: 6;\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-slats td {\n\theight: 1.5em;\n\tborder-bottom: 0; /* each cell is responsible for its top border */\n}\n\n.fc-time-grid .fc-slats .fc-minor td {\n\tborder-top-style: dotted;\n}\n\n\n/* TimeGrid Highlighting Slots\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-highlight-container { /* a div within a cell within the fc-highlight-skeleton */\n\tposition: relative; /* scopes the left/right of the fc-highlight to be in the column */\n}\n\n.fc-time-grid .fc-highlight {\n\tposition: absolute;\n\tleft: 0;\n\tright: 0;\n\t/* top and bottom will be in by JS */\n}\n\n\n/* TimeGrid Event Containment\n--------------------------------------------------------------------------------------------------*/\n\n.fc-ltr .fc-time-grid .fc-event-container { /* space on the sides of events for LTR (default) */\n\tmargin: 0 2.5% 0 2px;\n}\n\n.fc-rtl .fc-time-grid .fc-event-container { /* space on the sides of events for RTL */\n\tmargin: 0 2px 0 2.5%;\n}\n\n.fc-time-grid .fc-event,\n.fc-time-grid .fc-bgevent {\n\tposition: absolute;\n\tz-index: 1; /* scope inner z-index's */\n}\n\n.fc-time-grid .fc-bgevent {\n\t/* background events always span full width */\n\tleft: 0;\n\tright: 0;\n}\n\n\n/* Generic Vertical Event\n--------------------------------------------------------------------------------------------------*/\n\n.fc-v-event.fc-not-start { /* events that are continuing from another day */\n\t/* replace space made by the top border with padding */\n\tborder-top-width: 0;\n\tpadding-top: 1px;\n\n\t/* remove top rounded corners */\n\tborder-top-left-radius: 0;\n\tborder-top-right-radius: 0;\n}\n\n.fc-v-event.fc-not-end {\n\t/* replace space made by the top border with padding */\n\tborder-bottom-width: 0;\n\tpadding-bottom: 1px;\n\n\t/* remove bottom rounded corners */\n\tborder-bottom-left-radius: 0;\n\tborder-bottom-right-radius: 0;\n}\n\n\n/* TimeGrid Event Styling\n----------------------------------------------------------------------------------------------------\nWe use the full \"fc-time-grid-event\" class instead of using descendants because the event won't\nbe a descendant of the grid when it is being dragged.\n*/\n\n.fc-time-grid-event {\n\toverflow: hidden; /* don't let the bg flow over rounded corners */\n}\n\n.fc-time-grid-event.fc-selected {\n\t/* need to allow touch resizers to extend outside event's bounding box */\n\t/* common fc-selected styles hide the fc-bg, so don't need this anyway */\n\toverflow: visible;\n}\n\n.fc-time-grid-event.fc-selected .fc-bg {\n\tdisplay: none; /* hide semi-white background, to appear darker */\n}\n\n.fc-time-grid-event .fc-content {\n\toverflow: hidden; /* for when .fc-selected */\n}\n\n.fc-time-grid-event .fc-time,\n.fc-time-grid-event .fc-title {\n\tpadding: 0 1px;\n}\n\n.fc-time-grid-event .fc-time {\n\tfont-size: .85em;\n\twhite-space: nowrap;\n}\n\n/* short mode, where time and title are on the same line */\n\n.fc-time-grid-event.fc-short .fc-content {\n\t/* don't wrap to second line (now that contents will be inline) */\n\twhite-space: nowrap;\n}\n\n.fc-time-grid-event.fc-short .fc-time,\n.fc-time-grid-event.fc-short .fc-title {\n\t/* put the time and title on the same line */\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n\n.fc-time-grid-event.fc-short .fc-time span {\n\tdisplay: none; /* don't display the full time text... */\n}\n\n.fc-time-grid-event.fc-short .fc-time:before {\n\tcontent: attr(data-start); /* ...instead, display only the start time */\n}\n\n.fc-time-grid-event.fc-short .fc-time:after {\n\tcontent: \"\\000A0-\\000A0\"; /* seperate with a dash, wrapped in nbsp's */\n}\n\n.fc-time-grid-event.fc-short .fc-title {\n\tfont-size: .85em; /* make the title text the same size as the time */\n\tpadding: 0; /* undo padding from above */\n}\n\n/* resizer (cursor device) */\n\n.fc-time-grid-event.fc-allow-mouse-resize .fc-resizer {\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n\theight: 8px;\n\toverflow: hidden;\n\tline-height: 8px;\n\tfont-size: 11px;\n\tfont-family: monospace;\n\ttext-align: center;\n\tcursor: s-resize;\n}\n\n.fc-time-grid-event.fc-allow-mouse-resize .fc-resizer:after {\n\tcontent: \"=\";\n}\n\n/* resizer (touch device) */\n\n.fc-time-grid-event.fc-selected .fc-resizer {\n\t/* 10x10 dot */\n\tborder-radius: 5px;\n\tborder-width: 1px;\n\twidth: 8px;\n\theight: 8px;\n\tborder-style: solid;\n\tborder-color: inherit;\n\tbackground: #fff;\n\t/* horizontally center */\n\tleft: 50%;\n\tmargin-left: -5px;\n\t/* center on the bottom edge */\n\tbottom: -5px;\n}\n\n\n/* Now Indicator\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-now-indicator-line {\n\tborder-top-width: 1px;\n\tleft: 0;\n\tright: 0;\n}\n\n/* arrow on axis */\n\n.fc-time-grid .fc-now-indicator-arrow {\n\tmargin-top: -5px; /* vertically center on top coordinate */\n}\n\n.fc-ltr .fc-time-grid .fc-now-indicator-arrow {\n\tleft: 0;\n\t/* triangle pointing right... */\n\tborder-width: 5px 0 5px 6px;\n\tborder-top-color: transparent;\n\tborder-bottom-color: transparent;\n}\n\n.fc-rtl .fc-time-grid .fc-now-indicator-arrow {\n\tright: 0;\n\t/* triangle pointing left... */\n\tborder-width: 5px 6px 5px 0;\n\tborder-top-color: transparent;\n\tborder-bottom-color: transparent;\n}\n\n\n\n/* List View\n--------------------------------------------------------------------------------------------------*/\n\n/* possibly reusable */\n\n.fc-event-dot {\n\tdisplay: inline-block;\n\twidth: 10px;\n\theight: 10px;\n\tborder-radius: 5px;\n}\n\n/* view wrapper */\n\n.fc-rtl .fc-list-view {\n\tdirection: rtl; /* unlike core views, leverage browser RTL */\n}\n\n.fc-list-view {\n\tborder-width: 1px;\n\tborder-style: solid;\n}\n\n/* table resets */\n\n.fc .fc-list-table {\n\ttable-layout: auto; /* for shrinkwrapping cell content */\n}\n\n.fc-list-table td {\n\tborder-width: 1px 0 0;\n\tpadding: 8px 14px;\n}\n\n.fc-list-table tr:first-child td {\n\tborder-top-width: 0;\n}\n\n/* day headings with the list */\n\n.fc-list-heading {\n\tborder-bottom-width: 1px;\n}\n\n.fc-list-heading td {\n\tfont-weight: bold;\n}\n\n.fc-ltr .fc-list-heading-main { float: left; }\n.fc-ltr .fc-list-heading-alt { float: right; }\n\n.fc-rtl .fc-list-heading-main { float: right; }\n.fc-rtl .fc-list-heading-alt { float: left; }\n\n/* event list items */\n\n.fc-list-item.fc-has-url {\n\tcursor: pointer; /* whole row will be clickable */\n}\n\n.fc-list-item-marker,\n.fc-list-item-time {\n\twhite-space: nowrap;\n\twidth: 1px;\n}\n\n/* make the dot closer to the event title */\n.fc-ltr .fc-list-item-marker { padding-right: 0; }\n.fc-rtl .fc-list-item-marker { padding-left: 0; }\n\n.fc-list-item-title a {\n\t/* every event title cell has an <a> tag */\n\ttext-decoration: none;\n\tcolor: inherit;\n}\n\n.fc-list-item-title a[href]:hover {\n\t/* hover effect only on titles with hrefs */\n\ttext-decoration: underline;\n}\n\n/* message when no events */\n\n.fc-list-empty-wrap2 {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n}\n\n.fc-list-empty-wrap1 {\n\twidth: 100%;\n\theight: 100%;\n\tdisplay: table;\n}\n\n.fc-list-empty {\n\tdisplay: table-cell;\n\tvertical-align: middle;\n\ttext-align: center;\n}\n\n.fc-unthemed .fc-list-empty { /* theme will provide own background */\n\tbackground-color: #eee;\n}\n", ""]);
-
-/***/ }),
-/* 337 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(16)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
-/* 338 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(16)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
+/* 336 */,
+/* 337 */,
+/* 338 */,
 /* 339 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)();
-exports.push([module.i, "\n.progress-container[data-v-40c190f0]{\r\n    width:100%;\r\n    position:relative;\r\n    padding-top: 15px;\n}\n.progress-bar[data-v-40c190f0] {\r\n  height: 20px;\r\n  border: 1px solid #3cba54;\r\n  border-radius: 3px;\r\n  background-image: \r\n    repeating-linear-gradient(\r\n      -45deg,\r\n      #3cba54,\r\n      #3cba54 11px,\r\n      #f4c20d 10px,\r\n      #f4c20d 20px /* determines size */\r\n    );\r\n  background-size: 28px 28px;\r\n  -webkit-animation: move .5s linear infinite;\r\n          animation: move .5s linear infinite;\r\n  padding:0;\r\n  margin: 0;\n}\n.inner[data-v-40c190f0] {\r\n    position: absolute;\n}\n@-webkit-keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\n@keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\r\n", ""]);
+exports = module.exports = __webpack_require__(9)();
+exports.push([module.i, "/*!\n * FullCalendar v3.5.1 Stylesheet\n * Docs & License: https://fullcalendar.io/\n * (c) 2017 Adam Shaw\n */\n\n\n.fc {\n\tdirection: ltr;\n\ttext-align: left;\n}\n\n.fc-rtl {\n\ttext-align: right;\n}\n\nbody .fc { /* extra precedence to overcome jqui */\n\tfont-size: 1em;\n}\n\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n\n.fc-highlight { /* when user is selecting cells */\n\tbackground: #bce8f1;\n\topacity: .3;\n}\n\n.fc-bgevent { /* default look for background events */\n\tbackground: rgb(143, 223, 130);\n\topacity: .3;\n}\n\n.fc-nonbusiness { /* default look for non-business-hours areas */\n\t/* will inherit .fc-bgevent's styles */\n\tbackground: #d7d7d7;\n}\n\n\n/* Buttons (styled <button> tags, normalized to work cross-browser)\n--------------------------------------------------------------------------------------------------*/\n\n.fc button {\n\t/* force height to include the border and padding */\n\t-moz-box-sizing: border-box;\n\t-webkit-box-sizing: border-box;\n\tbox-sizing: border-box;\n\n\t/* dimensions */\n\tmargin: 0;\n\theight: 2.1em;\n\tpadding: 0 .6em;\n\n\t/* text & cursor */\n\tfont-size: 1em; /* normalize */\n\twhite-space: nowrap;\n\tcursor: pointer;\n}\n\n/* Firefox has an annoying inner border */\n.fc button::-moz-focus-inner { margin: 0; padding: 0; }\n\t\n.fc-state-default { /* non-theme */\n\tborder: 1px solid;\n}\n\n.fc-state-default.fc-corner-left { /* non-theme */\n\tborder-top-left-radius: 4px;\n\tborder-bottom-left-radius: 4px;\n}\n\n.fc-state-default.fc-corner-right { /* non-theme */\n\tborder-top-right-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n}\n\n/* icons in buttons */\n\n.fc button .fc-icon { /* non-theme */\n\tposition: relative;\n\ttop: -0.05em; /* seems to be a good adjustment across browsers */\n\tmargin: 0 .2em;\n\tvertical-align: middle;\n}\n\t\n/*\n  button states\n  borrowed from twitter bootstrap (http://twitter.github.com/bootstrap/)\n*/\n\n.fc-state-default {\n\tbackground-color: #f5f5f5;\n\tbackground-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));\n\tbackground-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: -o-linear-gradient(top, #ffffff, #e6e6e6);\n\tbackground-image: linear-gradient(to bottom, #ffffff, #e6e6e6);\n\tbackground-repeat: repeat-x;\n\tborder-color: #e6e6e6 #e6e6e6 #bfbfbf;\n\tborder-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n\tcolor: #333;\n\ttext-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);\n\tbox-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n}\n\n.fc-state-hover,\n.fc-state-down,\n.fc-state-active,\n.fc-state-disabled {\n\tcolor: #333333;\n\tbackground-color: #e6e6e6;\n}\n\n.fc-state-hover {\n\tcolor: #333333;\n\ttext-decoration: none;\n\tbackground-position: 0 -15px;\n\t-webkit-transition: background-position 0.1s linear;\n\t   -moz-transition: background-position 0.1s linear;\n\t     -o-transition: background-position 0.1s linear;\n\t        transition: background-position 0.1s linear;\n}\n\n.fc-state-down,\n.fc-state-active {\n\tbackground-color: #cccccc;\n\tbackground-image: none;\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);\n}\n\n.fc-state-disabled {\n\tcursor: default;\n\tbackground-image: none;\n\topacity: 0.65;\n\tbox-shadow: none;\n}\n\n\n/* Buttons Groups\n--------------------------------------------------------------------------------------------------*/\n\n.fc-button-group {\n\tdisplay: inline-block;\n}\n\n/*\nevery button that is not first in a button group should scootch over one pixel and cover the\nprevious button's border...\n*/\n\n.fc .fc-button-group > * { /* extra precedence b/c buttons have margin set to zero */\n\tfloat: left;\n\tmargin: 0 0 0 -1px;\n}\n\n.fc .fc-button-group > :first-child { /* same */\n\tmargin-left: 0;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-popover {\n\tposition: absolute;\n\tbox-shadow: 0 2px 6px rgba(0,0,0,.15);\n}\n\n.fc-popover .fc-header { /* TODO: be more consistent with fc-head/fc-body */\n\tpadding: 2px 4px;\n}\n\n.fc-popover .fc-header .fc-title {\n\tmargin: 0 2px;\n}\n\n.fc-popover .fc-header .fc-close {\n\tcursor: pointer;\n}\n\n.fc-ltr .fc-popover .fc-header .fc-title,\n.fc-rtl .fc-popover .fc-header .fc-close {\n\tfloat: left;\n}\n\n.fc-rtl .fc-popover .fc-header .fc-title,\n.fc-ltr .fc-popover .fc-header .fc-close {\n\tfloat: right;\n}\n\n\n/* Misc Reusable Components\n--------------------------------------------------------------------------------------------------*/\n\n.fc-divider {\n\tborder-style: solid;\n\tborder-width: 1px;\n}\n\nhr.fc-divider {\n\theight: 0;\n\tmargin: 0;\n\tpadding: 0 0 2px; /* height is unreliable across browsers, so use padding */\n\tborder-width: 1px 0;\n}\n\n.fc-clear {\n\tclear: both;\n}\n\n.fc-bg,\n.fc-bgevent-skeleton,\n.fc-highlight-skeleton,\n.fc-helper-skeleton {\n\t/* these element should always cling to top-left/right corners */\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n.fc-bg {\n\tbottom: 0; /* strech bg to bottom edge */\n}\n\n.fc-bg table {\n\theight: 100%; /* strech bg to bottom edge */\n}\n\n\n/* Tables\n--------------------------------------------------------------------------------------------------*/\n\n.fc table {\n\twidth: 100%;\n\tbox-sizing: border-box; /* fix scrollbar issue in firefox */\n\ttable-layout: fixed;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n\tfont-size: 1em; /* normalize cross-browser */\n}\n\n.fc th {\n\ttext-align: center;\n}\n\n.fc th,\n.fc td {\n\tborder-style: solid;\n\tborder-width: 1px;\n\tpadding: 0;\n\tvertical-align: top;\n}\n\n.fc td.fc-today {\n\tborder-style: double; /* overcome neighboring borders */\n}\n\n\n/* Internal Nav Links\n--------------------------------------------------------------------------------------------------*/\n\na[data-goto] {\n\tcursor: pointer;\n}\n\na[data-goto]:hover {\n\ttext-decoration: underline;\n}\n\n\n/* Fake Table Rows\n--------------------------------------------------------------------------------------------------*/\n\n.fc .fc-row { /* extra precedence to overcome themes w/ .ui-widget-content forcing a 1px border */\n\t/* no visible border by default. but make available if need be (scrollbar width compensation) */\n\tborder-style: solid;\n\tborder-width: 0;\n}\n\n.fc-row table {\n\t/* don't put left/right border on anything within a fake row.\n\t   the outer tbody will worry about this */\n\tborder-left: 0 hidden transparent;\n\tborder-right: 0 hidden transparent;\n\n\t/* no bottom borders on rows */\n\tborder-bottom: 0 hidden transparent; \n}\n\n.fc-row:first-child table {\n\tborder-top: 0 hidden transparent; /* no top border on first row */\n}\n\n\n/* Day Row (used within the header and the DayGrid)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-row {\n\tposition: relative;\n}\n\n.fc-row .fc-bg {\n\tz-index: 1;\n}\n\n/* highlighting cells & background event skeleton */\n\n.fc-row .fc-bgevent-skeleton,\n.fc-row .fc-highlight-skeleton {\n\tbottom: 0; /* stretch skeleton to bottom of row */\n}\n\n.fc-row .fc-bgevent-skeleton table,\n.fc-row .fc-highlight-skeleton table {\n\theight: 100%; /* stretch skeleton to bottom of row */\n}\n\n.fc-row .fc-highlight-skeleton td,\n.fc-row .fc-bgevent-skeleton td {\n\tborder-color: transparent;\n}\n\n.fc-row .fc-bgevent-skeleton {\n\tz-index: 2;\n\n}\n\n.fc-row .fc-highlight-skeleton {\n\tz-index: 3;\n}\n\n/*\nrow content (which contains day/week numbers and events) as well as \"helper\" (which contains\ntemporary rendered events).\n*/\n\n.fc-row .fc-content-skeleton {\n\tposition: relative;\n\tz-index: 4;\n\tpadding-bottom: 2px; /* matches the space above the events */\n}\n\n.fc-row .fc-helper-skeleton {\n\tz-index: 5;\n}\n\n.fc .fc-row .fc-content-skeleton table,\n.fc .fc-row .fc-content-skeleton td,\n.fc .fc-row .fc-helper-skeleton td {\n\t/* see-through to the background below */\n\t/* extra precedence to prevent theme-provided backgrounds */\n\tbackground: none; /* in case <td>s are globally styled */\n\tborder-color: transparent;\n}\n\n.fc-row .fc-content-skeleton td,\n.fc-row .fc-helper-skeleton td {\n\t/* don't put a border between events and/or the day number */\n\tborder-bottom: 0;\n}\n\n.fc-row .fc-content-skeleton tbody td, /* cells with events inside (so NOT the day number cell) */\n.fc-row .fc-helper-skeleton tbody td {\n\t/* don't put a border between event cells */\n\tborder-top: 0;\n}\n\n\n/* Scrolling Container\n--------------------------------------------------------------------------------------------------*/\n\n.fc-scroller {\n\t-webkit-overflow-scrolling: touch;\n}\n\n/* TODO: move to agenda/basic */\n.fc-scroller > .fc-day-grid,\n.fc-scroller > .fc-time-grid {\n\tposition: relative; /* re-scope all positions */\n\twidth: 100%; /* hack to force re-sizing this inner element when scrollbars appear/disappear */\n}\n\n\n/* Global Event Styles\n--------------------------------------------------------------------------------------------------*/\n\n.fc-event {\n\tposition: relative; /* for resize handle and other inner positioning */\n\tdisplay: block; /* make the <a> tag block */\n\tfont-size: .85em;\n\tline-height: 1.3;\n\tborder-radius: 3px;\n\tborder: 1px solid #3a87ad; /* default BORDER color */\n}\n\n.fc-event,\n.fc-event-dot {\n\tbackground-color: #3a87ad; /* default BACKGROUND color */\n}\n\n.fc-event,\n.fc-event:hover {\n\tcolor: #fff; /* default TEXT color */\n\ttext-decoration: none; /* if <a> has an href */\n}\n\n.fc-event[href],\n.fc-event.fc-draggable {\n\tcursor: pointer; /* give events with links and draggable events a hand mouse pointer */\n}\n\n.fc-not-allowed, /* causes a \"warning\" cursor. applied on body */\n.fc-not-allowed .fc-event { /* to override an event's custom cursor */\n\tcursor: not-allowed;\n}\n\n.fc-event .fc-bg { /* the generic .fc-bg already does position */\n\tz-index: 1;\n\tbackground: #fff;\n\topacity: .25;\n}\n\n.fc-event .fc-content {\n\tposition: relative;\n\tz-index: 2;\n}\n\n/* resizer (cursor AND touch devices) */\n\n.fc-event .fc-resizer {\n\tposition: absolute;\n\tz-index: 4;\n}\n\n/* resizer (touch devices) */\n\n.fc-event .fc-resizer {\n\tdisplay: none;\n}\n\n.fc-event.fc-allow-mouse-resize .fc-resizer,\n.fc-event.fc-selected .fc-resizer {\n\t/* only show when hovering or selected (with touch) */\n\tdisplay: block;\n}\n\n/* hit area */\n\n.fc-event.fc-selected .fc-resizer:before {\n\t/* 40x40 touch area */\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 9999; /* user of this util can scope within a lower z-index */\n\ttop: 50%;\n\tleft: 50%;\n\twidth: 40px;\n\theight: 40px;\n\tmargin-left: -20px;\n\tmargin-top: -20px;\n}\n\n\n/* Event Selection (only for touch devices)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-event.fc-selected {\n\tz-index: 9999 !important; /* overcomes inline z-index */\n\tbox-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\n}\n\n.fc-event.fc-selected.fc-dragging {\n\tbox-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);\n}\n\n\n/* Horizontal Events\n--------------------------------------------------------------------------------------------------*/\n\n/* bigger touch area when selected */\n.fc-h-event.fc-selected:before {\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 3; /* below resizers */\n\ttop: -10px;\n\tbottom: -10px;\n\tleft: 0;\n\tright: 0;\n}\n\n/* events that are continuing to/from another week. kill rounded corners and butt up against edge */\n\n.fc-ltr .fc-h-event.fc-not-start,\n.fc-rtl .fc-h-event.fc-not-end {\n\tmargin-left: 0;\n\tborder-left-width: 0;\n\tpadding-left: 1px; /* replace the border with padding */\n\tborder-top-left-radius: 0;\n\tborder-bottom-left-radius: 0;\n}\n\n.fc-ltr .fc-h-event.fc-not-end,\n.fc-rtl .fc-h-event.fc-not-start {\n\tmargin-right: 0;\n\tborder-right-width: 0;\n\tpadding-right: 1px; /* replace the border with padding */\n\tborder-top-right-radius: 0;\n\tborder-bottom-right-radius: 0;\n}\n\n/* resizer (cursor AND touch devices) */\n\n/* left resizer  */\n.fc-ltr .fc-h-event .fc-start-resizer,\n.fc-rtl .fc-h-event .fc-end-resizer {\n\tcursor: w-resize;\n\tleft: -1px; /* overcome border */\n}\n\n/* right resizer */\n.fc-ltr .fc-h-event .fc-end-resizer,\n.fc-rtl .fc-h-event .fc-start-resizer {\n\tcursor: e-resize;\n\tright: -1px; /* overcome border */\n}\n\n/* resizer (mouse devices) */\n\n.fc-h-event.fc-allow-mouse-resize .fc-resizer {\n\twidth: 7px;\n\ttop: -1px; /* overcome top border */\n\tbottom: -1px; /* overcome bottom border */\n}\n\n/* resizer (touch devices) */\n\n.fc-h-event.fc-selected .fc-resizer {\n\t/* 8x8 little dot */\n\tborder-radius: 4px;\n\tborder-width: 1px;\n\twidth: 6px;\n\theight: 6px;\n\tborder-style: solid;\n\tborder-color: inherit;\n\tbackground: #fff;\n\t/* vertically center */\n\ttop: 50%;\n\tmargin-top: -4px;\n}\n\n/* left resizer  */\n.fc-ltr .fc-h-event.fc-selected .fc-start-resizer,\n.fc-rtl .fc-h-event.fc-selected .fc-end-resizer {\n\tmargin-left: -4px; /* centers the 8x8 dot on the left edge */\n}\n\n/* right resizer */\n.fc-ltr .fc-h-event.fc-selected .fc-end-resizer,\n.fc-rtl .fc-h-event.fc-selected .fc-start-resizer {\n\tmargin-right: -4px; /* centers the 8x8 dot on the right edge */\n}\n\n\n/* DayGrid events\n----------------------------------------------------------------------------------------------------\nWe use the full \"fc-day-grid-event\" class instead of using descendants because the event won't\nbe a descendant of the grid when it is being dragged.\n*/\n\n.fc-day-grid-event {\n\tmargin: 1px 2px 0; /* spacing between events and edges */\n\tpadding: 0 1px;\n}\n\ntr:first-child > td > .fc-day-grid-event {\n\tmargin-top: 2px; /* a little bit more space before the first event */\n}\n\n.fc-day-grid-event.fc-selected:after {\n\tcontent: \"\";\n\tposition: absolute;\n\tz-index: 1; /* same z-index as fc-bg, behind text */\n\t/* overcome the borders */\n\ttop: -1px;\n\tright: -1px;\n\tbottom: -1px;\n\tleft: -1px;\n\t/* darkening effect */\n\tbackground: #000;\n\topacity: .25;\n}\n\n.fc-day-grid-event .fc-content { /* force events to be one-line tall */\n\twhite-space: nowrap;\n\toverflow: hidden;\n}\n\n.fc-day-grid-event .fc-time {\n\tfont-weight: bold;\n}\n\n/* resizer (cursor devices) */\n\n/* left resizer  */\n.fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer,\n.fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer {\n\tmargin-left: -2px; /* to the day cell's edge */\n}\n\n/* right resizer */\n.fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer,\n.fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer {\n\tmargin-right: -2px; /* to the day cell's edge */\n}\n\n\n/* Event Limiting\n--------------------------------------------------------------------------------------------------*/\n\n/* \"more\" link that represents hidden events */\n\na.fc-more {\n\tmargin: 1px 3px;\n\tfont-size: .85em;\n\tcursor: pointer;\n\ttext-decoration: none;\n}\n\na.fc-more:hover {\n\ttext-decoration: underline;\n}\n\n.fc-limited { /* rows and cells that are hidden because of a \"more\" link */\n\tdisplay: none;\n}\n\n/* popover that appears when \"more\" link is clicked */\n\n.fc-day-grid .fc-row {\n\tz-index: 1; /* make the \"more\" popover one higher than this */\n}\n\n.fc-more-popover {\n\tz-index: 2;\n\twidth: 220px;\n}\n\n.fc-more-popover .fc-event-container {\n\tpadding: 10px;\n}\n\n\n/* Now Indicator\n--------------------------------------------------------------------------------------------------*/\n\n.fc-now-indicator {\n\tposition: absolute;\n\tborder: 0 solid red;\n}\n\n\n/* Utilities\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unselectable {\n\t-webkit-user-select: none;\n\t -khtml-user-select: none;\n\t   -moz-user-select: none;\n\t    -ms-user-select: none;\n\t        user-select: none;\n\t-webkit-touch-callout: none;\n\t-webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\n\n\n\n/*\nTODO: more distinction between this file and common.css\n*/\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed th,\n.fc-unthemed td,\n.fc-unthemed thead,\n.fc-unthemed tbody,\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-row,\n.fc-unthemed .fc-content, /* for gutter border */\n.fc-unthemed .fc-popover,\n.fc-unthemed .fc-list-view,\n.fc-unthemed .fc-list-heading td {\n\tborder-color: #ddd;\n}\n\n.fc-unthemed .fc-popover {\n\tbackground-color: #fff;\n}\n\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-popover .fc-header,\n.fc-unthemed .fc-list-heading td {\n\tbackground: #eee;\n}\n\n.fc-unthemed .fc-popover .fc-header .fc-close {\n\tcolor: #666;\n}\n\n.fc-unthemed td.fc-today {\n\tbackground: #fcf8e3;\n}\n\n.fc-unthemed .fc-disabled-day {\n\tbackground: #d7d7d7;\n\topacity: .3;\n}\n\n\n/* Icons (inline elements with styled text that mock arrow icons)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-icon {\n\tdisplay: inline-block;\n\theight: 1em;\n\tline-height: 1em;\n\tfont-size: 1em;\n\ttext-align: center;\n\toverflow: hidden;\n\tfont-family: \"Courier New\", Courier, monospace;\n\n\t/* don't allow browser text-selection */\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-khtml-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n/*\nAcceptable font-family overrides for individual icons:\n\t\"Arial\", sans-serif\n\t\"Times New Roman\", serif\n\nNOTE: use percentage font sizes or else old IE chokes\n*/\n\n.fc-icon:after {\n\tposition: relative;\n}\n\n.fc-icon-left-single-arrow:after {\n\tcontent: \"\\02039\";\n\tfont-weight: bold;\n\tfont-size: 200%;\n\ttop: -7%;\n}\n\n.fc-icon-right-single-arrow:after {\n\tcontent: \"\\0203A\";\n\tfont-weight: bold;\n\tfont-size: 200%;\n\ttop: -7%;\n}\n\n.fc-icon-left-double-arrow:after {\n\tcontent: \"\\000AB\";\n\tfont-size: 160%;\n\ttop: -7%;\n}\n\n.fc-icon-right-double-arrow:after {\n\tcontent: \"\\000BB\";\n\tfont-size: 160%;\n\ttop: -7%;\n}\n\n.fc-icon-left-triangle:after {\n\tcontent: \"\\25C4\";\n\tfont-size: 125%;\n\ttop: 3%;\n}\n\n.fc-icon-right-triangle:after {\n\tcontent: \"\\25BA\";\n\tfont-size: 125%;\n\ttop: 3%;\n}\n\n.fc-icon-down-triangle:after {\n\tcontent: \"\\25BC\";\n\tfont-size: 125%;\n\ttop: 2%;\n}\n\n.fc-icon-x:after {\n\tcontent: \"\\000D7\";\n\tfont-size: 200%;\n\ttop: 6%;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed .fc-popover {\n\tborder-width: 1px;\n\tborder-style: solid;\n}\n\n.fc-unthemed .fc-popover .fc-header .fc-close {\n\tfont-size: .9em;\n\tmargin-top: 2px;\n}\n\n\n/* List View\n--------------------------------------------------------------------------------------------------*/\n\n.fc-unthemed .fc-list-item:hover td {\n\tbackground-color: #f5f5f5;\n}\n\n\n\n/* Colors\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget .fc-disabled-day {\n\tbackground-image: none;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-popover > .ui-widget-header + .ui-widget-content {\n\tborder-top: 0; /* where they meet, let the header have the border */\n}\n\n\n/* Global Event Styles\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget .fc-event {\n\t/* overpower jqui's styles on <a> tags. TODO: more DRY */\n\tcolor: #fff; /* default TEXT color */\n\ttext-decoration: none; /* if <a> has an href */\n\n\t/* undo ui-widget-header bold */\n\tfont-weight: normal;\n}\n\n\n/* TimeGrid axis running down the side (for both the all-day area and the slot area)\n--------------------------------------------------------------------------------------------------*/\n\n.ui-widget td.fc-axis {\n\tfont-weight: normal; /* overcome bold */\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-slats .ui-widget-content { \n\tbackground: none; /* see through to fc-bg */\n}\n\n\n\n.fc.fc-bootstrap3 a {\n\ttext-decoration: none;\n}\n\n.fc.fc-bootstrap3 a[data-goto]:hover {\n\ttext-decoration: underline;\n}\n\n.fc-bootstrap3 hr.fc-divider {\n\tborder-color: inherit;\n}\n\n.fc-bootstrap3 .fc-today.alert {\n\tborder-radius: 0;\n}\n\n\n/* Popover\n--------------------------------------------------------------------------------------------------*/\n\n.fc-bootstrap3 .fc-popover .panel-body {\n\tpadding: 0; /* undo built-in padding */\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-bootstrap3 .fc-time-grid .fc-slats table {\n\t/* some themes have background color. see through to slats */\n\tbackground: none;\n}\n\n\n\n/* Toolbar\n--------------------------------------------------------------------------------------------------*/\n\n.fc-toolbar {\n\ttext-align: center;\n}\n\n.fc-toolbar.fc-header-toolbar {\n\tmargin-bottom: 1em;\n}\n\n.fc-toolbar.fc-footer-toolbar {\n\tmargin-top: 1em;\n}\n\n.fc-toolbar .fc-left {\n\tfloat: left;\n}\n\n.fc-toolbar .fc-right {\n\tfloat: right;\n}\n\n.fc-toolbar .fc-center {\n\tdisplay: inline-block;\n}\n\n/* the things within each left/right/center section */\n.fc .fc-toolbar > * > * { /* extra precedence to override button border margins */\n\tfloat: left;\n\tmargin-left: .75em;\n}\n\n/* the first thing within each left/center/right section */\n.fc .fc-toolbar > * > :first-child { /* extra precedence to override button border margins */\n\tmargin-left: 0;\n}\n\t\n/* title text */\n\n.fc-toolbar h2 {\n\tmargin: 0;\n}\n\n/* button layering (for border precedence) */\n\n.fc-toolbar button {\n\tposition: relative;\n}\n\n.fc-toolbar .fc-state-hover,\n.fc-toolbar .ui-state-hover {\n\tz-index: 2;\n}\n\t\n.fc-toolbar .fc-state-down {\n\tz-index: 3;\n}\n\n.fc-toolbar .fc-state-active,\n.fc-toolbar .ui-state-active {\n\tz-index: 4;\n}\n\n.fc-toolbar button:focus {\n\tz-index: 5;\n}\n\n\n/* View Structure\n--------------------------------------------------------------------------------------------------*/\n\n/* undo twitter bootstrap's box-sizing rules. normalizes positioning techniques */\n/* don't do this for the toolbar because we'll want bootstrap to style those buttons as some pt */\n.fc-view-container *,\n.fc-view-container *:before,\n.fc-view-container *:after {\n\t-webkit-box-sizing: content-box;\n\t   -moz-box-sizing: content-box;\n\t        box-sizing: content-box;\n}\n\n.fc-view, /* scope positioning and z-index's for everything within the view */\n.fc-view > table { /* so dragged elements can be above the view's main element */\n\tposition: relative;\n\tz-index: 1;\n}\n\n\n\n/* BasicView\n--------------------------------------------------------------------------------------------------*/\n\n/* day row structure */\n\n.fc-basicWeek-view .fc-content-skeleton,\n.fc-basicDay-view .fc-content-skeleton {\n\t/* there may be week numbers in these views, so no padding-top */\n\tpadding-bottom: 1em; /* ensure a space at bottom of cell for user selecting/clicking */\n}\n\n.fc-basic-view .fc-body .fc-row {\n\tmin-height: 4em; /* ensure that all rows are at least this tall */\n}\n\n/* a \"rigid\" row will take up a constant amount of height because content-skeleton is absolute */\n\n.fc-row.fc-rigid {\n\toverflow: hidden;\n}\n\n.fc-row.fc-rigid .fc-content-skeleton {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n/* week and day number styling */\n\n.fc-day-top.fc-other-month {\n\topacity: 0.3;\n}\n\n.fc-basic-view .fc-week-number,\n.fc-basic-view .fc-day-number {\n\tpadding: 2px;\n}\n\n.fc-basic-view th.fc-week-number,\n.fc-basic-view th.fc-day-number {\n\tpadding: 0 2px; /* column headers can't have as much v space */\n}\n\n.fc-ltr .fc-basic-view .fc-day-top .fc-day-number { float: right; }\n.fc-rtl .fc-basic-view .fc-day-top .fc-day-number { float: left; }\n\n.fc-ltr .fc-basic-view .fc-day-top .fc-week-number { float: left; border-radius: 0 0 3px 0; }\n.fc-rtl .fc-basic-view .fc-day-top .fc-week-number { float: right; border-radius: 0 0 0 3px; }\n\n.fc-basic-view .fc-day-top .fc-week-number {\n\tmin-width: 1.5em;\n\ttext-align: center;\n\tbackground-color: #f2f2f2;\n\tcolor: #808080;\n}\n\n/* when week/day number have own column */\n\n.fc-basic-view td.fc-week-number {\n\ttext-align: center;\n}\n\n.fc-basic-view td.fc-week-number > * {\n\t/* work around the way we do column resizing and ensure a minimum width */\n\tdisplay: inline-block;\n\tmin-width: 1.25em;\n}\n\n\n/* AgendaView all-day area\n--------------------------------------------------------------------------------------------------*/\n\n.fc-agenda-view .fc-day-grid {\n\tposition: relative;\n\tz-index: 2; /* so the \"more..\" popover will be over the time grid */\n}\n\n.fc-agenda-view .fc-day-grid .fc-row {\n\tmin-height: 3em; /* all-day section will never get shorter than this */\n}\n\n.fc-agenda-view .fc-day-grid .fc-row .fc-content-skeleton {\n\tpadding-bottom: 1em; /* give space underneath events for clicking/selecting days */\n}\n\n\n/* TimeGrid axis running down the side (for both the all-day area and the slot area)\n--------------------------------------------------------------------------------------------------*/\n\n.fc .fc-axis { /* .fc to overcome default cell styles */\n\tvertical-align: middle;\n\tpadding: 0 4px;\n\twhite-space: nowrap;\n}\n\n.fc-ltr .fc-axis {\n\ttext-align: right;\n}\n\n.fc-rtl .fc-axis {\n\ttext-align: left;\n}\n\n\n/* TimeGrid Structure\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid-container, /* so scroll container's z-index is below all-day */\n.fc-time-grid { /* so slats/bg/content/etc positions get scoped within here */\n\tposition: relative;\n\tz-index: 1;\n}\n\n.fc-time-grid {\n\tmin-height: 100%; /* so if height setting is 'auto', .fc-bg stretches to fill height */\n}\n\n.fc-time-grid table { /* don't put outer borders on slats/bg/content/etc */\n\tborder: 0 hidden transparent;\n}\n\n.fc-time-grid > .fc-bg {\n\tz-index: 1;\n}\n\n.fc-time-grid .fc-slats,\n.fc-time-grid > hr { /* the <hr> AgendaView injects when grid is shorter than scroller */\n\tposition: relative;\n\tz-index: 2;\n}\n\n.fc-time-grid .fc-content-col {\n\tposition: relative; /* because now-indicator lives directly inside */\n}\n\n.fc-time-grid .fc-content-skeleton {\n\tposition: absolute;\n\tz-index: 3;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n}\n\n/* divs within a cell within the fc-content-skeleton */\n\n.fc-time-grid .fc-business-container {\n\tposition: relative;\n\tz-index: 1;\n}\n\n.fc-time-grid .fc-bgevent-container {\n\tposition: relative;\n\tz-index: 2;\n}\n\n.fc-time-grid .fc-highlight-container {\n\tposition: relative;\n\tz-index: 3;\n}\n\n.fc-time-grid .fc-event-container {\n\tposition: relative;\n\tz-index: 4;\n}\n\n.fc-time-grid .fc-now-indicator-line {\n\tz-index: 5;\n}\n\n.fc-time-grid .fc-helper-container { /* also is fc-event-container */\n\tposition: relative;\n\tz-index: 6;\n}\n\n\n/* TimeGrid Slats (lines that run horizontally)\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-slats td {\n\theight: 1.5em;\n\tborder-bottom: 0; /* each cell is responsible for its top border */\n}\n\n.fc-time-grid .fc-slats .fc-minor td {\n\tborder-top-style: dotted;\n}\n\n\n/* TimeGrid Highlighting Slots\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-highlight-container { /* a div within a cell within the fc-highlight-skeleton */\n\tposition: relative; /* scopes the left/right of the fc-highlight to be in the column */\n}\n\n.fc-time-grid .fc-highlight {\n\tposition: absolute;\n\tleft: 0;\n\tright: 0;\n\t/* top and bottom will be in by JS */\n}\n\n\n/* TimeGrid Event Containment\n--------------------------------------------------------------------------------------------------*/\n\n.fc-ltr .fc-time-grid .fc-event-container { /* space on the sides of events for LTR (default) */\n\tmargin: 0 2.5% 0 2px;\n}\n\n.fc-rtl .fc-time-grid .fc-event-container { /* space on the sides of events for RTL */\n\tmargin: 0 2px 0 2.5%;\n}\n\n.fc-time-grid .fc-event,\n.fc-time-grid .fc-bgevent {\n\tposition: absolute;\n\tz-index: 1; /* scope inner z-index's */\n}\n\n.fc-time-grid .fc-bgevent {\n\t/* background events always span full width */\n\tleft: 0;\n\tright: 0;\n}\n\n\n/* Generic Vertical Event\n--------------------------------------------------------------------------------------------------*/\n\n.fc-v-event.fc-not-start { /* events that are continuing from another day */\n\t/* replace space made by the top border with padding */\n\tborder-top-width: 0;\n\tpadding-top: 1px;\n\n\t/* remove top rounded corners */\n\tborder-top-left-radius: 0;\n\tborder-top-right-radius: 0;\n}\n\n.fc-v-event.fc-not-end {\n\t/* replace space made by the top border with padding */\n\tborder-bottom-width: 0;\n\tpadding-bottom: 1px;\n\n\t/* remove bottom rounded corners */\n\tborder-bottom-left-radius: 0;\n\tborder-bottom-right-radius: 0;\n}\n\n\n/* TimeGrid Event Styling\n----------------------------------------------------------------------------------------------------\nWe use the full \"fc-time-grid-event\" class instead of using descendants because the event won't\nbe a descendant of the grid when it is being dragged.\n*/\n\n.fc-time-grid-event {\n\toverflow: hidden; /* don't let the bg flow over rounded corners */\n}\n\n.fc-time-grid-event.fc-selected {\n\t/* need to allow touch resizers to extend outside event's bounding box */\n\t/* common fc-selected styles hide the fc-bg, so don't need this anyway */\n\toverflow: visible;\n}\n\n.fc-time-grid-event.fc-selected .fc-bg {\n\tdisplay: none; /* hide semi-white background, to appear darker */\n}\n\n.fc-time-grid-event .fc-content {\n\toverflow: hidden; /* for when .fc-selected */\n}\n\n.fc-time-grid-event .fc-time,\n.fc-time-grid-event .fc-title {\n\tpadding: 0 1px;\n}\n\n.fc-time-grid-event .fc-time {\n\tfont-size: .85em;\n\twhite-space: nowrap;\n}\n\n/* short mode, where time and title are on the same line */\n\n.fc-time-grid-event.fc-short .fc-content {\n\t/* don't wrap to second line (now that contents will be inline) */\n\twhite-space: nowrap;\n}\n\n.fc-time-grid-event.fc-short .fc-time,\n.fc-time-grid-event.fc-short .fc-title {\n\t/* put the time and title on the same line */\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n\n.fc-time-grid-event.fc-short .fc-time span {\n\tdisplay: none; /* don't display the full time text... */\n}\n\n.fc-time-grid-event.fc-short .fc-time:before {\n\tcontent: attr(data-start); /* ...instead, display only the start time */\n}\n\n.fc-time-grid-event.fc-short .fc-time:after {\n\tcontent: \"\\000A0-\\000A0\"; /* seperate with a dash, wrapped in nbsp's */\n}\n\n.fc-time-grid-event.fc-short .fc-title {\n\tfont-size: .85em; /* make the title text the same size as the time */\n\tpadding: 0; /* undo padding from above */\n}\n\n/* resizer (cursor device) */\n\n.fc-time-grid-event.fc-allow-mouse-resize .fc-resizer {\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n\theight: 8px;\n\toverflow: hidden;\n\tline-height: 8px;\n\tfont-size: 11px;\n\tfont-family: monospace;\n\ttext-align: center;\n\tcursor: s-resize;\n}\n\n.fc-time-grid-event.fc-allow-mouse-resize .fc-resizer:after {\n\tcontent: \"=\";\n}\n\n/* resizer (touch device) */\n\n.fc-time-grid-event.fc-selected .fc-resizer {\n\t/* 10x10 dot */\n\tborder-radius: 5px;\n\tborder-width: 1px;\n\twidth: 8px;\n\theight: 8px;\n\tborder-style: solid;\n\tborder-color: inherit;\n\tbackground: #fff;\n\t/* horizontally center */\n\tleft: 50%;\n\tmargin-left: -5px;\n\t/* center on the bottom edge */\n\tbottom: -5px;\n}\n\n\n/* Now Indicator\n--------------------------------------------------------------------------------------------------*/\n\n.fc-time-grid .fc-now-indicator-line {\n\tborder-top-width: 1px;\n\tleft: 0;\n\tright: 0;\n}\n\n/* arrow on axis */\n\n.fc-time-grid .fc-now-indicator-arrow {\n\tmargin-top: -5px; /* vertically center on top coordinate */\n}\n\n.fc-ltr .fc-time-grid .fc-now-indicator-arrow {\n\tleft: 0;\n\t/* triangle pointing right... */\n\tborder-width: 5px 0 5px 6px;\n\tborder-top-color: transparent;\n\tborder-bottom-color: transparent;\n}\n\n.fc-rtl .fc-time-grid .fc-now-indicator-arrow {\n\tright: 0;\n\t/* triangle pointing left... */\n\tborder-width: 5px 6px 5px 0;\n\tborder-top-color: transparent;\n\tborder-bottom-color: transparent;\n}\n\n\n\n/* List View\n--------------------------------------------------------------------------------------------------*/\n\n/* possibly reusable */\n\n.fc-event-dot {\n\tdisplay: inline-block;\n\twidth: 10px;\n\theight: 10px;\n\tborder-radius: 5px;\n}\n\n/* view wrapper */\n\n.fc-rtl .fc-list-view {\n\tdirection: rtl; /* unlike core views, leverage browser RTL */\n}\n\n.fc-list-view {\n\tborder-width: 1px;\n\tborder-style: solid;\n}\n\n/* table resets */\n\n.fc .fc-list-table {\n\ttable-layout: auto; /* for shrinkwrapping cell content */\n}\n\n.fc-list-table td {\n\tborder-width: 1px 0 0;\n\tpadding: 8px 14px;\n}\n\n.fc-list-table tr:first-child td {\n\tborder-top-width: 0;\n}\n\n/* day headings with the list */\n\n.fc-list-heading {\n\tborder-bottom-width: 1px;\n}\n\n.fc-list-heading td {\n\tfont-weight: bold;\n}\n\n.fc-ltr .fc-list-heading-main { float: left; }\n.fc-ltr .fc-list-heading-alt { float: right; }\n\n.fc-rtl .fc-list-heading-main { float: right; }\n.fc-rtl .fc-list-heading-alt { float: left; }\n\n/* event list items */\n\n.fc-list-item.fc-has-url {\n\tcursor: pointer; /* whole row will be clickable */\n}\n\n.fc-list-item-marker,\n.fc-list-item-time {\n\twhite-space: nowrap;\n\twidth: 1px;\n}\n\n/* make the dot closer to the event title */\n.fc-ltr .fc-list-item-marker { padding-right: 0; }\n.fc-rtl .fc-list-item-marker { padding-left: 0; }\n\n.fc-list-item-title a {\n\t/* every event title cell has an <a> tag */\n\ttext-decoration: none;\n\tcolor: inherit;\n}\n\n.fc-list-item-title a[href]:hover {\n\t/* hover effect only on titles with hrefs */\n\ttext-decoration: underline;\n}\n\n/* message when no events */\n\n.fc-list-empty-wrap2 {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n}\n\n.fc-list-empty-wrap1 {\n\twidth: 100%;\n\theight: 100%;\n\tdisplay: table;\n}\n\n.fc-list-empty {\n\tdisplay: table-cell;\n\tvertical-align: middle;\n\ttext-align: center;\n}\n\n.fc-unthemed .fc-list-empty { /* theme will provide own background */\n\tbackground-color: #eee;\n}\n", ""]);
 
 /***/ }),
 /* 340 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)();
-exports.i(__webpack_require__(336), "");
-exports.push([module.i, "\n\n", ""]);
+exports = module.exports = __webpack_require__(9)();
+exports.push([module.i, "/**\n * Trumbowyg v2.7.2 - A lightweight WYSIWYG editor\n * Trumbowyg plugin stylesheet\n * ------------------------\n * @link http://alex-d.github.io/Trumbowyg\n * @license MIT\n * @author Alexandre Demode (Alex-D)\n *         Twitter : @AlexandreDemode\n *         Website : alex-d.fr\n */\n\n.trumbowyg-dropdown-foreColor,\n.trumbowyg-dropdown-backColor {\n  width: 276px;\n  padding: 7px 5px; }\n  .trumbowyg-dropdown-foreColor svg,\n  .trumbowyg-dropdown-backColor svg {\n    display: none !important; }\n  .trumbowyg-dropdown-foreColor button,\n  .trumbowyg-dropdown-backColor button {\n    display: block;\n    position: relative;\n    float: left;\n    text-indent: -9999px;\n    height: 20px;\n    width: 20px;\n    border: 1px solid #333;\n    padding: 0;\n    margin: 2px; }\n    .trumbowyg-dropdown-foreColor button:hover::after, .trumbowyg-dropdown-foreColor button:focus::after,\n    .trumbowyg-dropdown-backColor button:hover::after,\n    .trumbowyg-dropdown-backColor button:focus::after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      top: -5px;\n      left: -5px;\n      height: 27px;\n      width: 27px;\n      background: inherit;\n      border: 1px solid #FFF;\n      box-shadow: #000 0 0 2px;\n      z-index: 10; }\n", ""]);
 
 /***/ }),
 /* 341 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+/***/ }),
+/* 342 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+/***/ }),
+/* 343 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)();
+exports.push([module.i, "\n.progress-container[data-v-40c190f0]{\r\n    width:100%;\r\n    position:relative;\r\n    padding-top: 15px;\n}\n.progress-bar[data-v-40c190f0] {\r\n  height: 20px;\r\n  border: 1px solid #3cba54;\r\n  border-radius: 3px;\r\n  background-image: \r\n    repeating-linear-gradient(\r\n      -45deg,\r\n      #3cba54,\r\n      #3cba54 11px,\r\n      #f4c20d 10px,\r\n      #f4c20d 20px /* determines size */\r\n    );\r\n  background-size: 28px 28px;\r\n  -webkit-animation: move .5s linear infinite;\r\n          animation: move .5s linear infinite;\r\n  padding:0;\r\n  margin: 0;\n}\n.inner[data-v-40c190f0] {\r\n    position: absolute;\n}\n@-webkit-keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\n@keyframes move {\n0% {\r\n    background-position: 0 0;\n}\n100% {\r\n    background-position: 28px 0;\n}\n}\r\n", ""]);
+
+/***/ }),
+/* 344 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)();
+exports.i(__webpack_require__(339), "");
+exports.push([module.i, "\n\n", ""]);
+
+/***/ }),
+/* 345 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52326,15 +52813,15 @@ var has = __webpack_require__(174);
 var toStr = Object.prototype.toString;
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
 
-var $isNaN = __webpack_require__(193);
-var $isFinite = __webpack_require__(192);
+var $isNaN = __webpack_require__(194);
+var $isFinite = __webpack_require__(193);
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
-var assign = __webpack_require__(191);
-var sign = __webpack_require__(195);
-var mod = __webpack_require__(194);
-var isPrimitive = __webpack_require__(345);
-var toPrimitive = __webpack_require__(347);
+var assign = __webpack_require__(192);
+var sign = __webpack_require__(196);
+var mod = __webpack_require__(195);
+var isPrimitive = __webpack_require__(349);
+var toPrimitive = __webpack_require__(351);
 var parseInteger = parseInt;
 var bind = __webpack_require__(136);
 var arraySlice = bind.call(Function.call, Array.prototype.slice);
@@ -52361,9 +52848,9 @@ var trim = function (value) {
 	return replace(value, trimRegex, '');
 };
 
-var ES5 = __webpack_require__(343);
+var ES5 = __webpack_require__(347);
 
-var hasRegExpMatcher = __webpack_require__(354);
+var hasRegExpMatcher = __webpack_require__(358);
 
 // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-abstract-operations
 var ES6 = assign(assign({}, ES5), {
@@ -52786,14 +53273,14 @@ module.exports = ES6;
 
 
 /***/ }),
-/* 342 */
+/* 346 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ES2015 = __webpack_require__(341);
-var assign = __webpack_require__(191);
+var ES2015 = __webpack_require__(345);
+var assign = __webpack_require__(192);
 
 var ES2016 = assign(assign({}, ES2015), {
 	// https://github.com/tc39/ecma262/pull/60
@@ -52809,20 +53296,20 @@ module.exports = ES2016;
 
 
 /***/ }),
-/* 343 */
+/* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $isNaN = __webpack_require__(193);
-var $isFinite = __webpack_require__(192);
+var $isNaN = __webpack_require__(194);
+var $isFinite = __webpack_require__(193);
 
-var sign = __webpack_require__(195);
-var mod = __webpack_require__(194);
+var sign = __webpack_require__(196);
+var mod = __webpack_require__(195);
 
 var IsCallable = __webpack_require__(175);
-var toPrimitive = __webpack_require__(346);
+var toPrimitive = __webpack_require__(350);
 
 var has = __webpack_require__(174);
 
@@ -53052,17 +53539,17 @@ module.exports = ES5;
 
 
 /***/ }),
-/* 344 */
+/* 348 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(342);
+module.exports = __webpack_require__(346);
 
 
 /***/ }),
-/* 345 */
+/* 349 */
 /***/ (function(module, exports) {
 
 module.exports = function isPrimitive(value) {
@@ -53071,7 +53558,7 @@ module.exports = function isPrimitive(value) {
 
 
 /***/ }),
-/* 346 */
+/* 350 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53079,7 +53566,7 @@ module.exports = function isPrimitive(value) {
 
 var toStr = Object.prototype.toString;
 
-var isPrimitive = __webpack_require__(196);
+var isPrimitive = __webpack_require__(197);
 
 var isCallable = __webpack_require__(175);
 
@@ -53115,7 +53602,7 @@ module.exports = function ToPrimitive(input, PreferredType) {
 
 
 /***/ }),
-/* 347 */
+/* 351 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53123,10 +53610,10 @@ module.exports = function ToPrimitive(input, PreferredType) {
 
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
 
-var isPrimitive = __webpack_require__(196);
+var isPrimitive = __webpack_require__(197);
 var isCallable = __webpack_require__(175);
-var isDate = __webpack_require__(353);
-var isSymbol = __webpack_require__(355);
+var isDate = __webpack_require__(357);
+var isSymbol = __webpack_require__(359);
 
 var ordinaryToPrimitive = function OrdinaryToPrimitive(O, hint) {
 	if (typeof O === 'undefined' || O === null) {
@@ -53196,13 +53683,13 @@ module.exports = function ToPrimitive(input, PreferredType) {
 
 
 /***/ }),
-/* 348 */
+/* 352 */
 /***/ (function(module, exports) {
 
 module.exports = "/fonts/vendor/trumbowyg/dist/ui/icons.svg?4ac194c41f46a5ad9a3d9e380894c5eb";
 
 /***/ }),
-/* 349 */
+/* 353 */
 /***/ (function(module, exports) {
 
 
@@ -53230,7 +53717,7 @@ module.exports = function forEach (obj, fn, ctx) {
 
 
 /***/ }),
-/* 350 */
+/* 354 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -53241,7 +53728,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 (function(factory) {
 	if (true) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(351), __webpack_require__(0) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(355), __webpack_require__(0) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -71079,7 +71566,7 @@ return FC; // export for Node/CommonJS
 });
 
 /***/ }),
-/* 351 */
+/* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -81339,7 +81826,7 @@ return jQuery;
 
 
 /***/ }),
-/* 352 */
+/* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -81398,7 +81885,7 @@ module.exports = function bind(that) {
 
 
 /***/ }),
-/* 353 */
+/* 357 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -81425,7 +81912,7 @@ module.exports = function isDateObject(value) {
 
 
 /***/ }),
-/* 354 */
+/* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -81471,7 +81958,7 @@ module.exports = function isRegex(value) {
 
 
 /***/ }),
-/* 355 */
+/* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -81505,7 +81992,7 @@ if (hasSymbols) {
 
 
 /***/ }),
-/* 356 */
+/* 360 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -83766,7 +84253,7 @@ module.exports = defaultsDeep;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(8)(module)))
 
 /***/ }),
-/* 357 */
+/* 361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -100858,7 +101345,7 @@ module.exports = defaultsDeep;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(8)(module)))
 
 /***/ }),
-/* 358 */
+/* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -100868,7 +101355,7 @@ module.exports = defaultsDeep;
 var has = Object.prototype.hasOwnProperty;
 var toStr = Object.prototype.toString;
 var slice = Array.prototype.slice;
-var isArgs = __webpack_require__(359);
+var isArgs = __webpack_require__(363);
 var isEnumerable = Object.prototype.propertyIsEnumerable;
 var hasDontEnumBug = !isEnumerable.call({ toString: null }, 'toString');
 var hasProtoEnumBug = isEnumerable.call(function () {}, 'prototype');
@@ -101005,7 +101492,7 @@ module.exports = keysShim;
 
 
 /***/ }),
-/* 359 */
+/* 363 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -101029,18 +101516,18 @@ module.exports = function isArguments(value) {
 
 
 /***/ }),
-/* 360 */
+/* 364 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var bind = __webpack_require__(136);
-var define = __webpack_require__(190);
+var define = __webpack_require__(191);
 
-var implementation = __webpack_require__(197);
-var getPolyfill = __webpack_require__(198);
-var shim = __webpack_require__(361);
+var implementation = __webpack_require__(198);
+var getPolyfill = __webpack_require__(199);
+var shim = __webpack_require__(365);
 
 var bound = bind.call(Function.call, getPolyfill());
 
@@ -101054,7 +101541,7 @@ module.exports = bound;
 
 
 /***/ }),
-/* 361 */
+/* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -101062,8 +101549,8 @@ module.exports = bound;
 
 var requirePromise = __webpack_require__(179);
 
-var getPolyfill = __webpack_require__(198);
-var define = __webpack_require__(190);
+var getPolyfill = __webpack_require__(199);
+var define = __webpack_require__(191);
 
 module.exports = function shimPromiseFinally() {
 	requirePromise();
@@ -101079,7 +101566,7 @@ module.exports = function shimPromiseFinally() {
 
 
 /***/ }),
-/* 362 */
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
@@ -102580,7 +103067,259 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
 
 
 /***/ }),
-/* 363 */
+/* 367 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+var stylesInDom = {},
+	memoize = function(fn) {
+		var memo;
+		return function () {
+			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+			return memo;
+		};
+	},
+	isOldIE = memoize(function() {
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+	}),
+	getHeadElement = memoize(function () {
+		return document.head || document.getElementsByTagName("head")[0];
+	}),
+	singletonElement = null,
+	singletonCounter = 0,
+	styleElementsInsertedAtTop = [];
+
+module.exports = function(list, options) {
+	if(typeof DEBUG !== "undefined" && DEBUG) {
+		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the bottom of <head>.
+	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+	var styles = listToStyles(list);
+	addStylesToDom(styles, options);
+
+	return function update(newList) {
+		var mayRemove = [];
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+		if(newList) {
+			var newStyles = listToStyles(newList);
+			addStylesToDom(newStyles, options);
+		}
+		for(var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+			if(domStyle.refs === 0) {
+				for(var j = 0; j < domStyle.parts.length; j++)
+					domStyle.parts[j]();
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+}
+
+function addStylesToDom(styles, options) {
+	for(var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+		if(domStyle) {
+			domStyle.refs++;
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles(list) {
+	var styles = [];
+	var newStyles = {};
+	for(var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+		if(!newStyles[id])
+			styles.push(newStyles[id] = {id: id, parts: [part]});
+		else
+			newStyles[id].parts.push(part);
+	}
+	return styles;
+}
+
+function insertStyleElement(options, styleElement) {
+	var head = getHeadElement();
+	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+	if (options.insertAt === "top") {
+		if(!lastStyleElementInsertedAtTop) {
+			head.insertBefore(styleElement, head.firstChild);
+		} else if(lastStyleElementInsertedAtTop.nextSibling) {
+			head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			head.appendChild(styleElement);
+		}
+		styleElementsInsertedAtTop.push(styleElement);
+	} else if (options.insertAt === "bottom") {
+		head.appendChild(styleElement);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement(styleElement) {
+	styleElement.parentNode.removeChild(styleElement);
+	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+	if(idx >= 0) {
+		styleElementsInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement(options) {
+	var styleElement = document.createElement("style");
+	styleElement.type = "text/css";
+	insertStyleElement(options, styleElement);
+	return styleElement;
+}
+
+function createLinkElement(options) {
+	var linkElement = document.createElement("link");
+	linkElement.rel = "stylesheet";
+	insertStyleElement(options, linkElement);
+	return linkElement;
+}
+
+function addStyle(obj, options) {
+	var styleElement, update, remove;
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+		styleElement = singletonElement || (singletonElement = createStyleElement(options));
+		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+	} else if(obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function") {
+		styleElement = createLinkElement(options);
+		update = updateLink.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+			if(styleElement.href)
+				URL.revokeObjectURL(styleElement.href);
+		};
+	} else {
+		styleElement = createStyleElement(options);
+		update = applyToTag.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle(newObj) {
+		if(newObj) {
+			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+				return;
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag(styleElement, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = styleElement.childNodes;
+		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+		if (childNodes.length) {
+			styleElement.insertBefore(cssNode, childNodes[index]);
+		} else {
+			styleElement.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag(styleElement, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		styleElement.setAttribute("media", media)
+	}
+
+	if(styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = css;
+	} else {
+		while(styleElement.firstChild) {
+			styleElement.removeChild(styleElement.firstChild);
+		}
+		styleElement.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink(linkElement, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	if(sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = linkElement.href;
+
+	linkElement.href = URL.createObjectURL(blob);
+
+	if(oldSrc)
+		URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -104270,13 +105009,13 @@ jQuery.trumbowyg = {
 
 
 /***/ }),
-/* 364 */,
-/* 365 */
+/* 369 */,
+/* 370 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FullCalendar_vue__ = __webpack_require__(367);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FullCalendar_vue__ = __webpack_require__(372);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FullCalendar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_FullCalendar_vue__);
 
 
@@ -104288,1567 +105027,878 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 366 */
+/* 371 */
 /***/ (function(module, exports, __webpack_require__) {
 
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(true)
-		module.exports = factory(__webpack_require__(135));
-	else if(typeof define === 'function' && define.amd)
-		define(["vue"], factory);
-	else if(typeof exports === 'object')
-		exports["vue-js-modal"] = factory(require("vue"));
-	else
-		root["vue-js-modal"] = factory(root["vue"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_22__) {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/dist/";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  // inject cssModules
-  if (cssModules) {
-    var computed = options.computed || (options.computed = {})
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(21)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
+!function(root, factory) {
+     true ? module.exports = factory(__webpack_require__(135)) : "function" == typeof define && define.amd ? define([ "vue" ], factory) : "object" == typeof exports ? exports["vue-js-modal"] = factory(require("vue")) : root["vue-js-modal"] = factory(root.vue);
+}(this, function(__WEBPACK_EXTERNAL_MODULE_22__) {
+    return function(modules) {
+        function __webpack_require__(moduleId) {
+            if (installedModules[moduleId]) return installedModules[moduleId].exports;
+            var module = installedModules[moduleId] = {
+                i: moduleId,
+                l: !1,
+                exports: {}
+            };
+            return modules[moduleId].call(module.exports, module, module.exports, __webpack_require__), 
+            module.l = !0, module.exports;
         }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Modal = __webpack_require__(6);
-
-var _Modal2 = _interopRequireDefault(_Modal);
-
-var _Dialog = __webpack_require__(5);
-
-var _Dialog2 = _interopRequireDefault(_Dialog);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var defaultComponentName = 'modal';
-
-var Plugin = {
-  install: function install(Vue) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    if (this.installed) {
-      return;
-    }
-
-    this.installed = true;
-    this.event = new Vue();
-
-    Vue.prototype.$modal = {
-      show: function show(name, params) {
-        Plugin.event.$emit('toggle', name, true, params);
-      },
-      hide: function hide(name, params) {
-        Plugin.event.$emit('toggle', name, false, params);
-      },
-      toggle: function toggle(name, params) {
-        Plugin.event.$emit('toggle', name, undefined, params);
-      }
-    };
-
-    var componentName = options.componentName || defaultComponentName;
-    Vue.component(componentName, _Modal2.default);
-
-    if (options.dialog) {
-      Vue.component('v-dialog', _Dialog2.default);
-    }
-  }
-};
-
-exports.default = Plugin;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var inRange = exports.inRange = function inRange(from, to, value) {
-  if (value < from) {
-    return from;
-  }
-
-  if (value > to) {
-    return to;
-  }
-
-  return value;
-};
-
-exports.default = { inRange: inRange };
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(18)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(7),
-  /* template */
-  __webpack_require__(15),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Dialog.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dialog.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-18cd6db4", Component.options)
-  } else {
-    hotAPI.reload("data-v-18cd6db4", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(19)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(8),
-  /* template */
-  __webpack_require__(16),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Modal.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-40dd3b1e", Component.options)
-  } else {
-    hotAPI.reload("data-v-40dd3b1e", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  name: 'Dialog',
-  data: function data() {
-    return {
-      params: {},
-      defaultButtons: [{ title: 'CLOSE' }]
-    };
-  },
-
-  computed: {
-    buttons: function buttons() {
-      return this.params.buttons || this.defaultButtons;
-    },
-    buttonStyle: function buttonStyle() {
-      return {
-        flex: '1 1 ' + 100 / this.buttons.length + '%'
-      };
-    }
-  },
-  methods: {
-    beforeOpened: function beforeOpened(event) {
-      this.params = event.params || {};
-    },
-    beforeClosed: function beforeClosed() {
-      this.params = {};
-    },
-    click: function click(i, event) {
-      var button = this.buttons[i];
-
-      if (typeof button.handler === 'function') {
-        return button.handler(i, event);
-      } else {
-        this.$modal.hide('dialog');
-      }
-    }
-  }
-};
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _vue = __webpack_require__(22);
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _index = __webpack_require__(3);
-
-var _index2 = _interopRequireDefault(_index);
-
-var _Resizer = __webpack_require__(14);
-
-var _Resizer2 = _interopRequireDefault(_Resizer);
-
-var _util = __webpack_require__(4);
-
-var _parser = __webpack_require__(10);
-
-var _parser2 = _interopRequireDefault(_parser);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  name: 'VueJsModal',
-  props: {
-    name: {
-      required: true,
-      type: String
-    },
-    delay: {
-      type: Number,
-      default: 0
-    },
-    resizable: {
-      type: Boolean,
-      default: false
-    },
-    adaptive: {
-      type: Boolean,
-      default: false
-    },
-    draggable: {
-      type: [Boolean, String],
-      default: false
-    },
-    scrollable: {
-      type: Boolean,
-      default: false
-    },
-    reset: {
-      type: Boolean,
-      default: false
-    },
-    transition: {
-      type: String
-    },
-    clickToClose: {
-      type: Boolean,
-      default: true
-    },
-    classes: {
-      type: [String, Array],
-      default: 'v--modal'
-    },
-    minWidth: {
-      type: Number,
-      default: 0,
-      validator: function validator(value) {
-        return value >= 0;
-      }
-    },
-    minHeight: {
-      type: Number,
-      default: 0,
-      validator: function validator(value) {
-        return value >= 0;
-      }
-    },
-    width: {
-      type: [Number, String],
-      default: 600,
-      validator: function validator(value) {
-        if (typeof value === 'string') {
-          var width = (0, _parser2.default)(value);
-          return (width.type === '%' || width.type === 'px') && width.value > 0;
-        }
-
-        return value >= 0;
-      }
-    },
-    height: {
-      type: [Number, String],
-      default: 300,
-      validator: function validator(value) {
-        if (typeof value === 'string') {
-          if (value === 'auto') {
-            return true;
-          }
-
-          var height = (0, _parser2.default)(value);
-          return (height.type === '%' || height.type === 'px') && height.value > 0;
-        }
-
-        return value >= 0;
-      }
-    },
-    pivotX: {
-      type: Number,
-      default: 0.5,
-      validator: function validator(value) {
-        return value >= 0 && value <= 1;
-      }
-    },
-    pivotY: {
-      type: Number,
-      default: 0.5,
-      validator: function validator(value) {
-        return value >= 0 && value <= 1;
-      }
-    }
-  },
-  components: {
-    Resizer: _Resizer2.default
-  },
-  data: function data() {
-    return {
-      visible: false,
-
-      visibility: {
-        modal: false,
-        overlay: false
-      },
-
-      shift: {
-        left: 0,
-        top: 0
-      },
-
-      modal: {
-        width: 0,
-        widthType: 'px',
-        height: 0,
-        heightType: 'px'
-      },
-
-      window: {
-        width: 0,
-        height: 0
-      }
-    };
-  },
-
-  watch: {
-    visible: function visible(value) {
-      var _this = this;
-
-      if (value) {
-        this.visibility.overlay = true;
-
-        setTimeout(function () {
-          _this.visibility.modal = true;
-          _this.$nextTick(function () {
-            _this.addDraggableListeners();
-          });
-        }, this.delay);
-      } else {
-        this.visibility.modal = false;
-
-        setTimeout(function () {
-          _this.visibility.overlay = false;
-          _this.$nextTick(function () {
-            _this.removeDraggableListeners();
-          });
-        }, this.delay);
-      }
-    }
-  },
-  created: function created() {
-    this.setInitialSize();
-  },
-  beforeMount: function beforeMount() {
-    var _this2 = this;
-
-    _index2.default.event.$on('toggle', function (name, state, params) {
-      if (name === _this2.name) {
-        if (typeof state === 'undefined') {
-          state = !_this2.visible;
-        }
-
-        _this2.toggle(state, params);
-      }
-    });
-
-    window.addEventListener('resize', this.onWindowResize);
-    this.onWindowResize();
-
-    if (this.scrollable && !this.isAutoHeight) {
-      console.warn('Modal "' + this.name + '" has scrollable flag set to true ' + ('but height is not "auto" (' + this.height + ')'));
-    }
-  },
-  beforeDestroy: function beforeDestroy() {
-    window.removeEventListener('resize', this.onWindowResize);
-  },
-
-  computed: {
-    isAutoHeight: function isAutoHeight() {
-      return this.modal.heightType === 'auto';
-    },
-    position: function position() {
-      var window = this.window,
-          shift = this.shift,
-          pivotX = this.pivotX,
-          pivotY = this.pivotY,
-          trueModalWidth = this.trueModalWidth,
-          trueModalHeight = this.trueModalHeight;
-
-
-      var maxLeft = window.width - trueModalWidth;
-      var maxTop = window.height - trueModalHeight;
-
-      var minTop = this.scrollable ? Number.NEGATIVE_INFINITY : 0;
-
-      var left = shift.left + pivotX * maxLeft;
-      var top = shift.top + pivotY * maxTop;
-
-      return {
-        left: (0, _util.inRange)(0, maxLeft, left),
-        top: (0, _util.inRange)(minTop, maxTop, top)
-      };
-    },
-    trueModalWidth: function trueModalWidth() {
-      var window = this.window,
-          modal = this.modal,
-          adaptive = this.adaptive,
-          minWidth = this.minWidth;
-
-
-      var value = modal.widthType === '%' ? window.width / 100 * modal.width : modal.width;
-
-      return adaptive ? (0, _util.inRange)(minWidth, window.width, value) : value;
-    },
-    trueModalHeight: function trueModalHeight() {
-      var window = this.window,
-          modal = this.modal,
-          isAutoHeight = this.isAutoHeight,
-          adaptive = this.adaptive;
-
-
-      var value = modal.heightType === '%' ? window.height / 100 * modal.height : modal.height;
-
-      if (isAutoHeight) {
-        return 0;
-      }
-
-      return adaptive ? (0, _util.inRange)(this.minHeight, this.window.height, value) : value;
-    },
-    overlayClass: function overlayClass() {
-      return {
-        'v--modal-overlay': true,
-        'scrollable': this.scrollable && this.isAutoHeight
-      };
-    },
-    modalClass: function modalClass() {
-      return ['v--modal-box', this.classes];
-    },
-    modalStyle: function modalStyle() {
-      return {
-        top: this.position.top + 'px',
-        left: this.position.left + 'px',
-        width: this.trueModalWidth + 'px',
-        height: this.isAutoHeight ? 'auto' : this.trueModalHeight + 'px'
-      };
-    }
-  },
-  methods: {
-    setInitialSize: function setInitialSize() {
-      var modal = this.modal;
-
-      var width = (0, _parser2.default)(this.width);
-      var height = (0, _parser2.default)(this.height);
-
-      modal.width = width.value;
-      modal.widthType = width.type;
-      modal.height = height.value;
-      modal.heightType = height.type;
-    },
-    onWindowResize: function onWindowResize() {
-      this.window.width = document.body.clientWidth;
-      this.window.height = window.innerHeight;
-    },
-    genEventObject: function genEventObject(params) {
-      var data = {
-        name: this.name,
-        timestamp: Date.now(),
-        canceled: false,
-        ref: this.$refs.modal
-      };
-
-      return _vue2.default.util.extend(data, params || {});
-    },
-    onModalResize: function onModalResize(event) {
-      this.modal.widthType = 'px';
-      this.modal.width = event.size.width;
-
-      this.modal.heightType = 'px';
-      this.modal.height = event.size.height;
-
-      var size = this.modal.size;
-
-      var resizeEvent = this.genEventObject({ size: size });
-
-      this.$emit('resize', resizeEvent);
-    },
-    toggle: function toggle(state, params) {
-      var reset = this.reset,
-          scrollable = this.scrollable,
-          visible = this.visible;
-
-
-      var beforeEventName = visible ? 'before-close' : 'before-open';
-
-      var afterEventName = visible ? 'closed' : 'opened';
-
-      if (beforeEventName === 'before-open') {
-        if (reset) {
-          this.setInitialSize();
-          this.shift.left = 0;
-          this.shift.top = 0;
-        }
-
-        if (scrollable) {
-          document.body.classList.add('v--modal-block-scroll');
-        }
-      }
-
-      if (beforeEventName === 'before-close') {
-        if (scrollable) {
-          document.body.classList.remove('v--modal-block-scroll');
-        }
-      }
-
-      var stopEventExecution = false;
-
-      var stop = function stop() {
-        stopEventExecution = true;
-      };
-      var beforeEvent = this.genEventObject({ stop: stop, state: state, params: params });
-
-      this.$emit(beforeEventName, beforeEvent);
-
-      if (!stopEventExecution) {
-        var afterEvent = this.genEventObject({ state: state, params: params });
-
-        this.visible = state;
-        this.$emit(afterEventName, afterEvent);
-      }
-    },
-    getDraggableElement: function getDraggableElement() {
-      var selector = typeof this.draggable !== 'string' ? '.v--modal-box' : this.draggable;
-
-      if (selector) {
-        var handler = this.$refs.overlay.querySelector(selector);
-        if (handler) {
-          return handler;
-        }
-      }
-    },
-    onBackgroundClick: function onBackgroundClick() {
-      if (this.clickToClose) {
-        this.toggle(false);
-      }
-    },
-    addDraggableListeners: function addDraggableListeners() {
-      var _this3 = this;
-
-      if (!this.draggable) {
-        return;
-      }
-
-      var dragger = this.getDraggableElement();
-
-      if (dragger) {
-        var startX = 0;
-        var startY = 0;
-        var cachedShiftX = 0;
-        var cachedShiftY = 0;
-
-        var getPosition = function getPosition(event) {
-          return event.touches && event.touches.length > 0 ? event.touches[0] : event;
+        var installedModules = {};
+        return __webpack_require__.m = modules, __webpack_require__.c = installedModules, 
+        __webpack_require__.i = function(value) {
+            return value;
+        }, __webpack_require__.d = function(exports, name, getter) {
+            __webpack_require__.o(exports, name) || Object.defineProperty(exports, name, {
+                configurable: !1,
+                enumerable: !0,
+                get: getter
+            });
+        }, __webpack_require__.n = function(module) {
+            var getter = module && module.__esModule ? function() {
+                return module.default;
+            } : function() {
+                return module;
+            };
+            return __webpack_require__.d(getter, "a", getter), getter;
+        }, __webpack_require__.o = function(object, property) {
+            return Object.prototype.hasOwnProperty.call(object, property);
+        }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 3);
+    }([ function(module, exports) {
+        module.exports = function() {
+            var list = [];
+            return list.toString = function() {
+                for (var result = [], i = 0; i < this.length; i++) {
+                    var item = this[i];
+                    item[2] ? result.push("@media " + item[2] + "{" + item[1] + "}") : result.push(item[1]);
+                }
+                return result.join("");
+            }, list.i = function(modules, mediaQuery) {
+                "string" == typeof modules && (modules = [ [ null, modules, "" ] ]);
+                for (var alreadyImportedModules = {}, i = 0; i < this.length; i++) {
+                    var id = this[i][0];
+                    "number" == typeof id && (alreadyImportedModules[id] = !0);
+                }
+                for (i = 0; i < modules.length; i++) {
+                    var item = modules[i];
+                    "number" == typeof item[0] && alreadyImportedModules[item[0]] || (mediaQuery && !item[2] ? item[2] = mediaQuery : mediaQuery && (item[2] = "(" + item[2] + ") and (" + mediaQuery + ")"), 
+                    list.push(item));
+                }
+            }, list;
         };
-
-        var mousedown = function mousedown(event) {
-          var _getPosition = getPosition(event),
-              clientX = _getPosition.clientX,
-              clientY = _getPosition.clientY;
-
-          document.addEventListener('mousemove', _mousemove);
-          document.addEventListener('mouseup', _mouseup);
-
-          document.addEventListener('touchmove', _mousemove);
-          document.addEventListener('touchend', _mouseup);
-
-          startX = clientX;
-          startY = clientY;
-          cachedShiftX = _this3.shift.left;
-          cachedShiftY = _this3.shift.top;
-
-          event.preventDefault();
+    }, function(module, exports) {
+        module.exports = function(rawScriptExports, compiledTemplate, scopeId, cssModules) {
+            var esModule, scriptExports = rawScriptExports = rawScriptExports || {}, type = typeof rawScriptExports.default;
+            "object" !== type && "function" !== type || (esModule = rawScriptExports, scriptExports = rawScriptExports.default);
+            var options = "function" == typeof scriptExports ? scriptExports.options : scriptExports;
+            if (compiledTemplate && (options.render = compiledTemplate.render, options.staticRenderFns = compiledTemplate.staticRenderFns), 
+            scopeId && (options._scopeId = scopeId), cssModules) {
+                var computed = options.computed || (options.computed = {});
+                Object.keys(cssModules).forEach(function(key) {
+                    var module = cssModules[key];
+                    computed[key] = function() {
+                        return module;
+                    };
+                });
+            }
+            return {
+                esModule: esModule,
+                exports: scriptExports,
+                options: options
+            };
         };
-
-        var _mousemove = function _mousemove(event) {
-          var _getPosition2 = getPosition(event),
-              clientX = _getPosition2.clientX,
-              clientY = _getPosition2.clientY;
-
-          _this3.shift.left = cachedShiftX + clientX - startX;
-          _this3.shift.top = cachedShiftY + clientY - startY;
-          event.preventDefault();
+    }, function(module, exports, __webpack_require__) {
+        function addStylesToDom(styles) {
+            for (var i = 0; i < styles.length; i++) {
+                var item = styles[i], domStyle = stylesInDom[item.id];
+                if (domStyle) {
+                    domStyle.refs++;
+                    for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j](item.parts[j]);
+                    for (;j < item.parts.length; j++) domStyle.parts.push(addStyle(item.parts[j]));
+                    domStyle.parts.length > item.parts.length && (domStyle.parts.length = item.parts.length);
+                } else {
+                    for (var parts = [], j = 0; j < item.parts.length; j++) parts.push(addStyle(item.parts[j]));
+                    stylesInDom[item.id] = {
+                        id: item.id,
+                        refs: 1,
+                        parts: parts
+                    };
+                }
+            }
+        }
+        function createStyleElement() {
+            var styleElement = document.createElement("style");
+            return styleElement.type = "text/css", head.appendChild(styleElement), styleElement;
+        }
+        function addStyle(obj) {
+            var update, remove, styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]');
+            if (styleElement) {
+                if (isProduction) return noop;
+                styleElement.parentNode.removeChild(styleElement);
+            }
+            if (isOldIE) {
+                var styleIndex = singletonCounter++;
+                styleElement = singletonElement || (singletonElement = createStyleElement()), update = applyToSingletonTag.bind(null, styleElement, styleIndex, !1), 
+                remove = applyToSingletonTag.bind(null, styleElement, styleIndex, !0);
+            } else styleElement = createStyleElement(), update = applyToTag.bind(null, styleElement), 
+            remove = function() {
+                styleElement.parentNode.removeChild(styleElement);
+            };
+            return update(obj), function(newObj) {
+                if (newObj) {
+                    if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) return;
+                    update(obj = newObj);
+                } else remove();
+            };
+        }
+        function applyToSingletonTag(styleElement, index, remove, obj) {
+            var css = remove ? "" : obj.css;
+            if (styleElement.styleSheet) styleElement.styleSheet.cssText = replaceText(index, css); else {
+                var cssNode = document.createTextNode(css), childNodes = styleElement.childNodes;
+                childNodes[index] && styleElement.removeChild(childNodes[index]), childNodes.length ? styleElement.insertBefore(cssNode, childNodes[index]) : styleElement.appendChild(cssNode);
+            }
+        }
+        function applyToTag(styleElement, obj) {
+            var css = obj.css, media = obj.media, sourceMap = obj.sourceMap;
+            if (media && styleElement.setAttribute("media", media), sourceMap && (css += "\n/*# sourceURL=" + sourceMap.sources[0] + " */", 
+            css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */"), 
+            styleElement.styleSheet) styleElement.styleSheet.cssText = css; else {
+                for (;styleElement.firstChild; ) styleElement.removeChild(styleElement.firstChild);
+                styleElement.appendChild(document.createTextNode(css));
+            }
+        }
+        var hasDocument = "undefined" != typeof document;
+        if ("undefined" != typeof DEBUG && DEBUG && !hasDocument) throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");
+        var listToStyles = __webpack_require__(21), stylesInDom = {}, head = hasDocument && (document.head || document.getElementsByTagName("head")[0]), singletonElement = null, singletonCounter = 0, isProduction = !1, noop = function() {}, isOldIE = "undefined" != typeof navigator && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase());
+        module.exports = function(parentId, list, _isProduction) {
+            isProduction = _isProduction;
+            var styles = listToStyles(parentId, list);
+            return addStylesToDom(styles), function(newList) {
+                for (var mayRemove = [], i = 0; i < styles.length; i++) {
+                    var item = styles[i], domStyle = stylesInDom[item.id];
+                    domStyle.refs--, mayRemove.push(domStyle);
+                }
+                newList ? (styles = listToStyles(parentId, newList), addStylesToDom(styles)) : styles = [];
+                for (var i = 0; i < mayRemove.length; i++) {
+                    var domStyle = mayRemove[i];
+                    if (0 === domStyle.refs) {
+                        for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+                        delete stylesInDom[domStyle.id];
+                    }
+                }
+            };
         };
-
-        var _mouseup = function _mouseup(event) {
-          document.removeEventListener('mousemove', _mousemove);
-          document.removeEventListener('mouseup', _mouseup);
-
-          document.removeEventListener('touchmove', _mousemove);
-          document.removeEventListener('touchend', _mouseup);
-
-          event.preventDefault();
-        };
-
-        dragger.addEventListener('mousedown', mousedown);
-        dragger.addEventListener('touchstart', mousedown);
-      }
-    },
-    removeDraggableListeners: function removeDraggableListeners() {}
-  }
-};
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _util = __webpack_require__(4);
-
-exports.default = {
-  name: 'VueJsModalResizer',
-  props: {
-    minHeight: {
-      type: Number,
-      default: 0
-    },
-    minWidth: {
-      type: Number,
-      default: 0
-    } },
-  data: function data() {
-    return {
-      clicked: false,
-      size: {}
-    };
-  },
-  mounted: function mounted() {
-    this.$el.addEventListener('mousedown', this.start, false);
-  },
-
-  computed: {
-    className: function className() {
-      return { 'vue-modal-resizer': true, 'clicked': this.clicked };
-    }
-  },
-  methods: {
-    start: function start(event) {
-      this.clicked = true;
-
-      window.addEventListener('mousemove', this.mousemove, false);
-      window.addEventListener('mouseup', this.stop, false);
-
-      event.stopPropagation();
-      event.preventDefault();
-    },
-    stop: function stop() {
-      this.clicked = false;
-
-      window.removeEventListener('mousemove', this.mousemove, false);
-      window.removeEventListener('mouseup', this.stop, false);
-
-      this.$emit('resize-stop', {
-        element: this.$el.parentElement,
-        size: this.size
-      });
-    },
-    mousemove: function mousemove(event) {
-      this.resize(event);
-    },
-    resize: function resize(event) {
-      var el = this.$el.parentElement;
-
-      if (el) {
-        var width = event.clientX - el.offsetLeft;
-        var height = event.clientY - el.offsetTop;
-
-        width = (0, _util.inRange)(this.minWidth, window.innerWidth, width);
-        height = (0, _util.inRange)(this.minHeight, window.innerHeight, height);
-
-        this.size = { width: width, height: height };
-        el.style.width = width + 'px';
-        el.style.height = height + 'px';
-
-        this.$emit('resize', {
-          element: el,
-          size: this.size
+        var replaceText = function() {
+            var textStore = [];
+            return function(index, replacement) {
+                return textStore[index] = replacement, textStore.filter(Boolean).join("\n");
+            };
+        }();
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        function _interopRequireDefault(obj) {
+            return obj && obj.__esModule ? obj : {
+                default: obj
+            };
+        }
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
         });
-      }
-    }
-  }
-};
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var floatRegexp = '[-+]?[0-9]*.?[0-9]+';
-
-var types = [{
-  name: 'px',
-  regexp: new RegExp('^' + floatRegexp + 'px$')
-}, {
-  name: '%',
-  regexp: new RegExp('^' + floatRegexp + '%$')
-}, {
-  name: 'px',
-  regexp: new RegExp('^' + floatRegexp + '$')
-}];
-
-var getType = function getType(value) {
-  if (value === 'auto') {
-    return {
-      type: value,
-      value: 0
-    };
-  }
-
-  for (var i = 0; i < types.length; i++) {
-    var type = types[i];
-    if (type.regexp.test(value)) {
-      return {
-        type: type.name,
-        value: parseFloat(value)
-      };
-    }
-  }
-
-  return {
-    type: '',
-    value: value
-  };
-};
-
-var parse = exports.parse = function parse(value) {
-  switch (typeof value === 'undefined' ? 'undefined' : _typeof(value)) {
-    case 'number':
-      return { type: 'px', value: value };
-    case 'string':
-      return getType(value);
-    default:
-      return { type: '', value: value };
-  }
-};
-
-exports.default = parse;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.vue-dialog {\n  font-size: 14px;\n}\n.vue-dialog div {\n  box-sizing: border-box;\n}\n.vue-dialog .dialog-flex {\n  width: 100%;\n  height: 100%;\n}\n.vue-dialog .dialog-content {\n  flex: 1 0 auto;\n  width: 100%;\n  padding: 15px;\n}\n.vue-dialog .dialog-c-title {\n  font-weight: 600;\n  padding-bottom: 15px;\n}\n.vue-dialog .dialog-c-text {\n}\n.vue-dialog .dialog-buttons {\n  display: flex;\n  flex: 0 1 auto;\n  width: 100%;\n  border-top: 1px solid #eee;\n  font-size: 12px;\n}\n.vue-dialog .dialog-buttons-none {\n  width: 100%;\n  padding-bottom: 15px;\n}\n.vue-dialog button {\n  background: transparent;\n  padding: 0;\n  margin: 0;\n  border: 0;\n  cursor: pointer;\n  box-sizing: border-box;\n  line-height: 44px;\n  height: 44px;\n\n/*  text-transform: uppercase; */\n/*  letter-spacing: 1px; */\n\n  color:inherit;\n  font:inherit;\n}\n.vue-dialog button:hover {\n  background: rgba(0, 0, 0, 0.01);\n}\n.vue-dialog button:active {\n  background: rgba(0, 0, 0, 0.025);\n}\n.vue-dialog button:not(:first-of-type) {\n  border-left: 1px solid #eee;\n}\n", "", {"version":3,"sources":["/./src/Dialog.vue?52df2bd4"],"names":[],"mappings":";AAwEA;EACA,gBAAA;CACA;AAEA;EACA,uBAAA;CACA;AAEA;EACA,YAAA;EACA,aAAA;CACA;AAEA;EACA,eAAA;EACA,YAAA;EACA,cAAA;CACA;AAEA;EACA,iBAAA;EACA,qBAAA;CACA;AAEA;CACA;AAEA;EACA,cAAA;EACA,eAAA;EACA,YAAA;EACA,2BAAA;EACA,gBAAA;CACA;AAEA;EACA,YAAA;EACA,qBAAA;CACA;AAEA;EACA,wBAAA;EACA,WAAA;EACA,UAAA;EACA,UAAA;EACA,gBAAA;EACA,uBAAA;EACA,kBAAA;EACA,aAAA;;AAEA,iCAAA;AACA,2BAAA;;EAEA,cAAA;EACA,aAAA;CACA;AAEA;EACA,gCAAA;CACA;AAEA;EACA,iCAAA;CACA;AAEA;EACA,4BAAA;CACA","file":"Dialog.vue","sourcesContent":["<template>\n  <modal name=\"dialog\"\n         :classes=\"['v--modal', 'vue-dialog', this.params.class]\"\n         :width=\"400\"\n         height=\"auto\"\n         :pivot-y=\"0.3\"\n         :adaptive=\"true\"\n         transition=\"fade\"\n         @before-open=\"beforeOpened\"\n         @before-close=\"beforeClosed\">\n      <div class=\"dialog-content\">\n        <div class=\"dialog-c-title\"\n             v-if=\"params.title\"\n             v-html=\"params.title || ''\"></div>\n        <div class=\"dialog-c-text\"\n             v-html=\"params.text || ''\"></div>\n      </div>\n      <div class=\"dialog-buttons\" v-if=\"buttons\">\n        <button v-for=\"(button, i) in buttons\"\n                :style=\"buttonStyle\"\n                :key=\"i\"\n                v-html=\"button.title\"\n                @click.stop=\"click(i, $event)\">\n          {{button.title}}\n        </button>\n      </div>\n      <div v-else class=\"dialog-buttons-none\"></div>\n  </modal>\n</template>\n<script>\n  export default {\n    name: 'Dialog',\n    data () {\n      return {\n        params: {},\n        defaultButtons: [{ title: 'CLOSE' }]\n      }\n    },\n    computed: {\n      buttons () {\n        return this.params.buttons || this.defaultButtons\n      },\n      /**\n       * Returns FLEX style with correct width for arbitrary number of\n       * buttons.\n       */\n      buttonStyle () {\n        return {\n          flex: `1 1 ${100 / this.buttons.length}%`\n        }\n      }\n    },\n    methods: {\n      beforeOpened (event) {\n        this.params = event.params || {}\n      },\n      beforeClosed () {\n        this.params = {}\n      },\n      click (i, event) {\n        let button = this.buttons[i]\n\n        if (typeof button.handler === 'function') {\n          return button.handler(i, event)\n        } else {\n          this.$modal.hide('dialog')\n        }\n      }\n    }\n  }\n</script>\n<style>\n  .vue-dialog {\n    font-size: 14px;\n  }\n\n  .vue-dialog div {\n    box-sizing: border-box;\n  }\n\n  .vue-dialog .dialog-flex {\n    width: 100%;\n    height: 100%;\n  }\n\n  .vue-dialog .dialog-content {\n    flex: 1 0 auto;\n    width: 100%;\n    padding: 15px;\n  }\n\n  .vue-dialog .dialog-c-title {\n    font-weight: 600;\n    padding-bottom: 15px;\n  }\n\n  .vue-dialog .dialog-c-text {\n  }\n\n  .vue-dialog .dialog-buttons {\n    display: flex;\n    flex: 0 1 auto;\n    width: 100%;\n    border-top: 1px solid #eee;\n    font-size: 12px;\n  }\n\n  .vue-dialog .dialog-buttons-none {\n    width: 100%;\n    padding-bottom: 15px;\n  }\n\n  .vue-dialog button {\n    background: transparent;\n    padding: 0;\n    margin: 0;\n    border: 0;\n    cursor: pointer;\n    box-sizing: border-box;\n    line-height: 44px;\n    height: 44px;\n\n  /*  text-transform: uppercase; */\n  /*  letter-spacing: 1px; */\n\n    color:inherit;\n    font:inherit;\n  }\n\n  .vue-dialog button:hover {\n    background: rgba(0, 0, 0, 0.01);\n  }\n\n  .vue-dialog button:active {\n    background: rgba(0, 0, 0, 0.025);\n  }\n\n  .vue-dialog button:not(:first-of-type) {\n    border-left: 1px solid #eee;\n  }\n</style>\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.v--modal-block-scroll {\n  overflow: hidden;\n}\n.v--modal-overlay {\n  position: fixed;\n  box-sizing: border-box;\n  left: 0;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 999;\n  opacity: 1;\n}\n.v--modal-overlay.scrollable {\n  height: 100%;\n  min-height: 100vh;\n  overflow-y: auto;\n  padding-bottom: 10px;\n}\n.v--modal-overlay .v--modal-box {\n  position: relative;\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.v--modal-overlay.scrollable .v--modal-box {\n  margin-bottom: 10px;\n}\n.v--modal {\n  background-color: white;\n  text-align: left;\n  border-radius: 3px;\n  box-shadow: 0 20px 60px -2px rgba(27, 33, 58, .4);\n  padding: 0;\n}\n.v--modal.v--modal-fullscreen {\n  width: 100vw;\n  height: 100vh;\n  margin: 0;\n  left: 0;\n  top: 0;\n}\n.v--modal-top-right {\n  display: block;\n  position: absolute;\n  right: 0;\n  top: 0;\n}\n.overlay-fade-enter-active, .overlay-fade-leave-active {\n  transition: all 0.2s;\n}\n.overlay-fade-enter, .overlay-fade-leave-active {\n  opacity: 0;\n}\n.nice-modal-fade-enter-active, .nice-modal-fade-leave-active {\n  transition: all 0.4s;\n}\n.nice-modal-fade-enter, .nice-modal-fade-leave-active {\n  opacity: 0;\n  transform: translateY(-20px);\n}\n", "", {"version":3,"sources":["/./src/Modal.vue?2c0ce702"],"names":[],"mappings":";AAufA;EACA,iBAAA;CACA;AAEA;EACA,gBAAA;EACA,uBAAA;EACA,QAAA;EACA,OAAA;EACA,aAAA;EACA,cAAA;EACA,+BAAA;EACA,aAAA;EACA,WAAA;CACA;AAEA;EACA,aAAA;EACA,kBAAA;EACA,iBAAA;EACA,qBAAA;CACA;AAEA;EACA,mBAAA;EACA,iBAAA;EACA,uBAAA;CACA;AAEA;EACA,oBAAA;CACA;AAEA;EACA,wBAAA;EACA,iBAAA;EACA,mBAAA;EACA,kDAAA;EACA,WAAA;CACA;AAEA;EACA,aAAA;EACA,cAAA;EACA,UAAA;EACA,QAAA;EACA,OAAA;CACA;AAEA;EACA,eAAA;EACA,mBAAA;EACA,SAAA;EACA,OAAA;CACA;AAEA;EACA,qBAAA;CACA;AAEA;EACA,WAAA;CACA;AAEA;EACA,qBAAA;CACA;AAEA;EACA,WAAA;EACA,6BAAA;CACA","file":"Modal.vue","sourcesContent":["<template>\n  <transition name=\"overlay-fade\">\n    <div v-if=\"visibility.overlay\"\n         ref=\"overlay\"\n         :class=\"overlayClass\"\n         :aria-expanded=\"visible.toString()\"\n         :data-modal=\"name\"\n         @mousedown.stop=\"onBackgroundClick\"\n         @touchstart.stop=\"onBackgroundClick\">\n      <div class=\"v--modal-top-right\">\n        <slot name=\"top-right\"/>\n      </div>\n      <transition :name=\"transition\">\n        <div v-if=\"visibility.modal\"\n             ref=\"modal\"\n             :class=\"modalClass\"\n             :style=\"modalStyle\"\n             @mousedown.stop\n             @touchstart.stop>\n          <slot/>\n          <resizer v-if=\"resizable && !isAutoHeight\"\n                   :min-width=\"minWidth\"\n                   :min-height=\"minHeight\"\n                   @resize=\"onModalResize\"/>\n        </div>\n      </transition>\n    </div>\n  </transition>\n</template>\n<script>\n  import Vue         from 'vue'\n  import Modal       from './index'\n  import Resizer     from './Resizer.vue'\n  import { inRange } from './util'\n  import parseNumber from './parser'\n\n  export default {\n    name: 'VueJsModal',\n    props: {\n      name: {\n        required: true,\n        type: String\n      },\n      delay: {\n        type: Number,\n        default: 0\n      },\n      resizable: {\n        type: Boolean,\n        default: false\n      },\n      adaptive: {\n        type: Boolean,\n        default: false\n      },\n      draggable: {\n        type: [Boolean, String],\n        default: false\n      },\n      scrollable: {\n        type: Boolean,\n        default: false\n      },\n      reset: {\n        type: Boolean,\n        default: false\n      },\n      transition: {\n        type: String\n      },\n      clickToClose: {\n        type: Boolean,\n        default: true\n      },\n      classes: {\n        type: [String, Array],\n        default: 'v--modal'\n      },\n      minWidth: {\n        type: Number,\n        default: 0,\n        validator (value) {\n          return value >= 0\n        }\n      },\n      minHeight: {\n        type: Number,\n        default: 0,\n        validator (value) {\n          return value >= 0\n        }\n      },\n      width: {\n        type: [Number, String],\n        default: 600,\n        validator (value) {\n          if (typeof value === 'string') {\n            let width = parseNumber(value)\n            return (width.type === '%' || width.type === 'px') &&\n              width.value > 0\n          }\n\n          return value >= 0\n        }\n      },\n      height: {\n        type: [Number, String],\n        default: 300,\n        validator (value) {\n          if (typeof value === 'string') {\n            if (value === 'auto') {\n              return true\n            }\n\n            let height = parseNumber(value)\n            return (height.type === '%' || height.type === 'px') &&\n              height.value > 0\n          }\n\n          return value >= 0\n        }\n      },\n      pivotX: {\n        type: Number,\n        default: 0.5,\n        validator (value) {\n          return value >= 0 && value <= 1\n        }\n      },\n      pivotY: {\n        type: Number,\n        default: 0.5,\n        validator (value) {\n          return value >= 0 && value <= 1\n        }\n      }\n    },\n    components: {\n      Resizer\n    },\n    data () {\n      return {\n        visible: false,\n\n        visibility: {\n          modal: false,\n          overlay: false\n        },\n\n        shift: {\n          left: 0,\n          top: 0\n        },\n\n        modal: {\n          width: 0,\n          widthType: 'px',\n          height: 0,\n          heightType: 'px'\n        },\n\n        window: {\n          width: 0,\n          height: 0\n        }\n      }\n    },\n    watch: {\n      visible (value) {\n        if (value) {\n          this.visibility.overlay = true\n\n          setTimeout(() => {\n            this.visibility.modal = true\n            this.$nextTick(() => {\n              this.addDraggableListeners()\n            })\n          }, this.delay)\n        } else {\n          this.visibility.modal = false\n\n          setTimeout(() => {\n            this.visibility.overlay = false\n            this.$nextTick(() => {\n              this.removeDraggableListeners()\n            })\n          }, this.delay)\n        }\n      }\n    },\n    created () {\n      this.setInitialSize()\n    },\n    /**\n     * Sets global listeners\n     */\n    beforeMount () {\n      Modal.event.$on('toggle', (name, state, params) => {\n        if (name === this.name) {\n          if (typeof state === 'undefined') {\n            state = !this.visible\n          }\n\n          this.toggle(state, params)\n        }\n      })\n\n      window.addEventListener('resize', this.onWindowResize)\n      this.onWindowResize()\n\n      if (this.scrollable && !this.isAutoHeight) {\n        console.warn(`Modal \"${this.name}\" has scrollable flag set to true ` +\n          `but height is not \"auto\" (${this.height})`)\n      }\n    },\n    /**\n     * Removes \"resize\" window listener\n     */\n    beforeDestroy () {\n      window.removeEventListener('resize', this.onWindowResize)\n    },\n    computed: {\n      /**\n       * Returns true if height is set to \"auto\"\n       */\n      isAutoHeight () {\n        return this.modal.heightType === 'auto'\n      },\n      /**\n       * Calculates and returns modal position based on the\n       * pivots, window size and modal size\n       */\n      position () {\n        const { window, shift, pivotX, pivotY,\n          trueModalWidth, trueModalHeight } = this\n\n        const maxLeft = window.width - trueModalWidth\n        const maxTop = window.height - trueModalHeight\n\n        const minTop = this.scrollable\n          ? Number.NEGATIVE_INFINITY\n          : 0\n\n        const left = shift.left + pivotX * maxLeft\n        const top = shift.top + pivotY * maxTop\n\n        return {\n          left: inRange(0, maxLeft, left),\n          top: inRange(minTop, maxTop, top)\n        }\n      },\n      /**\n       * Returns pixel width (if set with %) and makes sure that modal size\n       * fits the window\n       */\n      trueModalWidth () {\n        const { window, modal, adaptive, minWidth } = this\n\n        const value = modal.widthType === '%'\n          ? window.width / 100 * modal.width\n          : modal.width\n\n        return adaptive\n          ? inRange(minWidth, window.width, value)\n          : value\n      },\n      /**\n       * Returns pixel height (if set with %) and makes sure that modal size\n       * fits the window.\n       *\n       * Returns 0 if height set as \"auto\"\n       */\n      trueModalHeight () {\n        const { window, modal, isAutoHeight, adaptive } = this\n\n        const value = (modal.heightType === '%')\n          ? window.height / 100 * modal.height\n          : modal.height\n\n        if (isAutoHeight) {\n          return 0\n        }\n\n        return adaptive\n          ? inRange(this.minHeight, this.window.height, value)\n          : value\n      },\n      /**\n       * Returns class list for screen overlay (modal background)\n       */\n      overlayClass () {\n        return {\n          'v--modal-overlay': true,\n          'scrollable': this.scrollable && this.isAutoHeight\n        }\n      },\n      /**\n       * Returns class list for modal itself\n       */\n      modalClass () {\n        return ['v--modal-box', this.classes]\n      },\n      /**\n       * CSS styles for position and size of the modal\n       */\n      modalStyle () {\n        return {\n          top: this.position.top + 'px',\n          left: this.position.left + 'px',\n          width: this.trueModalWidth + 'px',\n          height: this.isAutoHeight\n            ? 'auto'\n            : (this.trueModalHeight + 'px')\n        }\n      }\n    },\n    methods: {\n      /**\n       * Initializes modal's size & position,\n       * if \"reset\" flag is set to true - this function will be called\n       * every time \"beforeOpen\" is triggered\n       */\n      setInitialSize () {\n        let { modal } = this\n        let width = parseNumber(this.width)\n        let height = parseNumber(this.height)\n\n        modal.width = width.value\n        modal.widthType = width.type\n        modal.height = height.value\n        modal.heightType = height.type\n      },\n\n      onWindowResize () {\n        this.window.width = document.body.clientWidth\n        this.window.height = window.innerHeight\n      },\n\n      /**\n       * Generates event object\n       */\n      genEventObject (params) {\n        // @todo: clean this up (change to ...)\n        var data = {\n          name: this.name,\n          timestamp: Date.now(),\n          canceled: false,\n          ref: this.$refs.modal\n        }\n\n        return Vue.util.extend(data, params || {})\n      },\n      /**\n       * Event handler which is triggered on modal resize\n       */\n      onModalResize (event) {\n        this.modal.widthType = 'px'\n        this.modal.width = event.size.width\n\n        this.modal.heightType = 'px'\n        this.modal.height = event.size.height\n\n        const { size } = this.modal\n        const resizeEvent = this.genEventObject({ size })\n\n        this.$emit('resize', resizeEvent)\n      },\n      /**\n       * Event handler which is triggered on $modal.show and $modal.hight\n       */\n      toggle (state, params) {\n        const { reset, scrollable, visible } = this\n\n        const beforeEventName = visible\n          ? 'before-close'\n          : 'before-open'\n\n        const afterEventName = visible\n          ? 'closed'\n          : 'opened'\n\n        if (beforeEventName === 'before-open') {\n          if (reset) {\n            this.setInitialSize()\n            this.shift.left = 0\n            this.shift.top = 0\n          }\n\n          if (scrollable) {\n            document.body.classList.add('v--modal-block-scroll')\n          }\n        }\n\n        if (beforeEventName === 'before-close') {\n          if (scrollable) {\n            document.body.classList.remove('v--modal-block-scroll')\n          }\n        }\n\n        let stopEventExecution = false\n\n        const stop = () => {\n          stopEventExecution = true\n        }\n        const beforeEvent = this.genEventObject({ stop, state, params })\n\n        this.$emit(beforeEventName, beforeEvent)\n\n        if (!stopEventExecution) {\n          const afterEvent = this.genEventObject({ state, params })\n\n          this.visible = state\n          this.$emit(afterEventName, afterEvent)\n        }\n      },\n\n      getDraggableElement () {\n        var selector = typeof this.draggable !== 'string'\n          ? '.v--modal-box'\n          : this.draggable\n\n        if (selector) {\n          var handler = this.$refs.overlay.querySelector(selector)\n          if (handler) {\n            return handler\n          }\n        }\n      },\n      /**\n       * Event handler that is triggered when background overlay is clicked\n       */\n      onBackgroundClick () {\n        if (this.clickToClose) {\n          this.toggle(false)\n        }\n      },\n\n      addDraggableListeners () {\n        if (!this.draggable) {\n          return\n        }\n\n        let dragger = this.getDraggableElement()\n\n        if (dragger) {\n          let startX = 0\n          let startY = 0\n          let cachedShiftX = 0\n          let cachedShiftY = 0\n\n          let getPosition = (event) => {\n            return event.touches && event.touches.length > 0\n              ? event.touches[0]\n              : event\n          }\n\n          let mousedown = (event) => {\n            let { clientX, clientY } = getPosition(event)\n\n            document.addEventListener('mousemove', mousemove)\n            document.addEventListener('mouseup', mouseup)\n\n            document.addEventListener('touchmove', mousemove)\n            document.addEventListener('touchend', mouseup)\n\n            startX = clientX\n            startY = clientY\n            cachedShiftX = this.shift.left\n            cachedShiftY = this.shift.top\n\n            event.preventDefault()\n          }\n\n          let mousemove = (event) => {\n            let { clientX, clientY } = getPosition(event)\n\n            this.shift.left = cachedShiftX + clientX - startX\n            this.shift.top = cachedShiftY + clientY - startY\n            event.preventDefault()\n          }\n\n          let mouseup = (event) => {\n            document.removeEventListener('mousemove', mousemove)\n            document.removeEventListener('mouseup', mouseup)\n\n            document.removeEventListener('touchmove', mousemove)\n            document.removeEventListener('touchend', mouseup)\n\n            event.preventDefault()\n          }\n\n          dragger.addEventListener('mousedown', mousedown)\n          dragger.addEventListener('touchstart', mousedown)\n        }\n      },\n\n      removeDraggableListeners () {\n      //  console.log('removing draggable handlers')\n      }\n    }\n  }\n</script>\n<style>\n  .v--modal-block-scroll {\n    overflow: hidden;\n  }\n\n  .v--modal-overlay {\n    position: fixed;\n    box-sizing: border-box;\n    left: 0;\n    top: 0;\n    width: 100vw;\n    height: 100vh;\n    background: rgba(0, 0, 0, 0.2);\n    z-index: 999;\n    opacity: 1;\n  }\n\n  .v--modal-overlay.scrollable {\n    height: 100%;\n    min-height: 100vh;\n    overflow-y: auto;\n    padding-bottom: 10px;\n  }\n\n  .v--modal-overlay .v--modal-box {\n    position: relative;\n    overflow: hidden;\n    box-sizing: border-box;\n  }\n\n  .v--modal-overlay.scrollable .v--modal-box {\n    margin-bottom: 10px;\n  }\n\n  .v--modal {\n    background-color: white;\n    text-align: left;\n    border-radius: 3px;\n    box-shadow: 0 20px 60px -2px rgba(27, 33, 58, .4);\n    padding: 0;\n  }\n\n  .v--modal.v--modal-fullscreen {\n    width: 100vw;\n    height: 100vh;\n    margin: 0;\n    left: 0;\n    top: 0;\n  }\n\n  .v--modal-top-right {\n    display: block;\n    position: absolute;\n    right: 0;\n    top: 0;\n  }\n\n  .overlay-fade-enter-active, .overlay-fade-leave-active {\n    transition: all 0.2s;\n  }\n\n  .overlay-fade-enter, .overlay-fade-leave-active {\n    opacity: 0;\n  }\n\n  .nice-modal-fade-enter-active, .nice-modal-fade-leave-active {\n    transition: all 0.4s;\n  }\n\n  .nice-modal-fade-enter, .nice-modal-fade-leave-active {\n    opacity: 0;\n    transform: translateY(-20px);\n  }\n</style>\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n.vue-modal-resizer {\n  display: block;\n  overflow: hidden;\n  position: absolute;\n  width: 12px;\n  height: 12px;\n  right: 0;\n  bottom: 0;\n  z-index: 9999999;\n  background: transparent;\n  cursor: se-resize;\n}\n.vue-modal-resizer::after {\n  display: block;\n  position: absolute;\n  content: '';\n  background: transparent;\n  left: 0;\n  top: 0;\n  width: 0;\n  height: 0;\n  border-bottom: 10px solid #ddd;\n  border-left: 10px solid transparent;\n}\n.vue-modal-resizer.clicked::after {\n  border-bottom: 10px solid #369BE9;\n}\n", "", {"version":3,"sources":["/./src/Resizer.vue?29279603"],"names":[],"mappings":";AA+EA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,YAAA;EACA,aAAA;EACA,SAAA;EACA,UAAA;EACA,iBAAA;EACA,wBAAA;EACA,kBAAA;CACA;AAEA;EACA,eAAA;EACA,mBAAA;EACA,YAAA;EACA,wBAAA;EACA,QAAA;EACA,OAAA;EACA,SAAA;EACA,UAAA;EACA,+BAAA;EACA,oCAAA;CACA;AAEA;EACA,kCAAA;CACA","file":"Resizer.vue","sourcesContent":["<template>\n  <div :class=\"className\"></div>\n</template>\n<script>\nimport { inRange } from './util'\n\nexport default {\n  name: 'VueJsModalResizer',\n  props: {\n    minHeight: {\n      type: Number,\n      default: 0\n    },\n    minWidth: {\n      type: Number,\n      default: 0\n    }},\n  data () {\n    return {\n      clicked: false,\n      size: {}\n    }\n  },\n  mounted () {\n    this.$el.addEventListener('mousedown', this.start, false)\n  },\n  computed: {\n    className () {\n      return {'vue-modal-resizer': true, 'clicked': this.clicked}\n    }\n  },\n  methods: {\n    start (event) {\n      this.clicked = true\n\n      window.addEventListener('mousemove', this.mousemove, false)\n      window.addEventListener('mouseup', this.stop, false)\n\n      event.stopPropagation()\n      event.preventDefault()\n    },\n    stop () {\n      this.clicked = false\n\n      window.removeEventListener('mousemove', this.mousemove, false)\n      window.removeEventListener('mouseup', this.stop, false)\n\n      this.$emit('resize-stop', {\n        element: this.$el.parentElement,\n        size: this.size\n      })\n    },\n    mousemove (event) {\n      this.resize(event)\n    },\n    resize (event) {\n      var el = this.$el.parentElement\n\n      if (el) {\n        var width = event.clientX - el.offsetLeft\n        var height = event.clientY - el.offsetTop\n\n        width = inRange(this.minWidth, window.innerWidth, width)\n        height = inRange(this.minHeight, window.innerHeight, height)\n\n        this.size = {width, height}\n        el.style.width = width + 'px'\n        el.style.height = height + 'px'\n\n        this.$emit('resize', {\n          element: el,\n          size: this.size\n        })\n      }\n    }\n  }\n}\n</script>\n<style>\n.vue-modal-resizer {\n  display: block;\n  overflow: hidden;\n  position: absolute;\n  width: 12px;\n  height: 12px;\n  right: 0;\n  bottom: 0;\n  z-index: 9999999;\n  background: transparent;\n  cursor: se-resize;\n}\n\n.vue-modal-resizer::after {\n  display: block;\n  position: absolute;\n  content: '';\n  background: transparent;\n  left: 0;\n  top: 0;\n  width: 0;\n  height: 0;\n  border-bottom: 10px solid #ddd;\n  border-left: 10px solid transparent;\n}\n\n.vue-modal-resizer.clicked::after {\n  border-bottom: 10px solid #369BE9;\n}\n</style>\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(20)
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(9),
-  /* template */
-  __webpack_require__(17),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Resizer.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Resizer.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-60fe12fc", Component.options)
-  } else {
-    hotAPI.reload("data-v-60fe12fc", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('modal', {
-    attrs: {
-      "name": "dialog",
-      "classes": ['v--modal', 'vue-dialog', this.params.class],
-      "width": 400,
-      "height": "auto",
-      "pivot-y": 0.3,
-      "adaptive": true,
-      "transition": "fade"
-    },
-    on: {
-      "before-open": _vm.beforeOpened,
-      "before-close": _vm.beforeClosed
-    }
-  }, [_c('div', {
-    staticClass: "dialog-content"
-  }, [(_vm.params.title) ? _c('div', {
-    staticClass: "dialog-c-title",
-    domProps: {
-      "innerHTML": _vm._s(_vm.params.title || '')
-    }
-  }) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "dialog-c-text",
-    domProps: {
-      "innerHTML": _vm._s(_vm.params.text || '')
-    }
-  })]), _vm._v(" "), (_vm.buttons) ? _c('div', {
-    staticClass: "dialog-buttons"
-  }, _vm._l((_vm.buttons), function(button, i) {
-    return _c('button', {
-      key: i,
-      style: (_vm.buttonStyle),
-      domProps: {
-        "innerHTML": _vm._s(button.title)
-      },
-      on: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.click(i, $event)
+        var _Modal = __webpack_require__(6), _Modal2 = _interopRequireDefault(_Modal), _Dialog = __webpack_require__(5), _Dialog2 = _interopRequireDefault(_Dialog), Plugin = {
+            install: function(Vue) {
+                var options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+                if (!this.installed) {
+                    this.installed = !0, this.event = new Vue(), Vue.prototype.$modal = {
+                        show: function(name, params) {
+                            Plugin.event.$emit("toggle", name, !0, params);
+                        },
+                        hide: function(name, params) {
+                            Plugin.event.$emit("toggle", name, !1, params);
+                        },
+                        toggle: function(name, params) {
+                            Plugin.event.$emit("toggle", name, void 0, params);
+                        }
+                    };
+                    var componentName = options.componentName || "modal";
+                    Vue.component(componentName, _Modal2.default), options.dialog && Vue.component("v-dialog", _Dialog2.default);
+                }
+            }
+        };
+        exports.default = Plugin;
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
+        });
+        var inRange = exports.inRange = function(from, to, value) {
+            return value < from ? from : value > to ? to : value;
+        };
+        exports.default = {
+            inRange: inRange
+        };
+    }, function(module, exports, __webpack_require__) {
+        __webpack_require__(18);
+        var Component = __webpack_require__(1)(__webpack_require__(7), __webpack_require__(15), null, null);
+        Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Dialog.vue", 
+        Component.esModule && Object.keys(Component.esModule).some(function(key) {
+            return "default" !== key && "__esModule" !== key;
+        }) && console.error("named exports are not supported in *.vue files."), Component.options.functional && console.error("[vue-loader] Dialog.vue: functional components are not supported with templates, they should use render functions."), 
+        module.exports = Component.exports;
+    }, function(module, exports, __webpack_require__) {
+        __webpack_require__(19);
+        var Component = __webpack_require__(1)(__webpack_require__(8), __webpack_require__(16), null, null);
+        Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Modal.vue", 
+        Component.esModule && Object.keys(Component.esModule).some(function(key) {
+            return "default" !== key && "__esModule" !== key;
+        }) && console.error("named exports are not supported in *.vue files."), Component.options.functional && console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions."), 
+        module.exports = Component.exports;
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
+        }), exports.default = {
+            name: "Dialog",
+            props: {
+                width: {
+                    type: [ Number, String ],
+                    default: 400
+                },
+                clickToClose: {
+                    type: Boolean,
+                    default: !0
+                },
+                transition: {
+                    type: String,
+                    default: "fade"
+                }
+            },
+            data: function() {
+                return {
+                    params: {},
+                    defaultButtons: [ {
+                        title: "CLOSE"
+                    } ]
+                };
+            },
+            computed: {
+                buttons: function() {
+                    return this.params.buttons || this.defaultButtons;
+                },
+                buttonStyle: function() {
+                    return {
+                        flex: "1 1 " + 100 / this.buttons.length + "%"
+                    };
+                }
+            },
+            methods: {
+                beforeOpened: function(event) {
+                    this.params = event.params || {};
+                },
+                beforeClosed: function() {
+                    this.params = {};
+                },
+                click: function(i, event) {
+                    var button = this.buttons[i];
+                    if ("function" == typeof button.handler) return button.handler(i, event);
+                    this.$modal.hide("dialog");
+                }
+            }
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        function _interopRequireDefault(obj) {
+            return obj && obj.__esModule ? obj : {
+                default: obj
+            };
         }
-      }
-    }, [_vm._v("\n        " + _vm._s(button.title) + "\n      ")])
-  })) : _c('div', {
-    staticClass: "dialog-buttons-none"
-  })])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-18cd6db4", module.exports)
-  }
-}
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
+        });
+        var _vue = __webpack_require__(22), _vue2 = _interopRequireDefault(_vue), _index = __webpack_require__(3), _index2 = _interopRequireDefault(_index), _Resizer = __webpack_require__(14), _Resizer2 = _interopRequireDefault(_Resizer), _util = __webpack_require__(4), _parser = __webpack_require__(10), _parser2 = _interopRequireDefault(_parser);
+        exports.default = {
+            name: "VueJsModal",
+            props: {
+                name: {
+                    required: !0,
+                    type: String
+                },
+                delay: {
+                    type: Number,
+                    default: 0
+                },
+                resizable: {
+                    type: Boolean,
+                    default: !1
+                },
+                adaptive: {
+                    type: Boolean,
+                    default: !1
+                },
+                draggable: {
+                    type: [ Boolean, String ],
+                    default: !1
+                },
+                scrollable: {
+                    type: Boolean,
+                    default: !1
+                },
+                reset: {
+                    type: Boolean,
+                    default: !1
+                },
+                transition: {
+                    type: String
+                },
+                clickToClose: {
+                    type: Boolean,
+                    default: !0
+                },
+                classes: {
+                    type: [ String, Array ],
+                    default: "v--modal"
+                },
+                minWidth: {
+                    type: Number,
+                    default: 0,
+                    validator: function(value) {
+                        return value >= 0;
+                    }
+                },
+                minHeight: {
+                    type: Number,
+                    default: 0,
+                    validator: function(value) {
+                        return value >= 0;
+                    }
+                },
+                width: {
+                    type: [ Number, String ],
+                    default: 600,
+                    validator: function(value) {
+                        if ("string" == typeof value) {
+                            var width = (0, _parser2.default)(value);
+                            return ("%" === width.type || "px" === width.type) && width.value > 0;
+                        }
+                        return value >= 0;
+                    }
+                },
+                height: {
+                    type: [ Number, String ],
+                    default: 300,
+                    validator: function(value) {
+                        if ("string" == typeof value) {
+                            if ("auto" === value) return !0;
+                            var height = (0, _parser2.default)(value);
+                            return ("%" === height.type || "px" === height.type) && height.value > 0;
+                        }
+                        return value >= 0;
+                    }
+                },
+                pivotX: {
+                    type: Number,
+                    default: .5,
+                    validator: function(value) {
+                        return value >= 0 && value <= 1;
+                    }
+                },
+                pivotY: {
+                    type: Number,
+                    default: .5,
+                    validator: function(value) {
+                        return value >= 0 && value <= 1;
+                    }
+                }
+            },
+            components: {
+                Resizer: _Resizer2.default
+            },
+            data: function() {
+                return {
+                    visible: !1,
+                    visibility: {
+                        modal: !1,
+                        overlay: !1
+                    },
+                    shift: {
+                        left: 0,
+                        top: 0
+                    },
+                    modal: {
+                        width: 0,
+                        widthType: "px",
+                        height: 0,
+                        heightType: "px"
+                    },
+                    window: {
+                        width: 0,
+                        height: 0
+                    }
+                };
+            },
+            watch: {
+                visible: function(value) {
+                    var _this = this;
+                    value ? (this.visibility.overlay = !0, setTimeout(function() {
+                        _this.visibility.modal = !0, _this.$nextTick(function() {
+                            _this.addDraggableListeners();
+                        });
+                    }, this.delay)) : (this.visibility.modal = !1, setTimeout(function() {
+                        _this.visibility.overlay = !1, _this.$nextTick(function() {
+                            _this.removeDraggableListeners();
+                        });
+                    }, this.delay));
+                }
+            },
+            created: function() {
+                this.setInitialSize();
+            },
+            beforeMount: function() {
+                var _this2 = this;
+                _index2.default.event.$on("toggle", function(name, state, params) {
+                    name === _this2.name && (void 0 === state && (state = !_this2.visible), _this2.toggle(state, params));
+                }), window.addEventListener("resize", this.onWindowResize), this.onWindowResize(), 
+                this.scrollable && !this.isAutoHeight && console.warn('Modal "' + this.name + '" has scrollable flag set to true but height is not "auto" (' + this.height + ")");
+            },
+            beforeDestroy: function() {
+                window.removeEventListener("resize", this.onWindowResize);
+            },
+            computed: {
+                isAutoHeight: function() {
+                    return "auto" === this.modal.heightType;
+                },
+                position: function() {
+                    var window = this.window, shift = this.shift, pivotX = this.pivotX, pivotY = this.pivotY, trueModalWidth = this.trueModalWidth, trueModalHeight = this.trueModalHeight, maxLeft = window.width - trueModalWidth, maxTop = window.height - trueModalHeight, minTop = this.scrollable ? Number.NEGATIVE_INFINITY : 0, left = shift.left + pivotX * maxLeft, top = shift.top + pivotY * maxTop;
+                    return {
+                        left: (0, _util.inRange)(0, maxLeft, left),
+                        top: (0, _util.inRange)(minTop, maxTop, top)
+                    };
+                },
+                trueModalWidth: function() {
+                    var window = this.window, modal = this.modal, adaptive = this.adaptive, minWidth = this.minWidth, value = "%" === modal.widthType ? window.width / 100 * modal.width : modal.width;
+                    return adaptive ? (0, _util.inRange)(minWidth, window.width, value) : value;
+                },
+                trueModalHeight: function() {
+                    var window = this.window, modal = this.modal, isAutoHeight = this.isAutoHeight, adaptive = this.adaptive, value = "%" === modal.heightType ? window.height / 100 * modal.height : modal.height;
+                    return isAutoHeight ? 0 : adaptive ? (0, _util.inRange)(this.minHeight, this.window.height, value) : value;
+                },
+                overlayClass: function() {
+                    return {
+                        "v--modal-overlay": !0,
+                        scrollable: this.scrollable && this.isAutoHeight
+                    };
+                },
+                modalClass: function() {
+                    return [ "v--modal-box", this.classes ];
+                },
+                modalStyle: function() {
+                    return {
+                        top: this.position.top + "px",
+                        left: this.position.left + "px",
+                        width: this.trueModalWidth + "px",
+                        height: this.isAutoHeight ? "auto" : this.trueModalHeight + "px"
+                    };
+                }
+            },
+            methods: {
+                setInitialSize: function() {
+                    var modal = this.modal, width = (0, _parser2.default)(this.width), height = (0, 
+                    _parser2.default)(this.height);
+                    modal.width = width.value, modal.widthType = width.type, modal.height = height.value, 
+                    modal.heightType = height.type;
+                },
+                onWindowResize: function() {
+                    this.window.width = document.body.clientWidth, this.window.height = window.innerHeight;
+                },
+                genEventObject: function(params) {
+                    var data = {
+                        name: this.name,
+                        timestamp: Date.now(),
+                        canceled: !1,
+                        ref: this.$refs.modal
+                    };
+                    return _vue2.default.util.extend(data, params || {});
+                },
+                onModalResize: function(event) {
+                    this.modal.widthType = "px", this.modal.width = event.size.width, this.modal.heightType = "px", 
+                    this.modal.height = event.size.height;
+                    var size = this.modal.size, resizeEvent = this.genEventObject({
+                        size: size
+                    });
+                    this.$emit("resize", resizeEvent);
+                },
+                toggle: function(state, params) {
+                    var reset = this.reset, scrollable = this.scrollable, visible = this.visible, beforeEventName = visible ? "before-close" : "before-open", afterEventName = visible ? "closed" : "opened";
+                    "before-open" === beforeEventName && (reset && (this.setInitialSize(), this.shift.left = 0, 
+                    this.shift.top = 0), scrollable && document.body.classList.add("v--modal-block-scroll")), 
+                    "before-close" === beforeEventName && scrollable && document.body.classList.remove("v--modal-block-scroll");
+                    var stopEventExecution = !1, stop = function() {
+                        stopEventExecution = !0;
+                    }, beforeEvent = this.genEventObject({
+                        stop: stop,
+                        state: state,
+                        params: params
+                    });
+                    if (this.$emit(beforeEventName, beforeEvent), !stopEventExecution) {
+                        var afterEvent = this.genEventObject({
+                            state: state,
+                            params: params
+                        });
+                        this.visible = state, this.$emit(afterEventName, afterEvent);
+                    }
+                },
+                getDraggableElement: function() {
+                    var selector = "string" != typeof this.draggable ? ".v--modal-box" : this.draggable;
+                    if (selector) {
+                        var handler = this.$refs.overlay.querySelector(selector);
+                        if (handler) return handler;
+                    }
+                },
+                onBackgroundClick: function() {
+                    this.clickToClose && this.toggle(!1);
+                },
+                addDraggableListeners: function() {
+                    var _this3 = this;
+                    if (this.draggable) {
+                        var dragger = this.getDraggableElement();
+                        if (dragger) {
+                            var startX = 0, startY = 0, cachedShiftX = 0, cachedShiftY = 0, getPosition = function(event) {
+                                return event.touches && event.touches.length > 0 ? event.touches[0] : event;
+                            }, mousedown = function(event) {
+                                var _getPosition = getPosition(event), clientX = _getPosition.clientX, clientY = _getPosition.clientY;
+                                document.addEventListener("mousemove", _mousemove), document.addEventListener("mouseup", _mouseup), 
+                                document.addEventListener("touchmove", _mousemove), document.addEventListener("touchend", _mouseup), 
+                                startX = clientX, startY = clientY, cachedShiftX = _this3.shift.left, cachedShiftY = _this3.shift.top, 
+                                event.preventDefault();
+                            }, _mousemove = function(event) {
+                                var _getPosition2 = getPosition(event), clientX = _getPosition2.clientX, clientY = _getPosition2.clientY;
+                                _this3.shift.left = cachedShiftX + clientX - startX, _this3.shift.top = cachedShiftY + clientY - startY, 
+                                event.preventDefault();
+                            }, _mouseup = function _mouseup(event) {
+                                document.removeEventListener("mousemove", _mousemove), document.removeEventListener("mouseup", _mouseup), 
+                                document.removeEventListener("touchmove", _mousemove), document.removeEventListener("touchend", _mouseup), 
+                                event.preventDefault();
+                            };
+                            dragger.addEventListener("mousedown", mousedown), dragger.addEventListener("touchstart", mousedown);
+                        }
+                    }
+                },
+                removeDraggableListeners: function() {}
+            }
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
+        });
+        var _util = __webpack_require__(4);
+        exports.default = {
+            name: "VueJsModalResizer",
+            props: {
+                minHeight: {
+                    type: Number,
+                    default: 0
+                },
+                minWidth: {
+                    type: Number,
+                    default: 0
+                }
+            },
+            data: function() {
+                return {
+                    clicked: !1,
+                    size: {}
+                };
+            },
+            mounted: function() {
+                this.$el.addEventListener("mousedown", this.start, !1);
+            },
+            computed: {
+                className: function() {
+                    return {
+                        "vue-modal-resizer": !0,
+                        clicked: this.clicked
+                    };
+                }
+            },
+            methods: {
+                start: function(event) {
+                    this.clicked = !0, window.addEventListener("mousemove", this.mousemove, !1), window.addEventListener("mouseup", this.stop, !1), 
+                    event.stopPropagation(), event.preventDefault();
+                },
+                stop: function() {
+                    this.clicked = !1, window.removeEventListener("mousemove", this.mousemove, !1), 
+                    window.removeEventListener("mouseup", this.stop, !1), this.$emit("resize-stop", {
+                        element: this.$el.parentElement,
+                        size: this.size
+                    });
+                },
+                mousemove: function(event) {
+                    this.resize(event);
+                },
+                resize: function(event) {
+                    var el = this.$el.parentElement;
+                    if (el) {
+                        var width = event.clientX - el.offsetLeft, height = event.clientY - el.offsetTop;
+                        width = (0, _util.inRange)(this.minWidth, window.innerWidth, width), height = (0, 
+                        _util.inRange)(this.minHeight, window.innerHeight, height), this.size = {
+                            width: width,
+                            height: height
+                        }, el.style.width = width + "px", el.style.height = height + "px", this.$emit("resize", {
+                            element: el,
+                            size: this.size
+                        });
+                    }
+                }
+            }
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports, "__esModule", {
+            value: !0
+        });
+        var _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+            return typeof obj;
+        } : function(obj) {
+            return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+        }, types = [ {
+            name: "px",
+            regexp: new RegExp("^[-+]?[0-9]*.?[0-9]+px$")
+        }, {
+            name: "%",
+            regexp: new RegExp("^[-+]?[0-9]*.?[0-9]+%$")
+        }, {
+            name: "px",
+            regexp: new RegExp("^[-+]?[0-9]*.?[0-9]+$")
+        } ], getType = function(value) {
+            if ("auto" === value) return {
+                type: value,
+                value: 0
+            };
+            for (var i = 0; i < types.length; i++) {
+                var type = types[i];
+                if (type.regexp.test(value)) return {
+                    type: type.name,
+                    value: parseFloat(value)
+                };
+            }
+            return {
+                type: "",
+                value: value
+            };
+        }, parse = exports.parse = function(value) {
+            switch (void 0 === value ? "undefined" : _typeof(value)) {
+              case "number":
+                return {
+                    type: "px",
+                    value: value
+                };
 
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
+              case "string":
+                return getType(value);
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('transition', {
-    attrs: {
-      "name": "overlay-fade"
-    }
-  }, [(_vm.visibility.overlay) ? _c('div', {
-    ref: "overlay",
-    class: _vm.overlayClass,
-    attrs: {
-      "aria-expanded": _vm.visible.toString(),
-      "data-modal": _vm.name
-    },
-    on: {
-      "mousedown": function($event) {
-        $event.stopPropagation();
-        _vm.onBackgroundClick($event)
-      },
-      "touchstart": function($event) {
-        $event.stopPropagation();
-        _vm.onBackgroundClick($event)
-      }
-    }
-  }, [_c('div', {
-    staticClass: "v--modal-top-right"
-  }, [_vm._t("top-right")], 2), _vm._v(" "), _c('transition', {
-    attrs: {
-      "name": _vm.transition
-    }
-  }, [(_vm.visibility.modal) ? _c('div', {
-    ref: "modal",
-    class: _vm.modalClass,
-    style: (_vm.modalStyle),
-    on: {
-      "mousedown": function($event) {
-        $event.stopPropagation();
-      },
-      "touchstart": function($event) {
-        $event.stopPropagation();
-      }
-    }
-  }, [_vm._t("default"), _vm._v(" "), (_vm.resizable && !_vm.isAutoHeight) ? _c('resizer', {
-    attrs: {
-      "min-width": _vm.minWidth,
-      "min-height": _vm.minHeight
-    },
-    on: {
-      "resize": _vm.onModalResize
-    }
-  }) : _vm._e()], 2) : _vm._e()])], 1) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-40dd3b1e", module.exports)
-  }
-}
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    class: _vm.className
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-60fe12fc", module.exports)
-  }
-}
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(11);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("e57c1368", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-18cd6db4!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Dialog.vue", function() {
-     var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-18cd6db4!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Dialog.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(12);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("0ba9730a", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-40dd3b1e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue", function() {
-     var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-40dd3b1e!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(13);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("43d3f0d1", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-60fe12fc!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Resizer.vue", function() {
-     var newContent = require("!!../node_modules/css-loader/index.js?sourceMap!../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-60fe12fc!../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Resizer.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_22__;
-
-/***/ })
-/******/ ]);
+              default:
+                return {
+                    type: "",
+                    value: value
+                };
+            }
+        };
+        exports.default = parse;
+    }, function(module, exports, __webpack_require__) {
+        exports = module.exports = __webpack_require__(0)(), exports.push([ module.i, "\n.vue-dialog {\n  font-size: 14px;\n}\n.vue-dialog div {\n  box-sizing: border-box;\n}\n.vue-dialog .dialog-flex {\n  width: 100%;\n  height: 100%;\n}\n.vue-dialog .dialog-content {\n  flex: 1 0 auto;\n  width: 100%;\n  padding: 15px;\n}\n.vue-dialog .dialog-c-title {\n  font-weight: 600;\n  padding-bottom: 15px;\n}\n.vue-dialog .dialog-c-text {\n}\n.vue-dialog .dialog-buttons {\n  display: flex;\n  flex: 0 1 auto;\n  width: 100%;\n  border-top: 1px solid #eee;\n  font-size: 12px;\n}\n.vue-dialog .dialog-buttons-none {\n  width: 100%;\n  padding-bottom: 15px;\n}\n.vue-dialog button {\n  background: transparent;\n  padding: 0;\n  margin: 0;\n  border: 0;\n  cursor: pointer;\n  box-sizing: border-box;\n  line-height: 44px;\n  height: 44px;\n\n/*  text-transform: uppercase; */\n/*  letter-spacing: 1px; */\n\n  color:inherit;\n  font:inherit;\n}\n.vue-dialog button:hover {\n  background: rgba(0, 0, 0, 0.01);\n}\n.vue-dialog button:active {\n  background: rgba(0, 0, 0, 0.025);\n}\n.vue-dialog button:not(:first-of-type) {\n  border-left: 1px solid #eee;\n}\n", "", {
+            version: 3,
+            sources: [ "/./src/Dialog.vue?64613640" ],
+            names: [],
+            mappings: ";AAuFA;EACA,gBAAA;CACA;AAEA;EACA,uBAAA;CACA;AAEA;EACA,YAAA;EACA,aAAA;CACA;AAEA;EACA,eAAA;EACA,YAAA;EACA,cAAA;CACA;AAEA;EACA,iBAAA;EACA,qBAAA;CACA;AAEA;CACA;AAEA;EACA,cAAA;EACA,eAAA;EACA,YAAA;EACA,2BAAA;EACA,gBAAA;CACA;AAEA;EACA,YAAA;EACA,qBAAA;CACA;AAEA;EACA,wBAAA;EACA,WAAA;EACA,UAAA;EACA,UAAA;EACA,gBAAA;EACA,uBAAA;EACA,kBAAA;EACA,aAAA;;AAEA,iCAAA;AACA,2BAAA;;EAEA,cAAA;EACA,aAAA;CACA;AAEA;EACA,gCAAA;CACA;AAEA;EACA,iCAAA;CACA;AAEA;EACA,4BAAA;CACA",
+            file: "Dialog.vue",
+            sourcesContent: [ '<template>\n  <modal name="dialog"\n         height="auto"\n         :classes="[\'v--modal\', \'vue-dialog\', this.params.class]"\n         :width="width"\n         :pivot-y="0.3"\n         :adaptive="true"\n         :clickToClose="clickToClose"\n         :transition="transition"\n         @before-open="beforeOpened"\n         @before-close="beforeClosed">\n      <div class="dialog-content">\n        <div class="dialog-c-title"\n             v-if="params.title"\n             v-html="params.title || \'\'"></div>\n        <div class="dialog-c-text"\n             v-html="params.text || \'\'"></div>\n      </div>\n      <div class="dialog-buttons" v-if="buttons">\n        <button v-for="(button, i) in buttons"\n                :style="buttonStyle"\n                :key="i"\n                v-html="button.title"\n                @click.stop="click(i, $event)">\n          {{button.title}}\n        </button>\n      </div>\n      <div v-else class="dialog-buttons-none"></div>\n  </modal>\n</template>\n<script>\n  export default {\n    name: \'Dialog\',\n    props: {\n      width: {\n        type: [Number, String],\n        default: 400\n      },\n      clickToClose: {\n        type: Boolean,\n        default: true\n      },\n      transition: {\n        type: String,\n        default: \'fade\'\n      }\n    },\n    data () {\n      return {\n        params: {},\n        defaultButtons: [{ title: \'CLOSE\' }]\n      }\n    },\n    computed: {\n      buttons () {\n        return this.params.buttons || this.defaultButtons\n      },\n      /**\n       * Returns FLEX style with correct width for arbitrary number of\n       * buttons.\n       */\n      buttonStyle () {\n        return {\n          flex: `1 1 ${100 / this.buttons.length}%`\n        }\n      }\n    },\n    methods: {\n      beforeOpened (event) {\n        this.params = event.params || {}\n      },\n      beforeClosed () {\n        this.params = {}\n      },\n      click (i, event) {\n        let button = this.buttons[i]\n\n        if (typeof button.handler === \'function\') {\n          return button.handler(i, event)\n        } else {\n          this.$modal.hide(\'dialog\')\n        }\n      }\n    }\n  }\n<\/script>\n<style>\n  .vue-dialog {\n    font-size: 14px;\n  }\n\n  .vue-dialog div {\n    box-sizing: border-box;\n  }\n\n  .vue-dialog .dialog-flex {\n    width: 100%;\n    height: 100%;\n  }\n\n  .vue-dialog .dialog-content {\n    flex: 1 0 auto;\n    width: 100%;\n    padding: 15px;\n  }\n\n  .vue-dialog .dialog-c-title {\n    font-weight: 600;\n    padding-bottom: 15px;\n  }\n\n  .vue-dialog .dialog-c-text {\n  }\n\n  .vue-dialog .dialog-buttons {\n    display: flex;\n    flex: 0 1 auto;\n    width: 100%;\n    border-top: 1px solid #eee;\n    font-size: 12px;\n  }\n\n  .vue-dialog .dialog-buttons-none {\n    width: 100%;\n    padding-bottom: 15px;\n  }\n\n  .vue-dialog button {\n    background: transparent;\n    padding: 0;\n    margin: 0;\n    border: 0;\n    cursor: pointer;\n    box-sizing: border-box;\n    line-height: 44px;\n    height: 44px;\n\n  /*  text-transform: uppercase; */\n  /*  letter-spacing: 1px; */\n\n    color:inherit;\n    font:inherit;\n  }\n\n  .vue-dialog button:hover {\n    background: rgba(0, 0, 0, 0.01);\n  }\n\n  .vue-dialog button:active {\n    background: rgba(0, 0, 0, 0.025);\n  }\n\n  .vue-dialog button:not(:first-of-type) {\n    border-left: 1px solid #eee;\n  }\n</style>\n' ],
+            sourceRoot: "webpack://"
+        } ]);
+    }, function(module, exports, __webpack_require__) {
+        exports = module.exports = __webpack_require__(0)(), exports.push([ module.i, "\n.v--modal-block-scroll {\n  overflow: hidden;\n}\n.v--modal-overlay {\n  position: fixed;\n  box-sizing: border-box;\n  left: 0;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  background: rgba(0, 0, 0, 0.2);\n  z-index: 999;\n  opacity: 1;\n}\n.v--modal-overlay.scrollable {\n  height: 100%;\n  min-height: 100vh;\n  overflow-y: auto;\n  padding-bottom: 10px;\n}\n.v--modal-overlay .v--modal-box {\n  position: relative;\n  overflow: hidden;\n  box-sizing: border-box;\n}\n.v--modal-overlay.scrollable .v--modal-box {\n  margin-bottom: 10px;\n}\n.v--modal {\n  background-color: white;\n  text-align: left;\n  border-radius: 3px;\n  box-shadow: 0 20px 60px -2px rgba(27, 33, 58, .4);\n  padding: 0;\n}\n.v--modal.v--modal-fullscreen {\n  width: 100vw;\n  height: 100vh;\n  margin: 0;\n  left: 0;\n  top: 0;\n}\n.v--modal-top-right {\n  display: block;\n  position: absolute;\n  right: 0;\n  top: 0;\n}\n.overlay-fade-enter-active, .overlay-fade-leave-active {\n  transition: all 0.2s;\n}\n.overlay-fade-enter, .overlay-fade-leave-active {\n  opacity: 0;\n}\n.nice-modal-fade-enter-active, .nice-modal-fade-leave-active {\n  transition: all 0.4s;\n}\n.nice-modal-fade-enter, .nice-modal-fade-leave-active {\n  opacity: 0;\n  transform: translateY(-20px);\n}\n", "", {
+            version: 3,
+            sources: [ "/./src/Modal.vue?2c0ce702" ],
+            names: [],
+            mappings: ";AAufA;EACA,iBAAA;CACA;AAEA;EACA,gBAAA;EACA,uBAAA;EACA,QAAA;EACA,OAAA;EACA,aAAA;EACA,cAAA;EACA,+BAAA;EACA,aAAA;EACA,WAAA;CACA;AAEA;EACA,aAAA;EACA,kBAAA;EACA,iBAAA;EACA,qBAAA;CACA;AAEA;EACA,mBAAA;EACA,iBAAA;EACA,uBAAA;CACA;AAEA;EACA,oBAAA;CACA;AAEA;EACA,wBAAA;EACA,iBAAA;EACA,mBAAA;EACA,kDAAA;EACA,WAAA;CACA;AAEA;EACA,aAAA;EACA,cAAA;EACA,UAAA;EACA,QAAA;EACA,OAAA;CACA;AAEA;EACA,eAAA;EACA,mBAAA;EACA,SAAA;EACA,OAAA;CACA;AAEA;EACA,qBAAA;CACA;AAEA;EACA,WAAA;CACA;AAEA;EACA,qBAAA;CACA;AAEA;EACA,WAAA;EACA,6BAAA;CACA",
+            file: "Modal.vue",
+            sourcesContent: [ "<template>\n  <transition name=\"overlay-fade\">\n    <div v-if=\"visibility.overlay\"\n         ref=\"overlay\"\n         :class=\"overlayClass\"\n         :aria-expanded=\"visible.toString()\"\n         :data-modal=\"name\"\n         @mousedown.stop=\"onBackgroundClick\"\n         @touchstart.stop=\"onBackgroundClick\">\n      <div class=\"v--modal-top-right\">\n        <slot name=\"top-right\"/>\n      </div>\n      <transition :name=\"transition\">\n        <div v-if=\"visibility.modal\"\n             ref=\"modal\"\n             :class=\"modalClass\"\n             :style=\"modalStyle\"\n             @mousedown.stop\n             @touchstart.stop>\n          <slot/>\n          <resizer v-if=\"resizable && !isAutoHeight\"\n                   :min-width=\"minWidth\"\n                   :min-height=\"minHeight\"\n                   @resize=\"onModalResize\"/>\n        </div>\n      </transition>\n    </div>\n  </transition>\n</template>\n<script>\n  import Vue         from 'vue'\n  import Modal       from './index'\n  import Resizer     from './Resizer.vue'\n  import { inRange } from './util'\n  import parseNumber from './parser'\n\n  export default {\n    name: 'VueJsModal',\n    props: {\n      name: {\n        required: true,\n        type: String\n      },\n      delay: {\n        type: Number,\n        default: 0\n      },\n      resizable: {\n        type: Boolean,\n        default: false\n      },\n      adaptive: {\n        type: Boolean,\n        default: false\n      },\n      draggable: {\n        type: [Boolean, String],\n        default: false\n      },\n      scrollable: {\n        type: Boolean,\n        default: false\n      },\n      reset: {\n        type: Boolean,\n        default: false\n      },\n      transition: {\n        type: String\n      },\n      clickToClose: {\n        type: Boolean,\n        default: true\n      },\n      classes: {\n        type: [String, Array],\n        default: 'v--modal'\n      },\n      minWidth: {\n        type: Number,\n        default: 0,\n        validator (value) {\n          return value >= 0\n        }\n      },\n      minHeight: {\n        type: Number,\n        default: 0,\n        validator (value) {\n          return value >= 0\n        }\n      },\n      width: {\n        type: [Number, String],\n        default: 600,\n        validator (value) {\n          if (typeof value === 'string') {\n            let width = parseNumber(value)\n            return (width.type === '%' || width.type === 'px') &&\n              width.value > 0\n          }\n\n          return value >= 0\n        }\n      },\n      height: {\n        type: [Number, String],\n        default: 300,\n        validator (value) {\n          if (typeof value === 'string') {\n            if (value === 'auto') {\n              return true\n            }\n\n            let height = parseNumber(value)\n            return (height.type === '%' || height.type === 'px') &&\n              height.value > 0\n          }\n\n          return value >= 0\n        }\n      },\n      pivotX: {\n        type: Number,\n        default: 0.5,\n        validator (value) {\n          return value >= 0 && value <= 1\n        }\n      },\n      pivotY: {\n        type: Number,\n        default: 0.5,\n        validator (value) {\n          return value >= 0 && value <= 1\n        }\n      }\n    },\n    components: {\n      Resizer\n    },\n    data () {\n      return {\n        visible: false,\n\n        visibility: {\n          modal: false,\n          overlay: false\n        },\n\n        shift: {\n          left: 0,\n          top: 0\n        },\n\n        modal: {\n          width: 0,\n          widthType: 'px',\n          height: 0,\n          heightType: 'px'\n        },\n\n        window: {\n          width: 0,\n          height: 0\n        }\n      }\n    },\n    watch: {\n      visible (value) {\n        if (value) {\n          this.visibility.overlay = true\n\n          setTimeout(() => {\n            this.visibility.modal = true\n            this.$nextTick(() => {\n              this.addDraggableListeners()\n            })\n          }, this.delay)\n        } else {\n          this.visibility.modal = false\n\n          setTimeout(() => {\n            this.visibility.overlay = false\n            this.$nextTick(() => {\n              this.removeDraggableListeners()\n            })\n          }, this.delay)\n        }\n      }\n    },\n    created () {\n      this.setInitialSize()\n    },\n    /**\n     * Sets global listeners\n     */\n    beforeMount () {\n      Modal.event.$on('toggle', (name, state, params) => {\n        if (name === this.name) {\n          if (typeof state === 'undefined') {\n            state = !this.visible\n          }\n\n          this.toggle(state, params)\n        }\n      })\n\n      window.addEventListener('resize', this.onWindowResize)\n      this.onWindowResize()\n\n      if (this.scrollable && !this.isAutoHeight) {\n        console.warn(`Modal \"${this.name}\" has scrollable flag set to true ` +\n          `but height is not \"auto\" (${this.height})`)\n      }\n    },\n    /**\n     * Removes \"resize\" window listener\n     */\n    beforeDestroy () {\n      window.removeEventListener('resize', this.onWindowResize)\n    },\n    computed: {\n      /**\n       * Returns true if height is set to \"auto\"\n       */\n      isAutoHeight () {\n        return this.modal.heightType === 'auto'\n      },\n      /**\n       * Calculates and returns modal position based on the\n       * pivots, window size and modal size\n       */\n      position () {\n        const { window, shift, pivotX, pivotY,\n          trueModalWidth, trueModalHeight } = this\n\n        const maxLeft = window.width - trueModalWidth\n        const maxTop = window.height - trueModalHeight\n\n        const minTop = this.scrollable\n          ? Number.NEGATIVE_INFINITY\n          : 0\n\n        const left = shift.left + pivotX * maxLeft\n        const top = shift.top + pivotY * maxTop\n\n        return {\n          left: inRange(0, maxLeft, left),\n          top: inRange(minTop, maxTop, top)\n        }\n      },\n      /**\n       * Returns pixel width (if set with %) and makes sure that modal size\n       * fits the window\n       */\n      trueModalWidth () {\n        const { window, modal, adaptive, minWidth } = this\n\n        const value = modal.widthType === '%'\n          ? window.width / 100 * modal.width\n          : modal.width\n\n        return adaptive\n          ? inRange(minWidth, window.width, value)\n          : value\n      },\n      /**\n       * Returns pixel height (if set with %) and makes sure that modal size\n       * fits the window.\n       *\n       * Returns 0 if height set as \"auto\"\n       */\n      trueModalHeight () {\n        const { window, modal, isAutoHeight, adaptive } = this\n\n        const value = (modal.heightType === '%')\n          ? window.height / 100 * modal.height\n          : modal.height\n\n        if (isAutoHeight) {\n          return 0\n        }\n\n        return adaptive\n          ? inRange(this.minHeight, this.window.height, value)\n          : value\n      },\n      /**\n       * Returns class list for screen overlay (modal background)\n       */\n      overlayClass () {\n        return {\n          'v--modal-overlay': true,\n          'scrollable': this.scrollable && this.isAutoHeight\n        }\n      },\n      /**\n       * Returns class list for modal itself\n       */\n      modalClass () {\n        return ['v--modal-box', this.classes]\n      },\n      /**\n       * CSS styles for position and size of the modal\n       */\n      modalStyle () {\n        return {\n          top: this.position.top + 'px',\n          left: this.position.left + 'px',\n          width: this.trueModalWidth + 'px',\n          height: this.isAutoHeight\n            ? 'auto'\n            : (this.trueModalHeight + 'px')\n        }\n      }\n    },\n    methods: {\n      /**\n       * Initializes modal's size & position,\n       * if \"reset\" flag is set to true - this function will be called\n       * every time \"beforeOpen\" is triggered\n       */\n      setInitialSize () {\n        let { modal } = this\n        let width = parseNumber(this.width)\n        let height = parseNumber(this.height)\n\n        modal.width = width.value\n        modal.widthType = width.type\n        modal.height = height.value\n        modal.heightType = height.type\n      },\n\n      onWindowResize () {\n        this.window.width = document.body.clientWidth\n        this.window.height = window.innerHeight\n      },\n\n      /**\n       * Generates event object\n       */\n      genEventObject (params) {\n        // @todo: clean this up (change to ...)\n        var data = {\n          name: this.name,\n          timestamp: Date.now(),\n          canceled: false,\n          ref: this.$refs.modal\n        }\n\n        return Vue.util.extend(data, params || {})\n      },\n      /**\n       * Event handler which is triggered on modal resize\n       */\n      onModalResize (event) {\n        this.modal.widthType = 'px'\n        this.modal.width = event.size.width\n\n        this.modal.heightType = 'px'\n        this.modal.height = event.size.height\n\n        const { size } = this.modal\n        const resizeEvent = this.genEventObject({ size })\n\n        this.$emit('resize', resizeEvent)\n      },\n      /**\n       * Event handler which is triggered on $modal.show and $modal.hight\n       */\n      toggle (state, params) {\n        const { reset, scrollable, visible } = this\n\n        const beforeEventName = visible\n          ? 'before-close'\n          : 'before-open'\n\n        const afterEventName = visible\n          ? 'closed'\n          : 'opened'\n\n        if (beforeEventName === 'before-open') {\n          if (reset) {\n            this.setInitialSize()\n            this.shift.left = 0\n            this.shift.top = 0\n          }\n\n          if (scrollable) {\n            document.body.classList.add('v--modal-block-scroll')\n          }\n        }\n\n        if (beforeEventName === 'before-close') {\n          if (scrollable) {\n            document.body.classList.remove('v--modal-block-scroll')\n          }\n        }\n\n        let stopEventExecution = false\n\n        const stop = () => {\n          stopEventExecution = true\n        }\n        const beforeEvent = this.genEventObject({ stop, state, params })\n\n        this.$emit(beforeEventName, beforeEvent)\n\n        if (!stopEventExecution) {\n          const afterEvent = this.genEventObject({ state, params })\n\n          this.visible = state\n          this.$emit(afterEventName, afterEvent)\n        }\n      },\n\n      getDraggableElement () {\n        var selector = typeof this.draggable !== 'string'\n          ? '.v--modal-box'\n          : this.draggable\n\n        if (selector) {\n          var handler = this.$refs.overlay.querySelector(selector)\n          if (handler) {\n            return handler\n          }\n        }\n      },\n      /**\n       * Event handler that is triggered when background overlay is clicked\n       */\n      onBackgroundClick () {\n        if (this.clickToClose) {\n          this.toggle(false)\n        }\n      },\n\n      addDraggableListeners () {\n        if (!this.draggable) {\n          return\n        }\n\n        let dragger = this.getDraggableElement()\n\n        if (dragger) {\n          let startX = 0\n          let startY = 0\n          let cachedShiftX = 0\n          let cachedShiftY = 0\n\n          let getPosition = (event) => {\n            return event.touches && event.touches.length > 0\n              ? event.touches[0]\n              : event\n          }\n\n          let mousedown = (event) => {\n            let { clientX, clientY } = getPosition(event)\n\n            document.addEventListener('mousemove', mousemove)\n            document.addEventListener('mouseup', mouseup)\n\n            document.addEventListener('touchmove', mousemove)\n            document.addEventListener('touchend', mouseup)\n\n            startX = clientX\n            startY = clientY\n            cachedShiftX = this.shift.left\n            cachedShiftY = this.shift.top\n\n            event.preventDefault()\n          }\n\n          let mousemove = (event) => {\n            let { clientX, clientY } = getPosition(event)\n\n            this.shift.left = cachedShiftX + clientX - startX\n            this.shift.top = cachedShiftY + clientY - startY\n            event.preventDefault()\n          }\n\n          let mouseup = (event) => {\n            document.removeEventListener('mousemove', mousemove)\n            document.removeEventListener('mouseup', mouseup)\n\n            document.removeEventListener('touchmove', mousemove)\n            document.removeEventListener('touchend', mouseup)\n\n            event.preventDefault()\n          }\n\n          dragger.addEventListener('mousedown', mousedown)\n          dragger.addEventListener('touchstart', mousedown)\n        }\n      },\n\n      removeDraggableListeners () {\n      //  console.log('removing draggable handlers')\n      }\n    }\n  }\n<\/script>\n<style>\n  .v--modal-block-scroll {\n    overflow: hidden;\n  }\n\n  .v--modal-overlay {\n    position: fixed;\n    box-sizing: border-box;\n    left: 0;\n    top: 0;\n    width: 100vw;\n    height: 100vh;\n    background: rgba(0, 0, 0, 0.2);\n    z-index: 999;\n    opacity: 1;\n  }\n\n  .v--modal-overlay.scrollable {\n    height: 100%;\n    min-height: 100vh;\n    overflow-y: auto;\n    padding-bottom: 10px;\n  }\n\n  .v--modal-overlay .v--modal-box {\n    position: relative;\n    overflow: hidden;\n    box-sizing: border-box;\n  }\n\n  .v--modal-overlay.scrollable .v--modal-box {\n    margin-bottom: 10px;\n  }\n\n  .v--modal {\n    background-color: white;\n    text-align: left;\n    border-radius: 3px;\n    box-shadow: 0 20px 60px -2px rgba(27, 33, 58, .4);\n    padding: 0;\n  }\n\n  .v--modal.v--modal-fullscreen {\n    width: 100vw;\n    height: 100vh;\n    margin: 0;\n    left: 0;\n    top: 0;\n  }\n\n  .v--modal-top-right {\n    display: block;\n    position: absolute;\n    right: 0;\n    top: 0;\n  }\n\n  .overlay-fade-enter-active, .overlay-fade-leave-active {\n    transition: all 0.2s;\n  }\n\n  .overlay-fade-enter, .overlay-fade-leave-active {\n    opacity: 0;\n  }\n\n  .nice-modal-fade-enter-active, .nice-modal-fade-leave-active {\n    transition: all 0.4s;\n  }\n\n  .nice-modal-fade-enter, .nice-modal-fade-leave-active {\n    opacity: 0;\n    transform: translateY(-20px);\n  }\n</style>\n" ],
+            sourceRoot: "webpack://"
+        } ]);
+    }, function(module, exports, __webpack_require__) {
+        exports = module.exports = __webpack_require__(0)(), exports.push([ module.i, "\n.vue-modal-resizer {\n  display: block;\n  overflow: hidden;\n  position: absolute;\n  width: 12px;\n  height: 12px;\n  right: 0;\n  bottom: 0;\n  z-index: 9999999;\n  background: transparent;\n  cursor: se-resize;\n}\n.vue-modal-resizer::after {\n  display: block;\n  position: absolute;\n  content: '';\n  background: transparent;\n  left: 0;\n  top: 0;\n  width: 0;\n  height: 0;\n  border-bottom: 10px solid #ddd;\n  border-left: 10px solid transparent;\n}\n.vue-modal-resizer.clicked::after {\n  border-bottom: 10px solid #369BE9;\n}\n", "", {
+            version: 3,
+            sources: [ "/./src/Resizer.vue?29279603" ],
+            names: [],
+            mappings: ";AA+EA;EACA,eAAA;EACA,iBAAA;EACA,mBAAA;EACA,YAAA;EACA,aAAA;EACA,SAAA;EACA,UAAA;EACA,iBAAA;EACA,wBAAA;EACA,kBAAA;CACA;AAEA;EACA,eAAA;EACA,mBAAA;EACA,YAAA;EACA,wBAAA;EACA,QAAA;EACA,OAAA;EACA,SAAA;EACA,UAAA;EACA,+BAAA;EACA,oCAAA;CACA;AAEA;EACA,kCAAA;CACA",
+            file: "Resizer.vue",
+            sourcesContent: [ "<template>\n  <div :class=\"className\"></div>\n</template>\n<script>\nimport { inRange } from './util'\n\nexport default {\n  name: 'VueJsModalResizer',\n  props: {\n    minHeight: {\n      type: Number,\n      default: 0\n    },\n    minWidth: {\n      type: Number,\n      default: 0\n    }},\n  data () {\n    return {\n      clicked: false,\n      size: {}\n    }\n  },\n  mounted () {\n    this.$el.addEventListener('mousedown', this.start, false)\n  },\n  computed: {\n    className () {\n      return {'vue-modal-resizer': true, 'clicked': this.clicked}\n    }\n  },\n  methods: {\n    start (event) {\n      this.clicked = true\n\n      window.addEventListener('mousemove', this.mousemove, false)\n      window.addEventListener('mouseup', this.stop, false)\n\n      event.stopPropagation()\n      event.preventDefault()\n    },\n    stop () {\n      this.clicked = false\n\n      window.removeEventListener('mousemove', this.mousemove, false)\n      window.removeEventListener('mouseup', this.stop, false)\n\n      this.$emit('resize-stop', {\n        element: this.$el.parentElement,\n        size: this.size\n      })\n    },\n    mousemove (event) {\n      this.resize(event)\n    },\n    resize (event) {\n      var el = this.$el.parentElement\n\n      if (el) {\n        var width = event.clientX - el.offsetLeft\n        var height = event.clientY - el.offsetTop\n\n        width = inRange(this.minWidth, window.innerWidth, width)\n        height = inRange(this.minHeight, window.innerHeight, height)\n\n        this.size = {width, height}\n        el.style.width = width + 'px'\n        el.style.height = height + 'px'\n\n        this.$emit('resize', {\n          element: el,\n          size: this.size\n        })\n      }\n    }\n  }\n}\n<\/script>\n<style>\n.vue-modal-resizer {\n  display: block;\n  overflow: hidden;\n  position: absolute;\n  width: 12px;\n  height: 12px;\n  right: 0;\n  bottom: 0;\n  z-index: 9999999;\n  background: transparent;\n  cursor: se-resize;\n}\n\n.vue-modal-resizer::after {\n  display: block;\n  position: absolute;\n  content: '';\n  background: transparent;\n  left: 0;\n  top: 0;\n  width: 0;\n  height: 0;\n  border-bottom: 10px solid #ddd;\n  border-left: 10px solid transparent;\n}\n\n.vue-modal-resizer.clicked::after {\n  border-bottom: 10px solid #369BE9;\n}\n</style>\n" ],
+            sourceRoot: "webpack://"
+        } ]);
+    }, function(module, exports, __webpack_require__) {
+        __webpack_require__(20);
+        var Component = __webpack_require__(1)(__webpack_require__(9), __webpack_require__(17), null, null);
+        Component.options.__file = "/Users/yev/Projects/vue/vue-js-modal/src/Resizer.vue", 
+        Component.esModule && Object.keys(Component.esModule).some(function(key) {
+            return "default" !== key && "__esModule" !== key;
+        }) && console.error("named exports are not supported in *.vue files."), Component.options.functional && console.error("[vue-loader] Resizer.vue: functional components are not supported with templates, they should use render functions."), 
+        module.exports = Component.exports;
+    }, function(module, exports, __webpack_require__) {
+        module.exports = {
+            render: function() {
+                var _vm = this, _h = _vm.$createElement, _c = _vm._self._c || _h;
+                return _c("modal", {
+                    attrs: {
+                        name: "dialog",
+                        height: "auto",
+                        classes: [ "v--modal", "vue-dialog", this.params.class ],
+                        width: _vm.width,
+                        "pivot-y": .3,
+                        adaptive: !0,
+                        clickToClose: _vm.clickToClose,
+                        transition: _vm.transition
+                    },
+                    on: {
+                        "before-open": _vm.beforeOpened,
+                        "before-close": _vm.beforeClosed
+                    }
+                }, [ _c("div", {
+                    staticClass: "dialog-content"
+                }, [ _vm.params.title ? _c("div", {
+                    staticClass: "dialog-c-title",
+                    domProps: {
+                        innerHTML: _vm._s(_vm.params.title || "")
+                    }
+                }) : _vm._e(), _vm._v(" "), _c("div", {
+                    staticClass: "dialog-c-text",
+                    domProps: {
+                        innerHTML: _vm._s(_vm.params.text || "")
+                    }
+                }) ]), _vm._v(" "), _vm.buttons ? _c("div", {
+                    staticClass: "dialog-buttons"
+                }, _vm._l(_vm.buttons, function(button, i) {
+                    return _c("button", {
+                        key: i,
+                        style: _vm.buttonStyle,
+                        domProps: {
+                            innerHTML: _vm._s(button.title)
+                        },
+                        on: {
+                            click: function($event) {
+                                $event.stopPropagation(), _vm.click(i, $event);
+                            }
+                        }
+                    }, [ _vm._v("\n        " + _vm._s(button.title) + "\n      ") ]);
+                })) : _c("div", {
+                    staticClass: "dialog-buttons-none"
+                }) ]);
+            },
+            staticRenderFns: []
+        }, module.exports.render._withStripped = !0;
+    }, function(module, exports, __webpack_require__) {
+        module.exports = {
+            render: function() {
+                var _vm = this, _h = _vm.$createElement, _c = _vm._self._c || _h;
+                return _c("transition", {
+                    attrs: {
+                        name: "overlay-fade"
+                    }
+                }, [ _vm.visibility.overlay ? _c("div", {
+                    ref: "overlay",
+                    class: _vm.overlayClass,
+                    attrs: {
+                        "aria-expanded": _vm.visible.toString(),
+                        "data-modal": _vm.name
+                    },
+                    on: {
+                        mousedown: function($event) {
+                            $event.stopPropagation(), _vm.onBackgroundClick($event);
+                        },
+                        touchstart: function($event) {
+                            $event.stopPropagation(), _vm.onBackgroundClick($event);
+                        }
+                    }
+                }, [ _c("div", {
+                    staticClass: "v--modal-top-right"
+                }, [ _vm._t("top-right") ], 2), _vm._v(" "), _c("transition", {
+                    attrs: {
+                        name: _vm.transition
+                    }
+                }, [ _vm.visibility.modal ? _c("div", {
+                    ref: "modal",
+                    class: _vm.modalClass,
+                    style: _vm.modalStyle,
+                    on: {
+                        mousedown: function($event) {
+                            $event.stopPropagation();
+                        },
+                        touchstart: function($event) {
+                            $event.stopPropagation();
+                        }
+                    }
+                }, [ _vm._t("default"), _vm._v(" "), _vm.resizable && !_vm.isAutoHeight ? _c("resizer", {
+                    attrs: {
+                        "min-width": _vm.minWidth,
+                        "min-height": _vm.minHeight
+                    },
+                    on: {
+                        resize: _vm.onModalResize
+                    }
+                }) : _vm._e() ], 2) : _vm._e() ]) ], 1) : _vm._e() ]);
+            },
+            staticRenderFns: []
+        }, module.exports.render._withStripped = !0;
+    }, function(module, exports, __webpack_require__) {
+        module.exports = {
+            render: function() {
+                var _vm = this, _h = _vm.$createElement;
+                return (_vm._self._c || _h)("div", {
+                    class: _vm.className
+                });
+            },
+            staticRenderFns: []
+        }, module.exports.render._withStripped = !0;
+    }, function(module, exports, __webpack_require__) {
+        var content = __webpack_require__(11);
+        "string" == typeof content && (content = [ [ module.i, content, "" ] ]), content.locals && (module.exports = content.locals);
+        __webpack_require__(2)("e57c1368", content, !1);
+    }, function(module, exports, __webpack_require__) {
+        var content = __webpack_require__(12);
+        "string" == typeof content && (content = [ [ module.i, content, "" ] ]), content.locals && (module.exports = content.locals);
+        __webpack_require__(2)("0ba9730a", content, !1);
+    }, function(module, exports, __webpack_require__) {
+        var content = __webpack_require__(13);
+        "string" == typeof content && (content = [ [ module.i, content, "" ] ]), content.locals && (module.exports = content.locals);
+        __webpack_require__(2)("43d3f0d1", content, !1);
+    }, function(module, exports) {
+        module.exports = function(parentId, list) {
+            for (var styles = [], newStyles = {}, i = 0; i < list.length; i++) {
+                var item = list[i], id = item[0], css = item[1], media = item[2], sourceMap = item[3], part = {
+                    id: parentId + ":" + i,
+                    css: css,
+                    media: media,
+                    sourceMap: sourceMap
+                };
+                newStyles[id] ? newStyles[id].parts.push(part) : styles.push(newStyles[id] = {
+                    id: id,
+                    parts: [ part ]
+                });
+            }
+            return styles;
+        };
+    }, function(module, exports) {
+        module.exports = __WEBPACK_EXTERNAL_MODULE_22__;
+    } ]);
 });
-//# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 367 */
+/* 372 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(203),
+  __webpack_require__(206),
   /* template */
-  __webpack_require__(379),
+  __webpack_require__(384),
   /* scopeId */
   null,
   /* cssModules */
@@ -105875,18 +105925,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 368 */
+/* 373 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(383)
+__webpack_require__(388)
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(204),
+  __webpack_require__(207),
   /* template */
-  __webpack_require__(374),
+  __webpack_require__(379),
   /* scopeId */
   null,
   /* cssModules */
@@ -105913,14 +105963,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 369 */
+/* 374 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(205),
+  __webpack_require__(208),
   /* template */
-  __webpack_require__(377),
+  __webpack_require__(382),
   /* scopeId */
   null,
   /* cssModules */
@@ -105947,18 +105997,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 370 */
+/* 375 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(384)
+__webpack_require__(389)
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(206),
+  __webpack_require__(209),
   /* template */
-  __webpack_require__(375),
+  __webpack_require__(380),
   /* scopeId */
   null,
   /* cssModules */
@@ -105985,18 +106035,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 371 */
+/* 376 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(385)
+__webpack_require__(390)
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(207),
+  __webpack_require__(210),
   /* template */
-  __webpack_require__(376),
+  __webpack_require__(381),
   /* scopeId */
   "data-v-40c190f0",
   /* cssModules */
@@ -106023,18 +106073,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 372 */
+/* 377 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(386)
+__webpack_require__(391)
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(208),
+  __webpack_require__(211),
   /* template */
-  __webpack_require__(378),
+  __webpack_require__(383),
   /* scopeId */
   null,
   /* cssModules */
@@ -106061,14 +106111,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 373 */
+/* 378 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(7)(
   /* script */
-  __webpack_require__(209),
+  __webpack_require__(212),
   /* template */
-  __webpack_require__(380),
+  __webpack_require__(385),
   /* scopeId */
   null,
   /* cssModules */
@@ -106095,7 +106145,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 374 */
+/* 379 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106134,7 +106184,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             var $$v = campaign.id,
               $$i = _vm._i($$a, $$v);
             if ($$el.checked) {
-              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat($$v))
+              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
             } else {
               $$i > -1 && (_vm.cloneCampaignForm.campaigns = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
             }
@@ -106182,7 +106232,7 @@ if (false) {
 }
 
 /***/ }),
-/* 375 */
+/* 380 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106221,7 +106271,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             var $$v = campaign.id,
               $$i = _vm._i($$a, $$v);
             if ($$el.checked) {
-              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat($$v))
+              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
             } else {
               $$i > -1 && (_vm.cloneCampaignForm.campaigns = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
             }
@@ -106269,7 +106319,7 @@ if (false) {
 }
 
 /***/ }),
-/* 376 */
+/* 381 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106305,7 +106355,7 @@ if (false) {
 }
 
 /***/ }),
-/* 377 */
+/* 382 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106481,7 +106531,7 @@ if (false) {
 }
 
 /***/ }),
-/* 378 */
+/* 383 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106500,7 +106550,7 @@ if (false) {
 }
 
 /***/ }),
-/* 379 */
+/* 384 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106520,7 +106570,7 @@ if (false) {
 }
 
 /***/ }),
-/* 380 */
+/* 385 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -106546,7 +106596,7 @@ if (false) {
 }
 
 /***/ }),
-/* 381 */
+/* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.VueSelect=e():t.VueSelect=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var o=n[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var n={};return e.m=t,e.c=n,e.p="/",e(0)}([function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0}),e.mixins=e.VueSelect=void 0;var o=n(84),i=r(o),a=n(42),s=r(a);e.default=i.default,e.VueSelect=i.default,e.mixins=s.default},function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n)},function(t,e,n){t.exports=!n(9)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e)}},function(t,e,n){var r=n(11),o=n(33),i=n(25),a=Object.defineProperty;e.f=n(2)?Object.defineProperty:function(t,e,n){if(r(t),e=i(e,!0),r(n),o)try{return a(t,e,n)}catch(t){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t}},function(t,e,n){var r=n(59),o=n(16);t.exports=function(t){return r(o(t))}},function(t,e){var n=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=n)},function(t,e,n){var r=n(4),o=n(14);t.exports=n(2)?function(t,e,n){return r.f(t,e,o(1,n))}:function(t,e,n){return t[e]=n,t}},function(t,e,n){var r=n(23)("wks"),o=n(15),i=n(1).Symbol,a="function"==typeof i,s=t.exports=function(t){return r[t]||(r[t]=a&&i[t]||(a?i:o)("Symbol."+t))};s.store=r},function(t,e){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,e,n){var r=n(38),o=n(17);t.exports=Object.keys||function(t){return r(t,o)}},function(t,e,n){var r=n(13);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,e,n){var r=n(1),o=n(6),i=n(56),a=n(7),s="prototype",u=function(t,e,n){var l,c,f,p=t&u.F,d=t&u.G,h=t&u.S,b=t&u.P,v=t&u.B,y=t&u.W,g=d?o:o[e]||(o[e]={}),m=g[s],x=d?r:h?r[e]:(r[e]||{})[s];d&&(n=e);for(l in n)c=!p&&x&&void 0!==x[l],c&&l in g||(f=c?x[l]:n[l],g[l]=d&&"function"!=typeof x[l]?n[l]:v&&c?i(f,r):y&&x[l]==f?function(t){var e=function(e,n,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(e);case 2:return new t(e,n)}return new t(e,n,r)}return t.apply(this,arguments)};return e[s]=t[s],e}(f):b&&"function"==typeof f?i(Function.call,f):f,b&&((g.virtual||(g.virtual={}))[l]=f,t&u.R&&m&&!m[l]&&a(m,l,f)))};u.F=1,u.G=2,u.S=4,u.P=8,u.B=16,u.W=32,u.U=64,u.R=128,t.exports=u},function(t,e){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}},function(t,e){var n=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+r).toString(36))}},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,e){t.exports={}},function(t,e){t.exports=!0},function(t,e){e.f={}.propertyIsEnumerable},function(t,e,n){var r=n(4).f,o=n(3),i=n(8)("toStringTag");t.exports=function(t,e,n){t&&!o(t=n?t:t.prototype,i)&&r(t,i,{configurable:!0,value:e})}},function(t,e,n){var r=n(23)("keys"),o=n(15);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,e,n){var r=n(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,e){var n=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:n)(t)}},function(t,e,n){var r=n(13);t.exports=function(t,e){if(!r(t))return t;var n,o;if(e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;if("function"==typeof(n=t.valueOf)&&!r(o=n.call(t)))return o;if(!e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,e,n){var r=n(1),o=n(6),i=n(19),a=n(27),s=n(4).f;t.exports=function(t){var e=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in e||s(e,t,{value:a.f(t)})}},function(t,e,n){e.f=n(8)},function(t,e){"use strict";t.exports={props:{loading:{type:Boolean,default:!1},onSearch:{type:Function,default:function(t,e){}}},data:function(){return{mutableLoading:!1}},watch:{search:function(){this.search.length>0&&(this.onSearch(this.search,this.toggleLoading),this.$emit("search",this.search,this.toggleLoading))},loading:function(t){this.mutableLoading=t}},methods:{toggleLoading:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;return null==t?this.mutableLoading=!this.mutableLoading:this.mutableLoading=t}}}},function(t,e){"use strict";t.exports={watch:{typeAheadPointer:function(){this.maybeAdjustScroll()}},methods:{maybeAdjustScroll:function(){var t=this.pixelsToPointerTop(),e=this.pixelsToPointerBottom();return t<=this.viewport().top?this.scrollTo(t):e>=this.viewport().bottom?this.scrollTo(this.viewport().top+this.pointerHeight()):void 0},pixelsToPointerTop:function t(){var t=0;if(this.$refs.dropdownMenu)for(var e=0;e<this.typeAheadPointer;e++)t+=this.$refs.dropdownMenu.children[e].offsetHeight;return t},pixelsToPointerBottom:function(){return this.pixelsToPointerTop()+this.pointerHeight()},pointerHeight:function(){var t=!!this.$refs.dropdownMenu&&this.$refs.dropdownMenu.children[this.typeAheadPointer];return t?t.offsetHeight:0},viewport:function(){return{top:this.$refs.dropdownMenu?this.$refs.dropdownMenu.scrollTop:0,bottom:this.$refs.dropdownMenu?this.$refs.dropdownMenu.offsetHeight+this.$refs.dropdownMenu.scrollTop:0}},scrollTo:function(t){return this.$refs.dropdownMenu?this.$refs.dropdownMenu.scrollTop=t:null}}}},function(t,e){"use strict";t.exports={data:function(){return{typeAheadPointer:-1}},watch:{filteredOptions:function(){this.typeAheadPointer=0}},methods:{typeAheadUp:function(){this.typeAheadPointer>0&&(this.typeAheadPointer--,this.maybeAdjustScroll&&this.maybeAdjustScroll())},typeAheadDown:function(){this.typeAheadPointer<this.filteredOptions.length-1&&(this.typeAheadPointer++,this.maybeAdjustScroll&&this.maybeAdjustScroll())},typeAheadSelect:function(){this.filteredOptions[this.typeAheadPointer]?this.select(this.filteredOptions[this.typeAheadPointer]):this.taggable&&this.search.length&&this.select(this.search),this.clearSearchOnSelect&&(this.search="")}}}},function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1)}},function(t,e,n){var r=n(13),o=n(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,e,n){t.exports=!n(2)&&!n(9)(function(){return 7!=Object.defineProperty(n(32)("div"),"a",{get:function(){return 7}}).a})},function(t,e,n){"use strict";var r=n(19),o=n(12),i=n(39),a=n(7),s=n(3),u=n(18),l=n(61),c=n(21),f=n(68),p=n(8)("iterator"),d=!([].keys&&"next"in[].keys()),h="@@iterator",b="keys",v="values",y=function(){return this};t.exports=function(t,e,n,g,m,x,w){l(n,e,g);var O,S,_,j=function(t){if(!d&&t in C)return C[t];switch(t){case b:return function(){return new n(this,t)};case v:return function(){return new n(this,t)}}return function(){return new n(this,t)}},k=e+" Iterator",P=m==v,A=!1,C=t.prototype,M=C[p]||C[h]||m&&C[m],E=M||j(m),T=m?P?j("entries"):E:void 0,V="Array"==e?C.entries||M:M;if(V&&(_=f(V.call(new t)),_!==Object.prototype&&(c(_,k,!0),r||s(_,p)||a(_,p,y))),P&&M&&M.name!==v&&(A=!0,E=function(){return M.call(this)}),r&&!w||!d&&!A&&C[p]||a(C,p,E),u[e]=E,u[k]=y,m)if(O={values:P?E:j(v),keys:x?E:j(b),entries:T},w)for(S in O)S in C||i(C,S,O[S]);else o(o.P+o.F*(d||A),e,O);return O}},function(t,e,n){var r=n(11),o=n(65),i=n(17),a=n(22)("IE_PROTO"),s=function(){},u="prototype",l=function(){var t,e=n(32)("iframe"),r=i.length,o="<",a=">";for(e.style.display="none",n(58).appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(o+"script"+a+"document.F=Object"+o+"/script"+a),t.close(),l=t.F;r--;)delete l[u][i[r]];return l()};t.exports=Object.create||function(t,e){var n;return null!==t?(s[u]=r(t),n=new s,s[u]=null,n[a]=t):n=l(),void 0===e?n:o(n,e)}},function(t,e,n){var r=n(38),o=n(17).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,e){e.f=Object.getOwnPropertySymbols},function(t,e,n){var r=n(3),o=n(5),i=n(55)(!1),a=n(22)("IE_PROTO");t.exports=function(t,e){var n,s=o(t),u=0,l=[];for(n in s)n!=a&&r(s,n)&&l.push(n);for(;e.length>u;)r(s,n=e[u++])&&(~i(l,n)||l.push(n));return l}},function(t,e,n){t.exports=n(7)},function(t,e,n){var r=n(16);t.exports=function(t){return Object(r(t))}},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0});var o=n(44),i=r(o),a=n(47),s=r(a),u=n(48),l=r(u),c=n(29),f=r(c),p=n(30),d=r(p),h=n(28),b=r(h);e.default={mixins:[f.default,d.default,b.default],props:{value:{default:null},options:{type:Array,default:function(){return[]}},maxHeight:{type:String,default:"400px"},searchable:{type:Boolean,default:!0},multiple:{type:Boolean,default:!1},placeholder:{type:String,default:""},transition:{type:String,default:"fade"},clearSearchOnSelect:{type:Boolean,default:!0},label:{type:String,default:"label"},getOptionLabel:{type:Function,default:function(t){return"object"===("undefined"==typeof t?"undefined":(0,l.default)(t))&&this.label&&t[this.label]?t[this.label]:t}},onChange:{type:Function,default:function(t){this.$emit("input",t)}},taggable:{type:Boolean,default:!1},pushTags:{type:Boolean,default:!1},createOption:{type:Function,default:function(t){return"object"===(0,l.default)(this.mutableOptions[0])&&(t=(0,s.default)({},this.label,t)),this.$emit("option:created",t),t}},resetOnOptionsChange:{type:Boolean,default:!1},noDrop:{type:Boolean,default:!1}},data:function(){return{search:"",open:!1,mutableValue:null,mutableOptions:[]}},watch:{value:function(t){this.mutableValue=t},mutableValue:function(t,e){this.multiple?this.onChange?this.onChange(t):null:this.onChange&&t!==e?this.onChange(t):null},options:function(t){this.mutableOptions=t},mutableOptions:function(){!this.taggable&&this.resetOnOptionsChange&&(this.mutableValue=this.multiple?[]:null)},multiple:function(t){this.mutableValue=t?[]:null}},created:function(){this.mutableValue=this.value,this.mutableOptions=this.options.slice(0),this.mutableLoading=this.loading,this.$on("option:created",this.maybePushTag)},methods:{select:function(t){this.isOptionSelected(t)?this.deselect(t):(this.taggable&&!this.optionExists(t)&&(t=this.createOption(t)),this.multiple&&!this.mutableValue?this.mutableValue=[t]:this.multiple?this.mutableValue.push(t):this.mutableValue=t),this.onAfterSelect(t)},deselect:function(t){var e=this;if(this.multiple){var n=-1;this.mutableValue.forEach(function(r){(r===t||"object"===("undefined"==typeof r?"undefined":(0,l.default)(r))&&r[e.label]===t[e.label])&&(n=r)});var r=this.mutableValue.indexOf(n);this.mutableValue.splice(r,1)}else this.mutableValue=null},onAfterSelect:function(t){this.multiple||(this.open=!this.open,this.$refs.search.blur()),this.clearSearchOnSelect&&(this.search="")},toggleDropdown:function(t){t.target!==this.$refs.openIndicator&&t.target!==this.$refs.search&&t.target!==this.$refs.toggle&&t.target!==this.$el||(this.open?this.$refs.search.blur():(this.open=!0,this.$refs.search.focus()))},isOptionSelected:function(t){var e=this;if(this.multiple&&this.mutableValue){var n=!1;return this.mutableValue.forEach(function(r){"object"===("undefined"==typeof r?"undefined":(0,l.default)(r))&&r[e.label]===t[e.label]?n=!0:"object"===("undefined"==typeof r?"undefined":(0,l.default)(r))&&r[e.label]===t?n=!0:r===t&&(n=!0)}),n}return this.mutableValue===t},onEscape:function(){this.search.length?this.search="":this.$refs.search.blur()},onSearchBlur:function(){this.open=!1,this.$emit("search:blur")},onSearchFocus:function(){this.open=!0,this.$emit("search:focus")},maybeDeleteValue:function(){if(!this.$refs.search.value.length&&this.mutableValue)return this.multiple?this.mutableValue.pop():this.mutableValue=null},optionExists:function(t){var e=this,n=!1;return this.mutableOptions.forEach(function(r){"object"===("undefined"==typeof r?"undefined":(0,l.default)(r))&&r[e.label]===t?n=!0:r===t&&(n=!0)}),n},maybePushTag:function(t){this.pushTags&&this.mutableOptions.push(t)}},computed:{dropdownClasses:function(){return{open:this.dropdownOpen,searchable:this.searchable,unsearchable:!this.searchable,loading:this.mutableLoading}},dropdownOpen:function(){return!this.noDrop&&(this.open&&!this.mutableLoading)},searchPlaceholder:function(){if(this.isValueEmpty&&this.placeholder)return this.placeholder},filteredOptions:function(){var t=this,e=this.mutableOptions.filter(function(e){return"object"===("undefined"==typeof e?"undefined":(0,l.default)(e))&&e.hasOwnProperty(t.label)?e[t.label].toLowerCase().indexOf(t.search.toLowerCase())>-1:"object"!==("undefined"==typeof e?"undefined":(0,l.default)(e))||e.hasOwnProperty(t.label)?e.toLowerCase().indexOf(t.search.toLowerCase())>-1:console.warn('[vue-select warn]: Label key "option.'+t.label+'" does not exist in options object.\nhttp://sagalbot.github.io/vue-select/#ex-labels')});return this.taggable&&this.search.length&&!this.optionExists(this.search)&&e.unshift(this.search),e},isValueEmpty:function(){return!this.mutableValue||("object"===(0,l.default)(this.mutableValue)?!(0,i.default)(this.mutableValue).length:!this.mutableValue.length)},valueAsArray:function(){return this.multiple?this.mutableValue:this.mutableValue?[this.mutableValue]:[]}}}},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0});var o=n(28),i=r(o),a=n(30),s=r(a),u=n(29),l=r(u);e.default={ajax:i.default,pointer:s.default,pointerScroll:l.default}},function(t,e,n){t.exports={default:n(49),__esModule:!0}},function(t,e,n){t.exports={default:n(50),__esModule:!0}},function(t,e,n){t.exports={default:n(51),__esModule:!0}},function(t,e,n){t.exports={default:n(52),__esModule:!0}},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}e.__esModule=!0;var o=n(43),i=r(o);e.default=function(t,e,n){return e in t?(0,i.default)(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}e.__esModule=!0;var o=n(46),i=r(o),a=n(45),s=r(a),u="function"==typeof s.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof s.default&&t.constructor===s.default&&t!==s.default.prototype?"symbol":typeof t};e.default="function"==typeof s.default&&"symbol"===u(i.default)?function(t){return"undefined"==typeof t?"undefined":u(t)}:function(t){return t&&"function"==typeof s.default&&t.constructor===s.default&&t!==s.default.prototype?"symbol":"undefined"==typeof t?"undefined":u(t)}},function(t,e,n){n(74);var r=n(6).Object;t.exports=function(t,e,n){return r.defineProperty(t,e,n)}},function(t,e,n){n(75),t.exports=n(6).Object.keys},function(t,e,n){n(78),n(76),n(79),n(80),t.exports=n(6).Symbol},function(t,e,n){n(77),n(81),t.exports=n(27).f("iterator")},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,e){t.exports=function(){}},function(t,e,n){var r=n(5),o=n(72),i=n(71);t.exports=function(t){return function(e,n,a){var s,u=r(e),l=o(u.length),c=i(a,l);if(t&&n!=n){for(;l>c;)if(s=u[c++],s!=s)return!0}else for(;l>c;c++)if((t||c in u)&&u[c]===n)return t||c||0;return!t&&-1}}},function(t,e,n){var r=n(53);t.exports=function(t,e,n){if(r(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n)};case 2:return function(n,r){return t.call(e,n,r)};case 3:return function(n,r,o){return t.call(e,n,r,o)}}return function(){return t.apply(e,arguments)}}},function(t,e,n){var r=n(10),o=n(37),i=n(20);t.exports=function(t){var e=r(t),n=o.f;if(n)for(var a,s=n(t),u=i.f,l=0;s.length>l;)u.call(t,a=s[l++])&&e.push(a);return e}},function(t,e,n){t.exports=n(1).document&&document.documentElement},function(t,e,n){var r=n(31);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,e,n){var r=n(31);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,e,n){"use strict";var r=n(35),o=n(14),i=n(21),a={};n(7)(a,n(8)("iterator"),function(){return this}),t.exports=function(t,e,n){t.prototype=r(a,{next:o(1,n)}),i(t,e+" Iterator")}},function(t,e){t.exports=function(t,e){return{value:e,done:!!t}}},function(t,e,n){var r=n(10),o=n(5);t.exports=function(t,e){for(var n,i=o(t),a=r(i),s=a.length,u=0;s>u;)if(i[n=a[u++]]===e)return n}},function(t,e,n){var r=n(15)("meta"),o=n(13),i=n(3),a=n(4).f,s=0,u=Object.isExtensible||function(){return!0},l=!n(9)(function(){return u(Object.preventExtensions({}))}),c=function(t){a(t,r,{value:{i:"O"+ ++s,w:{}}})},f=function(t,e){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!u(t))return"F";if(!e)return"E";c(t)}return t[r].i},p=function(t,e){if(!i(t,r)){if(!u(t))return!0;if(!e)return!1;c(t)}return t[r].w},d=function(t){return l&&h.NEED&&u(t)&&!i(t,r)&&c(t),t},h=t.exports={KEY:r,NEED:!1,fastKey:f,getWeak:p,onFreeze:d}},function(t,e,n){var r=n(4),o=n(11),i=n(10);t.exports=n(2)?Object.defineProperties:function(t,e){o(t);for(var n,a=i(e),s=a.length,u=0;s>u;)r.f(t,n=a[u++],e[n]);return t}},function(t,e,n){var r=n(20),o=n(14),i=n(5),a=n(25),s=n(3),u=n(33),l=Object.getOwnPropertyDescriptor;e.f=n(2)?l:function(t,e){if(t=i(t),e=a(e,!0),u)try{return l(t,e)}catch(t){}if(s(t,e))return o(!r.f.call(t,e),t[e])}},function(t,e,n){var r=n(5),o=n(36).f,i={}.toString,a="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],s=function(t){try{return o(t)}catch(t){return a.slice()}};t.exports.f=function(t){return a&&"[object Window]"==i.call(t)?s(t):o(r(t))}},function(t,e,n){var r=n(3),o=n(40),i=n(22)("IE_PROTO"),a=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?a:null}},function(t,e,n){var r=n(12),o=n(6),i=n(9);t.exports=function(t,e){var n=(o.Object||{})[t]||Object[t],a={};a[t]=e(n),r(r.S+r.F*i(function(){n(1)}),"Object",a)}},function(t,e,n){var r=n(24),o=n(16);t.exports=function(t){return function(e,n){var i,a,s=String(o(e)),u=r(n),l=s.length;return u<0||u>=l?t?"":void 0:(i=s.charCodeAt(u),i<55296||i>56319||u+1===l||(a=s.charCodeAt(u+1))<56320||a>57343?t?s.charAt(u):i:t?s.slice(u,u+2):(i-55296<<10)+(a-56320)+65536)}}},function(t,e,n){var r=n(24),o=Math.max,i=Math.min;t.exports=function(t,e){return t=r(t),t<0?o(t+e,0):i(t,e)}},function(t,e,n){var r=n(24),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,e,n){"use strict";var r=n(54),o=n(62),i=n(18),a=n(5);t.exports=n(34)(Array,"Array",function(t,e){this._t=a(t),this._i=0,this._k=e},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,o(1)):"keys"==e?o(0,n):"values"==e?o(0,t[n]):o(0,[n,t[n]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,e,n){var r=n(12);r(r.S+r.F*!n(2),"Object",{defineProperty:n(4).f})},function(t,e,n){var r=n(40),o=n(10);n(69)("keys",function(){return function(t){return o(r(t))}})},function(t,e){},function(t,e,n){"use strict";var r=n(70)(!0);n(34)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=r(e,n),this._i+=t.length,{value:t,done:!1})})},function(t,e,n){"use strict";var r=n(1),o=n(3),i=n(2),a=n(12),s=n(39),u=n(64).KEY,l=n(9),c=n(23),f=n(21),p=n(15),d=n(8),h=n(27),b=n(26),v=n(63),y=n(57),g=n(60),m=n(11),x=n(5),w=n(25),O=n(14),S=n(35),_=n(67),j=n(66),k=n(4),P=n(10),A=j.f,C=k.f,M=_.f,E=r.Symbol,T=r.JSON,V=T&&T.stringify,L="prototype",$=d("_hidden"),F=d("toPrimitive"),N={}.propertyIsEnumerable,B=c("symbol-registry"),D=c("symbols"),I=c("op-symbols"),z=Object[L],R="function"==typeof E,H=r.QObject,U=!H||!H[L]||!H[L].findChild,W=i&&l(function(){return 7!=S(C({},"a",{get:function(){return C(this,"a",{value:7}).a}})).a})?function(t,e,n){var r=A(z,e);r&&delete z[e],C(t,e,n),r&&t!==z&&C(z,e,r)}:C,J=function(t){var e=D[t]=S(E[L]);return e._k=t,e},G=R&&"symbol"==typeof E.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof E},K=function(t,e,n){return t===z&&K(I,e,n),m(t),e=w(e,!0),m(n),o(D,e)?(n.enumerable?(o(t,$)&&t[$][e]&&(t[$][e]=!1),n=S(n,{enumerable:O(0,!1)})):(o(t,$)||C(t,$,O(1,{})),t[$][e]=!0),W(t,e,n)):C(t,e,n)},Y=function(t,e){m(t);for(var n,r=y(e=x(e)),o=0,i=r.length;i>o;)K(t,n=r[o++],e[n]);return t},Q=function(t,e){return void 0===e?S(t):Y(S(t),e)},Z=function(t){var e=N.call(this,t=w(t,!0));return!(this===z&&o(D,t)&&!o(I,t))&&(!(e||!o(this,t)||!o(D,t)||o(this,$)&&this[$][t])||e)},q=function(t,e){if(t=x(t),e=w(e,!0),t!==z||!o(D,e)||o(I,e)){var n=A(t,e);return!n||!o(D,e)||o(t,$)&&t[$][e]||(n.enumerable=!0),n}},X=function(t){for(var e,n=M(x(t)),r=[],i=0;n.length>i;)o(D,e=n[i++])||e==$||e==u||r.push(e);return r},tt=function(t){for(var e,n=t===z,r=M(n?I:x(t)),i=[],a=0;r.length>a;)!o(D,e=r[a++])||n&&!o(z,e)||i.push(D[e]);return i};R||(E=function(){if(this instanceof E)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),e=function(n){this===z&&e.call(I,n),o(this,$)&&o(this[$],t)&&(this[$][t]=!1),W(this,t,O(1,n))};return i&&U&&W(z,t,{configurable:!0,set:e}),J(t)},s(E[L],"toString",function(){return this._k}),j.f=q,k.f=K,n(36).f=_.f=X,n(20).f=Z,n(37).f=tt,i&&!n(19)&&s(z,"propertyIsEnumerable",Z,!0),h.f=function(t){return J(d(t))}),a(a.G+a.W+a.F*!R,{Symbol:E});for(var et="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),nt=0;et.length>nt;)d(et[nt++]);for(var et=P(d.store),nt=0;et.length>nt;)b(et[nt++]);a(a.S+a.F*!R,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=E(t)},keyFor:function(t){if(G(t))return v(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){U=!0},useSimple:function(){U=!1}}),a(a.S+a.F*!R,"Object",{create:Q,defineProperty:K,defineProperties:Y,getOwnPropertyDescriptor:q,getOwnPropertyNames:X,getOwnPropertySymbols:tt}),T&&a(a.S+a.F*(!R||l(function(){var t=E();return"[null]"!=V([t])||"{}"!=V({a:t})||"{}"!=V(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!G(t)){for(var e,n,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return e=r[1],"function"==typeof e&&(n=e),!n&&g(e)||(e=function(t,e){if(n&&(e=n.call(this,t,e)),!G(e))return e}),r[1]=e,V.apply(T,r)}}}),E[L][F]||n(7)(E[L],F,E[L].valueOf),f(E,"Symbol"),f(Math,"Math",!0),f(r.JSON,"JSON",!0)},function(t,e,n){n(26)("asyncIterator")},function(t,e,n){n(26)("observable")},function(t,e,n){n(73);for(var r=n(1),o=n(7),i=n(18),a=n(8)("toStringTag"),s=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],u=0;u<5;u++){var l=s[u],c=r[l],f=c&&c.prototype;f&&!f[a]&&o(f,a,l),i[l]=i.Array}},function(t,e,n){e=t.exports=n(83)(),e.push([t.id,'.v-select{position:relative;font-family:sans-serif}.v-select,.v-select *{box-sizing:border-box}.v-select .open-indicator{position:absolute;bottom:6px;right:10px;display:inline-block;cursor:pointer;pointer-events:all;transition:all .15s cubic-bezier(1,-.115,.975,.855);transition-timing-function:cubic-bezier(1,-.115,.975,.855);opacity:1;transition:opacity .1s;height:20px;width:10px}.v-select .open-indicator:before{border-color:rgba(60,60,60,.5);border-style:solid;border-width:3px 3px 0 0;content:"";display:inline-block;height:10px;width:10px;vertical-align:top;transform:rotate(133deg);transition:all .15s cubic-bezier(1,-.115,.975,.855);transition-timing-function:cubic-bezier(1,-.115,.975,.855);box-sizing:inherit}.v-select.open .open-indicator:before{transform:rotate(315deg)}.v-select.loading .open-indicator{opacity:0}.v-select.open .open-indicator{bottom:1px}.v-select .dropdown-toggle{-webkit-appearance:none;-moz-appearance:none;appearance:none;display:block;padding:0;background:none;border:1px solid rgba(60,60,60,.26);border-radius:4px;white-space:normal;transition:border-radius .25s}.v-select .dropdown-toggle:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0}.v-select.searchable .dropdown-toggle{cursor:text}.v-select.unsearchable .dropdown-toggle{cursor:pointer}.v-select.open .dropdown-toggle{border-bottom-color:transparent;border-bottom-left-radius:0;border-bottom-right-radius:0}.v-select .dropdown-menu{display:block;position:absolute;top:100%;left:0;z-index:1000;min-width:160px;padding:5px 0;margin:0;width:100%;overflow-y:scroll;border:1px solid rgba(0,0,0,.26);box-shadow:0 3px 6px 0 rgba(0,0,0,.15);border-top:none;border-radius:0 0 4px 4px;text-align:left;list-style:none;background:#fff}.v-select .no-options{text-align:center}.v-select .selected-tag{color:#333;background-color:#f0f0f0;border:1px solid #ccc;border-radius:4px;height:26px;margin:4px 1px 0 3px;padding:1px .25em;float:left;line-height:24px}.v-select .selected-tag .close{float:none;margin-right:0;font-size:20px;appearance:none;padding:0;cursor:pointer;background:0 0;border:0;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;filter:alpha(opacity=20);opacity:.2}.v-select input[type=search]::-webkit-search-cancel-button,.v-select input[type=search]::-webkit-search-decoration,.v-select input[type=search]::-webkit-search-results-button,.v-select input[type=search]::-webkit-search-results-decoration{display:none}.v-select input[type=search]::-ms-clear{display:none}.v-select input[type=search],.v-select input[type=search]:focus{appearance:none;-webkit-appearance:none;-moz-appearance:none;line-height:1.42857143;font-size:1em;height:34px;display:inline-block;border:none;outline:none;margin:0;padding:0 .5em;width:10em;max-width:100%;background:none;position:relative;box-shadow:none;float:left;clear:none}.v-select.unsearchable input[type=search]{max-width:1px}.v-select li{line-height:1.42857143}.v-select li>a{display:block;padding:3px 20px;clear:both;color:#333;white-space:nowrap}.v-select li:hover{cursor:pointer}.v-select .dropdown-menu .active>a{color:#333;background:rgba(50,50,50,.1)}.v-select .dropdown-menu>.highlight>a{background:#5897fb;color:#fff}.v-select .highlight:not(:last-child){margin-bottom:0}.v-select .spinner{opacity:0;position:absolute;top:5px;right:10px;font-size:5px;text-indent:-9999em;overflow:hidden;border-top:.9em solid hsla(0,0%,39%,.1);border-right:.9em solid hsla(0,0%,39%,.1);border-bottom:.9em solid hsla(0,0%,39%,.1);border-left:.9em solid rgba(60,60,60,.45);transform:translateZ(0);animation:vSelectSpinner 1.1s infinite linear;transition:opacity .1s}.v-select .spinner,.v-select .spinner:after{border-radius:50%;width:5em;height:5em}.v-select.loading .spinner{opacity:1}@-webkit-keyframes vSelectSpinner{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@keyframes vSelectSpinner{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.fade-enter-active,.fade-leave-active{transition:opacity .15s cubic-bezier(1,.5,.8,1)}.fade-enter,.fade-leave-to{opacity:0}',""])},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1])}return t.join("")},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var r={},o=0;o<this.length;o++){var i=this[o][0];"number"==typeof i&&(r[i]=!0)}for(o=0;o<e.length;o++){var a=e[o];"number"==typeof a[0]&&r[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a))}},t}},function(t,e,n){n(88);var r=n(85)(n(41),n(86),null,null);t.exports=r.exports},function(t,e){t.exports=function(t,e,n,r){var o,i=t=t||{},a=typeof t.default;"object"!==a&&"function"!==a||(o=t,i=t.default);var s="function"==typeof i?i.options:i;if(e&&(s.render=e.render,s.staticRenderFns=e.staticRenderFns),n&&(s._scopeId=n),r){var u=s.computed||(s.computed={});Object.keys(r).forEach(function(t){var e=r[t];u[t]=function(){return e}})}return{esModule:o,exports:i,options:s}}},function(t,e){t.exports={render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"dropdown v-select",class:t.dropdownClasses},[n("div",{ref:"toggle",staticClass:"dropdown-toggle",on:{mousedown:function(e){e.preventDefault(),t.toggleDropdown(e)}}},[t._l(t.valueAsArray,function(e){return n("span",{key:e.index,staticClass:"selected-tag"},[t._v("\n      "+t._s(t.getOptionLabel(e))+"\n      "),t.multiple?n("button",{staticClass:"close",attrs:{type:"button"},on:{click:function(n){t.deselect(e)}}},[n("span",{attrs:{"aria-hidden":"true"}},[t._v("×")])]):t._e()])}),t._v(" "),n("input",{directives:[{name:"model",rawName:"v-model",value:t.search,expression:"search"}],ref:"search",staticClass:"form-control",style:{width:t.isValueEmpty?"100%":"auto"},attrs:{type:"search",placeholder:t.searchPlaceholder,readonly:!t.searchable},domProps:{value:t.search},on:{keydown:[function(e){return t._k(e.keyCode,"delete",[8,46])?null:void t.maybeDeleteValue(e)},function(e){return t._k(e.keyCode,"up",38)?null:(e.preventDefault(),void t.typeAheadUp(e))},function(e){return t._k(e.keyCode,"down",40)?null:(e.preventDefault(),void t.typeAheadDown(e))}],keyup:[function(e){return t._k(e.keyCode,"esc",27)?null:void t.onEscape(e)},function(e){return t._k(e.keyCode,"enter",13)?null:(e.preventDefault(),void t.typeAheadSelect(e))}],blur:t.onSearchBlur,focus:t.onSearchFocus,input:function(e){e.target.composing||(t.search=e.target.value)}}}),t._v(" "),t.noDrop?t._e():n("i",{ref:"openIndicator",staticClass:"open-indicator",attrs:{role:"presentation"}}),t._v(" "),t._t("spinner",[n("div",{directives:[{name:"show",rawName:"v-show",value:t.mutableLoading,expression:"mutableLoading"}],staticClass:"spinner"},[t._v("Loading...")])])],2),t._v(" "),n("transition",{attrs:{name:t.transition}},[t.dropdownOpen?n("ul",{ref:"dropdownMenu",staticClass:"dropdown-menu",style:{"max-height":t.maxHeight}},[t._l(t.filteredOptions,function(e,r){return n("li",{key:r,class:{active:t.isOptionSelected(e),highlight:r===t.typeAheadPointer},on:{mouseover:function(e){t.typeAheadPointer=r}}},[n("a",{on:{mousedown:function(n){n.preventDefault(),t.select(e)}}},[t._v("\n          "+t._s(t.getOptionLabel(e))+"\n        ")])])}),t._v(" "),t.filteredOptions.length?t._e():n("li",{staticClass:"no-options"},[t._t("no-options",[t._v("Sorry, no matching options.")])],2)],2):t._e()])],1)},staticRenderFns:[]}},function(t,e,n){function r(t,e){for(var n=0;n<t.length;n++){var r=t[n],o=f[r.id];if(o){o.refs++;for(var i=0;i<o.parts.length;i++)o.parts[i](r.parts[i]);for(;i<r.parts.length;i++)o.parts.push(u(r.parts[i],e))}else{for(var a=[],i=0;i<r.parts.length;i++)a.push(u(r.parts[i],e));f[r.id]={id:r.id,refs:1,parts:a}}}}function o(t){for(var e=[],n={},r=0;r<t.length;r++){var o=t[r],i=o[0],a=o[1],s=o[2],u=o[3],l={css:a,media:s,sourceMap:u};n[i]?n[i].parts.push(l):e.push(n[i]={id:i,parts:[l]})}return e}function i(t,e){var n=h(),r=y[y.length-1];if("top"===t.insertAt)r?r.nextSibling?n.insertBefore(e,r.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),y.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e)}}function a(t){t.parentNode.removeChild(t);var e=y.indexOf(t);e>=0&&y.splice(e,1)}function s(t){var e=document.createElement("style");return e.type="text/css",i(t,e),e}function u(t,e){var n,r,o;if(e.singleton){var i=v++;n=b||(b=s(e)),r=l.bind(null,n,i,!1),o=l.bind(null,n,i,!0)}else n=s(e),r=c.bind(null,n),o=function(){a(n)};return r(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;
@@ -106554,20 +106604,20 @@ r(t=e)}else o()}}function l(t,e,n,r){var o=n?"":r.css;if(t.styleSheet)t.styleShe
 //# sourceMappingURL=vue-select.js.map
 
 /***/ }),
-/* 382 */
+/* 387 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define("VueStarRating",[],e):"object"==typeof exports?exports.VueStarRating=e():t.VueStarRating=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var i=n[r]={i:r,l:!1,exports:{}};return t[r].call(i.exports,i,i.exports,e),i.l=!0,i.exports}var n={};return e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,r){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:r})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="/dist/",e(e.s=2)}([function(t,e){t.exports=function(t,e,n,r,i){var o,a=t=t||{},s=typeof t.default;"object"!==s&&"function"!==s||(o=t,a=t.default);var u="function"==typeof a?a.options:a;e&&(u.render=e.render,u.staticRenderFns=e.staticRenderFns),r&&(u._scopeId=r);var d;if(i?(d=function(t){t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,t||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),n&&n.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(i)},u._ssrRegister=d):n&&(d=n),d){var l=u.functional,c=l?u.render:u.beforeCreate;l?u.render=function(t,e){return d.call(e),c(t,e)}:u.beforeCreate=c?[].concat(c,d):[d]}return{esModule:o,exports:a,options:u}}},function(t,e,n){function r(t){n(10)}var i=n(0)(n(3),n(9),r,"data-v-34cbeed1",null);t.exports=i.exports},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(1),i=function(t){return t&&t.__esModule?t:{default:t}}(r);e.default=i.default},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(7),i=function(t){return t&&t.__esModule?t:{default:t}}(r);e.default={components:{star:i.default},model:{prop:"rating",event:"rating-selected"},props:{increment:{type:Number,default:1},rating:{type:Number,default:0},activeColor:{type:String,default:"#ffd055"},inactiveColor:{type:String,default:"#d8d8d8"},maxRating:{type:Number,default:5},starSize:{type:Number,default:50},showRating:{type:Boolean,default:!0},readOnly:{type:Boolean,default:!1},textClass:{type:String,default:""},inline:{type:Boolean,default:!1},borderColor:{type:String,default:"#999"},borderWidth:{type:Number,default:0},padding:{type:Number,default:0},rtl:{type:Boolean,default:!1},fixedPoints:{type:Number,default:null}},created:function(){this.step=100*this.increment,this.currentRating=this.rating,this.selectedRating=this.rating,this.createStars()},methods:{setRating:function(t,e){if(!this.readOnly){var n=this.rtl?(100-t.position)/100:t.position/100;this.currentRating=(t.id+n-1).toFixed(2),this.currentRating=this.currentRating>this.maxRating?this.maxRating:this.currentRating,this.createStars(),e?(this.selectedRating=this.currentRating,this.$emit("rating-selected",this.selectedRating)):this.$emit("current-rating",this.currentRating)}},resetRating:function(){this.readOnly||(this.currentRating=this.selectedRating,this.createStars())},createStars:function(){this.round();for(var t=0;t<this.maxRating;t++){var e=0;t<this.currentRating&&(e=this.currentRating-t>1?100:100*(this.currentRating-t)),this.$set(this.fillLevel,t,Math.round(e))}},round:function(){var t=1/this.increment;this.currentRating=Math.min(this.maxRating,Math.ceil(this.currentRating*t)/t)}},computed:{formattedRating:function(){return null===this.fixedPoints?this.currentRating:this.currentRating.toFixed(this.fixedPoints)}},watch:{rating:function(t){this.currentRating=t,this.selectedRating=t,this.createStars()}},data:function(){return{step:0,fillLevel:[],currentRating:0,selectedRating:0}}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={props:{fill:{type:Number,default:0},size:{type:Number,default:50},starId:{type:Number,required:!0},activeColor:{type:String,required:!0},inactiveColor:{type:String,required:!0},borderColor:{type:String,default:"#000"},borderWidth:{type:Number,default:0},padding:{type:Number,default:0},rtl:{type:Boolean,default:!1}},created:function(){this.calculatePoints,this.grad=Math.random().toString(36).substring(7)},computed:{calculatePoints:function(){var t=this;this.starPoints=this.starPoints.map(function(e){return t.size/43*e+1.5*t.borderWidth})},starPointsToString:function(){return this.starPoints.join(",")},getGradId:function(){return"url(#"+this.grad+")"},getSize:function(){return parseInt(this.size)+parseInt(3*this.borderWidth)+this.padding},getFill:function(){return this.rtl?100-this.fill+"%":this.fill+"%"}},methods:{mouseMoving:function(t){this.$emit("star-mouse-move",{event:t,position:this.getPosition(t),id:this.starId})},getPosition:function(t){var e=.92*this.size,n=Math.round(100/e*t.offsetX);return Math.min(n,100)},selected:function(t){this.$emit("star-selected",{id:this.starId,position:this.getPosition(t)})}},data:function(){return{starPoints:[19.8,2.2,6.6,43.56,39.6,17.16,0,17.16,33,43.56],grad:""}}}},function(t,e,n){e=t.exports=n(6)(void 0),e.push([t.i,".star[data-v-34cbeed1]{display:inline-block}.pointer[data-v-34cbeed1]{cursor:pointer}.star-rating[data-v-34cbeed1]{display:flex;align-items:center}.inline[data-v-34cbeed1]{display:inline-flex}.rating-text[data-v-34cbeed1]{margin-top:7px;margin-left:7px}.star-rating-rtl[data-v-34cbeed1]{direction:rtl}.star-rating-rtl .rating-text[data-v-34cbeed1]{margin-right:10px;direction:rtl}",""])},function(t,e){function n(t,e){var n=t[1]||"",i=t[3];if(!i)return n;if(e&&"function"==typeof btoa){var o=r(i);return[n].concat(i.sources.map(function(t){return"/*# sourceURL="+i.sourceRoot+t+" */"})).concat([o]).join("\n")}return[n].join("\n")}function r(t){return"/*# sourceMappingURL=data:application/json;charset=utf-8;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(t))))+" */"}t.exports=function(t){var e=[];return e.toString=function(){return this.map(function(e){var r=n(e,t);return e[2]?"@media "+e[2]+"{"+r+"}":r}).join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var r={},i=0;i<this.length;i++){var o=this[i][0];"number"==typeof o&&(r[o]=!0)}for(i=0;i<t.length;i++){var a=t[i];"number"==typeof a[0]&&r[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),e.push(a))}},e}},function(t,e,n){var r=n(0)(n(4),n(8),null,null,null);t.exports=r.exports},function(t,e){t.exports={render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("svg",{staticStyle:{overflow:"visible"},attrs:{height:t.getSize,width:t.getSize},on:{mousemove:t.mouseMoving,click:t.selected}},[n("linearGradient",{attrs:{id:t.grad,x1:"0",x2:"100%",y1:"0",y2:"0"}},[n("stop",{attrs:{offset:t.getFill,"stop-color":t.rtl?t.inactiveColor:t.activeColor}}),t._v(" "),n("stop",{attrs:{offset:t.getFill,"stop-color":t.rtl?t.activeColor:t.inactiveColor}})],1),t._v(" "),n("polygon",{attrs:{points:t.starPointsToString,fill:t.getGradId,stroke:t.borderColor,"stroke-width":t.borderWidth}}),t._v(" "),n("polygon",{attrs:{points:t.starPointsToString,fill:t.getGradId}})],1)},staticRenderFns:[]}},function(t,e){t.exports={render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{class:["star-rating",{"star-rating-rtl":t.rtl},{inline:t.inline}]},[n("div",{staticClass:"star-rating",on:{mouseleave:t.resetRating}},[t._l(t.maxRating,function(e){return n("span",{class:[{pointer:!t.readOnly},"star"]},[n("star",{attrs:{fill:t.fillLevel[e-1],size:t.starSize,"star-id":e,step:t.step,"active-color":t.activeColor,"inactive-color":t.inactiveColor,"border-color":t.borderColor,"border-width":t.borderWidth,padding:t.padding,rtl:t.rtl},on:{"star-selected":function(e){t.setRating(e,!0)},"star-mouse-move":t.setRating}})],1)}),t._v(" "),t.showRating?n("span",{class:["rating-text",t.textClass]},[t._v(" "+t._s(t.formattedRating))]):t._e()],2)])},staticRenderFns:[]}},function(t,e,n){var r=n(5);"string"==typeof r&&(r=[[t.i,r,""]]),r.locals&&(t.exports=r.locals);n(11)("2e648ff1",r,!0)},function(t,e,n){function r(t){for(var e=0;e<t.length;e++){var n=t[e],r=l[n.id];if(r){r.refs++;for(var i=0;i<r.parts.length;i++)r.parts[i](n.parts[i]);for(;i<n.parts.length;i++)r.parts.push(o(n.parts[i]));r.parts.length>n.parts.length&&(r.parts.length=n.parts.length)}else{for(var a=[],i=0;i<n.parts.length;i++)a.push(o(n.parts[i]));l[n.id]={id:n.id,refs:1,parts:a}}}}function i(){var t=document.createElement("style");return t.type="text/css",c.appendChild(t),t}function o(t){var e,n,r=document.querySelector('style[data-vue-ssr-id~="'+t.id+'"]');if(r){if(h)return g;r.parentNode.removeChild(r)}if(v){var o=p++;r=f||(f=i()),e=a.bind(null,r,o,!1),n=a.bind(null,r,o,!0)}else r=i(),e=s.bind(null,r),n=function(){r.parentNode.removeChild(r)};return e(t),function(r){if(r){if(r.css===t.css&&r.media===t.media&&r.sourceMap===t.sourceMap)return;e(t=r)}else n()}}function a(t,e,n,r){var i=n?"":r.css;if(t.styleSheet)t.styleSheet.cssText=m(e,i);else{var o=document.createTextNode(i),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(o,a[e]):t.appendChild(o)}}function s(t,e){var n=e.css,r=e.media,i=e.sourceMap;if(r&&t.setAttribute("media",r),i&&(n+="\n/*# sourceURL="+i.sources[0]+" */",n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(i))))+" */"),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}var u="undefined"!=typeof document;if("undefined"!=typeof DEBUG&&DEBUG&&!u)throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");var d=n(12),l={},c=u&&(document.head||document.getElementsByTagName("head")[0]),f=null,p=0,h=!1,g=function(){},v="undefined"!=typeof navigator&&/msie [6-9]\b/.test(navigator.userAgent.toLowerCase());t.exports=function(t,e,n){h=n;var i=d(t,e);return r(i),function(e){for(var n=[],o=0;o<i.length;o++){var a=i[o],s=l[a.id];s.refs--,n.push(s)}e?(i=d(t,e),r(i)):i=[];for(var o=0;o<n.length;o++){var s=n[o];if(0===s.refs){for(var u=0;u<s.parts.length;u++)s.parts[u]();delete l[s.id]}}}};var m=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},function(t,e){t.exports=function(t,e){for(var n=[],r={},i=0;i<e.length;i++){var o=e[i],a=o[0],s=o[1],u=o[2],d=o[3],l={id:t+":"+i,css:s,media:u,sourceMap:d};r[a]?r[a].parts.push(l):n.push(r[a]={id:a,parts:[l]})}return n}}])});
 //# sourceMappingURL=star-rating.min.js.map
 
 /***/ }),
-/* 383 */
+/* 388 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(337);
+var content = __webpack_require__(341);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -106587,13 +106637,13 @@ if(false) {
 }
 
 /***/ }),
-/* 384 */
+/* 389 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(338);
+var content = __webpack_require__(342);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -106613,13 +106663,13 @@ if(false) {
 }
 
 /***/ }),
-/* 385 */
+/* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(339);
+var content = __webpack_require__(343);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -106639,13 +106689,13 @@ if(false) {
 }
 
 /***/ }),
-/* 386 */
+/* 391 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(340);
+var content = __webpack_require__(344);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -106665,7 +106715,7 @@ if(false) {
 }
 
 /***/ }),
-/* 387 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -106698,7 +106748,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 388 */
+/* 393 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -107064,7 +107114,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   if (true) {
-    var Sortable = __webpack_require__(362);
+    var Sortable = __webpack_require__(366);
     module.exports = buildDraggable(Sortable);
   } else if (typeof define == "function" && define.amd) {
     define(['sortablejs'], function (Sortable) {
@@ -107077,7 +107127,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })();
 
 /***/ }),
-/* 389 */
+/* 394 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -107702,600 +107752,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 390 */,
-/* 391 */
+/* 395 */,
+/* 396 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(202);
+module.exports = __webpack_require__(205);
 
-
-/***/ }),
-/* 392 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(16)();
-exports.push([module.i, "/**\n * Trumbowyg v2.7.2 - A lightweight WYSIWYG editor\n * Trumbowyg plugin stylesheet\n * ------------------------\n * @link http://alex-d.github.io/Trumbowyg\n * @license MIT\n * @author Alexandre Demode (Alex-D)\n *         Twitter : @AlexandreDemode\n *         Website : alex-d.fr\n */\n\n.trumbowyg-dropdown-foreColor,\n.trumbowyg-dropdown-backColor {\n  width: 276px;\n  padding: 7px 5px; }\n  .trumbowyg-dropdown-foreColor svg,\n  .trumbowyg-dropdown-backColor svg {\n    display: none !important; }\n  .trumbowyg-dropdown-foreColor button,\n  .trumbowyg-dropdown-backColor button {\n    display: block;\n    position: relative;\n    float: left;\n    text-indent: -9999px;\n    height: 20px;\n    width: 20px;\n    border: 1px solid #333;\n    padding: 0;\n    margin: 2px; }\n    .trumbowyg-dropdown-foreColor button:hover::after, .trumbowyg-dropdown-foreColor button:focus::after,\n    .trumbowyg-dropdown-backColor button:hover::after,\n    .trumbowyg-dropdown-backColor button:focus::after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      top: -5px;\n      left: -5px;\n      height: 27px;\n      width: 27px;\n      background: inherit;\n      border: 1px solid #FFF;\n      box-shadow: #000 0 0 2px;\n      z-index: 10; }\n", ""]);
-
-/***/ }),
-/* 393 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-var stylesInDom = {},
-	memoize = function(fn) {
-		var memo;
-		return function () {
-			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-			return memo;
-		};
-	},
-	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
-	}),
-	getHeadElement = memoize(function () {
-		return document.head || document.getElementsByTagName("head")[0];
-	}),
-	singletonElement = null,
-	singletonCounter = 0,
-	styleElementsInsertedAtTop = [];
-
-module.exports = function(list, options) {
-	if(typeof DEBUG !== "undefined" && DEBUG) {
-		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-	}
-
-	options = options || {};
-	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-	// tags it will allow on a page
-	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-
-	// By default, add <style> tags to the bottom of <head>.
-	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-
-	var styles = listToStyles(list);
-	addStylesToDom(styles, options);
-
-	return function update(newList) {
-		var mayRemove = [];
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			domStyle.refs--;
-			mayRemove.push(domStyle);
-		}
-		if(newList) {
-			var newStyles = listToStyles(newList);
-			addStylesToDom(newStyles, options);
-		}
-		for(var i = 0; i < mayRemove.length; i++) {
-			var domStyle = mayRemove[i];
-			if(domStyle.refs === 0) {
-				for(var j = 0; j < domStyle.parts.length; j++)
-					domStyle.parts[j]();
-				delete stylesInDom[domStyle.id];
-			}
-		}
-	};
-}
-
-function addStylesToDom(styles, options) {
-	for(var i = 0; i < styles.length; i++) {
-		var item = styles[i];
-		var domStyle = stylesInDom[item.id];
-		if(domStyle) {
-			domStyle.refs++;
-			for(var j = 0; j < domStyle.parts.length; j++) {
-				domStyle.parts[j](item.parts[j]);
-			}
-			for(; j < item.parts.length; j++) {
-				domStyle.parts.push(addStyle(item.parts[j], options));
-			}
-		} else {
-			var parts = [];
-			for(var j = 0; j < item.parts.length; j++) {
-				parts.push(addStyle(item.parts[j], options));
-			}
-			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-		}
-	}
-}
-
-function listToStyles(list) {
-	var styles = [];
-	var newStyles = {};
-	for(var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var id = item[0];
-		var css = item[1];
-		var media = item[2];
-		var sourceMap = item[3];
-		var part = {css: css, media: media, sourceMap: sourceMap};
-		if(!newStyles[id])
-			styles.push(newStyles[id] = {id: id, parts: [part]});
-		else
-			newStyles[id].parts.push(part);
-	}
-	return styles;
-}
-
-function insertStyleElement(options, styleElement) {
-	var head = getHeadElement();
-	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-	if (options.insertAt === "top") {
-		if(!lastStyleElementInsertedAtTop) {
-			head.insertBefore(styleElement, head.firstChild);
-		} else if(lastStyleElementInsertedAtTop.nextSibling) {
-			head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-		} else {
-			head.appendChild(styleElement);
-		}
-		styleElementsInsertedAtTop.push(styleElement);
-	} else if (options.insertAt === "bottom") {
-		head.appendChild(styleElement);
-	} else {
-		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-	}
-}
-
-function removeStyleElement(styleElement) {
-	styleElement.parentNode.removeChild(styleElement);
-	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-	if(idx >= 0) {
-		styleElementsInsertedAtTop.splice(idx, 1);
-	}
-}
-
-function createStyleElement(options) {
-	var styleElement = document.createElement("style");
-	styleElement.type = "text/css";
-	insertStyleElement(options, styleElement);
-	return styleElement;
-}
-
-function createLinkElement(options) {
-	var linkElement = document.createElement("link");
-	linkElement.rel = "stylesheet";
-	insertStyleElement(options, linkElement);
-	return linkElement;
-}
-
-function addStyle(obj, options) {
-	var styleElement, update, remove;
-
-	if (options.singleton) {
-		var styleIndex = singletonCounter++;
-		styleElement = singletonElement || (singletonElement = createStyleElement(options));
-		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-	} else if(obj.sourceMap &&
-		typeof URL === "function" &&
-		typeof URL.createObjectURL === "function" &&
-		typeof URL.revokeObjectURL === "function" &&
-		typeof Blob === "function" &&
-		typeof btoa === "function") {
-		styleElement = createLinkElement(options);
-		update = updateLink.bind(null, styleElement);
-		remove = function() {
-			removeStyleElement(styleElement);
-			if(styleElement.href)
-				URL.revokeObjectURL(styleElement.href);
-		};
-	} else {
-		styleElement = createStyleElement(options);
-		update = applyToTag.bind(null, styleElement);
-		remove = function() {
-			removeStyleElement(styleElement);
-		};
-	}
-
-	update(obj);
-
-	return function updateStyle(newObj) {
-		if(newObj) {
-			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-				return;
-			update(obj = newObj);
-		} else {
-			remove();
-		}
-	};
-}
-
-var replaceText = (function () {
-	var textStore = [];
-
-	return function (index, replacement) {
-		textStore[index] = replacement;
-		return textStore.filter(Boolean).join('\n');
-	};
-})();
-
-function applyToSingletonTag(styleElement, index, remove, obj) {
-	var css = remove ? "" : obj.css;
-
-	if (styleElement.styleSheet) {
-		styleElement.styleSheet.cssText = replaceText(index, css);
-	} else {
-		var cssNode = document.createTextNode(css);
-		var childNodes = styleElement.childNodes;
-		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-		if (childNodes.length) {
-			styleElement.insertBefore(cssNode, childNodes[index]);
-		} else {
-			styleElement.appendChild(cssNode);
-		}
-	}
-}
-
-function applyToTag(styleElement, obj) {
-	var css = obj.css;
-	var media = obj.media;
-
-	if(media) {
-		styleElement.setAttribute("media", media)
-	}
-
-	if(styleElement.styleSheet) {
-		styleElement.styleSheet.cssText = css;
-	} else {
-		while(styleElement.firstChild) {
-			styleElement.removeChild(styleElement.firstChild);
-		}
-		styleElement.appendChild(document.createTextNode(css));
-	}
-}
-
-function updateLink(linkElement, obj) {
-	var css = obj.css;
-	var sourceMap = obj.sourceMap;
-
-	if(sourceMap) {
-		// http://stackoverflow.com/a/26603875
-		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-	}
-
-	var blob = new Blob([css], { type: "text/css" });
-
-	var oldSrc = linkElement.href;
-
-	linkElement.href = URL.createObjectURL(blob);
-
-	if(oldSrc)
-		URL.revokeObjectURL(oldSrc);
-}
-
-
-/***/ }),
-/* 394 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(392);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(393)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../css-loader/index.js!./trumbowyg.colors.css", function() {
-			var newContent = require("!!../../../../../css-loader/index.js!./trumbowyg.colors.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 395 */
-/***/ (function(module, exports) {
-
-/* ===========================================================
- * trumbowyg.colors.js v1.2
- * Colors picker plugin for Trumbowyg
- * http://alex-d.github.com/Trumbowyg
- * ===========================================================
- * Author : Alexandre Demode (Alex-D)
- *          Twitter : @AlexandreDemode
- *          Website : alex-d.fr
- */
-
-(function ($) {
-    'use strict';
-
-    $.extend(true, $.trumbowyg, {
-        langs: {
-            // jshint camelcase:false
-            cs: {
-                foreColor: 'Barva textu',
-                backColor: 'Barva pozadí'
-            },
-            en: {
-                foreColor: 'Text color',
-                backColor: 'Background color'
-            },
-            fr: {
-                foreColor: 'Couleur du texte',
-                backColor: 'Couleur de fond'
-            },
-            sk: {
-                foreColor: 'Farba textu',
-                backColor: 'Farba pozadia'
-            },
-            zh_cn: {
-                foreColor: '文字颜色',
-                backColor: '背景颜色'
-            },
-            ja: {
-                foreColor: '文字色',
-                backColor: '背景色'
-            }
-        }
-    });
-    // jshint camelcase:true
-
-
-    function hex(x) {
-        return ('0' + parseInt(x).toString(16)).slice(-2);
-    }
-
-    function colorToHex(rgb) {
-        if (rgb.search('rgb') === -1) {
-            return rgb.replace('#', '');
-        } else if (rgb === 'rgba(0, 0, 0, 0)') {
-            return 'transparent';
-        } else {
-            rgb = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/);
-            return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-        }
-    }
-
-    function colorTagHandler(element, trumbowyg) {
-        var tags = [];
-
-        if(!element.style){
-            return tags;
-        }
-
-        // background color
-        if (element.style.backgroundColor !== '') {
-            var backColor = colorToHex(element.style.backgroundColor);
-            if (trumbowyg.o.plugins.colors.colorList.indexOf(backColor) >= 0) {
-                tags.push('backColor' + backColor);
-            } else {
-                tags.push('backColorFree');
-            }
-        }
-
-        // text color
-        var foreColor;
-        if (element.style.color !== '') {
-            foreColor = colorToHex(element.style.color);
-        } else if (element.hasAttribute('color')) {
-            foreColor = colorToHex(element.getAttribute('color'));
-        }
-        if (foreColor) {
-            if (trumbowyg.o.plugins.colors.colorList.indexOf(foreColor) >= 0) {
-                tags.push('foreColor' + foreColor);
-            } else {
-                tags.push('foreColorFree');
-            }
-        }
-
-        return tags;
-    }
-
-    var defaultOptions = {
-        colorList: ['ffffff', '000000', 'eeece1', '1f497d', '4f81bd', 'c0504d', '9bbb59', '8064a2', '4bacc6', 'f79646', 'ffff00', 'f2f2f2', '7f7f7f', 'ddd9c3', 'c6d9f0', 'dbe5f1', 'f2dcdb', 'ebf1dd', 'e5e0ec', 'dbeef3', 'fdeada', 'fff2ca', 'd8d8d8', '595959', 'c4bd97', '8db3e2', 'b8cce4', 'e5b9b7', 'd7e3bc', 'ccc1d9', 'b7dde8', 'fbd5b5', 'ffe694', 'bfbfbf', '3f3f3f', '938953', '548dd4', '95b3d7', 'd99694', 'c3d69b', 'b2a2c7', 'b7dde8', 'fac08f', 'f2c314', 'a5a5a5', '262626', '494429', '17365d', '366092', '953734', '76923c', '5f497a', '92cddc', 'e36c09', 'c09100', '7f7f7f', '0c0c0c', '1d1b10', '0f243e', '244061', '632423', '4f6128', '3f3151', '31859b', '974806', '7f6000']
-    };
-
-    // Add all colors in two dropdowns
-    $.extend(true, $.trumbowyg, {
-        plugins: {
-            color: {
-                init: function (trumbowyg) {
-                    trumbowyg.o.plugins.colors = trumbowyg.o.plugins.colors || defaultOptions;
-                    var foreColorBtnDef = {
-                            dropdown: buildDropdown('foreColor', trumbowyg)
-                        },
-                        backColorBtnDef = {
-                            dropdown: buildDropdown('backColor', trumbowyg)
-                        };
-
-                    trumbowyg.addBtnDef('foreColor', foreColorBtnDef);
-                    trumbowyg.addBtnDef('backColor', backColorBtnDef);
-                },
-                tagHandler: colorTagHandler
-            }
-        }
-    });
-
-    function buildDropdown(fn, trumbowyg) {
-        var dropdown = [];
-
-        $.each(trumbowyg.o.plugins.colors.colorList, function (i, color) {
-            var btn = fn + color,
-                btnDef = {
-                    fn: fn,
-                    forceCss: true,
-                    param: '#' + color,
-                    style: 'background-color: #' + color + ';'
-                };
-            trumbowyg.addBtnDef(btn, btnDef);
-            dropdown.push(btn);
-        });
-
-        var removeColorButtonName = fn + 'Remove',
-            removeColorBtnDef = {
-                fn: 'removeFormat',
-                param: fn,
-                style: 'background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQIW2NkQAAfEJMRmwBYhoGBYQtMBYoAADziAp0jtJTgAAAAAElFTkSuQmCC);'
-            };
-        trumbowyg.addBtnDef(removeColorButtonName, removeColorBtnDef);
-        dropdown.push(removeColorButtonName);
-
-        // add free color btn
-        var freeColorButtonName = fn + 'Free',
-            freeColorBtnDef = {
-                fn: function () {
-                    trumbowyg.openModalInsert(trumbowyg.lang[fn],
-                        {
-                            color: {
-                                label: fn,
-                                value: '#FFFFFF'
-                            }
-                        },
-                        // callback
-                        function (values) {
-                            trumbowyg.execCmd(fn, values.color);
-                            return true;
-                        }
-                    );
-                },
-                text: '#',
-                // style adjust for displaying the text
-                style: 'text-indent: 0;line-height: 20px;padding: 0 5px;'
-            };
-        trumbowyg.addBtnDef(freeColorButtonName, freeColorBtnDef);
-        dropdown.push(freeColorButtonName);
-
-        return dropdown;
-    }
-})(jQuery);
-
-
-/***/ }),
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */
-/***/ (function(module, exports) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-(function ($) {
-    'use strict';
-
-    var defaultOptions = {
-        fileFieldName: 'image', // input field name
-        data: [] // Additional data for ajax [{name: 'key', value: 'value'}]
-    };
-
-    addXhrProgressEvent();
-
-    $.extend(true, $.trumbowyg, {
-        langs: {
-            // jshint camelcase:false
-            en: {
-                upload: 'Upload',
-                file: 'File',
-                uploadError: 'Error'
-            }
-        },
-        // jshint camelcase:true
-
-        plugins: {
-            upload: {
-                init: function init(trumbowyg) {
-                    trumbowyg.o.plugins.upload = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.upload || {});
-                    var btnDef = {
-                        fn: function fn() {
-                            trumbowyg.saveRange();
-
-                            var file,
-                                prefix = trumbowyg.o.prefix;
-
-                            var $modal = trumbowyg.openModalInsert(
-                            // Title
-                            trumbowyg.lang.upload,
-
-                            // Fields
-                            {
-                                file: {
-                                    type: 'file',
-                                    required: true,
-                                    attributes: {
-                                        accept: 'image/*'
-                                    }
-                                },
-                                alt: {
-                                    label: 'description',
-                                    value: trumbowyg.getRangeText()
-                                }
-                            },
-
-                            // Callback
-                            function (values) {
-                                var data = new FormData();
-                                data.append(trumbowyg.o.plugins.upload.fileFieldName, file);
-
-                                trumbowyg.o.plugins.upload.data.map(function (cur) {
-                                    data.append(cur.name, cur.value);
-                                });
-
-                                $.map(values, function (curr, key) {
-                                    if (key !== 'file') {
-                                        data.append(key, curr);
-                                    }
-                                });
-
-                                if ($('.' + prefix + 'progress', $modal).length === 0) {
-                                    $('.' + prefix + 'modal-title', $modal).after($('<div/>', {
-                                        'class': prefix + 'progress'
-                                    }).append($('<div/>', {
-                                        'class': prefix + 'progress-bar'
-                                    })));
-                                }
-                                Bus.$emit('upload-file', { data: data, trumbowyg: trumbowyg, $modal: $modal, values: values });
-                            });
-
-                            $('input[type=file]').on('change', function (e) {
-                                try {
-                                    // If multiple files allowed, we just get the first.
-                                    file = e.target.files[0];
-                                } catch (err) {
-                                    // In IE8, multiple files not allowed
-                                    file = e.target.value;
-                                }
-                            });
-                        }
-                    };
-
-                    trumbowyg.addBtnDef('upload', btnDef);
-                }
-            }
-        }
-    });
-
-    function addXhrProgressEvent() {
-        if (!$.trumbowyg && !$.trumbowyg.addedXhrProgressEvent) {
-            // Avoid adding progress event multiple times
-            var originalXhr = $.ajaxSettings.xhr;
-            $.ajaxSetup({
-                xhr: function xhr() {
-                    var req = originalXhr(),
-                        that = this;
-                    if (req && _typeof(req.upload) === 'object' && that.progressUpload !== undefined) {
-                        req.upload.addEventListener('progress', function (e) {
-                            that.progressUpload(e);
-                        }, false);
-                    }
-
-                    return req;
-                }
-            });
-            $.trumbowyg.addedXhrProgressEvent = true;
-        }
-    }
-})(jQuery);
 
 /***/ })
 /******/ ]);

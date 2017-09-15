@@ -24,6 +24,10 @@
  */
 
 Evolutly.forms = {
+    editProjectForm:{
+        id: '',
+        client_name: '',
+    },
     projectForm: {
         client_name: '', 
         client_id: '', 
