@@ -21,10 +21,10 @@
         <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Job</button>
     </a>
     <a v-if="guard ==='web' && !showEditor" @click="openEditor()" class="margin10">
-        <button class="button bg-darkTeal fg-white" :disabled="taskForm.busy"><span class="icon fa fa-sticky-note "></span> Job Page Editor</button>
+        <button class="button bg-darkTeal fg-white" :disabled="taskForm.busy"><span class="icon fa sticky-note "></span> Job Page Editor</button>
     </a>
     <a v-if="guard ==='web' && showEditor"  @click="editDescription()" class="margin10">
-        <button class="button bg-teal fg-white" :disabled="taskForm.busy"><span class="icon fa fa-sticky-note "></span> Update Job Page</button>
+        <button class="button bg-teal fg-white" :disabled="taskForm.busy"><span class="icon fa sticky-note "></span> Update Job Page</button>
     </a>
 </div>
 

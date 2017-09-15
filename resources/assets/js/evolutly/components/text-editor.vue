@@ -63,6 +63,10 @@ mounted () {
         self.modal = $modal
         self.uploadImage(data)
     })
+
+    Bus.$on('editDescription',(id) => {
+        self.callApiUpdateTask(id)
+    })
 },
 methods: {
     uploadImage(formData){

@@ -49707,6 +49707,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             self.modal = $modal;
             self.uploadImage(data);
         });
+
+        Bus.$on('editDescription', function (id) {
+            self.callApiUpdateTask(id);
+        });
     },
 
     methods: {
