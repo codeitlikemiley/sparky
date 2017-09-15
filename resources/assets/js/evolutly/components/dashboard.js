@@ -15,7 +15,8 @@ Vue.component('dashboard', {
             clients: [],
             current_project: null,
             current_index: null,
-            projects: []
+            projects: [],
+            current_project: null
         }
     },
 
@@ -34,32 +35,40 @@ Vue.component('dashboard', {
     methods: { 
         updateProjectName(){
             let self = this 
-            self.projectForm.busy = true
-            let projectID = self.editProjectForm.id
-            self.endpoints.web = `/dashboard/clients/${projectID}/edit`
+            self.editProjectForm.busy = true
+            
+            self.endpoints.web = `/dashboard/clients/${self.current_project.id}/edit`
+            if(self.editProjectForm.newclient){
+                delete self.editProjectForm.client_id
+            }else {
+                delete self.editProjectForm.client
+            }
             delete self.editProjectForm.id
                 axios.post(self.guardedLocation(), self.editProjectForm)
                 .then(function (response) {
                     self.closeEditProjectModal()
-                    let index = _.findIndex(self.projects, { id: projectID })
+                    let index = _.findIndex(self.projects, { id: self.current_project.id })
                     // add a re-order function to reorder the campaigns
                     self.$set(self.projects, index, response.data.project)
-                    self.projectForm.busy = false
+                    self.clients = response.data.clients
+                    self.resetProjectForm()
+                    self.editProjectForm.client_id = _.find(this.clients, { id: response.data.client })
+                    self.editProjectForm.busy = false
                     self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
                 })
                 .catch(error => {
-                    self.projectForm.errors.set(error.response.data.errors)
-                    if(!self.projectForm.client_id){
-                        self.projectForm.client_id = _.find(this.clients, { id: this.project.client_id })
+                    self.editProjectForm.errors.set(error.response.data.errors)
+                    if(!self.editProjectForm.client_id){
+                        self.editProjectForm.client_id = _.find(this.clients, { id: this.project.client_id })
                     }
-                    if(!self.projectForm.client){
-                        this.projectForm.client = {
+                    if(!self.editProjectForm.client){
+                        this.editProjectForm.client = {
                             name: '', 
                             email: '', 
                             password: ''
                         }
                     }
-                    self.projectForm.busy = false
+                    self.editProjectForm.busy = false
                     self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff', })
                 })
                 
@@ -70,8 +79,10 @@ Vue.component('dashboard', {
         },
         fillUpEditProjectModal(project){
             let self = this 
+            self.current_project = project
             self.editProjectForm.client_name =  project.name
             self.editProjectForm.id  = project.id
+            self.editProjectForm.client_id = _.find(this.clients, { id: project.client_id })
         },
         showEditProjectModal(project){
             this.fillUpEditProjectModal(project)

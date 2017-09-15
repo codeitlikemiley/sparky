@@ -146,6 +146,13 @@
                     <span class="counter">Clone Template For Clients</span>
                 </a>
             </li>
+            <li>
+                <a href="/dashboard">
+                    <span class="mif-chevron-right icon"></span>
+                    <span class="title">Add Templates</span>
+                    <span class="counter">Clone an Existing Client</span>
+                </a>
+            </li>
         </ul>
     </li>
 <!-- Profile Menu -->

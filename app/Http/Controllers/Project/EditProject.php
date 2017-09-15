@@ -36,7 +36,7 @@ class EditProject extends BaseController
         $clients = $this->getAuth()->clients;
         $client = Client::find($project->client_id);
         $project = $project;
-        return response()->json(['message' => $this->message, 'project' => $project,'clients' => $clients, 'client' => $client, 'project' => $project], $this->code);
+        return response()->json(['message' => $this->message, 'project' => $project,'clients' => $clients, 'client' => $client], $this->code);
     }
 
     private function sanitize()

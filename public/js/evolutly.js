@@ -50072,13 +50072,15 @@ Vue.component('client-management', {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 Vue.component('dashboard', {
     mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_guard___default.a],
     props: ['guard', 'tenant', 'user', 'projectlist', 'clientlist'],
     data: function data() {
-        return {
+        return _defineProperty({
             campaigns: [],
             projectForm: new EvolutlyForm(Evolutly.forms.projectForm),
             editProjectForm: new EvolutlyForm(Evolutly.forms.editProjectForm),
@@ -50090,7 +50092,7 @@ Vue.component('dashboard', {
             current_project: null,
             current_index: null,
             projects: []
-        };
+        }, 'current_project', null);
     },
     mounted: function mounted() {
         this.clients = this.clientlist;
@@ -50110,30 +50112,38 @@ Vue.component('dashboard', {
             var _this = this;
 
             var self = this;
-            self.projectForm.busy = true;
-            var projectID = self.editProjectForm.id;
-            self.endpoints.web = '/dashboard/clients/' + projectID + '/edit';
+            self.editProjectForm.busy = true;
+
+            self.endpoints.web = '/dashboard/clients/' + self.current_project.id + '/edit';
+            if (self.editProjectForm.newclient) {
+                delete self.editProjectForm.client_id;
+            } else {
+                delete self.editProjectForm.client;
+            }
             delete self.editProjectForm.id;
             axios.post(self.guardedLocation(), self.editProjectForm).then(function (response) {
                 self.closeEditProjectModal();
-                var index = _.findIndex(self.projects, { id: projectID });
+                var index = _.findIndex(self.projects, { id: self.current_project.id });
                 // add a re-order function to reorder the campaigns
                 self.$set(self.projects, index, response.data.project);
-                self.projectForm.busy = false;
+                self.clients = response.data.clients;
+                self.resetProjectForm();
+                self.editProjectForm.client_id = _.find(this.clients, { id: response.data.client });
+                self.editProjectForm.busy = false;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
-                self.projectForm.errors.set(error.response.data.errors);
-                if (!self.projectForm.client_id) {
-                    self.projectForm.client_id = _.find(_this.clients, { id: _this.project.client_id });
+                self.editProjectForm.errors.set(error.response.data.errors);
+                if (!self.editProjectForm.client_id) {
+                    self.editProjectForm.client_id = _.find(_this.clients, { id: _this.project.client_id });
                 }
-                if (!self.projectForm.client) {
-                    _this.projectForm.client = {
+                if (!self.editProjectForm.client) {
+                    _this.editProjectForm.client = {
                         name: '',
                         email: '',
                         password: ''
                     };
                 }
-                self.projectForm.busy = false;
+                self.editProjectForm.busy = false;
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#ffffff' });
             });
         },
@@ -50143,8 +50153,10 @@ Vue.component('dashboard', {
         },
         fillUpEditProjectModal: function fillUpEditProjectModal(project) {
             var self = this;
+            self.current_project = project;
             self.editProjectForm.client_name = project.name;
             self.editProjectForm.id = project.id;
+            self.editProjectForm.client_id = _.find(this.clients, { id: project.client_id });
         },
         showEditProjectModal: function showEditProjectModal(project) {
             this.fillUpEditProjectModal(project);
@@ -52282,7 +52294,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 Evolutly.forms = (_Evolutly$forms = {
     editProjectForm: {
         id: '',
-        client_name: ''
+        client_name: '',
+        client_id: '',
+        website: '',
+        newclient: false,
+        client: {
+            name: '',
+            email: '',
+            password: ''
+        }
     },
     projectForm: {
         client_name: '',

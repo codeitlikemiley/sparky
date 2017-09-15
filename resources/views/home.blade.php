@@ -31,7 +31,7 @@
                 <div class="cell" v-for="(project,index_project, key_project) in chunk" :project="project" :index="index_project" :key="key_project">
                     <div class="panel error">
                         <div class="heading">
-                            <span class="title" @click="showEditProjectModal(project)">@{{ project.name }}</span>
+                            <span class="title" @click="showEditProjectModal(project)"><span class="mif-pencil" style="padding-right:5px;"></span>@{{ project.name }}</span>
                                 <span @click="deleteProject(project.id)" class="bg-red alert icon fa fa-trash" style="cursor:pointer;"
                                 data-role="hint" data-hint-mode="2" data-hint="Project|Delete" data-hint-position="top"
                                 ></span>
