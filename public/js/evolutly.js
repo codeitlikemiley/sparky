@@ -51365,7 +51365,7 @@ Vue.component('subtask', {
             task: {},
             client: {},
             options: [],
-            subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
+            subtaskForm: new EvolutlyForm(Evolutly.forms.editSubtaskForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
             rating: null,
             modal: null,
@@ -51527,7 +51527,7 @@ Vue.component('subtask', {
         closeEditSubtask: function closeEditSubtask() {
             var self = this;
             self.hide('edit-subtask-modal-' + self.subtask.id);
-            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.editSubtaskForm);
         },
         editSubtask: function editSubtask() {
             var self = this;
@@ -51557,7 +51557,7 @@ Vue.component('subtask', {
             if (self.subtaskForm.newCollaborator == false) {
                 delete self.subtaskForm.users;
             }
-            if (!self.subtask.employees) {
+            if (!self.subtaskForm.assignedEmployees) {
                 delete self.subtaskForm.assignedEmployees;
             }
             self.endpoints.web = '/dashboard/tasks/' + self.subtask.id + '/update';
@@ -52684,12 +52684,12 @@ Evolutly.forms = (_Evolutly$forms = {
         task_interval: 0
     },
     subtaskForm: {
-        name: null,
-        description: null,
-        points: null,
-        priority: null,
-        link: null,
-        due_date: null, // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
+        name: '',
+        description: '',
+        points: 1,
+        priority: 1,
+        link: '',
+        due_date: moment(new Date()).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
         done: false,
         newCollaborator: false,
         users: [{
@@ -52700,6 +52700,25 @@ Evolutly.forms = (_Evolutly$forms = {
         showEditor: false,
         sendEmail: false,
         assignedEmployees: []
+
+    },
+    editSubtaskForm: {
+        name: '',
+        description: '',
+        points: '',
+        priority: '',
+        link: '',
+        due_date: '', // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
+        done: false,
+        newCollaborator: false,
+        users: [{
+            name: '',
+            email: '',
+            password: ''
+        }],
+        showEditor: false,
+        sendEmail: false,
+        assignedEmployees: [{}]
 
     },
     commentForm: {

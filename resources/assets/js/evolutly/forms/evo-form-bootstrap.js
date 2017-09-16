@@ -86,12 +86,12 @@ Evolutly.forms = {
         task_interval: 0,
     },
     subtaskForm:{
-        name: null,
-        description: null,
-        points: null,
-        priority: null,
-        link: null,
-        due_date:  null, // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
+        name: '',
+        description: '',
+        points: 1,
+        priority: 1,
+        link: '',
+        due_date:  moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
         done: false,
         newCollaborator: false,
         users: [{
@@ -102,6 +102,25 @@ Evolutly.forms = {
         showEditor: false,
         sendEmail: false,
         assignedEmployees: []
+
+    },
+    editSubtaskForm:{
+        name: '',
+        description: '',
+        points: '',
+        priority: '',
+        link: '',
+        due_date:  '', // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
+        done: false,
+        newCollaborator: false,
+        users: [{
+            name: '',
+            email: '',
+            password: '',
+        }],
+        showEditor: false,
+        sendEmail: false,
+        assignedEmployees: [{}]
 
     },
     commentForm: {

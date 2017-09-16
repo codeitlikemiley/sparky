@@ -15,7 +15,7 @@ Vue.component('subtask', {
             task: {},
             client: {},
             options: [],
-            subtaskForm: new EvolutlyForm(Evolutly.forms.subtaskForm),
+            subtaskForm: new EvolutlyForm(Evolutly.forms.editSubtaskForm),
             ratingForm: new EvolutlyForm(Evolutly.forms.ratingForm),
             rating: null,
             modal: null,
@@ -191,7 +191,7 @@ Vue.component('subtask', {
         closeEditSubtask(){
             let self = this 
             self.hide(`edit-subtask-modal-${self.subtask.id}`)
-            self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
+            self.subtaskForm = new EvolutlyForm(Evolutly.forms.editSubtaskForm)
         },
         editSubtask(){
             let self = this
@@ -222,7 +222,7 @@ Vue.component('subtask', {
             if(self.subtaskForm.newCollaborator == false){
                 delete self.subtaskForm.users
             }
-            if(!self.subtask.employees){
+            if(!self.subtaskForm.assignedEmployees){
                 delete self.subtaskForm.assignedEmployees
             }
             self.endpoints.web = `/dashboard/tasks/${self.subtask.id}/update`
