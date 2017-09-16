@@ -51410,7 +51410,7 @@ Vue.component('subtask', {
     computed: {
         employeeChunks: function employeeChunks() {
             var self = this;
-            return _.chunk(self.subtaskForm.assignedEmployees, 4);
+            return _.chunk(self.subtask.employees, 4);
         }
     },
     methods: {
@@ -51452,10 +51452,10 @@ Vue.component('subtask', {
                 self.$popup({ message: 'Failed To Upload Image', backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },
-        goToTask: function goToTask() {
+        goToTeam: function goToTeam() {
             var self = this;
-            var url = '/dashboard/jobs/' + self.task.id;
-            window.location.href = url;
+            self.endpoints.web = '/users/teammates';
+            self.guardAllowed(['web'], window.location.href = self.endpoints.web);
         },
         overDueDate: function overDueDate() {
             var self = this;
@@ -51536,9 +51536,11 @@ Vue.component('subtask', {
         callApiEditSubtask: function callApiEditSubtask() {
             var self = this;
             self.subtaskForm.busy = true;
-            self.subtaskForm.name = self.subtask.name;
             if (self.subtaskForm.link == null) {
                 delete self.subtaskForm.link;
+            }
+            if (self.subtaskForm.description == null) {
+                delete self.subtaskForm.description;
             }
             if (self.subtaskForm.name == null) {
                 delete self.subtaskForm.name;
@@ -51555,17 +51557,34 @@ Vue.component('subtask', {
             if (self.subtaskForm.newCollaborator == false) {
                 delete self.subtaskForm.users;
             }
-            self.endpoints.web = '/tasks/' + self.subtask.id + '/update';
+            if (!self.subtask.employees) {
+                delete self.subtaskForm.assignedEmployees;
+            }
+            self.endpoints.web = '/dashboard/tasks/' + self.subtask.id + '/update';
             axios.put(self.guardedLocation(), self.subtaskForm).then(function (response) {
+                self.subtask = response.data.subtask;
                 self.subtaskForm.resetStatus();
                 self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
-                self.options = response.data.employees;
-                self.teammember = response.data.workers;
                 self.subtaskForm.busy = false;
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
+                if (!self.subtaskForm.description) {
+                    self.subtaskForm.description = self.subtask.description;
+                }
                 if (!self.subtaskForm.link) {
                     self.subtaskForm.link = '';
+                }
+                if (!self.subtaskForm.name) {
+                    self.subtaskForm.name = '';
+                }
+                if (!self.subtaskForm.points) {
+                    self.subtaskForm.points = '';
+                }
+                if (!self.subtaskForm.priority) {
+                    self.subtaskForm.priority = '';
+                }
+                if (!self.subtaskForm.due_date) {
+                    self.subtaskForm.due_date = null;
                 }
                 if (!self.subtaskForm.users) {
                     [{
@@ -51573,6 +51592,9 @@ Vue.component('subtask', {
                         email: '',
                         password: ''
                     }];
+                }
+                if (!self.subtask.employees) {
+                    self.subtask.employees = [];
                 }
                 if (error.response.data.errors) {
                     self.subtaskForm.errors.set(error.response.data.errors);
@@ -51586,6 +51608,16 @@ Vue.component('subtask', {
         },
         hide: function hide(name) {
             this.$modal.hide(name);
+        },
+        updateAssignedEmployees: function updateAssignedEmployees() {
+            var self = this;
+            self.subtaskForm.assignedEmployees = self.subtask.employees;
+            self.guardAllowed(['web'], self.callApiEditSubtask());
+        },
+        updateDescription: function updateDescription() {
+            var self = this;
+            self.subtaskForm.description = self.subtask.description;
+            self.guardAllowed(['web'], self.callApiEditSubtask());
         }
     },
     watch: {
@@ -51595,6 +51627,15 @@ Vue.component('subtask', {
         priority: function priority(newValue) {
             this.setPriority(newValue);
             this.subtaskForm.priority = newValue;
+        },
+
+        subtask: {
+            handler: function handler(newValue) {},
+
+            deep: true
+        },
+        options: function options(newValue) {
+            console.log('workers updated!');
         }
     },
 
@@ -52643,12 +52684,12 @@ Evolutly.forms = (_Evolutly$forms = {
         task_interval: 0
     },
     subtaskForm: {
-        name: '',
-        description: '',
-        points: 1,
-        priority: 1,
-        link: '',
-        due_date: moment(new Date()).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
+        name: null,
+        description: null,
+        points: null,
+        priority: null,
+        link: null,
+        due_date: null, // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
         done: false,
         newCollaborator: false,
         users: [{

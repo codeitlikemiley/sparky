@@ -6,34 +6,35 @@
 
 </style>
 @endpush
-<div class="frame bg-white" id="people_tab" v-if="subtaskForm.assignedEmployees.length >0" style="min-height:600px;padding-bottom:100px;">
+<div class="frame bg-white" id="people_tab"  style="min-height:600px;padding-bottom:100px;">
+    
     <div class="row" style="padding-top:100px;">
-            <v-select  style="margin-bottom:50px;margin-top:-50px;" multiple max-height="160px" class="full-size" v-model="subtaskForm.assignedEmployees" label="name" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
+            <a v-if="guard === 'web'" @click="updateAssignedEmployees()" style="position:absolute;top:0;right:0;font-size:1em;cursor:pointer;">
+                    <span class="tag info"><span class="icon mif-plus"></span> Update Assigned Teammates</span>
+            </a>
+            <v-select v-if="guard === 'web'" style="margin-bottom:50px;margin-top:-50px;" multiple max-height="160px" class="full-size" v-model="subtask.employees" label="email" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
     </div>
-    <div class="row cells4" v-for="(chunk, chunkKey) in employeeChunks" :key="chunkKey">
-            <div class="cell" v-for="(employee, employeeKey) in chunk" :key="employeeKey">
-                <a   style="cursor:pointer;">
-                    <img :src="employee.photo_url" 
-                        :alt="employee.name"
-                        style="border: 2px solid #d3e0e9;
-                            border-radius: 50%;
-                            height: 40px;
-                            padding: 2px;
-                            width: 40px;
-                            height: 50px;
-                            width: 50px;"
-                    >
-                    @{{ employee.name }}
-                </a>
-            </div>
+    <div  class="row cells4" v-for="(chunk, chunkKey) in employeeChunks" :key="chunkKey">
+        <div class="cell" v-for="(employee, employeeKey) in chunk" :key="employeeKey">
+            <a   style="cursor:pointer;">
+                <img :src="employee.photo_url" 
+                    :alt="employee.name"
+                    style="border: 2px solid #d3e0e9;
+                        border-radius: 50%;
+                        height: 40px;
+                        padding: 2px;
+                        width: 40px;
+                        height: 50px;
+                        width: 50px;"
+                >
+                @{{ employee.name }}
+            </a>
         </div>
     </div>
-    <div class="frame bg-white" id="people_tab" v-else>
-        <div class="row" style="min-height:450px;">
+    <div v-if="options.length < 1" class="row" style="min-height:450px;">
             <div class="cell align-center">
-                <h4 class="fg-lightRed">No Team Member Yet is Assigned To Any Of The Task For this Job!</h4>
-                <h4 class="tag bg-blue fg-white" style="cursor:pointer; font-size:20px;"><strong @click="goToTask()">Create a New Task and Assign A Team Member To That Task</strong></h4>
+                <h4 class="fg-lightRed">You Dont Have Any Teammembers Create Yet</h4>
+                <h4 class="tag bg-blue fg-white" style="cursor:pointer; font-size:20px;"><strong @click="goToTeam()">Create New Team Members Now</strong></h4>
             </div>
-        </div>
-        
     </div>
+</div>

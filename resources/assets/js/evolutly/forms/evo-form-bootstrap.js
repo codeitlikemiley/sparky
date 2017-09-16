@@ -86,12 +86,12 @@ Evolutly.forms = {
         task_interval: 0,
     },
     subtaskForm:{
-        name: '',
-        description: '',
-        points: 1,
-        priority: 1,
-        link: '',
-        due_date:  moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD'),
+        name: null,
+        description: null,
+        points: null,
+        priority: null,
+        link: null,
+        due_date:  null, // moment(new Date).add(1, 'day').endOf('day').format('YYYY-MM-DD')
         done: false,
         newCollaborator: false,
         users: [{

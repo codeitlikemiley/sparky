@@ -32,7 +32,7 @@ inline-template>
                         <div class="tabcontrol" data-role="tabcontrol">
                             <ul class="tabs">
                                 <li><a href="#view_tab">Task</a></li>
-                                <li><a href="#edit_tab">Edit</a></li>
+                                <li v-if="guard === 'web'"><a href="#edit_tab">Edit</a></li>
                                 <li><a href="#people_tab">Team</a></li>
                                 
                             </ul>

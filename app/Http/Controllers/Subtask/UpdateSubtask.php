@@ -38,33 +38,17 @@ class UpdateSubtask extends BaseController
         }
         if($this->getAuth()->id === $this->getTenant()->id){
             $this->editSubtask($subtask);
-            $subtask->save();
             $this->assignEmployeesIfAny($subtask);
             $this->addUsers($subtask);
             $subtask = $subtask->fresh();
             $subtask->employees;
-            $workers = $this->getWorkers($subtask);
-            $employees = $this->getAuth()->employees()->get()->toArray();
-            return response()->json(['message' => $this->message, 'subtask' => $subtask, 'employees' => $employees,'workers' => $workers], $this->code);
+            $workers = Employee::where('tenant_id',$this->getTenant()->id)->get();
+            return response()->json(['message' => $this->message, 'subtask' => $subtask, 'workers' => $workers], $this->code);
         }
         $this->message = 'UnAthorized Request!';
         $this->code = 401;
         return response()->json(['message' => $this->message], $this->code);
     }
-
-    private function getWorkers($subtask){
-        $workers = $subtask->task()->first()->campaign()->first()->project()->first()->assignedEmployees()->get();
-        $teammates = [];
-
-        if(count($workers)){
-            for ($i=0; $i < count($workers); $i++) { 
-                $e = Employee::with('assignedprojects.subtasks')->where('id',$workers[$i]['id'])->first();
-                array_push($teammates, $e);
-            }
-        }
-        return $teammates;
-    }
-
 
     private function sanitize()
     {
@@ -74,9 +58,9 @@ class UpdateSubtask extends BaseController
     private function rules(){
         return 
         [
-        'name' => 'required', // |max:30
+        'name' => 'max:255', // |max:30
         'description' => 'max:65535',
-        'points' => 'required|min:1',
+        'points' => 'min:1',
         'link' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
         'priority' => 'in:1,2,3,4,5',
         'done' => 'boolean',
@@ -89,8 +73,8 @@ class UpdateSubtask extends BaseController
 
     private function messages(){
         return [
-            'name.required' => 'Define Your Task',
-            // 'name.max' => 'Task Name Too Long Max(30)',
+            // 'name.required' => 'Define Your Task',
+            'name.max' => 'Task Name Too Long Max(255)',
             'description.max' => 'Job Description Reach Character Limit',
             'points.required' => 'Points is Required',
             'points.min' => 'Minimum Point is 1',
@@ -118,6 +102,7 @@ class UpdateSubtask extends BaseController
         $this->addPoints($subtask);
         $this->addDueDate($subtask);
         $this->addName($subtask);
+        $subtask->save();
     }
 
     private function addName($subtask)
@@ -186,7 +171,6 @@ class UpdateSubtask extends BaseController
             }
             $subtask->employees()->attach($data);
         }
-        $subtask->save();
         $employees = $users_input;
         if($employees && $this->request->sendEmail === true){
             foreach($employees as $employee){
@@ -213,7 +197,6 @@ class UpdateSubtask extends BaseController
         }else{
             $subtask->employees()->sync([]);
         }
-        $subtask->save();
         $employees = $subtask->employees;
         if(count($employees) && $this->request->sendEmail === true){
             foreach($employees as $employee){
