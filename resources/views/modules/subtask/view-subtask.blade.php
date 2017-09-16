@@ -34,6 +34,11 @@ inline-template>
                                 <li><a href="#view_tab">Task</a></li>
                                 <li v-if="guard === 'web'"><a href="#edit_tab">Edit</a></li>
                                 <li><a href="#people_tab">Team</a></li>
+                                <li v-if="guard === 'web' || guard === 'employee'" class="pull-right"><label class="switch">
+										<input @click="toggleDone()" type="checkbox" v-model="subtask.done">
+										<span  class="check"></span> <span v-if="subtask.done" class="fg-orange"> Undone Task</span> <span v-else class="fg-green"> Mark As Done</span>
+                                </label></li>
+                                
                                 
                             </ul>
                             <div class="grid frames bg-white">

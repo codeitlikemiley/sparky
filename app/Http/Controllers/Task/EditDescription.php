@@ -32,7 +32,7 @@ class EditDescription extends BaseController
         $validator = $this->sanitize();
         if($validator->fails())
         {
-            $this->message = 'Failed To Edit '. $task->name;
+            $this->message = 'Failed To Edit Job '. $task->name;
             $this->code = 400;
             return response()->json(['message' => $this->message, 'errors' => $validator->errors()], $this->code);
         }
@@ -41,7 +41,7 @@ class EditDescription extends BaseController
             $this->editTask($task);
             $this->save($task);
             $task = $task->fresh();
-            return response()->json(['message' => 'Task: '.$task->name. ' Edited!', 'description' => $task->description], 200);
+            return response()->json(['message' => 'Job : '.$task->name. ' Description Edited!', 'description' => $task->description], 200);
         }
         
 
@@ -60,7 +60,7 @@ class EditDescription extends BaseController
     }
     private function messages(){
         return [
-            'task_description.required' => 'Task Description Required',
+            'task_description.required' => 'Job Description Required',
         ];
     }
     private function allowed($task)
@@ -98,7 +98,7 @@ class EditDescription extends BaseController
     {
         $save = $task->save();
         if(!$save){
-        $this->message = 'Editing Task Failed!';
+        $this->message = 'Editing Job Description Failed!';
         $this->code = 404;
         }
     }
