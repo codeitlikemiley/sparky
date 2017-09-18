@@ -21,7 +21,7 @@ class ShowComment extends BaseController
         $this->request = $request;
     }
 
-    /**
+   /**
      * Receive Project Id
      *
      * @return \Illuminate\Http\Response
@@ -29,7 +29,7 @@ class ShowComment extends BaseController
     public function __invoke($task)
     {
         if($this->allowed($task) || $this->createdBy($task)){
-            $comments = $task->comments()->with('creator')->get();
+            $comments = $task->comments()->with('children.creator', 'creator')->where('parent_id', null)->get();
             return response()->json(['comments' => $comments],$this->code);
         }
         $this->code = 401;

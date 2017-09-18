@@ -17,7 +17,7 @@ class ShowComment extends BaseController
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:web');
+        $this->middleware('auth');
         $this->request = $request;
     }
 

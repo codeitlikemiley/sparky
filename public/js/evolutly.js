@@ -49278,6 +49278,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_guard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_guard__);
 //
 //
 //
@@ -49339,62 +49341,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_guard___default.a],
     props: ['guard', 'employees', 'tenant', 'user', 'task', 'client'],
     data: function data() {
         return {
             commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
-            comments: [],
-            endpoints: {
-                web: null,
-                team: null,
-                client: null
-            }
+            comments: []
         };
     },
     mounted: function mounted() {
         this.whenReady();
     },
 
-    computed: {},
     methods: {
-        // Overried pass array of valid guard from backend
-        // By Default Uses This Array
-        // Passed A Callback Function To Execute For Example Api Calls
-        guardAllowed: function guardAllowed() {
-            var guards = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['web', 'employee', 'client'];
-            var callback = arguments[1];
-
-            var self = this;
-            if (_.includes(guards, self.guard)) {
-                callback;
-                self.resetEndpoints();
-            } else {
-                self.$popup({ message: 'Oops Cant Do That!' });
-            }
-        },
-        resetEndpoints: function resetEndpoints() {
-            this.endpoints = {
-                web: null,
-                team: null,
-                client: null
-            };
-        },
-        guardedLocation: function guardedLocation() {
-            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.endpoints,
-                web = _ref.web,
-                team = _ref.team,
-                client = _ref.client;
-
-            var self = this;
-            if (self.guard === 'client') {
-                return client;
-            } else if (self.guard === 'employee') {
-                return team;
-            } else {
-                return web;
-            }
-        },
         resetCommentForm: function resetCommentForm() {
             var self = this;
             self.commentForm = new EvolutlyForm(Evolutly.forms.commentForm);
@@ -49414,13 +49375,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         fetchComments: function fetchComments() {
             var self = this;
-            self.guardAllowed(self.callApiGetComments());
+            self.guardAllowed(['client', 'employee', 'web'], self.callApiGetComments());
         },
         callApiGetComments: function callApiGetComments() {
             var self = this;
             self.endpoints.web = '/dashboard/jobs/' + self.task.id + '/comments';
-            self.endpoints.team = '/dashboard/jobs/' + self.task.id + '/comments';
-            self.endpoints.client = '/dashboard/jobs/' + self.task.id + '/comments';
+            self.endpoints.team = '/team/dashboard/jobs/' + self.task.id + '/comments';
+            self.endpoints.client = '/client/dashboard/jobs/' + self.task.id + '/comments';
 
             axios.get(self.guardedLocation()).then(function (response) {
                 self.comments = response.data.comments;

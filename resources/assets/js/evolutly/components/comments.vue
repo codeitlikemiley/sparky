@@ -59,55 +59,20 @@
 </template>
 
 <script>
+import guards from './../../mixins/guard'
 export default {
+    mixins: [guards],
     props: ['guard','employees', 'tenant','user', 'task', 'client'],
     data () {
         return {
             commentForm: new EvolutlyForm(Evolutly.forms.commentForm),
             comments: [],
-            endpoints: {
-                web: null,
-                team: null,
-                client: null,
-            },
         }
     },
     mounted() {
         this.whenReady()
     },
-    computed: {
-        
-    },
     methods: {
-        // Overried pass array of valid guard from backend
-        // By Default Uses This Array
-        // Passed A Callback Function To Execute For Example Api Calls
-        guardAllowed(guards = ['web', 'employee', 'client'],callback){
-            let self = this
-            if(_.includes(guards, self.guard)){
-                callback
-                self.resetEndpoints()
-            }else{
-                self.$popup({ message: 'Oops Cant Do That!' })
-            }
-        },
-        resetEndpoints(){
-            this.endpoints = {
-                web: null,
-                team: null,
-                client: null,
-            }
-        },
-        guardedLocation({web,team,client} = this.endpoints){
-            let self = this
-            if(self.guard === 'client'){
-                return client
-            }else if(self.guard === 'employee'){
-                return team
-            }else{
-                return web
-            }
-        },
         resetCommentForm(){
             let self = this
             self.commentForm = new EvolutlyForm(Evolutly.forms.commentForm)
@@ -127,13 +92,13 @@ export default {
         },
         fetchComments(){
             let self = this
-            self.guardAllowed(self.callApiGetComments())
+            self.guardAllowed(['client', 'employee', 'web'],self.callApiGetComments())
         },
         callApiGetComments(){
             let self = this
             self.endpoints.web = `/dashboard/jobs/${self.task.id}/comments`
-            self.endpoints.team = `/dashboard/jobs/${self.task.id}/comments`
-            self.endpoints.client = `/dashboard/jobs/${self.task.id}/comments`
+            self.endpoints.team = `/team/dashboard/jobs/${self.task.id}/comments`
+            self.endpoints.client = `/client/dashboard/jobs/${self.task.id}/comments`
 
             axios.get(self.guardedLocation())
             .then((response) => {
