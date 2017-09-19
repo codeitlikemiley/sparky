@@ -94533,7 +94533,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -94709,19 +94708,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "src": comment.creator.photo_url
       }
-    })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(comment.title))]), _vm._v(" "), _c('div', [_vm._v(_vm._s(comment.body))])]), _vm._v(" "), _c('span', {
-      staticClass: "icon mif-minus fg-red",
+    })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(comment.title) + " "), _c('span', {
+      staticClass: "icon mif-bin fg-red",
       staticStyle: {
-        "position": "relative",
-        "top": "-85px",
-        "right": "-550px !important"
+        "margin-top": "-6px",
+        "padding-left": "15px"
       },
       on: {
         "click": function($event) {
           _vm.deleteComment(comment, commentKey)
         }
       }
-    })]), _vm._v(" "), _c('ul', {
+    })]), _vm._v(" "), _c('div', [_vm._v(_vm._s(comment.body))])])]), _vm._v(" "), _c('ul', {
       staticStyle: {
         "list-style-type": "none"
       }
@@ -94743,19 +94741,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         attrs: {
           "src": child.creator.photo_url
         }
-      })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(child.title))]), _vm._v(" "), _c('div', [_vm._v(_vm._s(child.body))])]), _vm._v(" "), _c('span', {
-        staticClass: "icon mif-minus fg-red",
+      })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(child.title) + " "), _c('span', {
+        staticClass: "icon mif-bin fg-red",
         staticStyle: {
-          "position": "relative",
-          "top": "-75px",
-          "right": "-500px !important"
+          "margin-top": "-6px",
+          "padding-left": "15px"
         },
         on: {
           "click": function($event) {
             _vm.deleteComment(child, commentKey, childKey)
           }
         }
-      })])
+      })]), _vm._v(" "), _c('div', [_vm._v(_vm._s(child.body))])])])
     })), _vm._v(" "), _c('form', {
       on: {
         "submit": function($event) {

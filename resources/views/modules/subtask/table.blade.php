@@ -72,7 +72,7 @@
                                         data-role="hint" data-hint-mode="2" data-hint="Delete|Task" data-hint-position="top"
                                         >
                                         </span>
-                                        <span class="tag" :class="{success: !subtask.done}" @click="toggleDone(subtask)" style="cursor:pointer;"
+                                        <span v-if="guard != 'client'" class="tag" :class="{success: !subtask.done}" @click="toggleDone(subtask)" style="cursor:pointer;"
                                         data-role="hint" data-hint-mode="2" data-hint="Toggle|Done/Undone Task" data-hint-position="top">
                                             <span class="icon mif-checkmark" v-if="!subtask.done">
                                             </span>
