@@ -6,7 +6,7 @@
 
 </style>
 @endpush
-<modal name="add-subtask-modal" :pivot-x=".5" :pivot-y=".1" :adaptive="true" width="500px" height="auto" :scrollable="true">
+<modal name="add-subtask-modal" :click-to-close="false" :pivot-x=".5" :pivot-y=".1" :adaptive="true" width="500px" height="auto" :scrollable="true">
         <form @submit.prevent="addSubtask()" role="form" class="">
                 <div class="panel widget-box">
             
@@ -45,6 +45,7 @@
                                     </div>
                                 </div>
                                 -->
+                                <!--
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-video-camera fg-indigo"></span>
@@ -54,7 +55,7 @@
                                     </span>
                                     </div>
                                 </div>
-                                
+                                -->
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-calendar fg-amber"></span>

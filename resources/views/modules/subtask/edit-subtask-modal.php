@@ -1,4 +1,4 @@
-<modal :name="`edit-subtask-modal-${subtask.id}`" :pivot-x=".5" :pivot-y=".1" :adaptive="true" width="500px" height="auto" :scrollable="true">
+<modal :name="`edit-subtask-modal-${subtask.id}`" :click-to-close="false" :pivot-x=".5" :pivot-y=".1" :adaptive="true" width="500px" height="auto" :scrollable="true">
         <form @submit.prevent="editSubtask(subtask)" role="form" class="">
         <div class="panel widget-box">
             
@@ -24,6 +24,7 @@
                                     <trumbowyg :config="configs.advanced" v-model="subtaskForm.description"></trumbowyg>
                                 </div>
                                 <hr style="margin-top:270px;color:white;background-color:white;">
+                                <!--
                                 <h4 class="align-center fg-grayLight">Task Points Difficulty</h4>
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
@@ -43,6 +44,7 @@
                                     </span>
                                     </div>
                                 </div>
+                                -->
                                 <div class="row">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-calendar fg-amber"></span>
