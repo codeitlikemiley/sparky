@@ -27,15 +27,18 @@ class ToggleSubtask extends BaseController
 
         if($this->allowed($task) || $this->createdBy($task))
         {
-            $subtask->done = !$subtask->done;
-            $subtask->save();
-            $subtask->employees;
-            $this->code = 200;
-            $this->message = $subtask->done ? 'Subtask Mark As Done' : 'Subtask Undone';
-            if($old_task->done != $task->fresh()->done){
-                $this->log = Activity::where('subject_type', 'App\Task')->where('subject_id', $task->id)->latest()->first();
+            if($subtask->employees->contains('email',$this->getAuth()->email)){
+                $subtask->done = !$subtask->done;
+                $subtask->save();
+                $subtask->employees;
+                $this->code = 200;
+                $this->message = $subtask->done ? 'Subtask Mark As Done' : 'Subtask Undone';
+                if($old_task->done != $task->fresh()->done){
+                    $this->log = Activity::where('subject_type', 'App\Task')->where('subject_id', $task->id)->latest()->first();
+                }
+                return response()->json(['subtask' => $subtask,'message' => $this->message,'log' => $this->log], $this->code);
             }
-            return response()->json(['subtask' => $subtask,'message' => $this->message,'log' => $this->log], $this->code);
+            return response()->json(['error' => 'You Are Not Assigned To This Task!'], 401);
         }
         return response()->json(['error' => 'Actions Not Permitted!'], 401);
     }
