@@ -19,7 +19,7 @@
                             </span>
                             </div>
                         </div>
-    
+                        <!-- remove for the mean time 
                         <div class="row" style="padding:5px;">
                             <div class="input-control text full-size">
                                 <span class="prepend-icon mif-link fg-darkCyan"></span>
@@ -29,6 +29,7 @@
                             </span>
                             </div>
                         </div>
+                        -->
                         <div  class="row" style="padding:5px;margin-top:15px;">
                                 <div class="input-control text full-size">
                                     <label class="switch">

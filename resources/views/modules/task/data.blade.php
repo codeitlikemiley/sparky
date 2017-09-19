@@ -12,11 +12,12 @@ blockquote {
     <blockquote class="place-left">
         <p class="header fg-grayLight">@{{ taskForm.task_name }}</p>
     </blockquote>
-    
+    <!--
     <a @click="viewLink()" class="tag info place-right" v-if="taskForm.task_link">
         <span class="tag info">@{{ taskForm.task_link }}</span>
     </a>
-    <a v-else @click="editTaskModal()" style="cursor:pointer;" class="place-right"><span class="tag info" v-if="guard === 'web'">Edit Job</span></a>
+    <a v-else @click="editTaskModal()" style="cursor:pointer;" class="place-right"><span class="tag info">Edit Job</span></a>
+    -->
     <a v-if="taskForm.task_recurring" style="position:absolute;bottom:0;right:35px;font-size:1em;">
         <span class="tag success"><span class="icon mif-loop"></span> Repeat Job Every @{{ taskForm.task_interval }} Day</span>
     </a>

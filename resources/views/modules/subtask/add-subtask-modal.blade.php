@@ -33,6 +33,7 @@
                                 </div>
                                 
                                 <hr style="margin-top:270px;color:white;background-color:white;">
+                                <!--
                                 <h4 class="align-center fg-grayLight">Task Points Difficulty</h4>
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
@@ -43,6 +44,7 @@
                                         </span>
                                     </div>
                                 </div>
+                                -->
                                 <div class="row" style="padding:5px;">
                                     <div class="input-control text full-size">
                                         <span class="prepend-icon mif-video-camera fg-indigo"></span>

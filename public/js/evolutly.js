@@ -94105,9 +94105,7 @@ Vue.component('task', {
         },
         editTaskModal: function editTaskModal() {
             var self = this;
-            self.guardAllowed(['web'], function () {
-                return self.show('edit-task-modal');
-            });
+            self.guardAllowed(['web'], self.show('edit-task-modal'));
         },
         updateTask: function updateTask() {
             var self = this;
@@ -94134,9 +94132,7 @@ Vue.component('task', {
         },
         deleteTaskModal: function deleteTaskModal() {
             var self = this;
-            self.guardAllowed(['web'], function () {
-                return self.show('delete-task-modal');
-            });
+            self.guardAllowed(['web'], self.show('delete-task-modal'));
         },
         deleteTask: function deleteTask() {
             var self = this;
@@ -94230,9 +94226,7 @@ Vue.component('task', {
         addSubtaskModal: function addSubtaskModal() {
             var self = this;
             self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
-            self.guardAllowed(['web'], function () {
-                return self.show('add-subtask-modal');
-            }); // todo
+            self.guardAllowed(['web'], self.show('add-subtask-modal')); // todo
         },
         addSubtask: function addSubtask() {
             var self = this;
@@ -94269,9 +94263,7 @@ Vue.component('task', {
         },
         editSubtaskModal: function editSubtaskModal(subtask) {
             var self = this;
-            self.guardAllowed(['web'], function (subtask) {
-                return self.show('edit-subtask-modal-' + subtask.id);
-            });
+            self.guardAllowed(['web'], self.show('edit-subtask-modal-' + subtask.id));
             self.guardAllowed(['web'], self.assignSubtaskToForm(subtask));
         },
         assignSubtaskToForm: function assignSubtaskToForm(subtask) {
