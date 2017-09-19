@@ -16,10 +16,10 @@
                         </div>
                     </a>
                     <div>
-                        <h5>{{ comment.title }}</h5>
+                        <h5>{{ comment.title }} <span @click="deleteComment(comment,commentKey)" class="icon mif-bin fg-red" style="margin-top:-6px;padding-left:15px;"></span></h5>
                         <div>{{ comment.body }}</div>
                     </div>
-                    <span @click="deleteComment(comment,commentKey)" class="icon mif-minus fg-red" style="position:relative;top:-85px;right:-550px !important;"></span>
+                    
                 </li>
                 <ul style="list-style-type: none;">
                     <li v-for="(child ,childKey, childIndex) in comment.children" :key="childKey" :index="childIndex">
@@ -29,10 +29,9 @@
                         </div>
                     </a>
                     <div>
-                        <h5>{{ child.title }}</h5>
+                        <h5>{{ child.title }} <span @click="deleteComment(child,commentKey,childKey)" class="icon mif-bin fg-red" style="margin-top:-6px;padding-left:15px;"></span></h5>
                         <div>{{ child.body }}</div>
                     </div>
-                    <span @click="deleteComment(child,commentKey,childKey)" class="icon mif-minus fg-red" style="position:relative;top:-75px;right:-500px !important;"></span>
                     </li>
                 </ul>
                 <form v-on:submit.prevent="addComment(comment.id)">
