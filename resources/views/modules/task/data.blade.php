@@ -22,7 +22,7 @@ blockquote {
         <span class="tag success"><span class="icon mif-loop"></span> Repeat Job Every @{{ taskForm.task_interval }} Day</span>
     </a>
 </div>
-<div class="example align-center">
+<div class="example align-right">
     <a v-if="guard ==='web'" @click="editTaskModal()" class="margin10">
         <!-- Open Modal To Edit Task -->
         <button class="button info"><span class="mif-pencil"></span> Edit Job</button>
@@ -31,10 +31,10 @@ blockquote {
         <button class="button bg-lightRed fg-white"><span class="icon fa fa-trash "></span> Delete Job</button>
     </a>
     <a v-if="guard ==='web' && !showEditor" @click="openEditor()" class="margin10">
-        <button class="button bg-darkTeal fg-white" :disabled="taskForm.busy"><span class="icon fa sticky-note "></span> Job Page Editor</button>
+        <button class="button bg-cyan fg-white" :disabled="taskForm.busy"><span class="icon mif-keyboard"></span> Open Editor</button>
     </a>
     <a v-if="guard ==='web' && showEditor"  @click="editDescription()" class="margin10">
-        <button class="button bg-teal fg-white" :disabled="taskForm.busy"><span class="icon fa sticky-note "></span> Update Job Page</button>
+        <button class="button bg-lime fg-white" :disabled="taskForm.busy"><span class="icon mif-cloud-upload"></span> Save</button>
     </a>
 </div>
 
