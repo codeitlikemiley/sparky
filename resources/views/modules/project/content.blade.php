@@ -7,8 +7,8 @@
                     <ul class="tabs">
                         <li><a href="#tasks_tab">Campaigns</a></li>
                         <!-- <li><a href="#onboarding_tab" v-if="guard ==='web'">Forms</a></li> -->
-                        <li><a href="#uploads_tab">Upload</a></li>
-                        <li><a href="#uploaded_tab">Files</a></li>
+                        <li v-if="guard === 'web'"><a href="#uploads_tab">Upload</a></li>
+                        <li v-if="guard === 'web'"><a href="#uploaded_tab">Files</a></li>
                         <!-- <li><a href="#people_tab">Team</a></li> -->
                     </ul>
                     <div class="frames bg-white">

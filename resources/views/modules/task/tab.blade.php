@@ -13,11 +13,11 @@
                                 @{{ campaign.name }}
                             </span>
                         </div>
-                        <div v-else style="position:absolute;top:12px;margin-left:136px;">
+                        <div v-else class="align-center">
                                 <span>
                                     @{{ campaign.name }}
                                 </span>
-                            </div>
+                        </div>
                         <div v-if="guard === 'web'" @click="editCampaignModal(campaign)" class="align-center bg-cyan place-left" style="cursor:pointer;position:absolute;top:0;left:0;width: 53px; height: 53px;" data-role="hint" data-hint-mode="2" data-hint="Edit|Campaign" data-hint-position="top">
                             <span class="icon  fa fa-pencil-square-o" style="position: relative;top: 50% !important; transform: translateY(-50%) !important;"></span>
                         </div>
@@ -36,7 +36,6 @@
                                         <input type="checkbox" class="todo-cb" v-model="task.done">
                                         <span class="check"></span>
                                         <span class="caption"
-                                        data-role="hint" data-hint-mode="2" data-hint="Add|Tasks" data-hint-position="top"
                                         @click="viewTask(task.id)" style="cursor:pointer;" :class="{ 'todo-completed': isTaskDone(task) }">@{{ task.name }}</span>
                                     </label>
                                     <div @click="viewTask(task.id)" class="place-right" style="cursor:pointer;">

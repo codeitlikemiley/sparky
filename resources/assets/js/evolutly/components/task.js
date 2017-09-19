@@ -135,10 +135,11 @@ Vue.component('task', {
             })
         },
         viewSubtask(subtask){
-            this.endpoints.web = `/dashboard/tasks/${subtask.id}`
-            this.endpoints.teammate = `/team/dashboard/tasks/${subtask.id}`
-            this.endpoints.client = `/client/dashboard/tasks/${subtask.id}`
-            window.location.href = this.guardedLocation()
+            let self = this
+            self.endpoints.web = `/dashboard/tasks/${subtask.id}`
+            self.endpoints.team = `/team/dashboard/tasks/${subtask.id}`
+            self.endpoints.client = `/client/dashboard/tasks/${subtask.id}`
+            window.location.href = self.guardedLocation()
         },
         setInitialTask(){
             let self = this
@@ -181,7 +182,7 @@ Vue.component('task', {
         },
         editTaskModal(){
             let self = this
-            self.guardAllowed(['web'],self.show('edit-task-modal'))
+            self.guardAllowed(['web'],() => self.show('edit-task-modal'))
         },
         updateTask(){
             let self = this
@@ -209,7 +210,7 @@ Vue.component('task', {
         },
         deleteTaskModal(){
             let self = this
-            self.guardAllowed(['web'],self.show('delete-task-modal'))
+            self.guardAllowed(['web'],() => self.show('delete-task-modal'))
         },
         deleteTask(){
             let self = this
@@ -224,7 +225,9 @@ Vue.component('task', {
         },
         toggleDone(subtask){
             let self = this
-            self.guardAllowed(['web','employee'],self.callApiToggleSubtask(subtask))
+            if(self.assignedTask(subtask)){
+                self.guardAllowed(['web','employee'],self.callApiToggleSubtask(subtask))
+            }
         },
         callApiToggleSubtask(subtask){
             let self = this
@@ -305,7 +308,7 @@ Vue.component('task', {
         addSubtaskModal(){
             let self = this
             self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
-            self.guardAllowed(['web'],self.show('add-subtask-modal')) // todo
+            self.guardAllowed(['web'],() => self.show('add-subtask-modal')) // todo
         },
         addSubtask(){
             let self = this
@@ -344,7 +347,7 @@ Vue.component('task', {
         },
         editSubtaskModal(subtask){
             let self = this
-            self.guardAllowed(['web'],self.show('edit-subtask-modal-'+subtask.id))
+            self.guardAllowed(['web'],(subtask) => self.show(`edit-subtask-modal-${subtask.id}`))
             self.guardAllowed(['web'],self.assignSubtaskToForm(subtask))
         },
         assignSubtaskToForm(subtask){
@@ -481,6 +484,13 @@ Vue.component('task', {
             let self = this 
             self.hide(`view-all-subtasks-modal-${worker.id}`)
             self.membertasks = []
+        },
+        assignedTask(subtask){
+            let self = this
+            if(self.guard != 'employee'){
+                return true
+            }
+            return _.some(subtask.employees, {email: self.user.email});
         }
         
     },

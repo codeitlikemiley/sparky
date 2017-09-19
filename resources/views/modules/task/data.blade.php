@@ -1,13 +1,22 @@
+@push('critical_css')
+<style>
+blockquote {
+    margin: 0;
+    padding: 0 0 0 2rem;
+    border-left: 0.1rem #4db6ac solid;
+}
+</style>
+@endpush
 <div class="frame bg-white" id="job_tab">
-<div class="example" data-text="Link">
-    <blockquote class="place-right">
-        <small><cite title="Source Title">@{{ taskForm.task_name }}</cite></small>
+<div class="example">
+    <blockquote class="place-left">
+        <p class="header fg-grayLight">@{{ taskForm.task_name }}</p>
     </blockquote>
     
-    <a @click="viewLink()" class="tag info" v-if="taskForm.task_link">
+    <a @click="viewLink()" class="tag info place-right" v-if="taskForm.task_link">
         <span class="tag info">@{{ taskForm.task_link }}</span>
     </a>
-    <a v-else @click="editTaskModal()" style="cursor:pointer;"><span class="tag info">Add Link</span></a>
+    <a v-else @click="editTaskModal()" style="cursor:pointer;" class="place-right"><span class="tag info" v-if="guard === 'web'">Edit Job</span></a>
     <a v-if="taskForm.task_recurring" style="position:absolute;bottom:0;right:35px;font-size:1em;">
         <span class="tag success"><span class="icon mif-loop"></span> Repeat Job Every @{{ taskForm.task_interval }} Day</span>
     </a>
@@ -31,7 +40,7 @@
 <div v-if="!showEditor" class="example" v-html="taskForm.task_description" v-if="taskForm.task_description"></div>
 
 
-<div v-if="showEditor" style="min-height:500px;padding-bottom:100px;">
+<div v-if="showEditor && guard ==='web'" style="min-height:500px;padding-bottom:100px;">
     <text-editor :description="taskForm.task_description"></text-editor>
 </div>
 

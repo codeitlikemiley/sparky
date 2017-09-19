@@ -3,7 +3,7 @@
         <div class="heading">
             <span class="icon mif-trophy bg-amber"></span>
             <!-- Add Here Variable For Task Total and Progress -->
-            <span class="title">Job Progress Points 
+            <span class="title">Job Completion 
                 <span  style="padding-right:50px;">
                     <span class="fg-amber">@{{ done }}</span>
                     <span class="fg-white"> / </span>

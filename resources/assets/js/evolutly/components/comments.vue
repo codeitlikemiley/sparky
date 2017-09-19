@@ -19,7 +19,7 @@
                         <h5>{{ comment.title }}</h5>
                         <div>{{ comment.body }}</div>
                     </div>
-                    <span @click="deleteComment(comment,commentKey)" class="icon mif-minus fg-red" style="position:relative;top:-85px;right:-550px;"></span>
+                    <span @click="deleteComment(comment,commentKey)" class="icon mif-minus fg-red" style="position:relative;top:-85px;right:-550px !important;"></span>
                 </li>
                 <ul style="list-style-type: none;">
                     <li v-for="(child ,childKey, childIndex) in comment.children" :key="childKey" :index="childIndex">
@@ -32,7 +32,7 @@
                         <h5>{{ child.title }}</h5>
                         <div>{{ child.body }}</div>
                     </div>
-                    <span @click="deleteComment(child,commentKey,childKey)" class="icon mif-minus fg-red" style="position:relative;top:-75px;right:-500px;"></span>
+                    <span @click="deleteComment(child,commentKey,childKey)" class="icon mif-minus fg-red" style="position:relative;top:-75px;right:-500px !important;"></span>
                     </li>
                 </ul>
                 <form v-on:submit.prevent="addComment(comment.id)">
@@ -173,7 +173,9 @@ export default {
         },
         deleteComment(comment,commentIndex=null,childIndex=null){
             let self = this
-            self.guardAllowed(self.callApiDeleteComment(comment,commentIndex,childIndex))
+            if(self.user.email === comment.creator.email || self.guard === 'web'){
+                self.guardAllowed(self.callApiDeleteComment(comment,commentIndex,childIndex))
+            }
         },
         callApiDeleteComment(comment,commentIndex=null,childIndex=null){
             let self = this
