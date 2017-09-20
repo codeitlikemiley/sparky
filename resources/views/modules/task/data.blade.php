@@ -22,7 +22,7 @@ blockquote {
         <span class="tag success"><span class="icon mif-loop"></span> Repeat Job Every @{{ taskForm.task_interval }} Day</span>
     </a>
 </div>
-<div class="example align-right">
+<div class="example align-right" v-if="guard ==='web'">
     <a v-if="guard ==='web'" @click="editTaskModal()" class="margin10">
         <!-- Open Modal To Edit Task -->
         <button class="button info"><span class="mif-pencil"></span> Edit Job</button>
