@@ -21,6 +21,7 @@
       Route::post('/clients/{projectID}/progress', 'Project\CampaignsProgress')->name('client.projects.progress');
 
       Route::get('/jobs/{task}', 'Task\ShowTask')->name('client.tasks.view');
+      Route::get('/tasks/{subtask}', 'Subtask\ViewSubtask')->name('client.subtask.show');
       Route::get('/jobs/{task}/tasks', 'Subtask\ShowSubtask')->name('client.subtasks.index');
 
       Route::get('/jobs/{task}/comments', 'Comment\ShowComment')->name('client.comments.show');

@@ -9,7 +9,7 @@
         <li><a :href="`/client/dashboard`"><span class="icon mif-widgets fg-white"></span></a></li>
         <li><a :href="`/client/dashboard/clients/${project.id}`">@{{ project.name }}</a></li>
         <li><a :href="`/client/dashboard/jobs/${task.id}`">@{{ task.name }}</a></li>
-        <li><a :href="`/client/dashboard/tasks/${$subtask.id}`">@{{ subtask.name }}</a></li>
+        <li><a :href="`/client/dashboard/tasks/${subtask.id}`">@{{ subtask.name }}</a></li>
     </ul>
     <ul class="breadcrumbs fg-amber dark bg-teal" v-else>
         <li><a :href="`/dashboard`"><span class="icon mif-widgets fg-white"></span></a></li>
