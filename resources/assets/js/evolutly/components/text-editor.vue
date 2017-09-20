@@ -87,15 +87,14 @@ methods: {
     callApiUpdateTask(id){
             let self = this
             self.editForm.task_description = self.content
-            self.editForm.busy = true
             self.endpoints.web = `/dashboard/jobs/${id}/edit/description`
             axios.put(self.guardedLocation(),self.editForm).then( (response) => { 
                 Bus.$emit('updateDescription', self.content)
                 Bus.$emit('closeEditor')
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             }).catch(error => {
-                self.editForm.busy = false
-                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
+                Bus.$emit('closeEditor')
+                self.$popup({ message: error.response.data.errors.task_description[0], backgroundColor: '#e57373', delay: 5, color: '#fffffa', })
             })
         },
 },

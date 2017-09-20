@@ -68,6 +68,7 @@ Vue.component('task', {
     mounted() {
         let self = this
         Bus.$on('closeEditor', () => {
+            self.taskForm.busy = false
             self.closeEditor()
         })
         Bus.$on('updateDescription', (content) => {
