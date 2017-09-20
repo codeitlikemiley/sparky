@@ -8,7 +8,7 @@
 @endpush
 <div class="frame bg-white" id="people_tab"  style="min-height:600px;padding-bottom:100px;">
     
-    <div class="row" style="padding-top:100px;">
+    <div class="row" style="padding-top:100px;" v-if="guard === 'web'">
             <a v-if="guard === 'web'" @click="updateAssignedEmployees()" style="position:absolute;top:0;right:0;font-size:1em;cursor:pointer;">
                     <span class="tag info"><span class="icon mif-plus"></span> Update Assigned Teammates</span>
             </a>
