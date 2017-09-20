@@ -93981,6 +93981,7 @@ Vue.component('task', {
     mounted: function mounted() {
         var self = this;
         Bus.$on('closeEditor', function () {
+            self.taskForm.busy = false;
             self.closeEditor();
         });
         Bus.$on('updateDescription', function (content) {
@@ -95135,15 +95136,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         callApiUpdateTask: function callApiUpdateTask(id) {
             var self = this;
             self.editForm.task_description = self.content;
-            self.editForm.busy = true;
             self.endpoints.web = '/dashboard/jobs/' + id + '/edit/description';
             axios.put(self.guardedLocation(), self.editForm).then(function (response) {
                 Bus.$emit('updateDescription', self.content);
                 Bus.$emit('closeEditor');
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
-                self.editForm.busy = false;
-                self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
+                Bus.$emit('closeEditor');
+                self.$popup({ message: error.response.data.errors.task_description[0], backgroundColor: '#e57373', delay: 5, color: '#fffffa' });
             });
         }
     },
@@ -98644,6 +98644,9 @@ Vue.component('subtask', {
         var self = this;
         self.whenReady();
         self.assignSubtaskToForm();
+        if (self.subtask.description == '') {
+            self.showEditor = true;
+        }
         Bus.$on('upload-file', function () {
             var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : payload,
                 data = _ref.data,
@@ -98671,6 +98674,12 @@ Vue.component('subtask', {
             self.task = self.currentTask;
             self.client = self.currentClient;
             self.options = self.currentWorkers;
+        },
+        openEditor: function openEditor() {
+            this.showEditor = true;
+        },
+        closeEditor: function closeEditor() {
+            this.showEditor = false;
         },
         assignSubtaskToForm: function assignSubtaskToForm() {
             var self = this;
@@ -98735,7 +98744,7 @@ Vue.component('subtask', {
             if (!self.subtaskForm.users[0]) {
                 delete self.subtaskForm.users;
             }
-            self.endpoints.web = '/dashboard/tasks/' + self.subtask.id + '/update';
+            self.endpoints.web = '/dashboard/jobs/' + self.task.id + '/tasks/' + self.subtask.id + '/delete';
             axios.delete(self.guardedLocation()).then(function (response) {
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
                 window.location.href = '/dashboard/jobs/' + self.task.id + '/';
@@ -98776,12 +98785,24 @@ Vue.component('subtask', {
         },
         closeEditSubtask: function closeEditSubtask() {
             var self = this;
-            self.hide('edit-subtask-modal-' + self.subtask.id);
-            self.subtaskForm = new EvolutlyForm(Evolutly.forms.editSubtaskForm);
+            self.hide('update-subtask-modal');
+        },
+        editTaskModal: function editTaskModal() {
+            var self = this;
+            self.guardAllowed(['web'], self.show('update-subtask-modal'));
         },
         editSubtask: function editSubtask() {
             var self = this;
             self.guardAllowed(['web'], self.callApiEditSubtask());
+        },
+        editDescription: function editDescription() {
+            var self = this;
+            if (self.subtask.description === '') {
+                self.$popup({ message: 'PLEASE ADD DESCRIPTION', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
+                return;
+            }
+            self.subtaskForm.description = self.subtask.description;
+            self.callApiEditSubtask();
         },
         callApiEditSubtask: function callApiEditSubtask() {
             var self = this;
@@ -98814,8 +98835,9 @@ Vue.component('subtask', {
             axios.put(self.guardedLocation(), self.subtaskForm).then(function (response) {
                 self.subtask = response.data.subtask;
                 self.subtaskForm.resetStatus();
-                self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm);
                 self.subtaskForm.busy = false;
+                self.closeEditor();
+                self.closeEditSubtask();
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107' });
             }).catch(function (error) {
                 if (!self.subtaskForm.description) {
@@ -98850,6 +98872,8 @@ Vue.component('subtask', {
                     self.subtaskForm.errors.set(error.response.data.errors);
                 }
                 self.subtaskForm.busy = false;
+                self.closeEditor();
+                self.closeEditSubtask();
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac' });
             });
         },

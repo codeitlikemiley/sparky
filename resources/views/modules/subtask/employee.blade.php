@@ -10,7 +10,7 @@
     
     <div class="row" style="padding-top:100px;" v-if="guard === 'web'">
             <a v-if="guard === 'web'" @click="updateAssignedEmployees()" style="position:absolute;top:0;right:0;font-size:1em;cursor:pointer;">
-                    <span class="tag info"><span class="icon mif-plus"></span> Update Assigned Teammates</span>
+                    <span class="tag info" style="font-size:1.5em;"><span class="icon mif-keyboard-return"></span> Update Team</span>
             </a>
             <v-select v-if="guard === 'web'" style="margin-bottom:50px;margin-top:-50px;" multiple max-height="160px" class="full-size" v-model="subtask.employees" label="email" :options="options"  placeholder="Assigned Existing Team Member"></v-select>
     </div>

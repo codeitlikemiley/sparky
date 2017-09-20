@@ -58,6 +58,9 @@ Vue.component('subtask', {
         let self = this
         self.whenReady()
         self.assignSubtaskToForm()
+        if(self.subtask.description == ''){
+            self.showEditor = true
+        }
         Bus.$on('upload-file',({data, trumbowyg, $modal, values} = payload) => {
             self.trumbowyg = trumbowyg
             self.modal = $modal
@@ -79,6 +82,12 @@ Vue.component('subtask', {
             self.client = self.currentClient
             self.options = self.currentWorkers
             
+        },
+        openEditor(){
+            this.showEditor = true
+        },
+        closeEditor(){
+            this.showEditor = false
         },
         assignSubtaskToForm(){
             let self = this
@@ -145,7 +154,7 @@ Vue.component('subtask', {
             if(!self.subtaskForm.users[0]){
                 delete self.subtaskForm.users
             }
-            self.endpoints.web = `/dashboard/tasks/${self.subtask.id}/update`
+            self.endpoints.web = `/dashboard/jobs/${self.task.id}/tasks/${self.subtask.id}/delete`
             axios.delete(self.guardedLocation())
             .then(function (response) {
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
@@ -190,13 +199,25 @@ Vue.component('subtask', {
         },
         closeEditSubtask(){
             let self = this 
-            self.hide(`edit-subtask-modal-${self.subtask.id}`)
-            self.subtaskForm = new EvolutlyForm(Evolutly.forms.editSubtaskForm)
+            self.hide('update-subtask-modal')
+        },
+        editTaskModal(){
+            let self = this
+            self.guardAllowed(['web'],self.show('update-subtask-modal'))
         },
         editSubtask(){
             let self = this
             self.guardAllowed(['web'],self.callApiEditSubtask())
             
+        },
+        editDescription(){
+            let self = this
+            if(self.subtask.description === ''){
+                self.$popup({ message: 'PLEASE ADD DESCRIPTION', backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })  
+                return
+            }
+            self.subtaskForm.description = self.subtask.description
+            self.callApiEditSubtask()
         },
         callApiEditSubtask(){
             let self = this
@@ -230,8 +251,9 @@ Vue.component('subtask', {
             .then((response) => {
                 self.subtask = response.data.subtask
                 self.subtaskForm.resetStatus()
-                self.subtaskForm = new EvolutlyForm(Evolutly.forms.subtaskForm)
                 self.subtaskForm.busy = false
+                self.closeEditor()
+                self.closeEditSubtask()
                 self.$popup({ message: response.data.message, backgroundColor: '#4db6ac', delay: 5, color: '#ffc107', })
             })
             .catch(error => {
@@ -267,6 +289,8 @@ Vue.component('subtask', {
                 self.subtaskForm.errors.set(error.response.data.errors)
                 }
                 self.subtaskForm.busy = false
+                self.closeEditor()
+                self.closeEditSubtask()
                 self.$popup({ message: error.response.data.message, backgroundColor: '#e57373', delay: 5, color: '#4db6ac', })
             })
         },
