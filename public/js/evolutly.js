@@ -71795,19 +71795,25 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(343)
 }
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(346),
-  /* template */
-  __webpack_require__(347),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-40c190f0",
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(346)
+/* template */
+var __vue_template__ = __webpack_require__(347)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-40c190f0"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\progress-bar.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\progress-bar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] progress-bar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -71934,31 +71940,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "progress-container"
-  }, [_c('div', {
-    staticClass: "progress-bar inner",
-    style: ({
-      'width': _vm.progress + '%'
-    }),
-    attrs: {
-      "progress": _vm.progress,
-      "name": _vm.name
-    }
-  }, [_c('div', {
-    staticClass: "inner"
-  }, [_c('strong', {
-    staticClass: "fg-darkCobalt place-left"
-  }, [_vm._v(_vm._s(_vm.name))]), _vm._v(" "), (_vm.progress >= 100) ? _c('strong', {
-    staticClass: "fg-darkCobalt place-right completed"
-  }, [_vm._v(": 100% Completed")]) : _vm._e()])]), _vm._v(" "), (_vm.progress < 100) ? _c('div', {
-    staticClass: "align-right place-right"
-  }, [_c('strong', {
-    staticClass: "fg-darkCobalt"
-  }, [_vm._v(_vm._s(_vm.progress) + "%")])]) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "progress-container" }, [
+    _c(
+      "div",
+      {
+        staticClass: "progress-bar inner",
+        style: { width: _vm.progress + "%" },
+        attrs: { progress: _vm.progress, name: _vm.name }
+      },
+      [
+        _c("div", { staticClass: "inner" }, [
+          _c("strong", { staticClass: "fg-darkCobalt place-left" }, [
+            _vm._v(_vm._s(_vm.name))
+          ]),
+          _vm._v(" "),
+          _vm.progress >= 100
+            ? _c(
+                "strong",
+                { staticClass: "fg-darkCobalt place-right completed" },
+                [_vm._v(": 100% Completed")]
+              )
+            : _vm._e()
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _vm.progress < 100
+      ? _c("div", { staticClass: "align-right place-right" }, [
+          _c("strong", { staticClass: "fg-darkCobalt" }, [
+            _vm._v(_vm._s(_vm.progress) + "%")
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -72485,19 +72507,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(356),
-  /* template */
-  __webpack_require__(359),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(356)
+/* template */
+var __vue_template__ = __webpack_require__(359)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\node_modules\\vue-full-calendar\\components\\FullCalendar.vue"
+Component.options.__file = "node_modules\\vue-full-calendar\\components\\FullCalendar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FullCalendar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -92863,15 +92891,15 @@ return FC; // export for Node/CommonJS
 /* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    ref: "calendar",
-    attrs: {
-      "id": "calendar"
-    }
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { ref: "calendar", attrs: { id: "calendar" } })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -94432,19 +94460,25 @@ Vue.component('task', {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(367),
-  /* template */
-  __webpack_require__(368),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(367)
+/* template */
+var __vue_template__ = __webpack_require__(368)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\comments.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\comments.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] comments.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -94683,169 +94717,262 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "cell"
-  }, [_c('div', {
-    staticClass: "panel widget-box success",
-    attrs: {
-      "data-role": "panel"
-    }
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
-    staticClass: "content"
-  }, [(_vm.comments.length > 0) ? _c('div', _vm._l((_vm.comments), function(comment, commentKey, commentIndex) {
-    return _c('ul', {
-      key: commentKey,
-      staticClass: "chat-list",
-      attrs: {
-        "index": commentIndex
-      }
-    }, [_c('li', [_c('a', {
-      staticClass: "place-left"
-    }, [_c('div', {
-      staticClass: "icon small"
-    }, [_c('img', {
-      staticClass: "circle fit-width",
-      attrs: {
-        "src": comment.creator.photo_url
-      }
-    })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(comment.title) + " "), _c('span', {
-      staticClass: "icon mif-bin fg-red",
-      staticStyle: {
-        "margin-top": "-6px",
-        "padding-left": "15px"
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "cell" }, [
+    _c(
+      "div",
+      {
+        staticClass: "panel widget-box success",
+        attrs: { "data-role": "panel" }
       },
-      on: {
-        "click": function($event) {
-          _vm.deleteComment(comment, commentKey)
-        }
-      }
-    })]), _vm._v(" "), _c('div', [_vm._v(_vm._s(comment.body))])])]), _vm._v(" "), _c('ul', {
-      staticStyle: {
-        "list-style-type": "none"
-      }
-    }, _vm._l((comment.children), function(child, childKey, childIndex) {
-      return _c('li', {
-        key: childKey,
-        attrs: {
-          "index": childIndex
-        }
-      }, [_c('a', {
-        staticClass: "place-left",
-        attrs: {
-          "href": "#"
-        }
-      }, [_c('div', {
-        staticClass: "icon small"
-      }, [_c('img', {
-        staticClass: "circle fit-width",
-        attrs: {
-          "src": child.creator.photo_url
-        }
-      })])]), _vm._v(" "), _c('div', [_c('h5', [_vm._v(_vm._s(child.title) + " "), _c('span', {
-        staticClass: "icon mif-bin fg-red",
-        staticStyle: {
-          "margin-top": "-6px",
-          "padding-left": "15px"
-        },
-        on: {
-          "click": function($event) {
-            _vm.deleteComment(child, commentKey, childKey)
-          }
-        }
-      })]), _vm._v(" "), _c('div', [_vm._v(_vm._s(child.body))])])])
-    })), _vm._v(" "), _c('form', {
-      on: {
-        "submit": function($event) {
-          $event.preventDefault();
-          _vm.addComment(comment.id)
-        }
-      }
-    }, [_c('div', {
-      staticClass: "input-control text full-size",
-      attrs: {
-        "data-role": "input"
-      }
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: (_vm.commentForm.body),
-        expression: "commentForm.body"
-      }],
-      staticClass: "bg-grayLighter",
-      attrs: {
-        "type": "text",
-        "placeholder": ("Reply To " + (comment.creator.name) + "'s' Thread")
-      },
-      domProps: {
-        "value": (_vm.commentForm.body)
-      },
-      on: {
-        "input": function($event) {
-          if ($event.target.composing) { return; }
-          _vm.commentForm.body = $event.target.value
-        }
-      }
-    }), _vm._v(" "), _vm._m(1, true)])])])
-  })) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "padding10"
-  }, [_c('form', {
-    on: {
-      "submit": function($event) {
-        $event.preventDefault();
-        _vm.addComment()
-      }
-    }
-  }, [_c('div', {
-    staticClass: "input-control text full-size",
-    staticStyle: {
-      "padding-bottom": "100px"
-    },
-    attrs: {
-      "data-role": "input"
-    }
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.commentForm.body),
-      expression: "commentForm.body"
-    }],
-    staticClass: "bg-grayLighter",
-    attrs: {
-      "placeholder": "Create A New Thread"
-    },
-    domProps: {
-      "value": (_vm.commentForm.body)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.commentForm.body = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _vm._m(2)])])])])])])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "heading align-center"
-  }, [_c('div', {
-    staticClass: "title"
-  }, [_vm._v("Discussion")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "button info"
-  }, [_c('span', {
-    staticClass: "icon mif-bubbles"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "button info"
-  }, [_c('span', {
-    staticClass: "icon mif-bubble"
-  })])
-}]}
-module.exports.render._withStripped = true
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "content" }, [
+          _vm.comments.length > 0
+            ? _c(
+                "div",
+                _vm._l(_vm.comments, function(
+                  comment,
+                  commentKey,
+                  commentIndex
+                ) {
+                  return _c(
+                    "ul",
+                    {
+                      key: commentKey,
+                      staticClass: "chat-list",
+                      attrs: { index: commentIndex }
+                    },
+                    [
+                      _c("li", [
+                        _c("a", { staticClass: "place-left" }, [
+                          _c("div", { staticClass: "icon small" }, [
+                            _c("img", {
+                              staticClass: "circle fit-width",
+                              attrs: { src: comment.creator.photo_url }
+                            })
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("h5", [
+                            _vm._v(_vm._s(comment.title) + " "),
+                            _c("span", {
+                              staticClass: "icon mif-bin fg-red",
+                              staticStyle: {
+                                "margin-top": "-6px",
+                                "padding-left": "15px"
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.deleteComment(comment, commentKey)
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", [_vm._v(_vm._s(comment.body))])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticStyle: { "list-style-type": "none" } },
+                        _vm._l(comment.children, function(
+                          child,
+                          childKey,
+                          childIndex
+                        ) {
+                          return _c(
+                            "li",
+                            { key: childKey, attrs: { index: childIndex } },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "place-left",
+                                  attrs: { href: "#" }
+                                },
+                                [
+                                  _c("div", { staticClass: "icon small" }, [
+                                    _c("img", {
+                                      staticClass: "circle fit-width",
+                                      attrs: { src: child.creator.photo_url }
+                                    })
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", [
+                                _c("h5", [
+                                  _vm._v(_vm._s(child.title) + " "),
+                                  _c("span", {
+                                    staticClass: "icon mif-bin fg-red",
+                                    staticStyle: {
+                                      "margin-top": "-6px",
+                                      "padding-left": "15px"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.deleteComment(
+                                          child,
+                                          commentKey,
+                                          childKey
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", [_vm._v(_vm._s(child.body))])
+                              ])
+                            ]
+                          )
+                        })
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "form",
+                        {
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              _vm.addComment(comment.id)
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "input-control text full-size",
+                              attrs: { "data-role": "input" }
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.commentForm.body,
+                                    expression: "commentForm.body"
+                                  }
+                                ],
+                                staticClass: "bg-grayLighter",
+                                attrs: {
+                                  type: "text",
+                                  placeholder:
+                                    "Reply To " +
+                                    comment.creator.name +
+                                    "'s' Thread"
+                                },
+                                domProps: { value: _vm.commentForm.body },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.commentForm.body = $event.target.value
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm._m(1, true)
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                })
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "padding10" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.addComment()
+                  }
+                }
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "input-control text full-size",
+                    staticStyle: { "padding-bottom": "100px" },
+                    attrs: { "data-role": "input" }
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.commentForm.body,
+                          expression: "commentForm.body"
+                        }
+                      ],
+                      staticClass: "bg-grayLighter",
+                      attrs: { placeholder: "Create A New Thread" },
+                      domProps: { value: _vm.commentForm.body },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.commentForm.body = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "heading align-center" }, [
+      _c("div", { staticClass: "title" }, [_vm._v("Discussion")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "button info" }, [
+      _c("span", { staticClass: "icon mif-bubbles" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "button info" }, [
+      _c("span", { staticClass: "icon mif-bubble" })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -94862,19 +94989,25 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(370)
 }
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(373),
-  /* template */
-  __webpack_require__(374),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(373)
+/* template */
+var __vue_template__ = __webpack_require__(374)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\task-calendar.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\task-calendar.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] task-calendar.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -94985,14 +95118,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 374 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('full-calendar', {
-    attrs: {
-      "events": _vm.events
-    }
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("full-calendar", { attrs: { events: _vm.events } })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -95005,19 +95139,25 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(376),
-  /* template */
-  __webpack_require__(382),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(376)
+/* template */
+var __vue_template__ = __webpack_require__(382)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\text-editor.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\text-editor.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] text-editor.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -95162,7 +95302,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports) {
 
 /**
- * Trumbowyg v2.7.2 - A lightweight WYSIWYG editor
+ * Trumbowyg v2.8.0 - A lightweight WYSIWYG editor
  * Trumbowyg core file
  * ------------------------
  * @link http://alex-d.github.io/Trumbowyg
@@ -95238,9 +95378,58 @@ jQuery.trumbowyg = {
     hideButtonTexts: null
 };
 
+// Makes default options read-only
+Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
+    value: {
+        lang: 'en',
+
+        fixedBtnPane: false,
+        fixedFullWidth: false,
+        autogrow: false,
+        autogrowOnEnter: false,
+
+        prefix: 'trumbowyg-',
+
+        semantic: true,
+        resetCss: false,
+        removeformatPasted: false,
+        tagsToRemove: [],
+        btns: [
+            ['viewHTML'],
+            ['undo', 'redo'], // Only supported in Blink browsers
+            ['formatting'],
+            ['strong', 'em', 'del'],
+            ['superscript', 'subscript'],
+            ['link'],
+            ['insertImage'],
+            ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+            ['unorderedList', 'orderedList'],
+            ['horizontalRule'],
+            ['removeformat'],
+            ['fullscreen']
+        ],
+        // For custom button definitions
+        btnsDef: {},
+
+        inlineElementsSelector: 'a,abbr,acronym,b,caption,cite,code,col,dfn,dir,dt,dd,em,font,hr,i,kbd,li,q,span,strikeout,strong,sub,sup,u',
+
+        pasteHandlers: [],
+
+        // imgDblClickHandler: default is defined in constructor
+
+        plugins: {}
+    },
+    writable: false,
+    enumerable: true,
+    configurable: false
+});
+
 
 (function (navigator, window, document, $) {
     'use strict';
+
+    var CONFIRM_EVENT = 'tbwconfirm',
+        CANCEL_EVENT = 'tbwcancel';
 
     $.fn.trumbowyg = function (options, params) {
         var trumbowygDataName = 'trumbowyg';
@@ -95279,9 +95468,9 @@ jQuery.trumbowyg = {
 
                     // Enable/disable
                     case 'enable':
-                        return t.toggleDisable(false);
+                        return t.setDisabled(false);
                     case 'disable':
-                        return t.toggleDisable(true);
+                        return t.setDisabled(true);
 
                     // Destroy
                     case 'destroy':
@@ -95305,7 +95494,8 @@ jQuery.trumbowyg = {
     // @param: editorElem is the DOM element
     var Trumbowyg = function (editorElem, options) {
         var t = this,
-            trumbowygIconsId = 'trumbowyg-icons';
+            trumbowygIconsId = 'trumbowyg-icons',
+            $trumbowyg = $.trumbowyg;
 
         // Get the document of the element. It use to makes the plugin
         // compatible on iframes.
@@ -95318,20 +95508,21 @@ jQuery.trumbowyg = {
         options = options || {};
 
         // Localization management
-        if (options.lang != null || $.trumbowyg.langs[options.lang] != null) {
-            t.lang = $.extend(true, {}, $.trumbowyg.langs.en, $.trumbowyg.langs[options.lang]);
+        if (options.lang != null || $trumbowyg.langs[options.lang] != null) {
+            t.lang = $.extend(true, {}, $trumbowyg.langs.en, $trumbowyg.langs[options.lang]);
         } else {
-            t.lang = $.trumbowyg.langs.en;
+            t.lang = $trumbowyg.langs.en;
         }
 
-        t.hideButtonTexts = $.trumbowyg.hideButtonTexts != null ? $.trumbowyg.hideButtonTexts : options.hideButtonTexts;
+        t.hideButtonTexts = $trumbowyg.hideButtonTexts != null ? $trumbowyg.hideButtonTexts : options.hideButtonTexts;
 
         // SVG path
-        var svgPathOption = $.trumbowyg.svgPath != null ? $.trumbowyg.svgPath : options.svgPath;
+        var svgPathOption = $trumbowyg.svgPath != null ? $trumbowyg.svgPath : options.svgPath;
         t.hasSvg = svgPathOption !== false;
         t.svgPath = !!t.doc.querySelector('base') ? window.location.href.split('#')[0] : '';
         if ($('#' + trumbowygIconsId, t.doc).length === 0 && svgPathOption !== false) {
             if (svgPathOption == null) {
+                // Hack to get svgPathOption based on trumbowyg.js path
                 try {
                     throw new Error();
                 } catch (e) {
@@ -95341,10 +95532,10 @@ jQuery.trumbowyg = {
                         var stackLines = e.stack.split('\n');
 
                         for (var i in stackLines) {
-                            if (!stackLines[i].match(/http[s]?:\/\//)) {
+                            if (!stackLines[i].match(/https?:\/\//)) {
                                 continue;
                             }
-                            svgPathOption = stackLines[Number(i)].match(/((http[s]?:\/\/.+\/)([^\/]+\.js))(\?.*)?:/)[1].split('/');
+                            svgPathOption = stackLines[Number(i)].match(/((https?:\/\/.+\/)([^\/]+\.js))(\?.*)?:/)[1].split('/');
                             svgPathOption.pop();
                             svgPathOption = svgPathOption.join('/') + '/ui/icons.svg';
                             break;
@@ -95367,7 +95558,6 @@ jQuery.trumbowyg = {
                 beforeSend: null,
                 complete: null,
                 success: function (data) {
-                    console.log(data);
                     div.innerHTML = new XMLSerializer().serializeToString(data.documentElement);
                 }
             });
@@ -95382,9 +95572,9 @@ jQuery.trumbowyg = {
          *      foo: {}
          * is equivalent to :
          *      foo: {
-             *          fn: 'foo',
-             *          title: this.lang.foo
-             *      }
+         *          fn: 'foo',
+         *          title: this.lang.foo
+         *      }
          */
         var h = t.lang.header, // Header translation
             isBlinkFunction = function () {
@@ -95519,90 +95709,17 @@ jQuery.trumbowyg = {
         };
 
         // Defaults Options
-        t.o = $.extend(true, {}, {
-            lang: 'en',
-
-            fixedBtnPane: false,
-            fixedFullWidth: false,
-            autogrow: false,
-            autogrowOnEnter: false,
-
-            prefix: 'trumbowyg-',
-
-            semantic: true,
-            resetCss: false,
-            removeformatPasted: false,
-            tagsToRemove: [],
-
-            btnsGrps: {
-                design: ['bold', 'italic', 'underline', 'strikethrough'],
-                semantic: ['strong', 'em', 'del'],
-                justify: ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                lists: ['unorderedList', 'orderedList']
-            },
-            btns: [
-                ['viewHTML'],
-                ['undo', 'redo'],
-                ['formatting'],
-                'btnGrp-semantic',
-                ['superscript', 'subscript'],
-                ['link'],
-                ['insertImage'],
-                'btnGrp-justify',
-                'btnGrp-lists',
-                ['horizontalRule'],
-                ['removeformat'],
-                ['fullscreen']
-            ],
-            // For custom button definitions
-            btnsDef: {},
-
-            inlineElementsSelector: 'a,abbr,acronym,b,caption,cite,code,col,dfn,dir,dt,dd,em,font,hr,i,kbd,li,q,span,strikeout,strong,sub,sup,u',
-
-            pasteHandlers: [],
-
-            imgDblClickHandler: function () {
-                var $img = $(this),
-                    src = $img.attr('src'),
-                    base64 = '(Base64)';
-
-                if (src.indexOf('data:image') === 0) {
-                    src = base64;
-                }
-
-                t.openModalInsert(t.lang.insertImage, {
-                    url: {
-                        label: 'URL',
-                        value: src,
-                        required: true
-                    },
-                    alt: {
-                        label: t.lang.description,
-                        value: $img.attr('alt')
-                    }
-                }, function (v) {
-                    if (v.src !== base64) {
-                        $img.attr({
-                            src: v.src
-                        });
-                    }
-                    $img.attr({
-                        alt: v.alt
-                    });
-                    return true;
-                });
-                return false;
-            },
-
-            plugins: {}
-        }, options);
+        t.o = $.extend(true, {}, $trumbowyg.defaultOptions, options);
+        if (!t.o.hasOwnProperty('imgDblClickHandler')) {
+            t.o.imgDblClickHandler = t.getDefaultImgDblClickHandler();
+        }
 
         t.disabled = t.o.disabled || (editorElem.nodeName === 'TEXTAREA' && editorElem.disabled);
 
         if (options.btns) {
             t.o.btns = options.btns;
         } else if (!t.o.semantic) {
-            t.o.btns[4] = 'btnGrp-design';
+            t.o.btns[3] = ['bold', 'italic', 'underline', 'strikethrough'];
         }
 
         $.each(t.o.btnsDef, function (btnName, btnDef) {
@@ -95651,7 +95768,7 @@ jQuery.trumbowyg = {
 
             setTimeout(function () {
                 if (t.disabled) {
-                    t.toggleDisable(true);
+                    t.setDisabled(true);
                 }
                 t.$c.trigger('tbwinit');
             });
@@ -95819,6 +95936,10 @@ jQuery.trumbowyg = {
                     if (t.o.removeformatPasted) {
                         e.preventDefault();
 
+                        if (window.getSelection && window.getSelection().deleteFromDocument) {
+                            window.getSelection().deleteFromDocument();
+                        }
+
                         try {
                             // IE
                             var text = window.clipboardData.getData('Text');
@@ -95893,32 +96014,19 @@ jQuery.trumbowyg = {
                 class: prefix + 'button-pane'
             });
 
-            $.each(t.o.btns, function (i, btnGrps) {
-                // Managment of group of buttons
-                try {
-                    var b = btnGrps.split('btnGrp-');
-                    if (b[1] != null) {
-                        btnGrps = t.o.btnsGrps[b[1]];
-                    }
-                } catch (c) {
-                }
-
-                if (!$.isArray(btnGrps)) {
-                    btnGrps = [btnGrps];
+            $.each(t.o.btns, function (i, btnGrp) {
+                if (!$.isArray(btnGrp)) {
+                    btnGrp = [btnGrp];
                 }
 
                 var $btnGroup = $('<div/>', {
-                    class: prefix + 'button-group ' + ((btnGrps.indexOf('fullscreen') >= 0) ? prefix + 'right' : '')
+                    class: prefix + 'button-group ' + ((btnGrp.indexOf('fullscreen') >= 0) ? prefix + 'right' : '')
                 });
-                $.each(btnGrps, function (i, btn) {
+                $.each(btnGrp, function (i, btn) {
                     try { // Prevent buildBtn error
-                        var $item;
-
                         if (t.isSupportedBtn(btn)) { // It's a supported button
-                            $item = t.buildBtn(btn);
+                            $btnGroup.append(t.buildBtn(btn));
                         }
-
-                        $btnGroup.append($item);
                     } catch (c) {
                     }
                 });
@@ -95955,7 +96063,7 @@ jQuery.trumbowyg = {
                             return false;
                         }
 
-                        t.execCmd((isDropdown ? 'dropdown' : false) || btn.fn || btnName, btn.param || btnName, btn.forceCss || false);
+                        t.execCmd((isDropdown ? 'dropdown' : false) || btn.fn || btnName, btn.param || btnName, btn.forceCss);
 
                         return false;
                     }
@@ -96013,7 +96121,7 @@ jQuery.trumbowyg = {
                 mousedown: function () {
                     $('body', t.doc).trigger('mousedown');
 
-                    t.execCmd(btn.fn || btnName, btn.param || btnName, btn.forceCss || false);
+                    t.execCmd(btn.fn || btnName, btn.param || btnName, btn.forceCss);
 
                     return false;
                 }
@@ -96106,7 +96214,7 @@ jQuery.trumbowyg = {
         },
 
         // Disable editor
-        toggleDisable: function (disable) {
+        setDisabled: function (disable) {
             var t = this,
                 prefix = t.o.prefix;
 
@@ -96124,13 +96232,12 @@ jQuery.trumbowyg = {
         // Destroy the editor
         destroy: function () {
             var t = this,
-                prefix = t.o.prefix,
-                height = t.height;
+                prefix = t.o.prefix;
 
             if (t.isTextarea) {
                 t.$box.after(
                     t.$ta
-                        .css({height: height})
+                        .css({height: ''})
                         .val(t.html())
                         .removeClass(prefix + 'textarea')
                         .show()
@@ -96138,9 +96245,10 @@ jQuery.trumbowyg = {
             } else {
                 t.$box.after(
                     t.$ed
-                        .css({height: height})
+                        .css({height: ''})
                         .removeClass(prefix + 'editor')
                         .removeAttr('contenteditable')
+                        .removeAttr('dir')
                         .html(t.html())
                         .show()
                 );
@@ -96284,6 +96392,7 @@ jQuery.trumbowyg = {
             if (t.o.semantic) {
                 t.semanticTag('b', 'strong');
                 t.semanticTag('i', 'em');
+                t.semanticTag('strike', 'del');
 
                 if (full) {
                     var inlineElementsSelector = t.o.inlineElementsSelector,
@@ -96524,7 +96633,7 @@ jQuery.trumbowyg = {
 
             // Click on overlay close modal by cancelling them
             t.$overlay.one('click', function () {
-                $modal.trigger('tbwcancel');
+                $modal.trigger(CANCEL_EVENT);
                 return false;
             });
 
@@ -96534,11 +96643,11 @@ jQuery.trumbowyg = {
                 html: content
             })
                 .on('submit', function () {
-                    $modal.trigger('tbwconfirm');
+                    $modal.trigger(CONFIRM_EVENT);
                     return false;
                 })
                 .on('reset', function () {
-                    $modal.trigger('tbwcancel');
+                    $modal.trigger(CANCEL_EVENT);
                     return false;
                 })
                 .on('submit reset', function () {
@@ -96622,8 +96731,7 @@ jQuery.trumbowyg = {
             var t = this,
                 prefix = t.o.prefix,
                 lg = t.lang,
-                html = '',
-                CONFIRM_EVENT = 'tbwconfirm';
+                html = '';
 
             $.each(fields, function (fieldName, field) {
                 var l = field.label,
@@ -96675,7 +96783,7 @@ jQuery.trumbowyg = {
                         }
                     }
                 })
-                .one('tbwcancel', function () {
+                .one(CANCEL_EVENT, function () {
                     $(this).off(CONFIRM_EVENT);
                     t.closeModal();
                 });
@@ -96700,6 +96808,42 @@ jQuery.trumbowyg = {
                 );
         },
 
+        getDefaultImgDblClickHandler: function () {
+            var t = this;
+
+            return function () {
+                var $img = $(this),
+                    src = $img.attr('src'),
+                    base64 = '(Base64)';
+
+                if (src.indexOf('data:image') === 0) {
+                    src = base64;
+                }
+
+                t.openModalInsert(t.lang.insertImage, {
+                    url: {
+                        label: 'URL',
+                        value: src,
+                        required: true
+                    },
+                    alt: {
+                        label: t.lang.description,
+                        value: $img.attr('alt')
+                    }
+                }, function (v) {
+                    if (v.src !== base64) {
+                        $img.attr({
+                            src: v.src
+                        });
+                    }
+                    $img.attr({
+                        alt: v.alt
+                    });
+                    return true;
+                });
+                return false;
+            };
+        },
 
         // Range management
         saveRange: function () {
@@ -96819,7 +96963,7 @@ jQuery.trumbowyg = {
 
             tags.push(tag);
 
-            return t.getTagsRecursive(element, tags);
+            return t.getTagsRecursive(element, tags).filter(function(tag) { return tag != null; });
         },
 
         // Plugins
@@ -96851,7 +96995,7 @@ jQuery.trumbowyg = {
 /* 378 */
 /***/ (function(module, exports) {
 
-module.exports = "/fonts/vendor/trumbowyg/dist/ui/icons.svg?4ac194c41f46a5ad9a3d9e380894c5eb";
+module.exports = "/fonts/vendor/trumbowyg/dist/ui/icons.svg?fe14a6066b297f1848cbaafa1efb22c5";
 
 /***/ }),
 /* 379 */
@@ -96862,7 +97006,7 @@ exports = module.exports = __webpack_require__(9)(undefined);
 
 
 // module
-exports.push([module.i, "/**\n * Trumbowyg v2.7.2 - A lightweight WYSIWYG editor\n * Trumbowyg plugin stylesheet\n * ------------------------\n * @link http://alex-d.github.io/Trumbowyg\n * @license MIT\n * @author Alexandre Demode (Alex-D)\n *         Twitter : @AlexandreDemode\n *         Website : alex-d.fr\n */\n\n.trumbowyg-dropdown-foreColor,\n.trumbowyg-dropdown-backColor {\n  width: 276px;\n  padding: 7px 5px; }\n  .trumbowyg-dropdown-foreColor svg,\n  .trumbowyg-dropdown-backColor svg {\n    display: none !important; }\n  .trumbowyg-dropdown-foreColor button,\n  .trumbowyg-dropdown-backColor button {\n    display: block;\n    position: relative;\n    float: left;\n    text-indent: -9999px;\n    height: 20px;\n    width: 20px;\n    border: 1px solid #333;\n    padding: 0;\n    margin: 2px; }\n    .trumbowyg-dropdown-foreColor button:hover::after, .trumbowyg-dropdown-foreColor button:focus::after,\n    .trumbowyg-dropdown-backColor button:hover::after,\n    .trumbowyg-dropdown-backColor button:focus::after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      top: -5px;\n      left: -5px;\n      height: 27px;\n      width: 27px;\n      background: inherit;\n      border: 1px solid #FFF;\n      box-shadow: #000 0 0 2px;\n      z-index: 10; }\n", ""]);
+exports.push([module.i, "/**\n * Trumbowyg v2.8.0 - A lightweight WYSIWYG editor\n * Trumbowyg plugin stylesheet\n * ------------------------\n * @link http://alex-d.github.io/Trumbowyg\n * @license MIT\n * @author Alexandre Demode (Alex-D)\n *         Twitter : @AlexandreDemode\n *         Website : alex-d.fr\n */\n\n.trumbowyg-dropdown-foreColor,\n.trumbowyg-dropdown-backColor {\n  width: 276px;\n  padding: 7px 5px; }\n  .trumbowyg-dropdown-foreColor svg,\n  .trumbowyg-dropdown-backColor svg {\n    display: none !important; }\n  .trumbowyg-dropdown-foreColor button,\n  .trumbowyg-dropdown-backColor button {\n    display: block;\n    position: relative;\n    float: left;\n    text-indent: -9999px;\n    height: 20px;\n    width: 20px;\n    border: 1px solid #333;\n    padding: 0;\n    margin: 2px; }\n    .trumbowyg-dropdown-foreColor button:hover::after, .trumbowyg-dropdown-foreColor button:focus::after,\n    .trumbowyg-dropdown-backColor button:hover::after,\n    .trumbowyg-dropdown-backColor button:focus::after {\n      content: \" \";\n      display: block;\n      position: absolute;\n      top: -5px;\n      left: -5px;\n      height: 27px;\n      width: 27px;\n      background: inherit;\n      border: 1px solid #FFF;\n      box-shadow: #000 0 0 2px;\n      z-index: 10; }\n", ""]);
 
 // exports
 
@@ -97325,21 +97469,30 @@ module.exports = function (css) {
 /* 382 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('trumbowyg', {
-    attrs: {
-      "config": _vm.configs.advanced
-    },
-    model: {
-      value: (_vm.content),
-      callback: function($$v) {
-        _vm.content = $$v
-      },
-      expression: "content"
-    }
-  })], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("trumbowyg", {
+        attrs: { config: _vm.configs.advanced },
+        model: {
+          value: _vm.content,
+          callback: function($$v) {
+            _vm.content = $$v
+          },
+          expression: "content"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -97955,19 +98108,25 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(387)
 }
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(389),
-  /* template */
-  __webpack_require__(390),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(389)
+/* template */
+var __vue_template__ = __webpack_require__(390)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\campaignlist.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\campaignlist.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] campaignlist.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -98098,82 +98257,98 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticStyle: {
-      "padding": "10px"
-    }
-  }, _vm._l((_vm.campaigns), function(campaign, cKey, cIndex) {
-    return _c('li', {
-      key: cKey,
-      attrs: {
-        "index": cIndex
-      }
-    }, [_c('label', {
-      staticClass: "input-control checkbox"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: (_vm.cloneCampaignForm.campaigns),
-        expression: "cloneCampaignForm.campaigns"
-      }],
-      attrs: {
-        "type": "checkbox"
-      },
-      domProps: {
-        "value": campaign.id,
-        "checked": Array.isArray(_vm.cloneCampaignForm.campaigns) ? _vm._i(_vm.cloneCampaignForm.campaigns, campaign.id) > -1 : (_vm.cloneCampaignForm.campaigns)
-      },
-      on: {
-        "__c": function($event) {
-          var $$a = _vm.cloneCampaignForm.campaigns,
-            $$el = $event.target,
-            $$c = $$el.checked ? (true) : (false);
-          if (Array.isArray($$a)) {
-            var $$v = campaign.id,
-              $$i = _vm._i($$a, $$v);
-            if ($$el.checked) {
-              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
-            } else {
-              $$i > -1 && (_vm.cloneCampaignForm.campaigns = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticStyle: { padding: "10px" } },
+    _vm._l(_vm.campaigns, function(campaign, cKey, cIndex) {
+      return _c("li", { key: cKey, attrs: { index: cIndex } }, [
+        _c("label", { staticClass: "input-control checkbox" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.cloneCampaignForm.campaigns,
+                expression: "cloneCampaignForm.campaigns"
+              }
+            ],
+            attrs: { type: "checkbox" },
+            domProps: {
+              value: campaign.id,
+              checked: Array.isArray(_vm.cloneCampaignForm.campaigns)
+                ? _vm._i(_vm.cloneCampaignForm.campaigns, campaign.id) > -1
+                : _vm.cloneCampaignForm.campaigns
+            },
+            on: {
+              __c: function($event) {
+                var $$a = _vm.cloneCampaignForm.campaigns,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = campaign.id,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 &&
+                      (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.cloneCampaignForm.campaigns = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.cloneCampaignForm.campaigns = $$c
+                }
+              }
             }
-          } else {
-            _vm.cloneCampaignForm.campaigns = $$c
-          }
-        }
-      }
-    }), _vm._v(" "), _c('span', {
-      staticClass: "check"
-    }), _vm._v(" "), _c('span', {
-      staticClass: "caption"
-    }, [_vm._v(_vm._s(campaign.name))])]), _vm._v(" "), _c('div', {
-      staticClass: "place-right",
-      staticStyle: {
-        "cursor": "pointer"
-      },
-      on: {
-        "click": function($event) {
-          _vm.viewCampaignModal(campaign)
-        }
-      }
-    }, [_c('span', {
-      staticClass: "icon fg-green fa fa-tasks vertical-align-middle",
-      staticStyle: {
-        "position": "relative",
-        "padding-top": "8px",
-        "font-size": "2.5em"
-      },
-      attrs: {
-        "data-role": "hint",
-        "data-hint-mode": "2",
-        "data-hint": "View|Jobs List",
-        "data-hint-position": "left"
-      }
-    })])])
-  }))
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+          }),
+          _vm._v(" "),
+          _c("span", { staticClass: "check" }),
+          _vm._v(" "),
+          _c("span", { staticClass: "caption" }, [
+            _vm._v(_vm._s(campaign.name))
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "place-right",
+            staticStyle: { cursor: "pointer" },
+            on: {
+              click: function($event) {
+                _vm.viewCampaignModal(campaign)
+              }
+            }
+          },
+          [
+            _c("span", {
+              staticClass: "icon fg-green fa fa-tasks vertical-align-middle",
+              staticStyle: {
+                position: "relative",
+                "padding-top": "8px",
+                "font-size": "2.5em"
+              },
+              attrs: {
+                "data-role": "hint",
+                "data-hint-mode": "2",
+                "data-hint": "View|Jobs List",
+                "data-hint-position": "left"
+              }
+            })
+          ]
+        )
+      ])
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -98190,19 +98365,25 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(392)
 }
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(394),
-  /* template */
-  __webpack_require__(395),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(394)
+/* template */
+var __vue_template__ = __webpack_require__(395)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\uriah\\sites\\www\\sparky\\resources\\assets\\js\\evolutly\\components\\mycampaignlist.vue"
+Component.options.__file = "resources\\assets\\js\\evolutly\\components\\mycampaignlist.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] mycampaignlist.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -98333,82 +98514,98 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 395 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticStyle: {
-      "padding": "10px"
-    }
-  }, _vm._l((_vm.campaigns), function(campaign, cKey, cIndex) {
-    return _c('li', {
-      key: cKey,
-      attrs: {
-        "index": cIndex
-      }
-    }, [_c('label', {
-      staticClass: "input-control checkbox"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: (_vm.cloneCampaignForm.campaigns),
-        expression: "cloneCampaignForm.campaigns"
-      }],
-      attrs: {
-        "type": "checkbox"
-      },
-      domProps: {
-        "value": campaign.id,
-        "checked": Array.isArray(_vm.cloneCampaignForm.campaigns) ? _vm._i(_vm.cloneCampaignForm.campaigns, campaign.id) > -1 : (_vm.cloneCampaignForm.campaigns)
-      },
-      on: {
-        "__c": function($event) {
-          var $$a = _vm.cloneCampaignForm.campaigns,
-            $$el = $event.target,
-            $$c = $$el.checked ? (true) : (false);
-          if (Array.isArray($$a)) {
-            var $$v = campaign.id,
-              $$i = _vm._i($$a, $$v);
-            if ($$el.checked) {
-              $$i < 0 && (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
-            } else {
-              $$i > -1 && (_vm.cloneCampaignForm.campaigns = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticStyle: { padding: "10px" } },
+    _vm._l(_vm.campaigns, function(campaign, cKey, cIndex) {
+      return _c("li", { key: cKey, attrs: { index: cIndex } }, [
+        _c("label", { staticClass: "input-control checkbox" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.cloneCampaignForm.campaigns,
+                expression: "cloneCampaignForm.campaigns"
+              }
+            ],
+            attrs: { type: "checkbox" },
+            domProps: {
+              value: campaign.id,
+              checked: Array.isArray(_vm.cloneCampaignForm.campaigns)
+                ? _vm._i(_vm.cloneCampaignForm.campaigns, campaign.id) > -1
+                : _vm.cloneCampaignForm.campaigns
+            },
+            on: {
+              __c: function($event) {
+                var $$a = _vm.cloneCampaignForm.campaigns,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = campaign.id,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 &&
+                      (_vm.cloneCampaignForm.campaigns = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.cloneCampaignForm.campaigns = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.cloneCampaignForm.campaigns = $$c
+                }
+              }
             }
-          } else {
-            _vm.cloneCampaignForm.campaigns = $$c
-          }
-        }
-      }
-    }), _vm._v(" "), _c('span', {
-      staticClass: "check"
-    }), _vm._v(" "), _c('span', {
-      staticClass: "caption"
-    }, [_vm._v(_vm._s(campaign.name))])]), _vm._v(" "), _c('div', {
-      staticClass: "place-right",
-      staticStyle: {
-        "cursor": "pointer"
-      },
-      on: {
-        "click": function($event) {
-          _vm.viewCampaignModal(campaign)
-        }
-      }
-    }, [_c('span', {
-      staticClass: "icon fg-green fa fa-tasks vertical-align-middle",
-      staticStyle: {
-        "position": "relative",
-        "padding-top": "8px",
-        "font-size": "2.5em"
-      },
-      attrs: {
-        "data-role": "hint",
-        "data-hint-mode": "2",
-        "data-hint": "View|Jobs List",
-        "data-hint-position": "left"
-      }
-    })])])
-  }))
-},staticRenderFns: []}
-module.exports.render._withStripped = true
+          }),
+          _vm._v(" "),
+          _c("span", { staticClass: "check" }),
+          _vm._v(" "),
+          _c("span", { staticClass: "caption" }, [
+            _vm._v(_vm._s(campaign.name))
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "place-right",
+            staticStyle: { cursor: "pointer" },
+            on: {
+              click: function($event) {
+                _vm.viewCampaignModal(campaign)
+              }
+            }
+          },
+          [
+            _c("span", {
+              staticClass: "icon fg-green fa fa-tasks vertical-align-middle",
+              staticStyle: {
+                position: "relative",
+                "padding-top": "8px",
+                "font-size": "2.5em"
+              },
+              attrs: {
+                "data-role": "hint",
+                "data-hint-mode": "2",
+                "data-hint": "View|Jobs List",
+                "data-hint-position": "left"
+              }
+            })
+          ]
+        )
+      ])
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
