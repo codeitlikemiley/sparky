@@ -3,8 +3,8 @@
 namespace App\Traits\ModelBuilder;
 
 use App\Traits\MorphTo\Uploadable;
-use App\Traits\Relationship\byTenant;
+use App\Traits\Relationship\ByTenant;
 
 trait FileBuilder {
-    use Uploadable, byTenant;
+    use Uploadable, ByTenant;
 }
